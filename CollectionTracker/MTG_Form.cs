@@ -485,10 +485,12 @@ namespace CollectionTracker {
 							label.Size = new Size(TextRenderer.MeasureText(words[idx], label.Font).Width, 15);
 							label.Text = words[idx];
 							label.TextAlign = ContentAlignment.MiddleLeft;
+							location = new Point(5, location.Y + 15);
+							++idx;
+							continue;
 						}
 						location = new Point(5, location.Y + 15);
-						++idx;
-						continue;
+						maxWidth = box.Width - (location.X + 5);
 					}
 
 					//Loop words in line
