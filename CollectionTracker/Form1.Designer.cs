@@ -1974,7 +1974,7 @@
 			// 
 			this.mtgTooltipBox.Location = new System.Drawing.Point(865, 5);
 			this.mtgTooltipBox.Name = "mtgTooltipBox";
-			this.mtgTooltipBox.Size = new System.Drawing.Size(200, 100);
+			this.mtgTooltipBox.Size = new System.Drawing.Size(300, 100);
 			this.mtgTooltipBox.TabIndex = 5;
 			this.mtgTooltipBox.TabStop = false;
 			// 

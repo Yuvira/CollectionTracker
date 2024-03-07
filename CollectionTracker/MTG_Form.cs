@@ -393,6 +393,9 @@ namespace CollectionTracker {
 			mtgEditCardButton.Click += mtgOnEditCard;
 			mtgEditPrintButton.Click += mtgOnEditPrint;
 
+			//Hide tooltip
+			mtgTooltipBox.Hide();
+
 			//Set tab
 			mtgTabControl.SelectedTab = mtgDetailPage;
 
@@ -407,6 +410,9 @@ namespace CollectionTracker {
 			int y = location.Y;
 			while (true) {
 
+				//Clear leading spaces
+				if (desc.StartsWith(" ")) { desc = desc.Substring(1); }
+
 				//Get index of next object
 				int i = IndexOfMany(desc, new List<char>() { '{', '[', '<' });
 
@@ -419,6 +425,16 @@ namespace CollectionTracker {
 						if (i2 > 0) {
 							location = MTG_InsertSymbol(desc.Substring(0, i2 + 1), box, location, 15);
 							desc = desc.Substring(i2 + 1);
+						}
+					}
+
+					//Tooltip
+					else if (desc[0] == '[') {
+						int i2 = desc.IndexOf("|");
+						int i3 = desc.IndexOf("]");
+						if (i2 > 0 && i3 > 0) {
+							location = MTG_InsertTooltip(desc.Substring(1, i2 - 1), desc.Substring(i2 + 1, (i3 - i2) - 1), box, location);
+							desc = desc.Substring(i3 + 1);
 						}
 					}
 
@@ -439,6 +455,7 @@ namespace CollectionTracker {
 					//Write until next object, clear written text, and continue
 					else {
 						string substr = desc.Substring(0, i);
+						if (substr.EndsWith(" ")) { substr = substr.Substring(0, substr.Length - 1); }
 						location = MTG_WriteDescription(substr, box, location);
 						desc = desc.Substring(i);
 					}
@@ -547,7 +564,25 @@ namespace CollectionTracker {
 			return symbols;
 		}
 
-		//Insert symbol into control at position. Returns width of resulting object
+		//Insert clickable tooltip text at position. Returns position at end of added text
+		private Point MTG_InsertTooltip(string str, string tooltip, Control control, Point location) {
+			Label label = new Label();
+			label.Font = new Font(label.Font, FontStyle.Underline);
+			label.ForeColor = Color.Blue;
+			int textWidth = TextRenderer.MeasureText(str, label.Font).Width;
+			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + 15); }
+			control.Controls.Add(label);
+			label.Location = location;
+			label.Size = new Size(textWidth, 15);
+			label.Text = str;
+			label.TextAlign = ContentAlignment.MiddleLeft;
+			label.Click += new EventHandler((sender, e) => MTG_ShowTooltip(label, tooltip));
+			label.MouseLeave += new EventHandler((sender, e) => mtgTooltipBox.Hide());
+			location = new Point(location.X + textWidth, location.Y);
+			return location;
+		}
+
+		//Insert symbol into control at position. Returns position at end of symbol
 		private Point MTG_InsertSymbol(string str, Control control, Point location, int height) {
 
 			//Find symbol object for given symbol string
@@ -585,6 +620,18 @@ namespace CollectionTracker {
 		#endregion
 
 		#region Detail Utils
+
+		//Show tooltip window relative to given control with given text
+		private void MTG_ShowTooltip(Control control, string str) {
+			int posX = control.Parent.Location.X + control.Location.X + (control.Width / 2) - (mtgTooltipBox.Width / 2);
+			int posY = control.Parent.Location.Y + control.Location.Y + 15;
+			mtgTooltipBox.Show();
+			mtgTooltipBox.BringToFront();
+			mtgTooltipBox.Location = new Point(posX, posY);
+			mtgTooltipBox.Controls.Clear();
+			int height = MTG_GenerateDescription(str, mtgTooltipBox, new Point(5, 10));
+			mtgTooltipBox.Size = new Size(mtgTooltipBox.Width, height + 15);
+		}
 
 		//Load location table
 		private void MTG_LoadLocationTable(MTG_Printing print) {
