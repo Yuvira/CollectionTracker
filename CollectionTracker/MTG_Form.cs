@@ -25,7 +25,7 @@ namespace CollectionTracker {
 			mtgCatalog = new MTG_Catalog();
 			mtgPrintFilter = new List<int>();
 			detailBoxes = new List<GroupBox>();
-			mtgFlipCardButton.Click += mtgOnFlipCard;
+			mtgDetailImgbox.Click += mtgOnFlipCard;
 			mtgEditCardButton.Click += mtgOnEditCard;
 			mtgEditPrintButton.Click += mtgOnEditPrint;
 			mtgNameField.LostFocus += new EventHandler((sender, e) => MTG_CheckCardNameExists());
@@ -76,16 +76,16 @@ namespace CollectionTracker {
 				GroupBox box = new GroupBox();
 				mtgSetLayout.Controls.Add(box);
 				box.Location = new Point(3, 3);
-				box.Size = new Size(460, 55);
+				box.Size = new Size(700, 70);
 
 				//Filter button
 				Button filter = new Button();
 				box.Controls.Add(filter);
-				filter.Location = new Point(5 + indent, 10);
-				filter.Size = new Size(205 - indent, 40);
+				filter.Location = new Point(5 + indent, 15);
+				filter.Size = new Size(350 - indent, 50);
 				filter.Text = set.name;
 				filter.UseVisualStyleBackColor = true;
-				filter.Image = new Bitmap(Image.FromFile(set.imgPath), new Size(25, 25));
+				filter.Image = new Bitmap(Image.FromFile(set.imgPath), new Size(35, 35));
 				filter.TextImageRelation = TextImageRelation.ImageBeforeText;
 				filter.ImageAlign = ContentAlignment.MiddleRight;
 				filter.TextAlign = ContentAlignment.MiddleCenter;
@@ -95,8 +95,8 @@ namespace CollectionTracker {
 				if (indent > 0) {
 					Label arrow = new Label();
 					box.Controls.Add(arrow);
-					arrow.Location = new Point(indent - 25, 10);
-					arrow.Size = new Size(20, 40);
+					arrow.Location = new Point(indent - 25, 15);
+					arrow.Size = new Size(20, 50);
 					arrow.Text = "↳";
 					arrow.TextAlign = ContentAlignment.MiddleLeft;
 					arrow.Font = new Font(arrow.Font.Name, 20, arrow.Font.Style);
@@ -105,16 +105,16 @@ namespace CollectionTracker {
 				//Progress label
 				Label label = new Label();
 				box.Controls.Add(label);
-				label.Location = new Point(210, 10);
-				label.Size = new Size(60, 40);
+				label.Location = new Point(360, 15);
+				label.Size = new Size(60, 50);
 				label.Text = setOwned.ToString() + '/' + setCount.ToString();
 				label.TextAlign = ContentAlignment.MiddleCenter;
 
 				//Progress bar
 				ProgressBar bar = new ProgressBar();
 				box.Controls.Add(bar);
-				bar.Location = new Point(270, 20);
-				bar.Size = new Size(185, 20);
+				bar.Location = new Point(430, 25);
+				bar.Size = new Size(265, 30);
 				if (setCount > 0) { bar.Value = (int)(((float)setOwned / setCount) * 100); }
 
 			}
@@ -168,7 +168,7 @@ namespace CollectionTracker {
 				GroupBox box = new GroupBox();
 				mtgCatalogLayout.Controls.Add(box);
 				box.Location = new Point(3, 3);
-				box.Size = new Size(250, 360 + (20 * print.treatments.Count));
+				box.Size = new Size(250, 360 + (30 * print.treatments.Count));
 				if (!print.AnyOwned()) { box.BackColor = SystemColors.ControlDarkDark; }
 				box.SuspendLayout();
 
@@ -191,8 +191,8 @@ namespace CollectionTracker {
 					//Treatment label
 					Label treatmentLabel = new Label();
 					box.Controls.Add(treatmentLabel);
-					treatmentLabel.Location = new Point(60, 355 + (j * 20));
-					treatmentLabel.Size = new Size(100, 20);
+					treatmentLabel.Location = new Point(60, 355 + (j * 30));
+					treatmentLabel.Size = new Size(100, 30);
 					treatmentLabel.Text = treatment.name;
 					treatmentLabel.AutoEllipsis = true;
 					treatmentLabel.TextAlign = ContentAlignment.MiddleRight;
@@ -200,16 +200,16 @@ namespace CollectionTracker {
 					//Count label
 					Label label = new Label();
 					box.Controls.Add(label);
-					label.Location = new Point(160, 355 + (j * 20));
-					label.Size = new Size(30, 20);
+					label.Location = new Point(160, 355 + (j * 30));
+					label.Size = new Size(30, 30);
 					label.Text = print.OwnedCountOfTreatment(treatment.name).ToString();
 					label.TextAlign = ContentAlignment.MiddleLeft;
 
 					//Decrement
 					Button leftButton = new Button();
 					box.Controls.Add(leftButton);
-					leftButton.Location = new Point(5, 355 + (j * 20));
-					leftButton.Size = new Size(55, 20);
+					leftButton.Location = new Point(5, 355 + (j * 30));
+					leftButton.Size = new Size(55, 29);
 					leftButton.Text = "<";
 					leftButton.UseVisualStyleBackColor = true;
 					leftButton.Click += new EventHandler((sender, e) => MTG_DecrementCardCount(box, label, index, treatment.name));
@@ -217,8 +217,8 @@ namespace CollectionTracker {
 					//Increment
 					Button rightButton = new Button();
 					box.Controls.Add(rightButton);
-					rightButton.Location = new Point(190, 355 + (j * 20));
-					rightButton.Size = new Size(55, 20);
+					rightButton.Location = new Point(190, 355 + (j * 30));
+					rightButton.Size = new Size(55, 29);
 					rightButton.Text = ">";
 					rightButton.UseVisualStyleBackColor = true;
 					rightButton.Click += new EventHandler((sender, e) => MTG_IncrementCardCount(box, label, index, treatment.name));
@@ -261,6 +261,7 @@ namespace CollectionTracker {
 		#region Card Details
 
 		//Properties
+		public const int TEXT_HEIGHT = 21;
 		public bool mtgDetailFlipped = false;
 		public List<GroupBox> detailBoxes;
 		public EventHandler mtgOnFlipCard = null;
@@ -276,12 +277,6 @@ namespace CollectionTracker {
 
 			//Get card reference
 			MTG_Card card = print.card;
-
-			//Add or remove flip button
-			if (card.name.Contains("//"))
-				mtgFlipCardButton.Show();
-			else
-				mtgFlipCardButton.Hide();
 
 			//Clear old boxes
 			foreach (GroupBox box in detailBoxes) { mtgDetailPage.Controls.Remove(box); }
@@ -300,7 +295,7 @@ namespace CollectionTracker {
 			for (int i = 0; i < names.Length; ++i) {
 
 				//Box-relative Y position
-				int y2 = 15;
+				int y2 = 20;
 
 				//Face box
 				GroupBox box = new GroupBox();
@@ -311,7 +306,7 @@ namespace CollectionTracker {
 				Label name = new Label();
 				box.Controls.Add(name);
 				name.Location = new Point(5, y2);
-				name.Size = new Size(TextRenderer.MeasureText(names[i], name.Font).Width, 15);
+				name.Size = new Size(TextRenderer.MeasureText(names[i], name.Font).Width, TEXT_HEIGHT);
 				name.Text = names[i];
 				name.TextAlign = ContentAlignment.MiddleLeft;
 
@@ -319,19 +314,19 @@ namespace CollectionTracker {
 				if (costs.Length > i) {
 					Point location = new Point(5 + TextRenderer.MeasureText(name.Text, name.Font).Width, y2);
 					foreach (string symbol in MTG_GetSymbols(costs[i]))
-						location = MTG_InsertSymbol(symbol, box, location, 15);
+						location = MTG_InsertSymbol(symbol, box, location, TEXT_HEIGHT);
 				}
-				y2 += 25;
+				y2 += TEXT_HEIGHT + 10;
 
 				//Card Type
 				if (types.Length > i) {
 					Label type = new Label();
 					box.Controls.Add(type);
 					type.Location = new Point(5, y2);
-					type.Size = new Size(mtgDetailBox.Size.Width - 10, 15);
+					type.Size = new Size(mtgDetailBox.Size.Width - 10, TEXT_HEIGHT);
 					type.Text = types[i];
 					type.TextAlign = ContentAlignment.MiddleLeft;
-					y2 += 25;
+					y2 += TEXT_HEIGHT + 10;
 				}
 
 				//Oracle Text
@@ -344,7 +339,7 @@ namespace CollectionTracker {
 					Label stats = new Label();
 					box.Controls.Add(stats);
 					stats.Location = new Point(5, y2);
-					stats.Size = new Size(mtgDetailBox.Size.Width - 10, 15);
+					stats.Size = new Size(mtgDetailBox.Size.Width - 10, 30);
 					if (types[i].Contains("Planeswalker"))
 						stats.Text = (i == 0 ? card.toughness : card.toughness2) + " Loyalty";
 					else {
@@ -353,7 +348,7 @@ namespace CollectionTracker {
 								   : card.power2 + " / " + card.toughness2;
 					}
 					stats.TextAlign = ContentAlignment.MiddleLeft;
-					y2 += 25;
+					y2 += 35;
 				}
 
 				//Flavor Text (apply to last face box)
@@ -383,13 +378,13 @@ namespace CollectionTracker {
 			MTG_LoadLocationTable(print);
 
 			//Set button events
-			mtgFlipCardButton.Click -= mtgOnFlipCard;
+			mtgDetailImgbox.Click -= mtgOnFlipCard;
 			mtgEditCardButton.Click -= mtgOnEditCard;
 			mtgEditPrintButton.Click -= mtgOnEditPrint;
 			mtgOnFlipCard = new EventHandler((sender, e) => MTG_FlipCard(print));
 			mtgOnEditCard = new EventHandler((sender, e) => MTG_EditCard(print.card));
 			mtgOnEditPrint = new EventHandler((sender, e) => MTG_EditPrint(print));
-			mtgFlipCardButton.Click += mtgOnFlipCard;
+			mtgDetailImgbox.Click += mtgOnFlipCard;
 			mtgEditCardButton.Click += mtgOnEditCard;
 			mtgEditPrintButton.Click += mtgOnEditPrint;
 
@@ -423,7 +418,7 @@ namespace CollectionTracker {
 					if (desc[0] == '{') {
 						int i2 = desc.IndexOf('}');
 						if (i2 > 0) {
-							location = MTG_InsertSymbol(desc.Substring(0, i2 + 1), box, location, 15);
+							location = MTG_InsertSymbol(desc.Substring(0, i2 + 1), box, location, TEXT_HEIGHT);
 							desc = desc.Substring(i2 + 1);
 						}
 					}
@@ -465,7 +460,7 @@ namespace CollectionTracker {
 			}
 
 			//Return y delta
-			return location.Y + 15 - y;
+			return location.Y + TEXT_HEIGHT - y;
 
 		}
 
@@ -478,7 +473,7 @@ namespace CollectionTracker {
 
 				//Jump location
 				if (i > 0)
-					location = new Point(5, location.Y + 20);
+					location = new Point(5, location.Y + TEXT_HEIGHT + 5);
 
 				//Split words
 				string[] words = lines[i].Split(' ');
@@ -499,14 +494,14 @@ namespace CollectionTracker {
 					if (TextRenderer.MeasureText(words[idx], label.Font).Width > maxWidth) {
 						if (location.X == 5) {
 							label.Location = location;
-							label.Size = new Size(TextRenderer.MeasureText(words[idx], label.Font).Width, 15);
+							label.Size = new Size(TextRenderer.MeasureText(words[idx], label.Font).Width, 30);
 							label.Text = words[idx];
 							label.TextAlign = ContentAlignment.MiddleLeft;
-							location = new Point(5, location.Y + 15);
+							location = new Point(5, location.Y + TEXT_HEIGHT);
 							++idx;
 							continue;
 						}
-						location = new Point(5, location.Y + 15);
+						location = new Point(5, location.Y + TEXT_HEIGHT);
 						maxWidth = box.Width - (location.X + 5);
 					}
 
@@ -517,13 +512,13 @@ namespace CollectionTracker {
 						//If we're done with our text or the next word would exceed available width, generate the label and break
 						if (idx + 1 >= words.Length || TextRenderer.MeasureText(str + " " + words[idx + 1], label.Font).Width > maxWidth) {
 							label.Location = location;
-							label.Size = new Size(TextRenderer.MeasureText(str, label.Font).Width, 15);
+							label.Size = new Size(TextRenderer.MeasureText(str, label.Font).Width, TEXT_HEIGHT);
 							label.Text = str;
 							label.TextAlign = ContentAlignment.MiddleLeft;
 							if (idx + 1 >= words.Length)
 								location = new Point(location.X + TextRenderer.MeasureText(str, label.Font).Width, location.Y);
 							else
-								location = new Point(5, location.Y + 15);
+								location = new Point(5, location.Y + TEXT_HEIGHT);
 							++idx;
 							break;
 						}
@@ -567,13 +562,13 @@ namespace CollectionTracker {
 		//Insert clickable tooltip text at position. Returns position at end of added text
 		private Point MTG_InsertTooltip(string str, string tooltip, Control control, Point location) {
 			Label label = new Label();
-			label.Font = new Font(label.Font, FontStyle.Underline);
+			label.Font = new Font(Font, FontStyle.Underline);
 			label.ForeColor = Color.Blue;
 			int textWidth = TextRenderer.MeasureText(str, label.Font).Width;
-			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + 15); }
+			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
 			control.Controls.Add(label);
 			label.Location = location;
-			label.Size = new Size(textWidth, 15);
+			label.Size = new Size(textWidth, TEXT_HEIGHT);
 			label.Text = str;
 			label.TextAlign = ContentAlignment.MiddleLeft;
 			label.Click += new EventHandler((sender, e) => MTG_ShowTooltip(label, tooltip));
@@ -592,7 +587,7 @@ namespace CollectionTracker {
 			if (symbol == null) {
 				Label label = new Label();
 				int textWidth = TextRenderer.MeasureText(str, label.Font).Width;
-				if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + 15); }
+				if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
 				control.Controls.Add(label);
 				label.Location = location;
 				label.Size = new Size(textWidth, height);
@@ -606,7 +601,7 @@ namespace CollectionTracker {
 			//Insert image
 			PictureBox icon = new PictureBox();
 			int width = (int)(height * symbol.aspect);
-			if (width > control.Width - (location.X + 5)) { location = new Point(5, location.Y + 15); }
+			if (width > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
 			control.Controls.Add(icon);
 			icon.Location = location;
 			icon.Size = new Size(width, height);
@@ -624,13 +619,13 @@ namespace CollectionTracker {
 		//Show tooltip window relative to given control with given text
 		private void MTG_ShowTooltip(Control control, string str) {
 			int posX = control.Parent.Location.X + control.Location.X + (control.Width / 2) - (mtgTooltipBox.Width / 2);
-			int posY = control.Parent.Location.Y + control.Location.Y + 15;
+			int posY = control.Parent.Location.Y + control.Location.Y + TEXT_HEIGHT;
 			mtgTooltipBox.Show();
 			mtgTooltipBox.BringToFront();
 			mtgTooltipBox.Location = new Point(posX, posY);
 			mtgTooltipBox.Controls.Clear();
-			int height = MTG_GenerateDescription(str, mtgTooltipBox, new Point(5, 10));
-			mtgTooltipBox.Size = new Size(mtgTooltipBox.Width, height + 15);
+			int height = MTG_GenerateDescription(str, mtgTooltipBox, new Point(5, 15));
+			mtgTooltipBox.Size = new Size(mtgTooltipBox.Width, height + 20);
 		}
 
 		//Load location table
@@ -710,6 +705,9 @@ namespace CollectionTracker {
 
 		//Flip card image
 		private void MTG_FlipCard(MTG_Printing print) {
+
+			//Only flip if card has a second face
+			if (!print.card.name.Contains(" // ")) { return; }
 
 			//Get printing and flip
 			mtgDetailFlipped = !mtgDetailFlipped;
@@ -1023,27 +1021,27 @@ namespace CollectionTracker {
 
 			//Group box
 			GroupBox box = new GroupBox();
-			box.Size = new Size(300, 85);
+			box.Size = new Size(325, 120);
 
 			//Symbol box
 			TextBox symbol = new TextBox();
 			box.Controls.Add(symbol);
-			symbol.Location = new Point(5, 10);
-			symbol.Size = new Size(240, 20);
+			symbol.Location = new Point(5, 15);
+			symbol.Size = new Size(245, 30);
 			symbol.Text = useRef ? refSymbol.symbol : "Symbol";
 
 			//Name box
 			TextBox name = new TextBox();
 			box.Controls.Add(name);
-			name.Location = new Point(5, 35);
-			name.Size = new Size(240, 20);
+			name.Location = new Point(5, 50);
+			name.Size = new Size(245, 30);
 			name.Text = useRef ? refSymbol.name : "Name";
 
 			//Aspect box
 			NumericUpDown aspect = new NumericUpDown();
 			box.Controls.Add(aspect);
-			aspect.Location = new Point(5, 60);
-			aspect.Size = new Size(55, 20);
+			aspect.Location = new Point(5, 85);
+			aspect.Size = new Size(55, 30);
 			aspect.DecimalPlaces = 2;
 			aspect.Increment = 0.01m;
 			aspect.Minimum = 0.01m;
@@ -1052,15 +1050,15 @@ namespace CollectionTracker {
 			//Path label
 			Label path = new Label();
 			box.Controls.Add(path);
-			path.Location = new Point(65, 58);
-			path.Size = new Size(175, 20);
+			path.Location = new Point(65, 85);
+			path.Size = new Size(255, 30);
 			path.TextAlign = ContentAlignment.MiddleLeft;
 
 			//Icon box
 			PictureBox icon = new PictureBox();
 			box.Controls.Add(icon);
-			icon.Location = new Point(250, 10);
-			icon.Size = new Size(45, 45);
+			icon.Location = new Point(255, 15);
+			icon.Size = new Size(65, 65);
 			icon.SizeMode = PictureBoxSizeMode.StretchImage;
 			icon.Cursor = Cursors.Hand;
 			icon.Click += new EventHandler((sender, e) => MTG_OnClickSearchSymbol(i));
@@ -1150,34 +1148,34 @@ namespace CollectionTracker {
 
 			//Group box
 			GroupBox box = new GroupBox();
-			box.Size = new Size(300, 110);
+			box.Size = new Size(350, 155);
 
 			//Symbol box
 			TextBox name = new TextBox();
 			box.Controls.Add(name);
-			name.Location = new Point(5, 10);
-			name.Size = new Size(240, 20);
+			name.Location = new Point(5, 15);
+			name.Size = new Size(270, 30);
 			name.Text = useRef ? refSet.name : "Name";
 
 			//Name box
 			TextBox code = new TextBox();
 			box.Controls.Add(code);
-			code.Location = new Point(5, 35);
-			code.Size = new Size(240, 20);
+			code.Location = new Point(5, 50);
+			code.Size = new Size(270, 30);
 			code.Text = useRef ? refSet.code : "Code";
 
 			//Date box
 			DateTimePicker date = new DateTimePicker();
 			box.Controls.Add(date);
-			date.Location = new Point(5, 60);
-			date.Size = new Size(290, 20);
+			date.Location = new Point(5, 85);
+			date.Size = new Size(340, 30);
 			date.Value = useRef ? refSet.date : DateTime.Now;
 
-			//Aspect box
+			//Order box
 			NumericUpDown order = new NumericUpDown();
 			box.Controls.Add(order);
-			order.Location = new Point(5, 85);
-			order.Size = new Size(55, 20);
+			order.Location = new Point(5, 120);
+			order.Size = new Size(50, 30);
 			order.Increment = 1;
 			order.Minimum = 0;
 			order.Value = useRef ? refSet.order : 0;
@@ -1185,15 +1183,15 @@ namespace CollectionTracker {
 			//Path label
 			Label path = new Label();
 			box.Controls.Add(path);
-			path.Location = new Point(65, 83);
-			path.Size = new Size(225, 20);
+			path.Location = new Point(55, 120);
+			path.Size = new Size(285, 30);
 			path.TextAlign = ContentAlignment.MiddleLeft;
 
 			//Icon box
 			PictureBox icon = new PictureBox();
 			box.Controls.Add(icon);
-			icon.Location = new Point(250, 10);
-			icon.Size = new Size(45, 45);
+			icon.Location = new Point(280, 15);
+			icon.Size = new Size(65, 65);
 			icon.SizeMode = PictureBoxSizeMode.StretchImage;
 			icon.Cursor = Cursors.Hand;
 			icon.Click += new EventHandler((sender, e) => MTG_OnClickSearchSetIcon(i));

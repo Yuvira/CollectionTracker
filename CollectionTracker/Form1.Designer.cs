@@ -96,9 +96,9 @@
 			this.mtgCatalogLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgCatalogIndex = new System.Windows.Forms.Label();
 			this.mtgDetailPage = new System.Windows.Forms.TabPage();
+			this.mtgTooltipBox = new System.Windows.Forms.GroupBox();
 			this.mtgDetailBox = new System.Windows.Forms.GroupBox();
 			this.mtgReloadLocationsButton = new System.Windows.Forms.Button();
-			this.mtgFlipCardButton = new System.Windows.Forms.Button();
 			this.mtgEditPrintButton = new System.Windows.Forms.Button();
 			this.mtgEditCardButton = new System.Windows.Forms.Button();
 			this.mtgMoveLabel = new System.Windows.Forms.Label();
@@ -136,7 +136,6 @@
 			this.mtgToughnessField = new System.Windows.Forms.NumericUpDown();
 			this.mtgPowerField = new System.Windows.Forms.NumericUpDown();
 			this.mtgAtkDefLabel = new System.Windows.Forms.Label();
-			this.mtgCardHeader = new System.Windows.Forms.Label();
 			this.mtgAddCardButton = new System.Windows.Forms.Button();
 			this.mtgNameLabel = new System.Windows.Forms.Label();
 			this.mtgNameField = new System.Windows.Forms.TextBox();
@@ -174,7 +173,6 @@
 			this.mtgNumberLabel = new System.Windows.Forms.Label();
 			this.mtgSetField = new System.Windows.Forms.ComboBox();
 			this.mtgSetLabel = new System.Windows.Forms.Label();
-			this.mtgPrintHeader = new System.Windows.Forms.Label();
 			this.mtgSymbolsPage = new System.Windows.Forms.TabPage();
 			this.mtgSymbolLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgSymbolHeaderBox = new System.Windows.Forms.GroupBox();
@@ -187,7 +185,6 @@
 			this.mtgSaveSetsButton = new System.Windows.Forms.Button();
 			this.mtgAddSetButton = new System.Windows.Forms.Button();
 			this.mtgSetGeneratorLabel = new System.Windows.Forms.Label();
-			this.mtgTooltipBox = new System.Windows.Forms.GroupBox();
 			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoAttackField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoDefenseField)).BeginInit();
@@ -244,7 +241,7 @@
 			this.ygoCardHeader.AutoSize = true;
 			this.ygoCardHeader.Location = new System.Drawing.Point(5, 5);
 			this.ygoCardHeader.Name = "ygoCardHeader";
-			this.ygoCardHeader.Size = new System.Drawing.Size(81, 13);
+			this.ygoCardHeader.Size = new System.Drawing.Size(119, 21);
 			this.ygoCardHeader.TabIndex = 0;
 			this.ygoCardHeader.Text = "New Card Entry";
 			// 
@@ -253,7 +250,7 @@
 			this.ygoNameLabel.AutoSize = true;
 			this.ygoNameLabel.Location = new System.Drawing.Point(5, 25);
 			this.ygoNameLabel.Name = "ygoNameLabel";
-			this.ygoNameLabel.Size = new System.Drawing.Size(38, 13);
+			this.ygoNameLabel.Size = new System.Drawing.Size(55, 21);
 			this.ygoNameLabel.TabIndex = 1;
 			this.ygoNameLabel.Text = "Name:";
 			// 
@@ -261,7 +258,7 @@
 			// 
 			this.ygoNameField.Location = new System.Drawing.Point(100, 25);
 			this.ygoNameField.Name = "ygoNameField";
-			this.ygoNameField.Size = new System.Drawing.Size(170, 20);
+			this.ygoNameField.Size = new System.Drawing.Size(170, 29);
 			this.ygoNameField.TabIndex = 2;
 			// 
 			// ygoCardTypeField
@@ -270,7 +267,7 @@
 			this.ygoCardTypeField.FormattingEnabled = true;
 			this.ygoCardTypeField.Location = new System.Drawing.Point(100, 50);
 			this.ygoCardTypeField.Name = "ygoCardTypeField";
-			this.ygoCardTypeField.Size = new System.Drawing.Size(170, 21);
+			this.ygoCardTypeField.Size = new System.Drawing.Size(170, 29);
 			this.ygoCardTypeField.TabIndex = 4;
 			// 
 			// ygoAttributeField
@@ -279,7 +276,7 @@
 			this.ygoAttributeField.FormattingEnabled = true;
 			this.ygoAttributeField.Location = new System.Drawing.Point(100, 75);
 			this.ygoAttributeField.Name = "ygoAttributeField";
-			this.ygoAttributeField.Size = new System.Drawing.Size(170, 21);
+			this.ygoAttributeField.Size = new System.Drawing.Size(170, 29);
 			this.ygoAttributeField.TabIndex = 6;
 			// 
 			// ygoMonsterTypeField
@@ -290,7 +287,7 @@
 			this.ygoMonsterTypeField.IntegralHeight = false;
 			this.ygoMonsterTypeField.Location = new System.Drawing.Point(100, 100);
 			this.ygoMonsterTypeField.Name = "ygoMonsterTypeField";
-			this.ygoMonsterTypeField.Size = new System.Drawing.Size(170, 21);
+			this.ygoMonsterTypeField.Size = new System.Drawing.Size(170, 29);
 			this.ygoMonsterTypeField.TabIndex = 8;
 			// 
 			// ygoCardTypeLabel
@@ -298,7 +295,7 @@
 			this.ygoCardTypeLabel.AutoSize = true;
 			this.ygoCardTypeLabel.Location = new System.Drawing.Point(5, 50);
 			this.ygoCardTypeLabel.Name = "ygoCardTypeLabel";
-			this.ygoCardTypeLabel.Size = new System.Drawing.Size(59, 13);
+			this.ygoCardTypeLabel.Size = new System.Drawing.Size(82, 21);
 			this.ygoCardTypeLabel.TabIndex = 3;
 			this.ygoCardTypeLabel.Text = "Card Type:";
 			// 
@@ -307,7 +304,7 @@
 			this.ygoAttributeLabel.AutoSize = true;
 			this.ygoAttributeLabel.Location = new System.Drawing.Point(5, 75);
 			this.ygoAttributeLabel.Name = "ygoAttributeLabel";
-			this.ygoAttributeLabel.Size = new System.Drawing.Size(49, 13);
+			this.ygoAttributeLabel.Size = new System.Drawing.Size(74, 21);
 			this.ygoAttributeLabel.TabIndex = 5;
 			this.ygoAttributeLabel.Text = "Attribute:";
 			// 
@@ -316,7 +313,7 @@
 			this.ygoMonsterTypeLabel.AutoSize = true;
 			this.ygoMonsterTypeLabel.Location = new System.Drawing.Point(5, 100);
 			this.ygoMonsterTypeLabel.Name = "ygoMonsterTypeLabel";
-			this.ygoMonsterTypeLabel.Size = new System.Drawing.Size(80, 13);
+			this.ygoMonsterTypeLabel.Size = new System.Drawing.Size(114, 21);
 			this.ygoMonsterTypeLabel.TabIndex = 7;
 			this.ygoMonsterTypeLabel.Text = "Monster Types:";
 			// 
@@ -334,7 +331,7 @@
 			this.ygoOracleTextLabel.AutoSize = true;
 			this.ygoOracleTextLabel.Location = new System.Drawing.Point(5, 150);
 			this.ygoOracleTextLabel.Name = "ygoOracleTextLabel";
-			this.ygoOracleTextLabel.Size = new System.Drawing.Size(65, 13);
+			this.ygoOracleTextLabel.Size = new System.Drawing.Size(88, 21);
 			this.ygoOracleTextLabel.TabIndex = 12;
 			this.ygoOracleTextLabel.Text = "Oracle Text:";
 			// 
@@ -347,7 +344,7 @@
             0,
             0});
 			this.ygoLevelField.Name = "ygoLevelField";
-			this.ygoLevelField.Size = new System.Drawing.Size(170, 20);
+			this.ygoLevelField.Size = new System.Drawing.Size(170, 29);
 			this.ygoLevelField.TabIndex = 15;
 			// 
 			// ygoLevelLabel
@@ -355,7 +352,7 @@
 			this.ygoLevelLabel.AutoSize = true;
 			this.ygoLevelLabel.Location = new System.Drawing.Point(5, 250);
 			this.ygoLevelLabel.Name = "ygoLevelLabel";
-			this.ygoLevelLabel.Size = new System.Drawing.Size(36, 13);
+			this.ygoLevelLabel.Size = new System.Drawing.Size(49, 21);
 			this.ygoLevelLabel.TabIndex = 14;
 			this.ygoLevelLabel.Text = "Level:";
 			// 
@@ -373,7 +370,7 @@
             0,
             0});
 			this.ygoAttackField.Name = "ygoAttackField";
-			this.ygoAttackField.Size = new System.Drawing.Size(80, 20);
+			this.ygoAttackField.Size = new System.Drawing.Size(80, 29);
 			this.ygoAttackField.TabIndex = 20;
 			// 
 			// ygoDefenseField
@@ -390,7 +387,7 @@
             0,
             0});
 			this.ygoDefenseField.Name = "ygoDefenseField";
-			this.ygoDefenseField.Size = new System.Drawing.Size(80, 20);
+			this.ygoDefenseField.Size = new System.Drawing.Size(80, 29);
 			this.ygoDefenseField.TabIndex = 21;
 			// 
 			// ygoAtkDefLabel
@@ -398,7 +395,7 @@
 			this.ygoAtkDefLabel.AutoSize = true;
 			this.ygoAtkDefLabel.Location = new System.Drawing.Point(5, 300);
 			this.ygoAtkDefLabel.Name = "ygoAtkDefLabel";
-			this.ygoAtkDefLabel.Size = new System.Drawing.Size(86, 13);
+			this.ygoAtkDefLabel.Size = new System.Drawing.Size(118, 21);
 			this.ygoAtkDefLabel.TabIndex = 19;
 			this.ygoAtkDefLabel.Text = "Attack/Defense:";
 			// 
@@ -424,7 +421,7 @@
 			this.ygoTabControl.Location = new System.Drawing.Point(3, 3);
 			this.ygoTabControl.Name = "ygoTabControl";
 			this.ygoTabControl.SelectedIndex = 0;
-			this.ygoTabControl.Size = new System.Drawing.Size(1252, 663);
+			this.ygoTabControl.Size = new System.Drawing.Size(1252, 655);
 			this.ygoTabControl.TabIndex = 0;
 			// 
 			// ygoSetPage
@@ -432,10 +429,10 @@
 			this.ygoSetPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ygoSetPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.ygoSetPage.Controls.Add(this.ygoSetLayout);
-			this.ygoSetPage.Location = new System.Drawing.Point(4, 25);
+			this.ygoSetPage.Location = new System.Drawing.Point(4, 33);
 			this.ygoSetPage.Name = "ygoSetPage";
 			this.ygoSetPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoSetPage.Size = new System.Drawing.Size(1244, 634);
+			this.ygoSetPage.Size = new System.Drawing.Size(1244, 618);
 			this.ygoSetPage.TabIndex = 3;
 			this.ygoSetPage.Text = "Sets";
 			// 
@@ -447,7 +444,7 @@
 			this.ygoSetLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.ygoSetLayout.Location = new System.Drawing.Point(3, 3);
 			this.ygoSetLayout.Name = "ygoSetLayout";
-			this.ygoSetLayout.Size = new System.Drawing.Size(1234, 624);
+			this.ygoSetLayout.Size = new System.Drawing.Size(1234, 608);
 			this.ygoSetLayout.TabIndex = 0;
 			this.ygoSetLayout.WrapContents = false;
 			// 
@@ -459,7 +456,7 @@
 			this.ygoCatalogPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoCatalogPage.Name = "ygoCatalogPage";
 			this.ygoCatalogPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoCatalogPage.Size = new System.Drawing.Size(1244, 634);
+			this.ygoCatalogPage.Size = new System.Drawing.Size(1244, 626);
 			this.ygoCatalogPage.TabIndex = 2;
 			this.ygoCatalogPage.Text = "Catalog";
 			// 
@@ -469,7 +466,7 @@
 			this.ygoCatalogLayout.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ygoCatalogLayout.Location = new System.Drawing.Point(3, 3);
 			this.ygoCatalogLayout.Name = "ygoCatalogLayout";
-			this.ygoCatalogLayout.Size = new System.Drawing.Size(1234, 624);
+			this.ygoCatalogLayout.Size = new System.Drawing.Size(1234, 616);
 			this.ygoCatalogLayout.TabIndex = 0;
 			// 
 			// ygoDetailPage
@@ -480,7 +477,7 @@
 			this.ygoDetailPage.Controls.Add(this.ygoDetailImgbox);
 			this.ygoDetailPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoDetailPage.Name = "ygoDetailPage";
-			this.ygoDetailPage.Size = new System.Drawing.Size(1244, 634);
+			this.ygoDetailPage.Size = new System.Drawing.Size(1244, 626);
 			this.ygoDetailPage.TabIndex = 4;
 			this.ygoDetailPage.Text = "Card Details";
 			// 
@@ -523,7 +520,7 @@
 			this.ygoMoveLabel.AutoSize = true;
 			this.ygoMoveLabel.Location = new System.Drawing.Point(5, 20);
 			this.ygoMoveLabel.Name = "ygoMoveLabel";
-			this.ygoMoveLabel.Size = new System.Drawing.Size(49, 13);
+			this.ygoMoveLabel.Size = new System.Drawing.Size(70, 21);
 			this.ygoMoveLabel.TabIndex = 3;
 			this.ygoMoveLabel.Text = "Move to:";
 			// 
@@ -548,7 +545,7 @@
 			this.ygoMoveField.FormattingEnabled = true;
 			this.ygoMoveField.Location = new System.Drawing.Point(60, 15);
 			this.ygoMoveField.Name = "ygoMoveField";
-			this.ygoMoveField.Size = new System.Drawing.Size(170, 21);
+			this.ygoMoveField.Size = new System.Drawing.Size(170, 29);
 			this.ygoMoveField.TabIndex = 2;
 			// 
 			// ygoDetailImgbox
@@ -592,7 +589,7 @@
 			this.ygoCardPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoCardPage.Name = "ygoCardPage";
 			this.ygoCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoCardPage.Size = new System.Drawing.Size(1244, 634);
+			this.ygoCardPage.Size = new System.Drawing.Size(1244, 626);
 			this.ygoCardPage.TabIndex = 0;
 			this.ygoCardPage.Text = "Card Entry";
 			// 
@@ -601,7 +598,7 @@
 			this.ygoCardDialog.AutoSize = true;
 			this.ygoCardDialog.Location = new System.Drawing.Point(276, 330);
 			this.ygoCardDialog.Name = "ygoCardDialog";
-			this.ygoCardDialog.Size = new System.Drawing.Size(10, 13);
+			this.ygoCardDialog.Size = new System.Drawing.Size(16, 21);
 			this.ygoCardDialog.TabIndex = 23;
 			this.ygoCardDialog.Text = "-";
 			// 
@@ -614,7 +611,7 @@
             0,
             0});
 			this.ygoPendulumRight.Name = "ygoPendulumRight";
-			this.ygoPendulumRight.Size = new System.Drawing.Size(80, 20);
+			this.ygoPendulumRight.Size = new System.Drawing.Size(80, 29);
 			this.ygoPendulumRight.TabIndex = 18;
 			// 
 			// ygoPendulumLeft
@@ -626,7 +623,7 @@
             0,
             0});
 			this.ygoPendulumLeft.Name = "ygoPendulumLeft";
-			this.ygoPendulumLeft.Size = new System.Drawing.Size(80, 20);
+			this.ygoPendulumLeft.Size = new System.Drawing.Size(80, 29);
 			this.ygoPendulumLeft.TabIndex = 17;
 			// 
 			// ygoPendulumLabel
@@ -634,7 +631,7 @@
 			this.ygoPendulumLabel.AutoSize = true;
 			this.ygoPendulumLabel.Location = new System.Drawing.Point(5, 275);
 			this.ygoPendulumLabel.Name = "ygoPendulumLabel";
-			this.ygoPendulumLabel.Size = new System.Drawing.Size(87, 13);
+			this.ygoPendulumLabel.Size = new System.Drawing.Size(123, 21);
 			this.ygoPendulumLabel.TabIndex = 16;
 			this.ygoPendulumLabel.Text = "Pendulum Scale:";
 			// 
@@ -663,7 +660,7 @@
 			this.ygoMonsterTypeValue.AutoSize = true;
 			this.ygoMonsterTypeValue.Location = new System.Drawing.Point(100, 125);
 			this.ygoMonsterTypeValue.Name = "ygoMonsterTypeValue";
-			this.ygoMonsterTypeValue.Size = new System.Drawing.Size(10, 13);
+			this.ygoMonsterTypeValue.Size = new System.Drawing.Size(16, 21);
 			this.ygoMonsterTypeValue.TabIndex = 11;
 			this.ygoMonsterTypeValue.Text = "-";
 			// 
@@ -695,7 +692,7 @@
 			this.ygoPrintPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoPrintPage.Name = "ygoPrintPage";
 			this.ygoPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoPrintPage.Size = new System.Drawing.Size(1244, 634);
+			this.ygoPrintPage.Size = new System.Drawing.Size(1244, 626);
 			this.ygoPrintPage.TabIndex = 1;
 			this.ygoPrintPage.Text = "Printing Entry";
 			// 
@@ -703,16 +700,16 @@
 			// 
 			this.ygoIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.ygoIODialog.AutoSize = true;
-			this.ygoIODialog.Location = new System.Drawing.Point(185, 605);
+			this.ygoIODialog.Location = new System.Drawing.Point(185, 597);
 			this.ygoIODialog.Name = "ygoIODialog";
-			this.ygoIODialog.Size = new System.Drawing.Size(10, 13);
+			this.ygoIODialog.Size = new System.Drawing.Size(16, 21);
 			this.ygoIODialog.TabIndex = 24;
 			this.ygoIODialog.Text = "-";
 			// 
 			// ygoSaveButton
 			// 
 			this.ygoSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.ygoSaveButton.Location = new System.Drawing.Point(6, 600);
+			this.ygoSaveButton.Location = new System.Drawing.Point(6, 592);
 			this.ygoSaveButton.Name = "ygoSaveButton";
 			this.ygoSaveButton.Size = new System.Drawing.Size(170, 23);
 			this.ygoSaveButton.TabIndex = 22;
@@ -725,7 +722,7 @@
 			this.ygoImgpathLabel.AutoSize = true;
 			this.ygoImgpathLabel.Location = new System.Drawing.Point(475, 325);
 			this.ygoImgpathLabel.Name = "ygoImgpathLabel";
-			this.ygoImgpathLabel.Size = new System.Drawing.Size(10, 13);
+			this.ygoImgpathLabel.Size = new System.Drawing.Size(16, 21);
 			this.ygoImgpathLabel.TabIndex = 21;
 			this.ygoImgpathLabel.Text = "-";
 			// 
@@ -776,7 +773,7 @@
 			this.ygoCardrefField.FormattingEnabled = true;
 			this.ygoCardrefField.Location = new System.Drawing.Point(100, 275);
 			this.ygoCardrefField.Name = "ygoCardrefField";
-			this.ygoCardrefField.Size = new System.Drawing.Size(170, 21);
+			this.ygoCardrefField.Size = new System.Drawing.Size(170, 29);
 			this.ygoCardrefField.TabIndex = 15;
 			// 
 			// ygoCardrefLabel
@@ -784,7 +781,7 @@
 			this.ygoCardrefLabel.AutoSize = true;
 			this.ygoCardrefLabel.Location = new System.Drawing.Point(5, 275);
 			this.ygoCardrefLabel.Name = "ygoCardrefLabel";
-			this.ygoCardrefLabel.Size = new System.Drawing.Size(32, 13);
+			this.ygoCardrefLabel.Size = new System.Drawing.Size(46, 21);
 			this.ygoCardrefLabel.TabIndex = 14;
 			this.ygoCardrefLabel.Text = "Card:";
 			// 
@@ -803,7 +800,7 @@
 			this.ygoImgsearchLabel.AutoSize = true;
 			this.ygoImgsearchLabel.Location = new System.Drawing.Point(5, 250);
 			this.ygoImgsearchLabel.Name = "ygoImgsearchLabel";
-			this.ygoImgsearchLabel.Size = new System.Drawing.Size(39, 13);
+			this.ygoImgsearchLabel.Size = new System.Drawing.Size(56, 21);
 			this.ygoImgsearchLabel.TabIndex = 12;
 			this.ygoImgsearchLabel.Text = "Image:";
 			// 
@@ -820,7 +817,7 @@
 			this.ygoFlavorTextLabel.AutoSize = true;
 			this.ygoFlavorTextLabel.Location = new System.Drawing.Point(5, 150);
 			this.ygoFlavorTextLabel.Name = "ygoFlavorTextLabel";
-			this.ygoFlavorTextLabel.Size = new System.Drawing.Size(63, 13);
+			this.ygoFlavorTextLabel.Size = new System.Drawing.Size(86, 21);
 			this.ygoFlavorTextLabel.TabIndex = 10;
 			this.ygoFlavorTextLabel.Text = "Flavor Text:";
 			// 
@@ -838,7 +835,7 @@
 			this.ygoRaritiesField.FormattingEnabled = true;
 			this.ygoRaritiesField.Location = new System.Drawing.Point(100, 75);
 			this.ygoRaritiesField.Name = "ygoRaritiesField";
-			this.ygoRaritiesField.Size = new System.Drawing.Size(170, 21);
+			this.ygoRaritiesField.Size = new System.Drawing.Size(170, 29);
 			this.ygoRaritiesField.TabIndex = 6;
 			// 
 			// ygoTreatmentsLabel
@@ -846,7 +843,7 @@
 			this.ygoTreatmentsLabel.AutoSize = true;
 			this.ygoTreatmentsLabel.Location = new System.Drawing.Point(5, 75);
 			this.ygoTreatmentsLabel.Name = "ygoTreatmentsLabel";
-			this.ygoTreatmentsLabel.Size = new System.Drawing.Size(45, 13);
+			this.ygoTreatmentsLabel.Size = new System.Drawing.Size(65, 21);
 			this.ygoTreatmentsLabel.TabIndex = 5;
 			this.ygoTreatmentsLabel.Text = "Rarities:";
 			// 
@@ -859,7 +856,7 @@
             0,
             0});
 			this.ygoNumberField.Name = "ygoNumberField";
-			this.ygoNumberField.Size = new System.Drawing.Size(170, 20);
+			this.ygoNumberField.Size = new System.Drawing.Size(170, 29);
 			this.ygoNumberField.TabIndex = 4;
 			// 
 			// ygoNumberLabel
@@ -867,7 +864,7 @@
 			this.ygoNumberLabel.AutoSize = true;
 			this.ygoNumberLabel.Location = new System.Drawing.Point(5, 50);
 			this.ygoNumberLabel.Name = "ygoNumberLabel";
-			this.ygoNumberLabel.Size = new System.Drawing.Size(47, 13);
+			this.ygoNumberLabel.Size = new System.Drawing.Size(71, 21);
 			this.ygoNumberLabel.TabIndex = 3;
 			this.ygoNumberLabel.Text = "Number:";
 			// 
@@ -877,7 +874,7 @@
 			this.ygoSetField.FormattingEnabled = true;
 			this.ygoSetField.Location = new System.Drawing.Point(100, 25);
 			this.ygoSetField.Name = "ygoSetField";
-			this.ygoSetField.Size = new System.Drawing.Size(170, 21);
+			this.ygoSetField.Size = new System.Drawing.Size(170, 29);
 			this.ygoSetField.TabIndex = 2;
 			// 
 			// ygoSetLabel
@@ -885,7 +882,7 @@
 			this.ygoSetLabel.AutoSize = true;
 			this.ygoSetLabel.Location = new System.Drawing.Point(5, 25);
 			this.ygoSetLabel.Name = "ygoSetLabel";
-			this.ygoSetLabel.Size = new System.Drawing.Size(26, 13);
+			this.ygoSetLabel.Size = new System.Drawing.Size(35, 21);
 			this.ygoSetLabel.TabIndex = 1;
 			this.ygoSetLabel.Text = "Set:";
 			// 
@@ -894,7 +891,7 @@
 			this.ygoPrintHeader.AutoSize = true;
 			this.ygoPrintHeader.Location = new System.Drawing.Point(5, 5);
 			this.ygoPrintHeader.Name = "ygoPrintHeader";
-			this.ygoPrintHeader.Size = new System.Drawing.Size(94, 13);
+			this.ygoPrintHeader.Size = new System.Drawing.Size(141, 21);
 			this.ygoPrintHeader.TabIndex = 0;
 			this.ygoPrintHeader.Text = "New Printing Entry";
 			// 
@@ -906,8 +903,8 @@
 			// formTabControl
 			// 
 			this.formTabControl.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-			this.formTabControl.Controls.Add(this.ygoPage);
 			this.formTabControl.Controls.Add(this.mtgPage);
+			this.formTabControl.Controls.Add(this.ygoPage);
 			this.formTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.formTabControl.Location = new System.Drawing.Point(0, 0);
 			this.formTabControl.Name = "formTabControl";
@@ -919,10 +916,10 @@
 			// 
 			this.ygoPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ygoPage.Controls.Add(this.ygoTabControl);
-			this.ygoPage.Location = new System.Drawing.Point(4, 25);
+			this.ygoPage.Location = new System.Drawing.Point(4, 33);
 			this.ygoPage.Name = "ygoPage";
 			this.ygoPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoPage.Size = new System.Drawing.Size(1258, 669);
+			this.ygoPage.Size = new System.Drawing.Size(1258, 661);
 			this.ygoPage.TabIndex = 0;
 			this.ygoPage.Text = "YGO";
 			// 
@@ -930,10 +927,10 @@
 			// 
 			this.mtgPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgPage.Controls.Add(this.mtgTabControl);
-			this.mtgPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgPage.Name = "mtgPage";
 			this.mtgPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgPage.Size = new System.Drawing.Size(1258, 669);
+			this.mtgPage.Size = new System.Drawing.Size(1258, 661);
 			this.mtgPage.TabIndex = 1;
 			this.mtgPage.Text = "MTG";
 			// 
@@ -951,7 +948,7 @@
 			this.mtgTabControl.Location = new System.Drawing.Point(3, 3);
 			this.mtgTabControl.Name = "mtgTabControl";
 			this.mtgTabControl.SelectedIndex = 0;
-			this.mtgTabControl.Size = new System.Drawing.Size(1252, 663);
+			this.mtgTabControl.Size = new System.Drawing.Size(1252, 655);
 			this.mtgTabControl.TabIndex = 0;
 			// 
 			// mtgSetPage
@@ -959,10 +956,10 @@
 			this.mtgSetPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgSetPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.mtgSetPage.Controls.Add(this.mtgSetLayout);
-			this.mtgSetPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgSetPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgSetPage.Name = "mtgSetPage";
 			this.mtgSetPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgSetPage.Size = new System.Drawing.Size(1244, 634);
+			this.mtgSetPage.Size = new System.Drawing.Size(1244, 618);
 			this.mtgSetPage.TabIndex = 3;
 			this.mtgSetPage.Text = "Sets";
 			// 
@@ -974,7 +971,7 @@
 			this.mtgSetLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.mtgSetLayout.Location = new System.Drawing.Point(3, 3);
 			this.mtgSetLayout.Name = "mtgSetLayout";
-			this.mtgSetLayout.Size = new System.Drawing.Size(1234, 624);
+			this.mtgSetLayout.Size = new System.Drawing.Size(1234, 608);
 			this.mtgSetLayout.TabIndex = 0;
 			this.mtgSetLayout.WrapContents = false;
 			// 
@@ -986,10 +983,10 @@
 			this.mtgCatalogPage.Controls.Add(this.mtgCatalogPrevButton);
 			this.mtgCatalogPage.Controls.Add(this.mtgCatalogLayout);
 			this.mtgCatalogPage.Controls.Add(this.mtgCatalogIndex);
-			this.mtgCatalogPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgCatalogPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgCatalogPage.Name = "mtgCatalogPage";
 			this.mtgCatalogPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgCatalogPage.Size = new System.Drawing.Size(1244, 634);
+			this.mtgCatalogPage.Size = new System.Drawing.Size(1244, 618);
 			this.mtgCatalogPage.TabIndex = 2;
 			this.mtgCatalogPage.Text = "Catalog";
 			// 
@@ -998,7 +995,7 @@
 			this.mtgCatalogNextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.mtgCatalogNextButton.Location = new System.Drawing.Point(1160, 5);
 			this.mtgCatalogNextButton.Name = "mtgCatalogNextButton";
-			this.mtgCatalogNextButton.Size = new System.Drawing.Size(75, 23);
+			this.mtgCatalogNextButton.Size = new System.Drawing.Size(75, 29);
 			this.mtgCatalogNextButton.TabIndex = 2;
 			this.mtgCatalogNextButton.Text = ">";
 			this.mtgCatalogNextButton.UseVisualStyleBackColor = true;
@@ -1008,7 +1005,7 @@
 			// 
 			this.mtgCatalogPrevButton.Location = new System.Drawing.Point(5, 5);
 			this.mtgCatalogPrevButton.Name = "mtgCatalogPrevButton";
-			this.mtgCatalogPrevButton.Size = new System.Drawing.Size(75, 23);
+			this.mtgCatalogPrevButton.Size = new System.Drawing.Size(75, 29);
 			this.mtgCatalogPrevButton.TabIndex = 1;
 			this.mtgCatalogPrevButton.Text = "<";
 			this.mtgCatalogPrevButton.UseVisualStyleBackColor = true;
@@ -1021,9 +1018,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.mtgCatalogLayout.AutoScroll = true;
 			this.mtgCatalogLayout.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.mtgCatalogLayout.Location = new System.Drawing.Point(3, 32);
+			this.mtgCatalogLayout.Location = new System.Drawing.Point(3, 38);
 			this.mtgCatalogLayout.Name = "mtgCatalogLayout";
-			this.mtgCatalogLayout.Size = new System.Drawing.Size(1234, 595);
+			this.mtgCatalogLayout.Size = new System.Drawing.Size(1234, 572);
 			this.mtgCatalogLayout.TabIndex = 0;
 			// 
 			// mtgCatalogIndex
@@ -1031,7 +1028,7 @@
 			this.mtgCatalogIndex.Dock = System.Windows.Forms.DockStyle.Top;
 			this.mtgCatalogIndex.Location = new System.Drawing.Point(3, 3);
 			this.mtgCatalogIndex.Name = "mtgCatalogIndex";
-			this.mtgCatalogIndex.Size = new System.Drawing.Size(1234, 23);
+			this.mtgCatalogIndex.Size = new System.Drawing.Size(1234, 30);
 			this.mtgCatalogIndex.TabIndex = 3;
 			this.mtgCatalogIndex.Text = "Showing 0 - 0 of 0";
 			this.mtgCatalogIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1043,16 +1040,23 @@
 			this.mtgDetailPage.Controls.Add(this.mtgTooltipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailImgbox);
-			this.mtgDetailPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgDetailPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgDetailPage.Name = "mtgDetailPage";
-			this.mtgDetailPage.Size = new System.Drawing.Size(1244, 634);
+			this.mtgDetailPage.Size = new System.Drawing.Size(1244, 618);
 			this.mtgDetailPage.TabIndex = 4;
 			this.mtgDetailPage.Text = "Card Details";
+			// 
+			// mtgTooltipBox
+			// 
+			this.mtgTooltipBox.Location = new System.Drawing.Point(865, 5);
+			this.mtgTooltipBox.Name = "mtgTooltipBox";
+			this.mtgTooltipBox.Size = new System.Drawing.Size(300, 100);
+			this.mtgTooltipBox.TabIndex = 5;
+			this.mtgTooltipBox.TabStop = false;
 			// 
 			// mtgDetailBox
 			// 
 			this.mtgDetailBox.Controls.Add(this.mtgReloadLocationsButton);
-			this.mtgDetailBox.Controls.Add(this.mtgFlipCardButton);
 			this.mtgDetailBox.Controls.Add(this.mtgEditPrintButton);
 			this.mtgDetailBox.Controls.Add(this.mtgEditCardButton);
 			this.mtgDetailBox.Controls.Add(this.mtgMoveLabel);
@@ -1067,30 +1071,20 @@
 			// 
 			// mtgReloadLocationsButton
 			// 
-			this.mtgReloadLocationsButton.Location = new System.Drawing.Point(235, 20);
+			this.mtgReloadLocationsButton.Location = new System.Drawing.Point(295, 25);
 			this.mtgReloadLocationsButton.Name = "mtgReloadLocationsButton";
-			this.mtgReloadLocationsButton.Size = new System.Drawing.Size(120, 21);
+			this.mtgReloadLocationsButton.Size = new System.Drawing.Size(150, 29);
 			this.mtgReloadLocationsButton.TabIndex = 8;
 			this.mtgReloadLocationsButton.Text = "Reload Locations";
 			this.mtgReloadLocationsButton.UseVisualStyleBackColor = true;
 			this.mtgReloadLocationsButton.Click += new System.EventHandler(this.MTG_OnClickReloadLocations);
 			// 
-			// mtgFlipCardButton
-			// 
-			this.mtgFlipCardButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mtgFlipCardButton.Location = new System.Drawing.Point(9, 510);
-			this.mtgFlipCardButton.Name = "mtgFlipCardButton";
-			this.mtgFlipCardButton.Size = new System.Drawing.Size(60, 23);
-			this.mtgFlipCardButton.TabIndex = 7;
-			this.mtgFlipCardButton.Text = "Flip";
-			this.mtgFlipCardButton.UseVisualStyleBackColor = true;
-			// 
 			// mtgEditPrintButton
 			// 
 			this.mtgEditPrintButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.mtgEditPrintButton.Location = new System.Drawing.Point(325, 510);
+			this.mtgEditPrintButton.Location = new System.Drawing.Point(300, 505);
 			this.mtgEditPrintButton.Name = "mtgEditPrintButton";
-			this.mtgEditPrintButton.Size = new System.Drawing.Size(120, 23);
+			this.mtgEditPrintButton.Size = new System.Drawing.Size(145, 29);
 			this.mtgEditPrintButton.TabIndex = 5;
 			this.mtgEditPrintButton.Text = "Edit Printing Data";
 			this.mtgEditPrintButton.UseVisualStyleBackColor = true;
@@ -1098,21 +1092,21 @@
 			// mtgEditCardButton
 			// 
 			this.mtgEditCardButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.mtgEditCardButton.Location = new System.Drawing.Point(200, 510);
+			this.mtgEditCardButton.Location = new System.Drawing.Point(150, 505);
 			this.mtgEditCardButton.Name = "mtgEditCardButton";
-			this.mtgEditCardButton.Size = new System.Drawing.Size(120, 23);
+			this.mtgEditCardButton.Size = new System.Drawing.Size(145, 29);
 			this.mtgEditCardButton.TabIndex = 4;
 			this.mtgEditCardButton.Text = "Edit Card Data";
 			this.mtgEditCardButton.UseVisualStyleBackColor = true;
 			// 
 			// mtgMoveLabel
 			// 
-			this.mtgMoveLabel.AutoSize = true;
 			this.mtgMoveLabel.Location = new System.Drawing.Point(5, 25);
 			this.mtgMoveLabel.Name = "mtgMoveLabel";
-			this.mtgMoveLabel.Size = new System.Drawing.Size(49, 13);
+			this.mtgMoveLabel.Size = new System.Drawing.Size(70, 30);
 			this.mtgMoveLabel.TabIndex = 3;
 			this.mtgMoveLabel.Text = "Move to:";
+			this.mtgMoveLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgLocationTable
 			// 
@@ -1122,7 +1116,7 @@
 			this.mtgLocationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
 			this.mtgLocationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
 			this.mtgLocationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-			this.mtgLocationTable.Location = new System.Drawing.Point(9, 50);
+			this.mtgLocationTable.Location = new System.Drawing.Point(9, 60);
 			this.mtgLocationTable.Name = "mtgLocationTable";
 			this.mtgLocationTable.RowCount = 1;
 			this.mtgLocationTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -1134,9 +1128,9 @@
 			this.mtgMoveField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
 			this.mtgMoveField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
 			this.mtgMoveField.FormattingEnabled = true;
-			this.mtgMoveField.Location = new System.Drawing.Point(60, 20);
+			this.mtgMoveField.Location = new System.Drawing.Point(75, 25);
 			this.mtgMoveField.Name = "mtgMoveField";
-			this.mtgMoveField.Size = new System.Drawing.Size(170, 21);
+			this.mtgMoveField.Size = new System.Drawing.Size(215, 29);
 			this.mtgMoveField.TabIndex = 2;
 			// 
 			// mtgDetailImgbox
@@ -1183,7 +1177,6 @@
 			this.mtgCardPage.Controls.Add(this.mtgToughnessField);
 			this.mtgCardPage.Controls.Add(this.mtgPowerField);
 			this.mtgCardPage.Controls.Add(this.mtgAtkDefLabel);
-			this.mtgCardPage.Controls.Add(this.mtgCardHeader);
 			this.mtgCardPage.Controls.Add(this.mtgAddCardButton);
 			this.mtgCardPage.Controls.Add(this.mtgNameLabel);
 			this.mtgCardPage.Controls.Add(this.mtgNameField);
@@ -1192,275 +1185,267 @@
 			this.mtgCardPage.Controls.Add(this.mtgOracleTextField);
 			this.mtgCardPage.Controls.Add(this.mtgColourLabel);
 			this.mtgCardPage.Controls.Add(this.mtgCardTypeLabel);
-			this.mtgCardPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgCardPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgCardPage.Name = "mtgCardPage";
 			this.mtgCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgCardPage.Size = new System.Drawing.Size(1244, 634);
+			this.mtgCardPage.Size = new System.Drawing.Size(1244, 618);
 			this.mtgCardPage.TabIndex = 0;
 			this.mtgCardPage.Text = "Card Entry";
 			// 
 			// mtgCardTypeField
 			// 
-			this.mtgCardTypeField.Location = new System.Drawing.Point(100, 125);
+			this.mtgCardTypeField.Location = new System.Drawing.Point(100, 145);
 			this.mtgCardTypeField.Name = "mtgCardTypeField";
-			this.mtgCardTypeField.Size = new System.Drawing.Size(170, 20);
+			this.mtgCardTypeField.Size = new System.Drawing.Size(250, 29);
 			this.mtgCardTypeField.TabIndex = 18;
 			// 
 			// mtgToughnessBackField
 			// 
-			this.mtgToughnessBackField.Location = new System.Drawing.Point(190, 375);
+			this.mtgToughnessBackField.Location = new System.Drawing.Point(227, 460);
 			this.mtgToughnessBackField.Name = "mtgToughnessBackField";
-			this.mtgToughnessBackField.Size = new System.Drawing.Size(80, 20);
+			this.mtgToughnessBackField.Size = new System.Drawing.Size(123, 29);
 			this.mtgToughnessBackField.TabIndex = 29;
 			// 
 			// mtgPowerBackField
 			// 
-			this.mtgPowerBackField.Location = new System.Drawing.Point(100, 375);
+			this.mtgPowerBackField.Location = new System.Drawing.Point(100, 460);
 			this.mtgPowerBackField.Name = "mtgPowerBackField";
-			this.mtgPowerBackField.Size = new System.Drawing.Size(80, 20);
+			this.mtgPowerBackField.Size = new System.Drawing.Size(123, 29);
 			this.mtgPowerBackField.TabIndex = 28;
 			// 
 			// mtgAtkDefBackLabel
 			// 
-			this.mtgAtkDefBackLabel.AutoSize = true;
-			this.mtgAtkDefBackLabel.Location = new System.Drawing.Point(5, 375);
+			this.mtgAtkDefBackLabel.Location = new System.Drawing.Point(5, 460);
 			this.mtgAtkDefBackLabel.Name = "mtgAtkDefBackLabel";
-			this.mtgAtkDefBackLabel.Size = new System.Drawing.Size(57, 13);
+			this.mtgAtkDefBackLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgAtkDefBackLabel.TabIndex = 27;
 			this.mtgAtkDefBackLabel.Text = "Back P/T:";
+			this.mtgAtkDefBackLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgCostField
 			// 
-			this.mtgCostField.Location = new System.Drawing.Point(100, 100);
+			this.mtgCostField.Location = new System.Drawing.Point(100, 110);
 			this.mtgCostField.Name = "mtgCostField";
-			this.mtgCostField.Size = new System.Drawing.Size(170, 20);
+			this.mtgCostField.Size = new System.Drawing.Size(250, 29);
 			this.mtgCostField.TabIndex = 16;
 			// 
 			// mtgCostLabel
 			// 
-			this.mtgCostLabel.AutoSize = true;
-			this.mtgCostLabel.Location = new System.Drawing.Point(5, 100);
+			this.mtgCostLabel.Location = new System.Drawing.Point(5, 110);
 			this.mtgCostLabel.Name = "mtgCostLabel";
-			this.mtgCostLabel.Size = new System.Drawing.Size(31, 13);
+			this.mtgCostLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgCostLabel.TabIndex = 15;
 			this.mtgCostLabel.Text = "Cost:";
+			this.mtgCostLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgColourImgG
 			// 
-			this.mtgColourImgG.Location = new System.Drawing.Point(275, 75);
+			this.mtgColourImgG.Location = new System.Drawing.Point(320, 75);
 			this.mtgColourImgG.Name = "mtgColourImgG";
-			this.mtgColourImgG.Size = new System.Drawing.Size(20, 20);
+			this.mtgColourImgG.Size = new System.Drawing.Size(30, 30);
 			this.mtgColourImgG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgColourImgG.TabIndex = 43;
 			this.mtgColourImgG.TabStop = false;
 			// 
 			// mtgColourImgR
 			// 
-			this.mtgColourImgR.Location = new System.Drawing.Point(235, 75);
+			this.mtgColourImgR.Location = new System.Drawing.Point(270, 75);
 			this.mtgColourImgR.Name = "mtgColourImgR";
-			this.mtgColourImgR.Size = new System.Drawing.Size(20, 20);
+			this.mtgColourImgR.Size = new System.Drawing.Size(30, 30);
 			this.mtgColourImgR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgColourImgR.TabIndex = 42;
 			this.mtgColourImgR.TabStop = false;
 			// 
 			// mtgColourImgB
 			// 
-			this.mtgColourImgB.Location = new System.Drawing.Point(195, 75);
+			this.mtgColourImgB.Location = new System.Drawing.Point(220, 75);
 			this.mtgColourImgB.Name = "mtgColourImgB";
-			this.mtgColourImgB.Size = new System.Drawing.Size(20, 20);
+			this.mtgColourImgB.Size = new System.Drawing.Size(30, 30);
 			this.mtgColourImgB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgColourImgB.TabIndex = 41;
 			this.mtgColourImgB.TabStop = false;
 			// 
 			// mtgColourImgU
 			// 
-			this.mtgColourImgU.Location = new System.Drawing.Point(155, 75);
+			this.mtgColourImgU.Location = new System.Drawing.Point(170, 75);
 			this.mtgColourImgU.Name = "mtgColourImgU";
-			this.mtgColourImgU.Size = new System.Drawing.Size(20, 20);
+			this.mtgColourImgU.Size = new System.Drawing.Size(30, 30);
 			this.mtgColourImgU.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgColourImgU.TabIndex = 40;
 			this.mtgColourImgU.TabStop = false;
 			// 
 			// mtgColourImgW
 			// 
-			this.mtgColourImgW.Location = new System.Drawing.Point(115, 75);
+			this.mtgColourImgW.Location = new System.Drawing.Point(120, 75);
 			this.mtgColourImgW.Name = "mtgColourImgW";
-			this.mtgColourImgW.Size = new System.Drawing.Size(20, 20);
+			this.mtgColourImgW.Size = new System.Drawing.Size(30, 30);
 			this.mtgColourImgW.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgColourImgW.TabIndex = 39;
 			this.mtgColourImgW.TabStop = false;
 			// 
 			// mtgColourG
 			// 
-			this.mtgColourG.Location = new System.Drawing.Point(260, 75);
+			this.mtgColourG.Location = new System.Drawing.Point(305, 75);
 			this.mtgColourG.Name = "mtgColourG";
-			this.mtgColourG.Size = new System.Drawing.Size(20, 20);
+			this.mtgColourG.Size = new System.Drawing.Size(14, 30);
 			this.mtgColourG.TabIndex = 14;
 			this.mtgColourG.UseVisualStyleBackColor = true;
 			// 
 			// mtgColourR
 			// 
-			this.mtgColourR.Location = new System.Drawing.Point(220, 75);
+			this.mtgColourR.Location = new System.Drawing.Point(255, 75);
 			this.mtgColourR.Name = "mtgColourR";
-			this.mtgColourR.Size = new System.Drawing.Size(20, 20);
+			this.mtgColourR.Size = new System.Drawing.Size(14, 30);
 			this.mtgColourR.TabIndex = 13;
 			this.mtgColourR.UseVisualStyleBackColor = true;
 			// 
 			// mtgColourB
 			// 
-			this.mtgColourB.Location = new System.Drawing.Point(180, 75);
+			this.mtgColourB.Location = new System.Drawing.Point(205, 75);
 			this.mtgColourB.Name = "mtgColourB";
-			this.mtgColourB.Size = new System.Drawing.Size(20, 20);
+			this.mtgColourB.Size = new System.Drawing.Size(14, 30);
 			this.mtgColourB.TabIndex = 12;
 			this.mtgColourB.UseVisualStyleBackColor = true;
 			// 
 			// mtgColourU
 			// 
-			this.mtgColourU.Location = new System.Drawing.Point(140, 75);
+			this.mtgColourU.Location = new System.Drawing.Point(155, 75);
 			this.mtgColourU.Name = "mtgColourU";
-			this.mtgColourU.Size = new System.Drawing.Size(20, 20);
+			this.mtgColourU.Size = new System.Drawing.Size(14, 30);
 			this.mtgColourU.TabIndex = 11;
 			this.mtgColourU.UseVisualStyleBackColor = true;
 			// 
 			// mtgColourW
 			// 
-			this.mtgColourW.Location = new System.Drawing.Point(100, 75);
+			this.mtgColourW.Location = new System.Drawing.Point(105, 75);
 			this.mtgColourW.Name = "mtgColourW";
-			this.mtgColourW.Size = new System.Drawing.Size(20, 20);
+			this.mtgColourW.Size = new System.Drawing.Size(14, 30);
 			this.mtgColourW.TabIndex = 10;
 			this.mtgColourW.UseVisualStyleBackColor = true;
 			// 
 			// mtgIdentityImgG
 			// 
-			this.mtgIdentityImgG.Location = new System.Drawing.Point(275, 50);
+			this.mtgIdentityImgG.Location = new System.Drawing.Point(320, 40);
 			this.mtgIdentityImgG.Name = "mtgIdentityImgG";
-			this.mtgIdentityImgG.Size = new System.Drawing.Size(20, 20);
+			this.mtgIdentityImgG.Size = new System.Drawing.Size(30, 30);
 			this.mtgIdentityImgG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgIdentityImgG.TabIndex = 33;
 			this.mtgIdentityImgG.TabStop = false;
 			// 
 			// mtgIdentityImgR
 			// 
-			this.mtgIdentityImgR.Location = new System.Drawing.Point(235, 50);
+			this.mtgIdentityImgR.Location = new System.Drawing.Point(270, 40);
 			this.mtgIdentityImgR.Name = "mtgIdentityImgR";
-			this.mtgIdentityImgR.Size = new System.Drawing.Size(20, 20);
+			this.mtgIdentityImgR.Size = new System.Drawing.Size(30, 30);
 			this.mtgIdentityImgR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgIdentityImgR.TabIndex = 32;
 			this.mtgIdentityImgR.TabStop = false;
 			// 
 			// mtgIdentityImgB
 			// 
-			this.mtgIdentityImgB.Location = new System.Drawing.Point(195, 50);
+			this.mtgIdentityImgB.Location = new System.Drawing.Point(220, 40);
 			this.mtgIdentityImgB.Name = "mtgIdentityImgB";
-			this.mtgIdentityImgB.Size = new System.Drawing.Size(20, 20);
+			this.mtgIdentityImgB.Size = new System.Drawing.Size(30, 30);
 			this.mtgIdentityImgB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgIdentityImgB.TabIndex = 31;
 			this.mtgIdentityImgB.TabStop = false;
 			// 
 			// mtgIdentityImgU
 			// 
-			this.mtgIdentityImgU.Location = new System.Drawing.Point(155, 50);
+			this.mtgIdentityImgU.Location = new System.Drawing.Point(170, 40);
 			this.mtgIdentityImgU.Name = "mtgIdentityImgU";
-			this.mtgIdentityImgU.Size = new System.Drawing.Size(20, 20);
+			this.mtgIdentityImgU.Size = new System.Drawing.Size(30, 30);
 			this.mtgIdentityImgU.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgIdentityImgU.TabIndex = 30;
 			this.mtgIdentityImgU.TabStop = false;
 			// 
 			// mtgIdentityImgW
 			// 
-			this.mtgIdentityImgW.Location = new System.Drawing.Point(115, 50);
+			this.mtgIdentityImgW.Location = new System.Drawing.Point(120, 40);
 			this.mtgIdentityImgW.Name = "mtgIdentityImgW";
-			this.mtgIdentityImgW.Size = new System.Drawing.Size(20, 20);
+			this.mtgIdentityImgW.Size = new System.Drawing.Size(30, 30);
 			this.mtgIdentityImgW.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgIdentityImgW.TabIndex = 29;
 			this.mtgIdentityImgW.TabStop = false;
 			// 
 			// mtgIdentityG
 			// 
-			this.mtgIdentityG.Location = new System.Drawing.Point(260, 50);
+			this.mtgIdentityG.Location = new System.Drawing.Point(305, 40);
 			this.mtgIdentityG.Name = "mtgIdentityG";
-			this.mtgIdentityG.Size = new System.Drawing.Size(20, 20);
+			this.mtgIdentityG.Size = new System.Drawing.Size(14, 30);
 			this.mtgIdentityG.TabIndex = 8;
 			this.mtgIdentityG.UseVisualStyleBackColor = true;
 			// 
 			// mtgIdentityR
 			// 
-			this.mtgIdentityR.Location = new System.Drawing.Point(220, 50);
+			this.mtgIdentityR.Location = new System.Drawing.Point(255, 40);
 			this.mtgIdentityR.Name = "mtgIdentityR";
-			this.mtgIdentityR.Size = new System.Drawing.Size(20, 20);
+			this.mtgIdentityR.Size = new System.Drawing.Size(14, 30);
 			this.mtgIdentityR.TabIndex = 7;
 			this.mtgIdentityR.UseVisualStyleBackColor = true;
 			// 
 			// mtgIdentityB
 			// 
-			this.mtgIdentityB.Location = new System.Drawing.Point(180, 50);
+			this.mtgIdentityB.Location = new System.Drawing.Point(205, 40);
 			this.mtgIdentityB.Name = "mtgIdentityB";
-			this.mtgIdentityB.Size = new System.Drawing.Size(20, 20);
+			this.mtgIdentityB.Size = new System.Drawing.Size(14, 30);
 			this.mtgIdentityB.TabIndex = 6;
 			this.mtgIdentityB.UseVisualStyleBackColor = true;
 			// 
 			// mtgIdentityU
 			// 
-			this.mtgIdentityU.Location = new System.Drawing.Point(140, 50);
+			this.mtgIdentityU.Location = new System.Drawing.Point(155, 40);
 			this.mtgIdentityU.Name = "mtgIdentityU";
-			this.mtgIdentityU.Size = new System.Drawing.Size(20, 20);
+			this.mtgIdentityU.Size = new System.Drawing.Size(14, 30);
 			this.mtgIdentityU.TabIndex = 5;
 			this.mtgIdentityU.UseVisualStyleBackColor = true;
 			// 
 			// mtgIdentityW
 			// 
-			this.mtgIdentityW.Location = new System.Drawing.Point(100, 50);
+			this.mtgIdentityW.Location = new System.Drawing.Point(105, 40);
 			this.mtgIdentityW.Name = "mtgIdentityW";
-			this.mtgIdentityW.Size = new System.Drawing.Size(20, 20);
+			this.mtgIdentityW.Size = new System.Drawing.Size(14, 30);
 			this.mtgIdentityW.TabIndex = 4;
 			this.mtgIdentityW.UseVisualStyleBackColor = true;
 			// 
 			// mtgCardDialog
 			// 
 			this.mtgCardDialog.AutoSize = true;
-			this.mtgCardDialog.Location = new System.Drawing.Point(275, 405);
+			this.mtgCardDialog.Location = new System.Drawing.Point(355, 498);
 			this.mtgCardDialog.Name = "mtgCardDialog";
-			this.mtgCardDialog.Size = new System.Drawing.Size(10, 13);
+			this.mtgCardDialog.Size = new System.Drawing.Size(16, 21);
 			this.mtgCardDialog.TabIndex = 31;
 			this.mtgCardDialog.Text = "-";
+			this.mtgCardDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgToughnessField
 			// 
-			this.mtgToughnessField.Location = new System.Drawing.Point(190, 350);
+			this.mtgToughnessField.Location = new System.Drawing.Point(227, 425);
 			this.mtgToughnessField.Name = "mtgToughnessField";
-			this.mtgToughnessField.Size = new System.Drawing.Size(80, 20);
+			this.mtgToughnessField.Size = new System.Drawing.Size(123, 29);
 			this.mtgToughnessField.TabIndex = 26;
 			// 
 			// mtgPowerField
 			// 
-			this.mtgPowerField.Location = new System.Drawing.Point(100, 350);
+			this.mtgPowerField.Location = new System.Drawing.Point(100, 425);
 			this.mtgPowerField.Name = "mtgPowerField";
-			this.mtgPowerField.Size = new System.Drawing.Size(80, 20);
+			this.mtgPowerField.Size = new System.Drawing.Size(123, 29);
 			this.mtgPowerField.TabIndex = 25;
 			// 
 			// mtgAtkDefLabel
 			// 
-			this.mtgAtkDefLabel.AutoSize = true;
-			this.mtgAtkDefLabel.Location = new System.Drawing.Point(5, 350);
+			this.mtgAtkDefLabel.Location = new System.Drawing.Point(5, 425);
 			this.mtgAtkDefLabel.Name = "mtgAtkDefLabel";
-			this.mtgAtkDefLabel.Size = new System.Drawing.Size(76, 13);
+			this.mtgAtkDefLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgAtkDefLabel.TabIndex = 24;
-			this.mtgAtkDefLabel.Text = "Power/Tough:";
-			// 
-			// mtgCardHeader
-			// 
-			this.mtgCardHeader.AutoSize = true;
-			this.mtgCardHeader.Location = new System.Drawing.Point(5, 5);
-			this.mtgCardHeader.Name = "mtgCardHeader";
-			this.mtgCardHeader.Size = new System.Drawing.Size(81, 13);
-			this.mtgCardHeader.TabIndex = 0;
-			this.mtgCardHeader.Text = "New Card Entry";
+			this.mtgAtkDefLabel.Text = "Pow/Tough:";
+			this.mtgAtkDefLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgAddCardButton
 			// 
-			this.mtgAddCardButton.Location = new System.Drawing.Point(100, 400);
+			this.mtgAddCardButton.Location = new System.Drawing.Point(100, 495);
 			this.mtgAddCardButton.Name = "mtgAddCardButton";
-			this.mtgAddCardButton.Size = new System.Drawing.Size(170, 23);
+			this.mtgAddCardButton.Size = new System.Drawing.Size(250, 30);
 			this.mtgAddCardButton.TabIndex = 30;
 			this.mtgAddCardButton.Text = "Add To Catalog";
 			this.mtgAddCardButton.UseVisualStyleBackColor = true;
@@ -1468,64 +1453,64 @@
 			// 
 			// mtgNameLabel
 			// 
-			this.mtgNameLabel.AutoSize = true;
-			this.mtgNameLabel.Location = new System.Drawing.Point(5, 25);
+			this.mtgNameLabel.Location = new System.Drawing.Point(5, 5);
 			this.mtgNameLabel.Name = "mtgNameLabel";
-			this.mtgNameLabel.Size = new System.Drawing.Size(38, 13);
+			this.mtgNameLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgNameLabel.TabIndex = 1;
 			this.mtgNameLabel.Text = "Name:";
+			this.mtgNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgNameField
 			// 
-			this.mtgNameField.Location = new System.Drawing.Point(100, 25);
+			this.mtgNameField.Location = new System.Drawing.Point(100, 5);
 			this.mtgNameField.Name = "mtgNameField";
-			this.mtgNameField.Size = new System.Drawing.Size(170, 20);
+			this.mtgNameField.Size = new System.Drawing.Size(250, 29);
 			this.mtgNameField.TabIndex = 2;
 			// 
 			// mtgOracleTextLabel
 			// 
-			this.mtgOracleTextLabel.AutoSize = true;
-			this.mtgOracleTextLabel.Location = new System.Drawing.Point(5, 150);
+			this.mtgOracleTextLabel.Location = new System.Drawing.Point(5, 180);
 			this.mtgOracleTextLabel.Name = "mtgOracleTextLabel";
-			this.mtgOracleTextLabel.Size = new System.Drawing.Size(65, 13);
+			this.mtgOracleTextLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgOracleTextLabel.TabIndex = 22;
 			this.mtgOracleTextLabel.Text = "Oracle Text:";
+			this.mtgOracleTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgIdentityLabel
 			// 
-			this.mtgIdentityLabel.AutoSize = true;
-			this.mtgIdentityLabel.Location = new System.Drawing.Point(5, 50);
+			this.mtgIdentityLabel.Location = new System.Drawing.Point(5, 40);
 			this.mtgIdentityLabel.Name = "mtgIdentityLabel";
-			this.mtgIdentityLabel.Size = new System.Drawing.Size(44, 13);
+			this.mtgIdentityLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgIdentityLabel.TabIndex = 3;
 			this.mtgIdentityLabel.Text = "Identity:";
+			this.mtgIdentityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgOracleTextField
 			// 
-			this.mtgOracleTextField.Location = new System.Drawing.Point(100, 150);
+			this.mtgOracleTextField.Location = new System.Drawing.Point(100, 180);
 			this.mtgOracleTextField.Multiline = true;
 			this.mtgOracleTextField.Name = "mtgOracleTextField";
 			this.mtgOracleTextField.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.mtgOracleTextField.Size = new System.Drawing.Size(350, 195);
+			this.mtgOracleTextField.Size = new System.Drawing.Size(450, 240);
 			this.mtgOracleTextField.TabIndex = 23;
 			// 
 			// mtgColourLabel
 			// 
-			this.mtgColourLabel.AutoSize = true;
 			this.mtgColourLabel.Location = new System.Drawing.Point(5, 75);
 			this.mtgColourLabel.Name = "mtgColourLabel";
-			this.mtgColourLabel.Size = new System.Drawing.Size(45, 13);
+			this.mtgColourLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgColourLabel.TabIndex = 9;
 			this.mtgColourLabel.Text = "Colours:";
+			this.mtgColourLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgCardTypeLabel
 			// 
-			this.mtgCardTypeLabel.AutoSize = true;
-			this.mtgCardTypeLabel.Location = new System.Drawing.Point(5, 125);
+			this.mtgCardTypeLabel.Location = new System.Drawing.Point(5, 145);
 			this.mtgCardTypeLabel.Name = "mtgCardTypeLabel";
-			this.mtgCardTypeLabel.Size = new System.Drawing.Size(64, 13);
+			this.mtgCardTypeLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgCardTypeLabel.TabIndex = 17;
 			this.mtgCardTypeLabel.Text = "Card Types:";
+			this.mtgCardTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgPrintPage
 			// 
@@ -1559,11 +1544,10 @@
 			this.mtgPrintPage.Controls.Add(this.mtgNumberLabel);
 			this.mtgPrintPage.Controls.Add(this.mtgSetField);
 			this.mtgPrintPage.Controls.Add(this.mtgSetLabel);
-			this.mtgPrintPage.Controls.Add(this.mtgPrintHeader);
-			this.mtgPrintPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgPrintPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgPrintPage.Name = "mtgPrintPage";
 			this.mtgPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgPrintPage.Size = new System.Drawing.Size(1244, 634);
+			this.mtgPrintPage.Size = new System.Drawing.Size(1244, 618);
 			this.mtgPrintPage.TabIndex = 1;
 			this.mtgPrintPage.Text = "Printing Entry";
 			// 
@@ -1574,32 +1558,32 @@
 			this.mtgRarityField.FormattingEnabled = true;
 			this.mtgRarityField.Location = new System.Drawing.Point(100, 75);
 			this.mtgRarityField.Name = "mtgRarityField";
-			this.mtgRarityField.Size = new System.Drawing.Size(170, 21);
+			this.mtgRarityField.Size = new System.Drawing.Size(250, 29);
 			this.mtgRarityField.TabIndex = 6;
 			// 
 			// mtgRarityLabel
 			// 
-			this.mtgRarityLabel.AutoSize = true;
 			this.mtgRarityLabel.Location = new System.Drawing.Point(5, 75);
 			this.mtgRarityLabel.Name = "mtgRarityLabel";
-			this.mtgRarityLabel.Size = new System.Drawing.Size(37, 13);
+			this.mtgRarityLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgRarityLabel.TabIndex = 5;
 			this.mtgRarityLabel.Text = "Rarity:";
+			this.mtgRarityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgScryfallLabel
 			// 
-			this.mtgScryfallLabel.AutoSize = true;
-			this.mtgScryfallLabel.Location = new System.Drawing.Point(5, 325);
+			this.mtgScryfallLabel.Location = new System.Drawing.Point(5, 440);
 			this.mtgScryfallLabel.Name = "mtgScryfallLabel";
-			this.mtgScryfallLabel.Size = new System.Drawing.Size(58, 13);
+			this.mtgScryfallLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgScryfallLabel.TabIndex = 20;
 			this.mtgScryfallLabel.Text = "Scryfall ID:";
+			this.mtgScryfallLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgScryfallField
 			// 
-			this.mtgScryfallField.Location = new System.Drawing.Point(100, 325);
+			this.mtgScryfallField.Location = new System.Drawing.Point(100, 440);
 			this.mtgScryfallField.Name = "mtgScryfallField";
-			this.mtgScryfallField.Size = new System.Drawing.Size(170, 20);
+			this.mtgScryfallField.Size = new System.Drawing.Size(250, 29);
 			this.mtgScryfallField.TabIndex = 21;
 			// 
 			// mtgImgpathBackLabel
@@ -1607,7 +1591,7 @@
 			this.mtgImgpathBackLabel.AutoSize = true;
 			this.mtgImgpathBackLabel.Location = new System.Drawing.Point(855, 505);
 			this.mtgImgpathBackLabel.Name = "mtgImgpathBackLabel";
-			this.mtgImgpathBackLabel.Size = new System.Drawing.Size(0, 13);
+			this.mtgImgpathBackLabel.Size = new System.Drawing.Size(0, 21);
 			this.mtgImgpathBackLabel.TabIndex = 27;
 			// 
 			// mtgPrintImgboxBack
@@ -1623,9 +1607,9 @@
 			// 
 			// mtgImgsearchBackButton
 			// 
-			this.mtgImgsearchBackButton.Location = new System.Drawing.Point(100, 275);
+			this.mtgImgsearchBackButton.Location = new System.Drawing.Point(100, 370);
 			this.mtgImgsearchBackButton.Name = "mtgImgsearchBackButton";
-			this.mtgImgsearchBackButton.Size = new System.Drawing.Size(170, 23);
+			this.mtgImgsearchBackButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgImgsearchBackButton.TabIndex = 17;
 			this.mtgImgsearchBackButton.Text = "Search";
 			this.mtgImgsearchBackButton.UseVisualStyleBackColor = true;
@@ -1633,29 +1617,30 @@
 			// 
 			// mtgImgsearchBackLabel
 			// 
-			this.mtgImgsearchBackLabel.AutoSize = true;
-			this.mtgImgsearchBackLabel.Location = new System.Drawing.Point(5, 275);
+			this.mtgImgsearchBackLabel.Location = new System.Drawing.Point(5, 370);
 			this.mtgImgsearchBackLabel.Name = "mtgImgsearchBackLabel";
-			this.mtgImgsearchBackLabel.Size = new System.Drawing.Size(35, 13);
+			this.mtgImgsearchBackLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgImgsearchBackLabel.TabIndex = 16;
 			this.mtgImgsearchBackLabel.Text = "Back:";
+			this.mtgImgsearchBackLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgIODialog
 			// 
 			this.mtgIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.mtgIODialog.AutoSize = true;
-			this.mtgIODialog.Location = new System.Drawing.Point(185, 605);
+			this.mtgIODialog.Location = new System.Drawing.Point(260, 582);
 			this.mtgIODialog.Name = "mtgIODialog";
-			this.mtgIODialog.Size = new System.Drawing.Size(10, 13);
+			this.mtgIODialog.Size = new System.Drawing.Size(16, 21);
 			this.mtgIODialog.TabIndex = 25;
 			this.mtgIODialog.Text = "-";
+			this.mtgIODialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgSaveButton
 			// 
 			this.mtgSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mtgSaveButton.Location = new System.Drawing.Point(6, 600);
+			this.mtgSaveButton.Location = new System.Drawing.Point(5, 579);
 			this.mtgSaveButton.Name = "mtgSaveButton";
-			this.mtgSaveButton.Size = new System.Drawing.Size(170, 23);
+			this.mtgSaveButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgSaveButton.TabIndex = 24;
 			this.mtgSaveButton.Text = "Save Catalog";
 			this.mtgSaveButton.UseVisualStyleBackColor = true;
@@ -1666,15 +1651,15 @@
 			this.mtgImgpathLabel.AutoSize = true;
 			this.mtgImgpathLabel.Location = new System.Drawing.Point(475, 505);
 			this.mtgImgpathLabel.Name = "mtgImgpathLabel";
-			this.mtgImgpathLabel.Size = new System.Drawing.Size(10, 13);
+			this.mtgImgpathLabel.Size = new System.Drawing.Size(16, 21);
 			this.mtgImgpathLabel.TabIndex = 26;
 			this.mtgImgpathLabel.Text = "-";
 			// 
 			// mtgSubTreatmentButton
 			// 
-			this.mtgSubTreatmentButton.Location = new System.Drawing.Point(300, 100);
+			this.mtgSubTreatmentButton.Location = new System.Drawing.Point(390, 110);
 			this.mtgSubTreatmentButton.Name = "mtgSubTreatmentButton";
-			this.mtgSubTreatmentButton.Size = new System.Drawing.Size(23, 23);
+			this.mtgSubTreatmentButton.Size = new System.Drawing.Size(30, 29);
 			this.mtgSubTreatmentButton.TabIndex = 10;
 			this.mtgSubTreatmentButton.Text = "-";
 			this.mtgSubTreatmentButton.UseVisualStyleBackColor = true;
@@ -1682,9 +1667,9 @@
 			// 
 			// mtgAddTreatmentButton
 			// 
-			this.mtgAddTreatmentButton.Location = new System.Drawing.Point(275, 100);
+			this.mtgAddTreatmentButton.Location = new System.Drawing.Point(355, 110);
 			this.mtgAddTreatmentButton.Name = "mtgAddTreatmentButton";
-			this.mtgAddTreatmentButton.Size = new System.Drawing.Size(23, 23);
+			this.mtgAddTreatmentButton.Size = new System.Drawing.Size(30, 29);
 			this.mtgAddTreatmentButton.TabIndex = 9;
 			this.mtgAddTreatmentButton.Text = "+";
 			this.mtgAddTreatmentButton.UseVisualStyleBackColor = true;
@@ -1703,9 +1688,9 @@
 			// 
 			// mtgAddPrintButton
 			// 
-			this.mtgAddPrintButton.Location = new System.Drawing.Point(100, 350);
+			this.mtgAddPrintButton.Location = new System.Drawing.Point(100, 475);
 			this.mtgAddPrintButton.Name = "mtgAddPrintButton";
-			this.mtgAddPrintButton.Size = new System.Drawing.Size(170, 23);
+			this.mtgAddPrintButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgAddPrintButton.TabIndex = 22;
 			this.mtgAddPrintButton.Text = "Add To Catalog";
 			this.mtgAddPrintButton.UseVisualStyleBackColor = true;
@@ -1717,26 +1702,26 @@
 			this.mtgCardrefField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
 			this.mtgCardrefField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.mtgCardrefField.FormattingEnabled = true;
-			this.mtgCardrefField.Location = new System.Drawing.Point(100, 300);
+			this.mtgCardrefField.Location = new System.Drawing.Point(100, 405);
 			this.mtgCardrefField.Name = "mtgCardrefField";
-			this.mtgCardrefField.Size = new System.Drawing.Size(170, 21);
+			this.mtgCardrefField.Size = new System.Drawing.Size(250, 29);
 			this.mtgCardrefField.Sorted = true;
 			this.mtgCardrefField.TabIndex = 19;
 			// 
 			// mtgCardrefLabel
 			// 
-			this.mtgCardrefLabel.AutoSize = true;
-			this.mtgCardrefLabel.Location = new System.Drawing.Point(5, 300);
+			this.mtgCardrefLabel.Location = new System.Drawing.Point(5, 405);
 			this.mtgCardrefLabel.Name = "mtgCardrefLabel";
-			this.mtgCardrefLabel.Size = new System.Drawing.Size(32, 13);
+			this.mtgCardrefLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgCardrefLabel.TabIndex = 18;
 			this.mtgCardrefLabel.Text = "Card:";
+			this.mtgCardrefLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgImgsearchButton
 			// 
-			this.mtgImgsearchButton.Location = new System.Drawing.Point(100, 250);
+			this.mtgImgsearchButton.Location = new System.Drawing.Point(100, 335);
 			this.mtgImgsearchButton.Name = "mtgImgsearchButton";
-			this.mtgImgsearchButton.Size = new System.Drawing.Size(170, 23);
+			this.mtgImgsearchButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgImgsearchButton.TabIndex = 15;
 			this.mtgImgsearchButton.Text = "Search";
 			this.mtgImgsearchButton.UseVisualStyleBackColor = true;
@@ -1744,115 +1729,107 @@
 			// 
 			// mtgImgsearchLabel
 			// 
-			this.mtgImgsearchLabel.AutoSize = true;
-			this.mtgImgsearchLabel.Location = new System.Drawing.Point(5, 250);
+			this.mtgImgsearchLabel.Location = new System.Drawing.Point(5, 335);
 			this.mtgImgsearchLabel.Name = "mtgImgsearchLabel";
-			this.mtgImgsearchLabel.Size = new System.Drawing.Size(39, 13);
+			this.mtgImgsearchLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgImgsearchLabel.TabIndex = 14;
 			this.mtgImgsearchLabel.Text = "Image:";
+			this.mtgImgsearchLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgFlavorTextField
 			// 
-			this.mtgFlavorTextField.Location = new System.Drawing.Point(100, 150);
+			this.mtgFlavorTextField.Location = new System.Drawing.Point(100, 180);
 			this.mtgFlavorTextField.Multiline = true;
 			this.mtgFlavorTextField.Name = "mtgFlavorTextField";
-			this.mtgFlavorTextField.Size = new System.Drawing.Size(350, 94);
+			this.mtgFlavorTextField.Size = new System.Drawing.Size(370, 150);
 			this.mtgFlavorTextField.TabIndex = 13;
 			// 
 			// mtgFlavorTextLabel
 			// 
-			this.mtgFlavorTextLabel.AutoSize = true;
-			this.mtgFlavorTextLabel.Location = new System.Drawing.Point(5, 150);
+			this.mtgFlavorTextLabel.Location = new System.Drawing.Point(5, 180);
 			this.mtgFlavorTextLabel.Name = "mtgFlavorTextLabel";
-			this.mtgFlavorTextLabel.Size = new System.Drawing.Size(63, 13);
+			this.mtgFlavorTextLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgFlavorTextLabel.TabIndex = 12;
 			this.mtgFlavorTextLabel.Text = "Flavor Text:";
+			this.mtgFlavorTextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgTreatmentsValue
 			// 
-			this.mtgTreatmentsValue.Location = new System.Drawing.Point(100, 125);
+			this.mtgTreatmentsValue.Location = new System.Drawing.Point(100, 145);
 			this.mtgTreatmentsValue.Name = "mtgTreatmentsValue";
-			this.mtgTreatmentsValue.Size = new System.Drawing.Size(350, 20);
+			this.mtgTreatmentsValue.Size = new System.Drawing.Size(350, 30);
 			this.mtgTreatmentsValue.TabIndex = 11;
 			this.mtgTreatmentsValue.Text = "-";
+			this.mtgTreatmentsValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgTreatmentField
 			// 
 			this.mtgTreatmentField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
 			this.mtgTreatmentField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
 			this.mtgTreatmentField.FormattingEnabled = true;
-			this.mtgTreatmentField.Location = new System.Drawing.Point(100, 100);
+			this.mtgTreatmentField.Location = new System.Drawing.Point(100, 110);
 			this.mtgTreatmentField.Name = "mtgTreatmentField";
-			this.mtgTreatmentField.Size = new System.Drawing.Size(170, 21);
+			this.mtgTreatmentField.Size = new System.Drawing.Size(250, 29);
 			this.mtgTreatmentField.TabIndex = 8;
 			// 
 			// mtgTreatmentLabel
 			// 
-			this.mtgTreatmentLabel.AutoSize = true;
-			this.mtgTreatmentLabel.Location = new System.Drawing.Point(5, 100);
+			this.mtgTreatmentLabel.Location = new System.Drawing.Point(5, 110);
 			this.mtgTreatmentLabel.Name = "mtgTreatmentLabel";
-			this.mtgTreatmentLabel.Size = new System.Drawing.Size(63, 13);
+			this.mtgTreatmentLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgTreatmentLabel.TabIndex = 7;
 			this.mtgTreatmentLabel.Text = "Treatments:";
+			this.mtgTreatmentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgNumberField
 			// 
-			this.mtgNumberField.Location = new System.Drawing.Point(100, 50);
+			this.mtgNumberField.Location = new System.Drawing.Point(100, 40);
 			this.mtgNumberField.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
 			this.mtgNumberField.Name = "mtgNumberField";
-			this.mtgNumberField.Size = new System.Drawing.Size(170, 20);
+			this.mtgNumberField.Size = new System.Drawing.Size(250, 29);
 			this.mtgNumberField.TabIndex = 4;
 			// 
 			// mtgNumberLabel
 			// 
-			this.mtgNumberLabel.AutoSize = true;
-			this.mtgNumberLabel.Location = new System.Drawing.Point(5, 50);
+			this.mtgNumberLabel.Location = new System.Drawing.Point(5, 40);
 			this.mtgNumberLabel.Name = "mtgNumberLabel";
-			this.mtgNumberLabel.Size = new System.Drawing.Size(47, 13);
+			this.mtgNumberLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgNumberLabel.TabIndex = 3;
 			this.mtgNumberLabel.Text = "Number:";
+			this.mtgNumberLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgSetField
 			// 
 			this.mtgSetField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.mtgSetField.FormattingEnabled = true;
-			this.mtgSetField.Location = new System.Drawing.Point(100, 25);
+			this.mtgSetField.Location = new System.Drawing.Point(100, 5);
 			this.mtgSetField.Name = "mtgSetField";
-			this.mtgSetField.Size = new System.Drawing.Size(170, 21);
+			this.mtgSetField.Size = new System.Drawing.Size(250, 29);
 			this.mtgSetField.Sorted = true;
 			this.mtgSetField.TabIndex = 2;
 			// 
 			// mtgSetLabel
 			// 
-			this.mtgSetLabel.AutoSize = true;
-			this.mtgSetLabel.Location = new System.Drawing.Point(5, 25);
+			this.mtgSetLabel.Location = new System.Drawing.Point(5, 5);
 			this.mtgSetLabel.Name = "mtgSetLabel";
-			this.mtgSetLabel.Size = new System.Drawing.Size(26, 13);
+			this.mtgSetLabel.Size = new System.Drawing.Size(90, 30);
 			this.mtgSetLabel.TabIndex = 1;
 			this.mtgSetLabel.Text = "Set:";
-			// 
-			// mtgPrintHeader
-			// 
-			this.mtgPrintHeader.AutoSize = true;
-			this.mtgPrintHeader.Location = new System.Drawing.Point(5, 5);
-			this.mtgPrintHeader.Name = "mtgPrintHeader";
-			this.mtgPrintHeader.Size = new System.Drawing.Size(94, 13);
-			this.mtgPrintHeader.TabIndex = 0;
-			this.mtgPrintHeader.Text = "New Printing Entry";
+			this.mtgSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgSymbolsPage
 			// 
 			this.mtgSymbolsPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgSymbolsPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.mtgSymbolsPage.Controls.Add(this.mtgSymbolLayout);
-			this.mtgSymbolsPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgSymbolsPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgSymbolsPage.Name = "mtgSymbolsPage";
 			this.mtgSymbolsPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgSymbolsPage.Size = new System.Drawing.Size(1244, 634);
+			this.mtgSymbolsPage.Size = new System.Drawing.Size(1244, 618);
 			this.mtgSymbolsPage.TabIndex = 5;
 			this.mtgSymbolsPage.Text = "Symbols";
 			// 
@@ -1864,7 +1841,7 @@
 			this.mtgSymbolLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.mtgSymbolLayout.Location = new System.Drawing.Point(3, 3);
 			this.mtgSymbolLayout.Name = "mtgSymbolLayout";
-			this.mtgSymbolLayout.Size = new System.Drawing.Size(1234, 624);
+			this.mtgSymbolLayout.Size = new System.Drawing.Size(1234, 608);
 			this.mtgSymbolLayout.TabIndex = 0;
 			// 
 			// mtgSymbolHeaderBox
@@ -1874,15 +1851,16 @@
 			this.mtgSymbolHeaderBox.Controls.Add(this.mtgSymbolLabel);
 			this.mtgSymbolHeaderBox.Location = new System.Drawing.Point(3, 3);
 			this.mtgSymbolHeaderBox.Name = "mtgSymbolHeaderBox";
-			this.mtgSymbolHeaderBox.Size = new System.Drawing.Size(300, 35);
+			this.mtgSymbolHeaderBox.Size = new System.Drawing.Size(325, 50);
 			this.mtgSymbolHeaderBox.TabIndex = 1;
 			this.mtgSymbolHeaderBox.TabStop = false;
 			// 
 			// mtgSaveSymbolsButton
 			// 
-			this.mtgSaveSymbolsButton.Location = new System.Drawing.Point(250, 10);
+			this.mtgSaveSymbolsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgSaveSymbolsButton.Location = new System.Drawing.Point(260, 15);
 			this.mtgSaveSymbolsButton.Name = "mtgSaveSymbolsButton";
-			this.mtgSaveSymbolsButton.Size = new System.Drawing.Size(45, 20);
+			this.mtgSaveSymbolsButton.Size = new System.Drawing.Size(60, 29);
 			this.mtgSaveSymbolsButton.TabIndex = 2;
 			this.mtgSaveSymbolsButton.Text = "Save";
 			this.mtgSaveSymbolsButton.UseVisualStyleBackColor = true;
@@ -1890,9 +1868,10 @@
 			// 
 			// mtgAddSymbolButton
 			// 
-			this.mtgAddSymbolButton.Location = new System.Drawing.Point(230, 10);
+			this.mtgAddSymbolButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgAddSymbolButton.Location = new System.Drawing.Point(225, 15);
 			this.mtgAddSymbolButton.Name = "mtgAddSymbolButton";
-			this.mtgAddSymbolButton.Size = new System.Drawing.Size(20, 20);
+			this.mtgAddSymbolButton.Size = new System.Drawing.Size(30, 29);
 			this.mtgAddSymbolButton.TabIndex = 1;
 			this.mtgAddSymbolButton.Text = "+";
 			this.mtgAddSymbolButton.UseVisualStyleBackColor = true;
@@ -1900,22 +1879,22 @@
 			// 
 			// mtgSymbolLabel
 			// 
-			this.mtgSymbolLabel.AutoSize = true;
-			this.mtgSymbolLabel.Location = new System.Drawing.Point(5, 13);
+			this.mtgSymbolLabel.Location = new System.Drawing.Point(5, 15);
 			this.mtgSymbolLabel.Name = "mtgSymbolLabel";
-			this.mtgSymbolLabel.Size = new System.Drawing.Size(46, 13);
+			this.mtgSymbolLabel.Size = new System.Drawing.Size(150, 30);
 			this.mtgSymbolLabel.TabIndex = 0;
 			this.mtgSymbolLabel.Text = "Symbols";
+			this.mtgSymbolLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgSetsPage
 			// 
 			this.mtgSetsPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgSetsPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.mtgSetsPage.Controls.Add(this.mtgSetGeneratorLayout);
-			this.mtgSetsPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgSetsPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgSetsPage.Name = "mtgSetsPage";
 			this.mtgSetsPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgSetsPage.Size = new System.Drawing.Size(1244, 634);
+			this.mtgSetsPage.Size = new System.Drawing.Size(1244, 618);
 			this.mtgSetsPage.TabIndex = 6;
 			this.mtgSetsPage.Text = "Sets";
 			// 
@@ -1927,7 +1906,7 @@
 			this.mtgSetGeneratorLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.mtgSetGeneratorLayout.Location = new System.Drawing.Point(3, 3);
 			this.mtgSetGeneratorLayout.Name = "mtgSetGeneratorLayout";
-			this.mtgSetGeneratorLayout.Size = new System.Drawing.Size(1234, 624);
+			this.mtgSetGeneratorLayout.Size = new System.Drawing.Size(1234, 608);
 			this.mtgSetGeneratorLayout.TabIndex = 1;
 			// 
 			// mtgSetGeneratorHeaderBox
@@ -1937,15 +1916,16 @@
 			this.mtgSetGeneratorHeaderBox.Controls.Add(this.mtgSetGeneratorLabel);
 			this.mtgSetGeneratorHeaderBox.Location = new System.Drawing.Point(3, 3);
 			this.mtgSetGeneratorHeaderBox.Name = "mtgSetGeneratorHeaderBox";
-			this.mtgSetGeneratorHeaderBox.Size = new System.Drawing.Size(300, 35);
+			this.mtgSetGeneratorHeaderBox.Size = new System.Drawing.Size(350, 50);
 			this.mtgSetGeneratorHeaderBox.TabIndex = 1;
 			this.mtgSetGeneratorHeaderBox.TabStop = false;
 			// 
 			// mtgSaveSetsButton
 			// 
-			this.mtgSaveSetsButton.Location = new System.Drawing.Point(250, 10);
+			this.mtgSaveSetsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgSaveSetsButton.Location = new System.Drawing.Point(285, 15);
 			this.mtgSaveSetsButton.Name = "mtgSaveSetsButton";
-			this.mtgSaveSetsButton.Size = new System.Drawing.Size(45, 20);
+			this.mtgSaveSetsButton.Size = new System.Drawing.Size(60, 29);
 			this.mtgSaveSetsButton.TabIndex = 2;
 			this.mtgSaveSetsButton.Text = "Save";
 			this.mtgSaveSetsButton.UseVisualStyleBackColor = true;
@@ -1953,9 +1933,10 @@
 			// 
 			// mtgAddSetButton
 			// 
-			this.mtgAddSetButton.Location = new System.Drawing.Point(230, 10);
+			this.mtgAddSetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgAddSetButton.Location = new System.Drawing.Point(250, 15);
 			this.mtgAddSetButton.Name = "mtgAddSetButton";
-			this.mtgAddSetButton.Size = new System.Drawing.Size(20, 20);
+			this.mtgAddSetButton.Size = new System.Drawing.Size(30, 29);
 			this.mtgAddSetButton.TabIndex = 1;
 			this.mtgAddSetButton.Text = "+";
 			this.mtgAddSetButton.UseVisualStyleBackColor = true;
@@ -1963,26 +1944,19 @@
 			// 
 			// mtgSetGeneratorLabel
 			// 
-			this.mtgSetGeneratorLabel.AutoSize = true;
-			this.mtgSetGeneratorLabel.Location = new System.Drawing.Point(5, 13);
+			this.mtgSetGeneratorLabel.Location = new System.Drawing.Point(5, 15);
 			this.mtgSetGeneratorLabel.Name = "mtgSetGeneratorLabel";
-			this.mtgSetGeneratorLabel.Size = new System.Drawing.Size(28, 13);
+			this.mtgSetGeneratorLabel.Size = new System.Drawing.Size(150, 30);
 			this.mtgSetGeneratorLabel.TabIndex = 0;
 			this.mtgSetGeneratorLabel.Text = "Sets";
-			// 
-			// mtgTooltipBox
-			// 
-			this.mtgTooltipBox.Location = new System.Drawing.Point(865, 5);
-			this.mtgTooltipBox.Name = "mtgTooltipBox";
-			this.mtgTooltipBox.Size = new System.Drawing.Size(300, 100);
-			this.mtgTooltipBox.TabIndex = 5;
-			this.mtgTooltipBox.TabStop = false;
+			this.mtgSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ClientSize = new System.Drawing.Size(1266, 698);
 			this.Controls.Add(this.formTabControl);
+			this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "Form1";
 			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoAttackField)).EndInit();
@@ -2010,7 +1984,6 @@
 			this.mtgCatalogPage.ResumeLayout(false);
 			this.mtgDetailPage.ResumeLayout(false);
 			this.mtgDetailBox.ResumeLayout(false);
-			this.mtgDetailBox.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.mtgDetailImgbox)).EndInit();
 			this.mtgCardPage.ResumeLayout(false);
 			this.mtgCardPage.PerformLayout();
@@ -2036,11 +2009,9 @@
 			this.mtgSymbolsPage.ResumeLayout(false);
 			this.mtgSymbolLayout.ResumeLayout(false);
 			this.mtgSymbolHeaderBox.ResumeLayout(false);
-			this.mtgSymbolHeaderBox.PerformLayout();
 			this.mtgSetsPage.ResumeLayout(false);
 			this.mtgSetGeneratorLayout.ResumeLayout(false);
 			this.mtgSetGeneratorHeaderBox.ResumeLayout(false);
-			this.mtgSetGeneratorHeaderBox.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -2129,7 +2100,6 @@
 		private System.Windows.Forms.NumericUpDown mtgToughnessField;
 		private System.Windows.Forms.NumericUpDown mtgPowerField;
 		private System.Windows.Forms.Label mtgAtkDefLabel;
-		private System.Windows.Forms.Label mtgCardHeader;
 		private System.Windows.Forms.Button mtgAddCardButton;
 		private System.Windows.Forms.Label mtgNameLabel;
 		private System.Windows.Forms.TextBox mtgNameField;
@@ -2159,7 +2129,6 @@
 		private System.Windows.Forms.Label mtgNumberLabel;
 		private System.Windows.Forms.ComboBox mtgSetField;
 		private System.Windows.Forms.Label mtgSetLabel;
-		private System.Windows.Forms.Label mtgPrintHeader;
 		private System.Windows.Forms.CheckBox mtgIdentityG;
 		private System.Windows.Forms.CheckBox mtgIdentityR;
 		private System.Windows.Forms.CheckBox mtgIdentityB;
@@ -2193,7 +2162,6 @@
 		private System.Windows.Forms.NumericUpDown mtgToughnessBackField;
 		private System.Windows.Forms.NumericUpDown mtgPowerBackField;
 		private System.Windows.Forms.Label mtgAtkDefBackLabel;
-		private System.Windows.Forms.Button mtgFlipCardButton;
 		private System.Windows.Forms.TextBox mtgCardTypeField;
 		private System.Windows.Forms.Button mtgCatalogNextButton;
 		private System.Windows.Forms.Button mtgCatalogPrevButton;
