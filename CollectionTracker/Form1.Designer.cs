@@ -909,7 +909,7 @@
 			this.formTabControl.Location = new System.Drawing.Point(0, 0);
 			this.formTabControl.Name = "formTabControl";
 			this.formTabControl.SelectedIndex = 0;
-			this.formTabControl.Size = new System.Drawing.Size(1266, 698);
+			this.formTabControl.Size = new System.Drawing.Size(1284, 698);
 			this.formTabControl.TabIndex = 0;
 			// 
 			// ygoPage
@@ -930,7 +930,7 @@
 			this.mtgPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgPage.Name = "mtgPage";
 			this.mtgPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgPage.Size = new System.Drawing.Size(1258, 661);
+			this.mtgPage.Size = new System.Drawing.Size(1276, 661);
 			this.mtgPage.TabIndex = 1;
 			this.mtgPage.Text = "MTG";
 			// 
@@ -948,7 +948,7 @@
 			this.mtgTabControl.Location = new System.Drawing.Point(3, 3);
 			this.mtgTabControl.Name = "mtgTabControl";
 			this.mtgTabControl.SelectedIndex = 0;
-			this.mtgTabControl.Size = new System.Drawing.Size(1252, 655);
+			this.mtgTabControl.Size = new System.Drawing.Size(1270, 655);
 			this.mtgTabControl.TabIndex = 0;
 			// 
 			// mtgSetPage
@@ -1188,7 +1188,7 @@
 			this.mtgCardPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgCardPage.Name = "mtgCardPage";
 			this.mtgCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgCardPage.Size = new System.Drawing.Size(1244, 618);
+			this.mtgCardPage.Size = new System.Drawing.Size(1262, 618);
 			this.mtgCardPage.TabIndex = 0;
 			this.mtgCardPage.Text = "Card Entry";
 			// 
@@ -1954,7 +1954,7 @@
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.ClientSize = new System.Drawing.Size(1266, 698);
+			this.ClientSize = new System.Drawing.Size(1284, 698);
 			this.Controls.Add(this.formTabControl);
 			this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "Form1";

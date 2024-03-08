@@ -168,7 +168,7 @@ namespace CollectionTracker {
 				GroupBox box = new GroupBox();
 				mtgCatalogLayout.Controls.Add(box);
 				box.Location = new Point(3, 3);
-				box.Size = new Size(250, 360 + (30 * print.treatments.Count));
+				box.Size = new Size(300, 430 + (30 * print.treatments.Count));
 				if (!print.AnyOwned()) { box.BackColor = SystemColors.ControlDarkDark; }
 				box.SuspendLayout();
 
@@ -178,7 +178,7 @@ namespace CollectionTracker {
 				img.BorderStyle = BorderStyle.Fixed3D;
 				img.SizeMode = PictureBoxSizeMode.StretchImage;
 				img.Location = new Point(0, 0);
-				img.Size = new Size(250, 350);
+				img.Size = new Size(300, 420);
 				img.Load(print.imgPath);
 				img.Click += new EventHandler((sender, e) => MTG_LoadCardDetails(print));
 
@@ -191,8 +191,8 @@ namespace CollectionTracker {
 					//Treatment label
 					Label treatmentLabel = new Label();
 					box.Controls.Add(treatmentLabel);
-					treatmentLabel.Location = new Point(60, 355 + (j * 30));
-					treatmentLabel.Size = new Size(100, 30);
+					treatmentLabel.Location = new Point(60, 425 + (j * 30));
+					treatmentLabel.Size = new Size(120, 30);
 					treatmentLabel.Text = treatment.name;
 					treatmentLabel.AutoEllipsis = true;
 					treatmentLabel.TextAlign = ContentAlignment.MiddleRight;
@@ -200,15 +200,15 @@ namespace CollectionTracker {
 					//Count label
 					Label label = new Label();
 					box.Controls.Add(label);
-					label.Location = new Point(160, 355 + (j * 30));
-					label.Size = new Size(30, 30);
+					label.Location = new Point(180, 425 + (j * 30));
+					label.Size = new Size(60, 30);
 					label.Text = print.OwnedCountOfTreatment(treatment.name).ToString();
 					label.TextAlign = ContentAlignment.MiddleLeft;
 
 					//Decrement
 					Button leftButton = new Button();
 					box.Controls.Add(leftButton);
-					leftButton.Location = new Point(5, 355 + (j * 30));
+					leftButton.Location = new Point(5, 425 + (j * 30));
 					leftButton.Size = new Size(55, 29);
 					leftButton.Text = "<";
 					leftButton.UseVisualStyleBackColor = true;
@@ -217,7 +217,7 @@ namespace CollectionTracker {
 					//Increment
 					Button rightButton = new Button();
 					box.Controls.Add(rightButton);
-					rightButton.Location = new Point(190, 355 + (j * 30));
+					rightButton.Location = new Point(240, 425 + (j * 30));
 					rightButton.Size = new Size(55, 29);
 					rightButton.Text = ">";
 					rightButton.UseVisualStyleBackColor = true;
@@ -571,7 +571,7 @@ namespace CollectionTracker {
 			label.Size = new Size(textWidth, TEXT_HEIGHT);
 			label.Text = str;
 			label.TextAlign = ContentAlignment.MiddleLeft;
-			label.Click += new EventHandler((sender, e) => MTG_ShowTooltip(label, tooltip));
+			label.MouseEnter += new EventHandler((sender, e) => MTG_ShowTooltip(label, tooltip));
 			label.MouseLeave += new EventHandler((sender, e) => mtgTooltipBox.Hide());
 			location = new Point(location.X + textWidth, location.Y);
 			return location;
