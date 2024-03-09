@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace CollectionTracker {
 	public partial class Form1 : Form {
@@ -62,10 +60,11 @@ namespace CollectionTracker {
 		//Clear set list and update data
 		private void MTG_UpdateSets() {
 			mtgSetLayout.Controls.Clear();
-			foreach (MTG_Set set in mtgCatalog.sets) {
+			mtgCatalog.sets.Sort(new SetComparer().Compare);
+			foreach (MTG_Set set in mtgCatalog.sets/*.OrderBy(set => set, new SetComparer())*/) {
 
 				//Horizontal indent
-				int indent = set.order * 35;
+				int indent = set.indent * 35;
 
 				//Important values
 				List<MTG_Printing> cardsInSet = mtgCatalog.printings.Where(print => print.set == set).ToList();
@@ -85,7 +84,7 @@ namespace CollectionTracker {
 				filter.Size = new Size(350 - indent, 50);
 				filter.Text = set.name;
 				filter.UseVisualStyleBackColor = true;
-				filter.Image = new Bitmap(Image.FromFile(set.imgPath), new Size(35, 35));
+				if (set.imgPath.Length > 0) { filter.Image = new Bitmap(Image.FromFile(set.imgPath), new Size(35, 35)); }
 				filter.TextImageRelation = TextImageRelation.ImageBeforeText;
 				filter.ImageAlign = ContentAlignment.MiddleRight;
 				filter.TextAlign = ContentAlignment.MiddleCenter;
@@ -390,6 +389,7 @@ namespace CollectionTracker {
 
 			//Hide tooltip
 			mtgTooltipBox.Hide();
+			mtgCardtipBox.Hide();
 
 			//Set tab
 			mtgTabControl.SelectedTab = mtgDetailPage;
@@ -429,6 +429,16 @@ namespace CollectionTracker {
 						int i3 = desc.IndexOf("]");
 						if (i2 > 0 && i3 > 0) {
 							location = MTG_InsertTooltip(desc.Substring(1, i2 - 1), desc.Substring(i2 + 1, (i3 - i2) - 1), box, location);
+							desc = desc.Substring(i3 + 1);
+						}
+					}
+
+					//Cardtip
+					else if (desc[0] == '<') {
+						int i2 = desc.IndexOf("|");
+						int i3 = desc.IndexOf(">");
+						if (i2 > 0 && i3 > 0) {
+							location = MTG_InsertCardtip(desc.Substring(1, i2 - 1), desc.Substring(i2 + 1, (i3 - i2) - 1), box, location);
 							desc = desc.Substring(i3 + 1);
 						}
 					}
@@ -577,6 +587,25 @@ namespace CollectionTracker {
 			return location;
 		}
 
+		//Insert clickable cardtip text at position. Returns position at end of added text
+		private Point MTG_InsertCardtip(string str, string cardtip, Control control, Point location) {
+			Label label = new Label();
+			label.Font = new Font(Font, FontStyle.Underline);
+			label.ForeColor = Color.Green;
+			int textWidth = TextRenderer.MeasureText(str, label.Font).Width;
+			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
+			control.Controls.Add(label);
+			label.Location = location;
+			label.Size = new Size(textWidth, TEXT_HEIGHT);
+			label.Text = str;
+			label.TextAlign = ContentAlignment.MiddleLeft;
+			label.Click += new EventHandler((sender, e) => MTG_LoadCardtip(cardtip));
+			label.MouseEnter += new EventHandler((sender, e) => MTG_ShowCardtip(label, cardtip));
+			label.MouseLeave += new EventHandler((sender, e) => mtgCardtipBox.Hide());
+			location = new Point(location.X + textWidth, location.Y);
+			return location;
+		}
+
 		//Insert symbol into control at position. Returns position at end of symbol
 		private Point MTG_InsertSymbol(string str, Control control, Point location, int height) {
 
@@ -626,6 +655,25 @@ namespace CollectionTracker {
 			mtgTooltipBox.Controls.Clear();
 			int height = MTG_GenerateDescription(str, mtgTooltipBox, new Point(5, 15));
 			mtgTooltipBox.Size = new Size(mtgTooltipBox.Width, height + 20);
+		}
+
+		//Show tooltip window relative to given control with given text
+		private void MTG_ShowCardtip(Control control, string str) {
+			MTG_Printing print = mtgCatalog.printings.FirstOrDefault(p => p.scryfallID.Equals(str));
+			if (print != null) {
+				int posX = control.Parent.Location.X + control.Location.X + (control.Width / 2) - (mtgCardtipBox.Width / 2);
+				int posY = control.Parent.Location.Y + control.Location.Y + TEXT_HEIGHT;
+				mtgCardtipBox.Show();
+				mtgCardtipBox.BringToFront();
+				mtgCardtipBox.Location = new Point(posX, posY);
+				mtgCardtipImage.Load(print.imgPath);
+			}
+		}
+
+		//Show tooltip window relative to given control with given text
+		private void MTG_LoadCardtip(string str) {
+			MTG_Printing print = mtgCatalog.printings.FirstOrDefault(p => p.scryfallID.Equals(str));
+			if (print != null) { MTG_LoadCardDetails(print); }
 		}
 
 		//Load location table
@@ -815,7 +863,7 @@ namespace CollectionTracker {
 
 			//Create or update card in catalog
 			if (mtgUpdateCard == null) {
-				if (mtgCatalog.cards.Select(c => c.name).Contains(mtgNameField.Text)) {
+				if (mtgCatalog.cards.Select(c => c.name).Contains(mtgNameField.Text) && !mtgIgnoreDuplicateEntryBox.Checked) {
 					mtgCardDialog.Text = mtgNameField.Text + " already exists";
 					return;
 				}
@@ -847,6 +895,7 @@ namespace CollectionTracker {
 			mtgToughnessField.Value = 0;
 			mtgPowerBackField.Value = 0;
 			mtgToughnessBackField.Value = 0;
+			mtgIgnoreDuplicateEntryBox.Checked = false;
 			mtgUpdateCard = null;
 			mtgAddCardButton.Text = "Add To Catalog";
 
@@ -1116,22 +1165,25 @@ namespace CollectionTracker {
 			public TextBox codeBox;
 			public DateTimePicker dateBox;
 			public NumericUpDown orderBox;
+			public NumericUpDown indentBox;
 			public Label pathLabel;
 			public PictureBox iconBox;
-			public MTG_FormSet() : this(null, null, null, null, null, null, null) { }
-			public MTG_FormSet(GroupBox box, TextBox nameBox, TextBox codeBox, DateTimePicker dateBox, NumericUpDown orderBox, Label pathLabel, PictureBox iconBox) {
+			public MTG_FormSet() : this(null, null, null, null, null, null, null, null) { }
+			public MTG_FormSet(GroupBox box, TextBox nameBox, TextBox codeBox, DateTimePicker dateBox, NumericUpDown orderBox, NumericUpDown indentBox, Label pathLabel, PictureBox iconBox) {
 				this.box = box;
 				this.nameBox = nameBox;
 				this.codeBox = codeBox;
 				this.dateBox = dateBox;
 				this.orderBox = orderBox;
+				this.indentBox = indentBox;
 				this.pathLabel = pathLabel;
 				this.iconBox = iconBox;
 			}
 		}
 
 		//Regenerate symbol controls
-		private void RegenerateSets() {
+		private void MTG_RegenerateSets(object sender, EventArgs e) => MTG_RegenerateSets();
+		private void MTG_RegenerateSets() {
 			foreach (MTG_FormSet set in mtgFormSets) { mtgSetGeneratorLayout.Controls.Remove(set.box); }
 			mtgFormSets.Clear();
 			if (mtgCatalog.sets == null) { mtgCatalog.sets = new List<MTG_Set>(); }
@@ -1148,7 +1200,7 @@ namespace CollectionTracker {
 
 			//Group box
 			GroupBox box = new GroupBox();
-			box.Size = new Size(350, 155);
+			box.Size = new Size(350, 190);
 
 			//Symbol box
 			TextBox name = new TextBox();
@@ -1175,15 +1227,24 @@ namespace CollectionTracker {
 			NumericUpDown order = new NumericUpDown();
 			box.Controls.Add(order);
 			order.Location = new Point(5, 120);
-			order.Size = new Size(50, 30);
+			order.Size = new Size(168, 30);
 			order.Increment = 1;
 			order.Minimum = 0;
 			order.Value = useRef ? refSet.order : 0;
 
+			//Order box
+			NumericUpDown indent = new NumericUpDown();
+			box.Controls.Add(indent);
+			indent.Location = new Point(177, 120);
+			indent.Size = new Size(168, 30);
+			indent.Increment = 1;
+			indent.Minimum = 0;
+			indent.Value = useRef ? refSet.indent : 0;
+
 			//Path label
 			Label path = new Label();
 			box.Controls.Add(path);
-			path.Location = new Point(55, 120);
+			path.Location = new Point(5, 155);
 			path.Size = new Size(285, 30);
 			path.TextAlign = ContentAlignment.MiddleLeft;
 
@@ -1194,7 +1255,6 @@ namespace CollectionTracker {
 			icon.Size = new Size(65, 65);
 			icon.SizeMode = PictureBoxSizeMode.StretchImage;
 			icon.Cursor = Cursors.Hand;
-			icon.Click += new EventHandler((sender, e) => MTG_OnClickSearchSetIcon(i));
 
 			//Load image if one is referenced
 			if (refSet.imgPath.Length > 0) {
@@ -1202,21 +1262,25 @@ namespace CollectionTracker {
 				icon.Load(refSet.imgPath);
 			}
 
-			//Create object and add box to layout
-			mtgFormSets.Add(new MTG_FormSet(box, name, code, date, order, path, icon));
+			//Create object and set up search event
+			MTG_FormSet set = new MTG_FormSet(box, name, code, date, order, indent, path, icon);
+			icon.Click += new EventHandler((sender, e) => MTG_OnClickSearchSetIcon(set));
+
+			//Add to list and layout
+			mtgFormSets.Add(set);
 			mtgSetGeneratorLayout.Controls.Add(box);
 
 		}
 
 		//Get image path and display card
-		private void MTG_OnClickSearchSetIcon(int index) {
+		private void MTG_OnClickSearchSetIcon(MTG_FormSet set) {
 			if (imageFileDialog.ShowDialog() == DialogResult.OK) {
 				string curDir = Directory.GetCurrentDirectory();
 				string filePath = imageFileDialog.FileName;
 				if (!filePath.Contains(curDir)) { return; }
 				filePath = filePath.Remove(filePath.IndexOf(curDir), curDir.Length + 1);
-				mtgFormSets[index].pathLabel.Text = filePath;
-				mtgFormSets[index].iconBox.Load(filePath);
+				set.pathLabel.Text = filePath;
+				set.iconBox.Load(filePath);
 			}
 		}
 
@@ -1228,7 +1292,8 @@ namespace CollectionTracker {
 					mtgFormSets[i].codeBox.Text,
 					mtgFormSets[i].pathLabel.Text,
 					mtgFormSets[i].dateBox.Value,
-					(int)mtgFormSets[i].orderBox.Value
+					(int)mtgFormSets[i].orderBox.Value,
+					(int)mtgFormSets[i].indentBox.Value
 				);
 				if (i < mtgCatalog.sets.Count) { mtgCatalog.sets[i].Copy(set); }
 				else { mtgCatalog.sets.Add(set); }
@@ -1289,7 +1354,7 @@ namespace CollectionTracker {
 
 			//Generate symbol controls
 			RegenerateSymbols();
-			RegenerateSets();
+			MTG_RegenerateSets();
 
 			//Update lists
 			MTG_InitLists();

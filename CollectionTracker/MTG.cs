@@ -242,15 +242,17 @@ namespace CollectionTracker {
 		public string imgPath;
 		public DateTime date;
 		public int order;
+		public int indent;
 
 		//Constructor
-		public MTG_Set() : this("", "", "", DateTime.Now, 0) { }
-		public MTG_Set(string name, string code, string imgPath, DateTime date, int order) {
+		public MTG_Set() : this("", "", "", DateTime.Now, 0, 0) { }
+		public MTG_Set(string name, string code, string imgPath, DateTime date, int order, int indent) {
 			this.name = name;
 			this.code = code;
 			this.imgPath = imgPath;
 			this.date = date;
 			this.order = order;
+			this.indent = indent;
 		}
 
 		//Copy function
@@ -260,11 +262,23 @@ namespace CollectionTracker {
 			imgPath = set.imgPath;
 			date = set.date;
 			order = set.order;
+			indent = set.indent;
 		}
 
 		//ToString
 		public override string ToString() => name;
 
+	}
+
+	//Comparer
+	public class SetComparer : IComparer<MTG_Set> {
+		public int Compare(MTG_Set set1, MTG_Set set2) {
+			if (set1.date.Date > set2.date.Date) { return -1; }
+			if (set2.date.Date > set1.date.Date) { return 1; }
+			if (set1.order < set2.order) { return -1; }
+			if (set2.order < set1.order) { return 1; }
+			return 0;
+		}
 	}
 
 	#endregion

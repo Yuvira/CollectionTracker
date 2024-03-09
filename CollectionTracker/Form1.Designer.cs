@@ -1,4 +1,6 @@
-﻿namespace CollectionTracker {
+﻿using System;
+
+namespace CollectionTracker {
 	partial class Form1 {
 		/// <summary>
 		/// Required designer variable.
@@ -85,7 +87,6 @@
 			this.ygoPrintHeader = new System.Windows.Forms.Label();
 			this.imageFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.formTabControl = new System.Windows.Forms.TabControl();
-			this.ygoPage = new System.Windows.Forms.TabPage();
 			this.mtgPage = new System.Windows.Forms.TabPage();
 			this.mtgTabControl = new System.Windows.Forms.TabControl();
 			this.mtgSetPage = new System.Windows.Forms.TabPage();
@@ -182,9 +183,15 @@
 			this.mtgSetsPage = new System.Windows.Forms.TabPage();
 			this.mtgSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgSetGeneratorHeaderBox = new System.Windows.Forms.GroupBox();
+			this.mtgReloadSetsButton = new System.Windows.Forms.Button();
 			this.mtgSaveSetsButton = new System.Windows.Forms.Button();
 			this.mtgAddSetButton = new System.Windows.Forms.Button();
 			this.mtgSetGeneratorLabel = new System.Windows.Forms.Label();
+			this.ygoPage = new System.Windows.Forms.TabPage();
+			this.mtgIgnoreDuplicateEntryBox = new System.Windows.Forms.CheckBox();
+			this.mtgIgnoreDuplicateEntryLabel = new System.Windows.Forms.Label();
+			this.mtgCardtipBox = new System.Windows.Forms.GroupBox();
+			this.mtgCardtipImage = new System.Windows.Forms.PictureBox();
 			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoAttackField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoDefenseField)).BeginInit();
@@ -201,7 +208,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.ygoPrintImgbox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoNumberField)).BeginInit();
 			this.formTabControl.SuspendLayout();
-			this.ygoPage.SuspendLayout();
 			this.mtgPage.SuspendLayout();
 			this.mtgTabControl.SuspendLayout();
 			this.mtgSetPage.SuspendLayout();
@@ -234,6 +240,9 @@
 			this.mtgSetsPage.SuspendLayout();
 			this.mtgSetGeneratorLayout.SuspendLayout();
 			this.mtgSetGeneratorHeaderBox.SuspendLayout();
+			this.ygoPage.SuspendLayout();
+			this.mtgCardtipBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.mtgCardtipImage)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// ygoCardHeader
@@ -421,7 +430,7 @@
 			this.ygoTabControl.Location = new System.Drawing.Point(3, 3);
 			this.ygoTabControl.Name = "ygoTabControl";
 			this.ygoTabControl.SelectedIndex = 0;
-			this.ygoTabControl.Size = new System.Drawing.Size(1252, 655);
+			this.ygoTabControl.Size = new System.Drawing.Size(1270, 663);
 			this.ygoTabControl.TabIndex = 0;
 			// 
 			// ygoSetPage
@@ -432,7 +441,7 @@
 			this.ygoSetPage.Location = new System.Drawing.Point(4, 33);
 			this.ygoSetPage.Name = "ygoSetPage";
 			this.ygoSetPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoSetPage.Size = new System.Drawing.Size(1244, 618);
+			this.ygoSetPage.Size = new System.Drawing.Size(1262, 626);
 			this.ygoSetPage.TabIndex = 3;
 			this.ygoSetPage.Text = "Sets";
 			// 
@@ -444,7 +453,7 @@
 			this.ygoSetLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.ygoSetLayout.Location = new System.Drawing.Point(3, 3);
 			this.ygoSetLayout.Name = "ygoSetLayout";
-			this.ygoSetLayout.Size = new System.Drawing.Size(1234, 608);
+			this.ygoSetLayout.Size = new System.Drawing.Size(1252, 616);
 			this.ygoSetLayout.TabIndex = 0;
 			this.ygoSetLayout.WrapContents = false;
 			// 
@@ -456,7 +465,7 @@
 			this.ygoCatalogPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoCatalogPage.Name = "ygoCatalogPage";
 			this.ygoCatalogPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoCatalogPage.Size = new System.Drawing.Size(1244, 626);
+			this.ygoCatalogPage.Size = new System.Drawing.Size(1262, 634);
 			this.ygoCatalogPage.TabIndex = 2;
 			this.ygoCatalogPage.Text = "Catalog";
 			// 
@@ -466,7 +475,7 @@
 			this.ygoCatalogLayout.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ygoCatalogLayout.Location = new System.Drawing.Point(3, 3);
 			this.ygoCatalogLayout.Name = "ygoCatalogLayout";
-			this.ygoCatalogLayout.Size = new System.Drawing.Size(1234, 616);
+			this.ygoCatalogLayout.Size = new System.Drawing.Size(1252, 624);
 			this.ygoCatalogLayout.TabIndex = 0;
 			// 
 			// ygoDetailPage
@@ -477,7 +486,7 @@
 			this.ygoDetailPage.Controls.Add(this.ygoDetailImgbox);
 			this.ygoDetailPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoDetailPage.Name = "ygoDetailPage";
-			this.ygoDetailPage.Size = new System.Drawing.Size(1244, 626);
+			this.ygoDetailPage.Size = new System.Drawing.Size(1262, 634);
 			this.ygoDetailPage.TabIndex = 4;
 			this.ygoDetailPage.Text = "Card Details";
 			// 
@@ -589,7 +598,7 @@
 			this.ygoCardPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoCardPage.Name = "ygoCardPage";
 			this.ygoCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoCardPage.Size = new System.Drawing.Size(1244, 626);
+			this.ygoCardPage.Size = new System.Drawing.Size(1262, 634);
 			this.ygoCardPage.TabIndex = 0;
 			this.ygoCardPage.Text = "Card Entry";
 			// 
@@ -692,7 +701,7 @@
 			this.ygoPrintPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoPrintPage.Name = "ygoPrintPage";
 			this.ygoPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoPrintPage.Size = new System.Drawing.Size(1244, 626);
+			this.ygoPrintPage.Size = new System.Drawing.Size(1262, 634);
 			this.ygoPrintPage.TabIndex = 1;
 			this.ygoPrintPage.Text = "Printing Entry";
 			// 
@@ -700,7 +709,7 @@
 			// 
 			this.ygoIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.ygoIODialog.AutoSize = true;
-			this.ygoIODialog.Location = new System.Drawing.Point(185, 597);
+			this.ygoIODialog.Location = new System.Drawing.Point(185, 605);
 			this.ygoIODialog.Name = "ygoIODialog";
 			this.ygoIODialog.Size = new System.Drawing.Size(16, 21);
 			this.ygoIODialog.TabIndex = 24;
@@ -709,7 +718,7 @@
 			// ygoSaveButton
 			// 
 			this.ygoSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.ygoSaveButton.Location = new System.Drawing.Point(6, 592);
+			this.ygoSaveButton.Location = new System.Drawing.Point(6, 600);
 			this.ygoSaveButton.Name = "ygoSaveButton";
 			this.ygoSaveButton.Size = new System.Drawing.Size(170, 23);
 			this.ygoSaveButton.TabIndex = 22;
@@ -912,17 +921,6 @@
 			this.formTabControl.Size = new System.Drawing.Size(1284, 698);
 			this.formTabControl.TabIndex = 0;
 			// 
-			// ygoPage
-			// 
-			this.ygoPage.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.ygoPage.Controls.Add(this.ygoTabControl);
-			this.ygoPage.Location = new System.Drawing.Point(4, 33);
-			this.ygoPage.Name = "ygoPage";
-			this.ygoPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoPage.Size = new System.Drawing.Size(1258, 661);
-			this.ygoPage.TabIndex = 0;
-			this.ygoPage.Text = "YGO";
-			// 
 			// mtgPage
 			// 
 			this.mtgPage.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -959,7 +957,7 @@
 			this.mtgSetPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgSetPage.Name = "mtgSetPage";
 			this.mtgSetPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgSetPage.Size = new System.Drawing.Size(1244, 618);
+			this.mtgSetPage.Size = new System.Drawing.Size(1262, 618);
 			this.mtgSetPage.TabIndex = 3;
 			this.mtgSetPage.Text = "Sets";
 			// 
@@ -971,7 +969,7 @@
 			this.mtgSetLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.mtgSetLayout.Location = new System.Drawing.Point(3, 3);
 			this.mtgSetLayout.Name = "mtgSetLayout";
-			this.mtgSetLayout.Size = new System.Drawing.Size(1234, 608);
+			this.mtgSetLayout.Size = new System.Drawing.Size(1252, 608);
 			this.mtgSetLayout.TabIndex = 0;
 			this.mtgSetLayout.WrapContents = false;
 			// 
@@ -983,17 +981,17 @@
 			this.mtgCatalogPage.Controls.Add(this.mtgCatalogPrevButton);
 			this.mtgCatalogPage.Controls.Add(this.mtgCatalogLayout);
 			this.mtgCatalogPage.Controls.Add(this.mtgCatalogIndex);
-			this.mtgCatalogPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgCatalogPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgCatalogPage.Name = "mtgCatalogPage";
 			this.mtgCatalogPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgCatalogPage.Size = new System.Drawing.Size(1244, 618);
+			this.mtgCatalogPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgCatalogPage.TabIndex = 2;
 			this.mtgCatalogPage.Text = "Catalog";
 			// 
 			// mtgCatalogNextButton
 			// 
 			this.mtgCatalogNextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.mtgCatalogNextButton.Location = new System.Drawing.Point(1160, 5);
+			this.mtgCatalogNextButton.Location = new System.Drawing.Point(1178, 5);
 			this.mtgCatalogNextButton.Name = "mtgCatalogNextButton";
 			this.mtgCatalogNextButton.Size = new System.Drawing.Size(75, 29);
 			this.mtgCatalogNextButton.TabIndex = 2;
@@ -1020,7 +1018,7 @@
 			this.mtgCatalogLayout.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.mtgCatalogLayout.Location = new System.Drawing.Point(3, 38);
 			this.mtgCatalogLayout.Name = "mtgCatalogLayout";
-			this.mtgCatalogLayout.Size = new System.Drawing.Size(1234, 572);
+			this.mtgCatalogLayout.Size = new System.Drawing.Size(1252, 580);
 			this.mtgCatalogLayout.TabIndex = 0;
 			// 
 			// mtgCatalogIndex
@@ -1028,7 +1026,7 @@
 			this.mtgCatalogIndex.Dock = System.Windows.Forms.DockStyle.Top;
 			this.mtgCatalogIndex.Location = new System.Drawing.Point(3, 3);
 			this.mtgCatalogIndex.Name = "mtgCatalogIndex";
-			this.mtgCatalogIndex.Size = new System.Drawing.Size(1234, 30);
+			this.mtgCatalogIndex.Size = new System.Drawing.Size(1252, 30);
 			this.mtgCatalogIndex.TabIndex = 3;
 			this.mtgCatalogIndex.Text = "Showing 0 - 0 of 0";
 			this.mtgCatalogIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1037,12 +1035,13 @@
 			// 
 			this.mtgDetailPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgDetailPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgDetailPage.Controls.Add(this.mtgCardtipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgTooltipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailImgbox);
 			this.mtgDetailPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgDetailPage.Name = "mtgDetailPage";
-			this.mtgDetailPage.Size = new System.Drawing.Size(1244, 618);
+			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 618);
 			this.mtgDetailPage.TabIndex = 4;
 			this.mtgDetailPage.Text = "Card Details";
 			// 
@@ -1147,6 +1146,8 @@
 			// 
 			this.mtgCardPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgCardPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgCardPage.Controls.Add(this.mtgIgnoreDuplicateEntryLabel);
+			this.mtgCardPage.Controls.Add(this.mtgIgnoreDuplicateEntryBox);
 			this.mtgCardPage.Controls.Add(this.mtgCardTypeField);
 			this.mtgCardPage.Controls.Add(this.mtgToughnessBackField);
 			this.mtgCardPage.Controls.Add(this.mtgPowerBackField);
@@ -1544,10 +1545,10 @@
 			this.mtgPrintPage.Controls.Add(this.mtgNumberLabel);
 			this.mtgPrintPage.Controls.Add(this.mtgSetField);
 			this.mtgPrintPage.Controls.Add(this.mtgSetLabel);
-			this.mtgPrintPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgPrintPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgPrintPage.Name = "mtgPrintPage";
 			this.mtgPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgPrintPage.Size = new System.Drawing.Size(1244, 618);
+			this.mtgPrintPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgPrintPage.TabIndex = 1;
 			this.mtgPrintPage.Text = "Printing Entry";
 			// 
@@ -1628,7 +1629,7 @@
 			// 
 			this.mtgIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.mtgIODialog.AutoSize = true;
-			this.mtgIODialog.Location = new System.Drawing.Point(260, 582);
+			this.mtgIODialog.Location = new System.Drawing.Point(260, 590);
 			this.mtgIODialog.Name = "mtgIODialog";
 			this.mtgIODialog.Size = new System.Drawing.Size(16, 21);
 			this.mtgIODialog.TabIndex = 25;
@@ -1638,7 +1639,7 @@
 			// mtgSaveButton
 			// 
 			this.mtgSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mtgSaveButton.Location = new System.Drawing.Point(5, 579);
+			this.mtgSaveButton.Location = new System.Drawing.Point(5, 587);
 			this.mtgSaveButton.Name = "mtgSaveButton";
 			this.mtgSaveButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgSaveButton.TabIndex = 24;
@@ -1826,10 +1827,10 @@
 			this.mtgSymbolsPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgSymbolsPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.mtgSymbolsPage.Controls.Add(this.mtgSymbolLayout);
-			this.mtgSymbolsPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgSymbolsPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgSymbolsPage.Name = "mtgSymbolsPage";
 			this.mtgSymbolsPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgSymbolsPage.Size = new System.Drawing.Size(1244, 618);
+			this.mtgSymbolsPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgSymbolsPage.TabIndex = 5;
 			this.mtgSymbolsPage.Text = "Symbols";
 			// 
@@ -1841,7 +1842,7 @@
 			this.mtgSymbolLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.mtgSymbolLayout.Location = new System.Drawing.Point(3, 3);
 			this.mtgSymbolLayout.Name = "mtgSymbolLayout";
-			this.mtgSymbolLayout.Size = new System.Drawing.Size(1234, 608);
+			this.mtgSymbolLayout.Size = new System.Drawing.Size(1252, 616);
 			this.mtgSymbolLayout.TabIndex = 0;
 			// 
 			// mtgSymbolHeaderBox
@@ -1891,10 +1892,10 @@
 			this.mtgSetsPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgSetsPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.mtgSetsPage.Controls.Add(this.mtgSetGeneratorLayout);
-			this.mtgSetsPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgSetsPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgSetsPage.Name = "mtgSetsPage";
 			this.mtgSetsPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgSetsPage.Size = new System.Drawing.Size(1244, 618);
+			this.mtgSetsPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgSetsPage.TabIndex = 6;
 			this.mtgSetsPage.Text = "Sets";
 			// 
@@ -1906,11 +1907,12 @@
 			this.mtgSetGeneratorLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.mtgSetGeneratorLayout.Location = new System.Drawing.Point(3, 3);
 			this.mtgSetGeneratorLayout.Name = "mtgSetGeneratorLayout";
-			this.mtgSetGeneratorLayout.Size = new System.Drawing.Size(1234, 608);
+			this.mtgSetGeneratorLayout.Size = new System.Drawing.Size(1252, 616);
 			this.mtgSetGeneratorLayout.TabIndex = 1;
 			// 
 			// mtgSetGeneratorHeaderBox
 			// 
+			this.mtgSetGeneratorHeaderBox.Controls.Add(this.mtgReloadSetsButton);
 			this.mtgSetGeneratorHeaderBox.Controls.Add(this.mtgSaveSetsButton);
 			this.mtgSetGeneratorHeaderBox.Controls.Add(this.mtgAddSetButton);
 			this.mtgSetGeneratorHeaderBox.Controls.Add(this.mtgSetGeneratorLabel);
@@ -1919,6 +1921,17 @@
 			this.mtgSetGeneratorHeaderBox.Size = new System.Drawing.Size(350, 50);
 			this.mtgSetGeneratorHeaderBox.TabIndex = 1;
 			this.mtgSetGeneratorHeaderBox.TabStop = false;
+			// 
+			// mtgReloadSetsButton
+			// 
+			this.mtgReloadSetsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgReloadSetsButton.Location = new System.Drawing.Point(170, 15);
+			this.mtgReloadSetsButton.Name = "mtgReloadSetsButton";
+			this.mtgReloadSetsButton.Size = new System.Drawing.Size(75, 29);
+			this.mtgReloadSetsButton.TabIndex = 3;
+			this.mtgReloadSetsButton.Text = "Reload";
+			this.mtgReloadSetsButton.UseVisualStyleBackColor = true;
+			this.mtgReloadSetsButton.Click += new System.EventHandler(this.MTG_RegenerateSets);
 			// 
 			// mtgSaveSetsButton
 			// 
@@ -1951,6 +1964,52 @@
 			this.mtgSetGeneratorLabel.Text = "Sets";
 			this.mtgSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// ygoPage
+			// 
+			this.ygoPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.ygoPage.Controls.Add(this.ygoTabControl);
+			this.ygoPage.Location = new System.Drawing.Point(4, 25);
+			this.ygoPage.Name = "ygoPage";
+			this.ygoPage.Padding = new System.Windows.Forms.Padding(3);
+			this.ygoPage.Size = new System.Drawing.Size(1276, 669);
+			this.ygoPage.TabIndex = 0;
+			this.ygoPage.Text = "YGO";
+			// 
+			// mtgIgnoreDuplicateEntryBox
+			// 
+			this.mtgIgnoreDuplicateEntryBox.Location = new System.Drawing.Point(100, 530);
+			this.mtgIgnoreDuplicateEntryBox.Name = "mtgIgnoreDuplicateEntryBox";
+			this.mtgIgnoreDuplicateEntryBox.Size = new System.Drawing.Size(14, 30);
+			this.mtgIgnoreDuplicateEntryBox.TabIndex = 44;
+			this.mtgIgnoreDuplicateEntryBox.UseVisualStyleBackColor = true;
+			// 
+			// mtgIgnoreDuplicateEntryLabel
+			// 
+			this.mtgIgnoreDuplicateEntryLabel.Location = new System.Drawing.Point(115, 530);
+			this.mtgIgnoreDuplicateEntryLabel.Name = "mtgIgnoreDuplicateEntryLabel";
+			this.mtgIgnoreDuplicateEntryLabel.Size = new System.Drawing.Size(235, 30);
+			this.mtgIgnoreDuplicateEntryLabel.TabIndex = 45;
+			this.mtgIgnoreDuplicateEntryLabel.Text = "Ignore Duplicate Entry";
+			this.mtgIgnoreDuplicateEntryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// mtgCardtipBox
+			// 
+			this.mtgCardtipBox.Controls.Add(this.mtgCardtipImage);
+			this.mtgCardtipBox.Location = new System.Drawing.Point(865, 110);
+			this.mtgCardtipBox.Name = "mtgCardtipBox";
+			this.mtgCardtipBox.Size = new System.Drawing.Size(250, 350);
+			this.mtgCardtipBox.TabIndex = 6;
+			this.mtgCardtipBox.TabStop = false;
+			// 
+			// mtgCardtipImage
+			// 
+			this.mtgCardtipImage.Location = new System.Drawing.Point(0, 0);
+			this.mtgCardtipImage.Name = "mtgCardtipImage";
+			this.mtgCardtipImage.Size = new System.Drawing.Size(250, 350);
+			this.mtgCardtipImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgCardtipImage.TabIndex = 0;
+			this.mtgCardtipImage.TabStop = false;
+			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -1977,7 +2036,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.ygoPrintImgbox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoNumberField)).EndInit();
 			this.formTabControl.ResumeLayout(false);
-			this.ygoPage.ResumeLayout(false);
 			this.mtgPage.ResumeLayout(false);
 			this.mtgTabControl.ResumeLayout(false);
 			this.mtgSetPage.ResumeLayout(false);
@@ -2012,6 +2070,9 @@
 			this.mtgSetsPage.ResumeLayout(false);
 			this.mtgSetGeneratorLayout.ResumeLayout(false);
 			this.mtgSetGeneratorHeaderBox.ResumeLayout(false);
+			this.ygoPage.ResumeLayout(false);
+			this.mtgCardtipBox.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.mtgCardtipImage)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -2180,6 +2241,11 @@
 		private System.Windows.Forms.Label mtgSetGeneratorLabel;
 		private System.Windows.Forms.Button mtgReloadLocationsButton;
 		private System.Windows.Forms.GroupBox mtgTooltipBox;
+		private System.Windows.Forms.Button mtgReloadSetsButton;
+		private System.Windows.Forms.Label mtgIgnoreDuplicateEntryLabel;
+		private System.Windows.Forms.CheckBox mtgIgnoreDuplicateEntryBox;
+		private System.Windows.Forms.GroupBox mtgCardtipBox;
+		private System.Windows.Forms.PictureBox mtgCardtipImage;
 	}
 }
 
