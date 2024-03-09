@@ -23,9 +23,6 @@ namespace CollectionTracker {
 			mtgCatalog = new MTG_Catalog();
 			mtgPrintFilter = new List<int>();
 			detailBoxes = new List<GroupBox>();
-			mtgDetailImgbox.Click += mtgOnFlipCard;
-			mtgEditCardButton.Click += mtgOnEditCard;
-			mtgEditPrintButton.Click += mtgOnEditPrint;
 			mtgNameField.LostFocus += new EventHandler((sender, e) => MTG_CheckCardNameExists());
 			mtgIdentityImgW.Load("resources/mtg/_icons/w.png");
 			mtgIdentityImgU.Load("resources/mtg/_icons/u.png");
@@ -263,16 +260,17 @@ namespace CollectionTracker {
 		public const int TEXT_HEIGHT = 21;
 		public bool mtgDetailFlipped = false;
 		public List<GroupBox> detailBoxes;
-		public EventHandler mtgOnFlipCard = null;
-		public EventHandler mtgOnEditCard = null;
-		public EventHandler mtgOnEditPrint = null;
-		public EventHandler mtgOnPrevCard = null;
-		public EventHandler mtgOnNextCard = null;
+		public MTG_Printing mtgDetailPrint = null;
+		public MTG_Printing mtgDetailPrev = null;
+		public MTG_Printing mtgDetailNext = null;
 
 		//Load card data into details tab
 		private void MTG_LoadCardDetails(MTG_Printing print) {
 
-			//Get printing and set image
+			//Set persistent reference
+			mtgDetailPrint = print;
+
+			//Set image
 			mtgDetailImgbox.Load(print.imgPath);
 			mtgDetailFlipped = false;
 
@@ -378,35 +376,18 @@ namespace CollectionTracker {
 			mtgDetailBox.Location = new Point(mtgDetailBox.Location.X, y);
 			MTG_LoadLocationTable(print);
 
-			//Set button events
-			mtgDetailImgbox.Click -= mtgOnFlipCard;
-			mtgEditCardButton.Click -= mtgOnEditCard;
-			mtgEditPrintButton.Click -= mtgOnEditPrint;
-			mtgOnFlipCard = new EventHandler((sender, e) => MTG_FlipCard(print));
-			mtgOnEditCard = new EventHandler((sender, e) => MTG_EditCard(print.card));
-			mtgOnEditPrint = new EventHandler((sender, e) => MTG_EditPrint(print));
-			mtgDetailImgbox.Click += mtgOnFlipCard;
-			mtgEditCardButton.Click += mtgOnEditCard;
-			mtgEditPrintButton.Click += mtgOnEditPrint;
-
 			//Nav buttons
-			MTG_Printing prev = mtgCatalog.printings.FirstOrDefault(p => p.set == print.set && p.cardNumber == (print.cardNumber - 1));
-			MTG_Printing next = mtgCatalog.printings.FirstOrDefault(p => p.set == print.set && p.cardNumber == (print.cardNumber + 1));
-			if (prev == null) { mtgDetailPrevButton.Hide(); }
+			mtgDetailPrev = mtgCatalog.printings.FirstOrDefault(p => p.set == print.set && p.cardNumber == (print.cardNumber - 1));
+			if (mtgDetailPrev == null) { mtgDetailPrevButton.Hide(); }
 			else {
 				mtgDetailPrevButton.Show();
-				mtgDetailPrevButton.Click -= mtgOnPrevCard;
-				mtgOnPrevCard = new EventHandler((sender, e) => MTG_LoadCardDetails(prev));
-				mtgDetailPrevButton.Click += mtgOnPrevCard;
-				mtgDetailPrevButton.Text = prev.card.name;
+				mtgDetailPrevButton.Text = mtgDetailPrev.card.name;
 			}
-			if (next == null) { mtgDetailNextButton.Hide(); }
+			mtgDetailNext = mtgCatalog.printings.FirstOrDefault(p => p.set == print.set && p.cardNumber == (print.cardNumber + 1));
+			if (mtgDetailNext == null) { mtgDetailNextButton.Hide(); }
 			else {
 				mtgDetailNextButton.Show();
-				mtgDetailNextButton.Click -= mtgOnNextCard;
-				mtgOnNextCard = new EventHandler((sender, e) => MTG_LoadCardDetails(next));
-				mtgDetailNextButton.Click += mtgOnNextCard;
-				mtgDetailNextButton.Text = next.card.name;
+				mtgDetailNextButton.Text = mtgDetailNext.card.name;
 			}
 
 			//Hide tooltip
@@ -774,18 +755,22 @@ namespace CollectionTracker {
 		}
 
 		//Flip card image
-		private void MTG_FlipCard(MTG_Printing print) {
+		private void MTG_FlipCard(object sender, EventArgs e) => MTG_FlipCard();
+		private void MTG_FlipCard() {
+
+			//Return if no reference set
+			if (mtgDetailPrint == null) { return; }
 
 			//Only flip if card has a second face
-			if (!print.card.name.Contains(" // ")) { return; }
+			if (!mtgDetailPrint.card.name.Contains(" // ")) { return; }
 
 			//Get printing and flip
 			mtgDetailFlipped = !mtgDetailFlipped;
 
 			//Swap image if there's a back image reference
-			if (print.backImgPath.Length > 1) {
-				if (mtgDetailFlipped) { mtgDetailImgbox.Load(print.backImgPath); }
-				else { mtgDetailImgbox.Load(print.imgPath); }
+			if (mtgDetailPrint.backImgPath.Length > 1) {
+				if (mtgDetailFlipped) { mtgDetailImgbox.Load(mtgDetailPrint.backImgPath); }
+				else { mtgDetailImgbox.Load(mtgDetailPrint.imgPath); }
 			}
 
 			//Otherwise rotate 180
@@ -794,7 +779,15 @@ namespace CollectionTracker {
 		}
 
 		//Edit card data
-		private void MTG_EditCard(MTG_Card card) {
+		private void MTG_EditCard(object sender, EventArgs e) => MTG_EditCard();
+		private void MTG_EditCard() {
+
+			//Return if print or reference card are invalid
+			if (mtgDetailPrint == null) { return; }
+			MTG_Card card = mtgDetailPrint.card;
+			if (card == null) { return; }
+
+			//Setup edit page
 			mtgNameField.Text = card.name;
 			mtgIdentityW.Checked = card.identity.HasFlag(MTG_Colour.White);
 			mtgIdentityU.Checked = card.identity.HasFlag(MTG_Colour.Blue);
@@ -816,10 +809,18 @@ namespace CollectionTracker {
 			mtgUpdateCard = card;
 			mtgAddCardButton.Text = "Update Card";
 			mtgTabControl.SelectedTab = mtgCardPage;
+
 		}
 
 		//Edit printing data
-		private void MTG_EditPrint(MTG_Printing print) {
+		private void MTG_EditPrint(object sender, EventArgs e) => MTG_EditPrint();
+		private void MTG_EditPrint() {
+
+			//Return if print is invalid
+			if (mtgDetailPrint == null) { return; }
+			MTG_Printing print = mtgDetailPrint;
+
+			//Setup edit page
 			mtgSetField.SelectedItem = print.set;
 			mtgNumberField.Value = print.cardNumber;
 			mtgRarityField.Text = print.rarity;
@@ -837,7 +838,12 @@ namespace CollectionTracker {
 			mtgUpdatePrint = print;
 			mtgAddPrintButton.Text = "Update Printing";
 			mtgTabControl.SelectedTab = mtgPrintPage;
+
 		}
+
+		//Navigation
+		private void MTG_LoadPreviousInSet(object sender, EventArgs e) => MTG_LoadCardDetails(mtgDetailPrev);
+		private void MTG_LoadNextInSet(object sender, EventArgs e) => MTG_LoadCardDetails(mtgDetailNext);
 
 		#endregion
 
@@ -896,6 +902,7 @@ namespace CollectionTracker {
 			else {
 				mtgUpdateCard.Copy(card);
 				mtgCardDialog.Text = "Card Data Updated";
+				if (mtgDetailPrint.card == mtgUpdateCard) { MTG_LoadCardDetails(mtgDetailPrint); }
 			}
 
 			//Reset fields
@@ -1024,6 +1031,7 @@ namespace CollectionTracker {
 			else {
 				mtgUpdatePrint.Copy(print);
 				mtgImgpathLabel.Text = "Printing Data Updated";
+				if (mtgDetailPrint == mtgUpdatePrint) { MTG_LoadCardDetails(mtgDetailPrint); }
 			}
 
 			//Reset fields

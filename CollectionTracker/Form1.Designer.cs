@@ -97,6 +97,10 @@ namespace CollectionTracker {
 			this.mtgCatalogLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgCatalogIndex = new System.Windows.Forms.Label();
 			this.mtgDetailPage = new System.Windows.Forms.TabPage();
+			this.mtgDetailNextButton = new System.Windows.Forms.Button();
+			this.mtgDetailPrevButton = new System.Windows.Forms.Button();
+			this.mtgCardtipBox = new System.Windows.Forms.GroupBox();
+			this.mtgCardtipImage = new System.Windows.Forms.PictureBox();
 			this.mtgTooltipBox = new System.Windows.Forms.GroupBox();
 			this.mtgDetailBox = new System.Windows.Forms.GroupBox();
 			this.mtgReloadLocationsButton = new System.Windows.Forms.Button();
@@ -107,6 +111,8 @@ namespace CollectionTracker {
 			this.mtgMoveField = new System.Windows.Forms.ComboBox();
 			this.mtgDetailImgbox = new System.Windows.Forms.PictureBox();
 			this.mtgCardPage = new System.Windows.Forms.TabPage();
+			this.mtgIgnoreDuplicateEntryLabel = new System.Windows.Forms.Label();
+			this.mtgIgnoreDuplicateEntryBox = new System.Windows.Forms.CheckBox();
 			this.mtgCardTypeField = new System.Windows.Forms.TextBox();
 			this.mtgToughnessBackField = new System.Windows.Forms.NumericUpDown();
 			this.mtgPowerBackField = new System.Windows.Forms.NumericUpDown();
@@ -188,12 +194,6 @@ namespace CollectionTracker {
 			this.mtgAddSetButton = new System.Windows.Forms.Button();
 			this.mtgSetGeneratorLabel = new System.Windows.Forms.Label();
 			this.ygoPage = new System.Windows.Forms.TabPage();
-			this.mtgIgnoreDuplicateEntryBox = new System.Windows.Forms.CheckBox();
-			this.mtgIgnoreDuplicateEntryLabel = new System.Windows.Forms.Label();
-			this.mtgCardtipBox = new System.Windows.Forms.GroupBox();
-			this.mtgCardtipImage = new System.Windows.Forms.PictureBox();
-			this.mtgDetailPrevButton = new System.Windows.Forms.Button();
-			this.mtgDetailNextButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoAttackField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoDefenseField)).BeginInit();
@@ -215,6 +215,8 @@ namespace CollectionTracker {
 			this.mtgSetPage.SuspendLayout();
 			this.mtgCatalogPage.SuspendLayout();
 			this.mtgDetailPage.SuspendLayout();
+			this.mtgCardtipBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.mtgCardtipImage)).BeginInit();
 			this.mtgDetailBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.mtgDetailImgbox)).BeginInit();
 			this.mtgCardPage.SuspendLayout();
@@ -243,8 +245,6 @@ namespace CollectionTracker {
 			this.mtgSetGeneratorLayout.SuspendLayout();
 			this.mtgSetGeneratorHeaderBox.SuspendLayout();
 			this.ygoPage.SuspendLayout();
-			this.mtgCardtipBox.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.mtgCardtipImage)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// ygoCardHeader
@@ -1049,6 +1049,44 @@ namespace CollectionTracker {
 			this.mtgDetailPage.TabIndex = 4;
 			this.mtgDetailPage.Text = "Card Details";
 			// 
+			// mtgDetailNextButton
+			// 
+			this.mtgDetailNextButton.Location = new System.Drawing.Point(207, 550);
+			this.mtgDetailNextButton.Name = "mtgDetailNextButton";
+			this.mtgDetailNextButton.Size = new System.Drawing.Size(198, 29);
+			this.mtgDetailNextButton.TabIndex = 10;
+			this.mtgDetailNextButton.Text = "Next Card";
+			this.mtgDetailNextButton.UseVisualStyleBackColor = true;
+			this.mtgDetailNextButton.Click += new System.EventHandler(this.MTG_LoadNextInSet);
+			// 
+			// mtgDetailPrevButton
+			// 
+			this.mtgDetailPrevButton.Location = new System.Drawing.Point(5, 550);
+			this.mtgDetailPrevButton.Name = "mtgDetailPrevButton";
+			this.mtgDetailPrevButton.Size = new System.Drawing.Size(198, 29);
+			this.mtgDetailPrevButton.TabIndex = 9;
+			this.mtgDetailPrevButton.Text = "Previous Card";
+			this.mtgDetailPrevButton.UseVisualStyleBackColor = true;
+			this.mtgDetailPrevButton.Click += new System.EventHandler(this.MTG_LoadPreviousInSet);
+			// 
+			// mtgCardtipBox
+			// 
+			this.mtgCardtipBox.Controls.Add(this.mtgCardtipImage);
+			this.mtgCardtipBox.Location = new System.Drawing.Point(865, 110);
+			this.mtgCardtipBox.Name = "mtgCardtipBox";
+			this.mtgCardtipBox.Size = new System.Drawing.Size(250, 350);
+			this.mtgCardtipBox.TabIndex = 6;
+			this.mtgCardtipBox.TabStop = false;
+			// 
+			// mtgCardtipImage
+			// 
+			this.mtgCardtipImage.Location = new System.Drawing.Point(0, 0);
+			this.mtgCardtipImage.Name = "mtgCardtipImage";
+			this.mtgCardtipImage.Size = new System.Drawing.Size(250, 350);
+			this.mtgCardtipImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgCardtipImage.TabIndex = 0;
+			this.mtgCardtipImage.TabStop = false;
+			// 
 			// mtgTooltipBox
 			// 
 			this.mtgTooltipBox.Location = new System.Drawing.Point(865, 5);
@@ -1091,6 +1129,7 @@ namespace CollectionTracker {
 			this.mtgEditPrintButton.TabIndex = 5;
 			this.mtgEditPrintButton.Text = "Edit Printing Data";
 			this.mtgEditPrintButton.UseVisualStyleBackColor = true;
+			this.mtgEditPrintButton.Click += new System.EventHandler(this.MTG_EditPrint);
 			// 
 			// mtgEditCardButton
 			// 
@@ -1101,6 +1140,7 @@ namespace CollectionTracker {
 			this.mtgEditCardButton.TabIndex = 4;
 			this.mtgEditCardButton.Text = "Edit Card Data";
 			this.mtgEditCardButton.UseVisualStyleBackColor = true;
+			this.mtgEditCardButton.Click += new System.EventHandler(this.MTG_EditCard);
 			// 
 			// mtgMoveLabel
 			// 
@@ -1145,6 +1185,7 @@ namespace CollectionTracker {
 			this.mtgDetailImgbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.mtgDetailImgbox.TabIndex = 0;
 			this.mtgDetailImgbox.TabStop = false;
+			this.mtgDetailImgbox.Click += new System.EventHandler(this.MTG_FlipCard);
 			// 
 			// mtgCardPage
 			// 
@@ -1190,12 +1231,29 @@ namespace CollectionTracker {
 			this.mtgCardPage.Controls.Add(this.mtgOracleTextField);
 			this.mtgCardPage.Controls.Add(this.mtgColourLabel);
 			this.mtgCardPage.Controls.Add(this.mtgCardTypeLabel);
-			this.mtgCardPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgCardPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgCardPage.Name = "mtgCardPage";
 			this.mtgCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgCardPage.Size = new System.Drawing.Size(1262, 618);
+			this.mtgCardPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgCardPage.TabIndex = 0;
 			this.mtgCardPage.Text = "Card Entry";
+			// 
+			// mtgIgnoreDuplicateEntryLabel
+			// 
+			this.mtgIgnoreDuplicateEntryLabel.Location = new System.Drawing.Point(115, 530);
+			this.mtgIgnoreDuplicateEntryLabel.Name = "mtgIgnoreDuplicateEntryLabel";
+			this.mtgIgnoreDuplicateEntryLabel.Size = new System.Drawing.Size(235, 30);
+			this.mtgIgnoreDuplicateEntryLabel.TabIndex = 45;
+			this.mtgIgnoreDuplicateEntryLabel.Text = "Ignore Duplicate Entry";
+			this.mtgIgnoreDuplicateEntryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// mtgIgnoreDuplicateEntryBox
+			// 
+			this.mtgIgnoreDuplicateEntryBox.Location = new System.Drawing.Point(100, 530);
+			this.mtgIgnoreDuplicateEntryBox.Name = "mtgIgnoreDuplicateEntryBox";
+			this.mtgIgnoreDuplicateEntryBox.Size = new System.Drawing.Size(14, 30);
+			this.mtgIgnoreDuplicateEntryBox.TabIndex = 44;
+			this.mtgIgnoreDuplicateEntryBox.UseVisualStyleBackColor = true;
 			// 
 			// mtgCardTypeField
 			// 
@@ -1979,59 +2037,6 @@ namespace CollectionTracker {
 			this.ygoPage.TabIndex = 0;
 			this.ygoPage.Text = "YGO";
 			// 
-			// mtgIgnoreDuplicateEntryBox
-			// 
-			this.mtgIgnoreDuplicateEntryBox.Location = new System.Drawing.Point(100, 530);
-			this.mtgIgnoreDuplicateEntryBox.Name = "mtgIgnoreDuplicateEntryBox";
-			this.mtgIgnoreDuplicateEntryBox.Size = new System.Drawing.Size(14, 30);
-			this.mtgIgnoreDuplicateEntryBox.TabIndex = 44;
-			this.mtgIgnoreDuplicateEntryBox.UseVisualStyleBackColor = true;
-			// 
-			// mtgIgnoreDuplicateEntryLabel
-			// 
-			this.mtgIgnoreDuplicateEntryLabel.Location = new System.Drawing.Point(115, 530);
-			this.mtgIgnoreDuplicateEntryLabel.Name = "mtgIgnoreDuplicateEntryLabel";
-			this.mtgIgnoreDuplicateEntryLabel.Size = new System.Drawing.Size(235, 30);
-			this.mtgIgnoreDuplicateEntryLabel.TabIndex = 45;
-			this.mtgIgnoreDuplicateEntryLabel.Text = "Ignore Duplicate Entry";
-			this.mtgIgnoreDuplicateEntryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// mtgCardtipBox
-			// 
-			this.mtgCardtipBox.Controls.Add(this.mtgCardtipImage);
-			this.mtgCardtipBox.Location = new System.Drawing.Point(865, 110);
-			this.mtgCardtipBox.Name = "mtgCardtipBox";
-			this.mtgCardtipBox.Size = new System.Drawing.Size(250, 350);
-			this.mtgCardtipBox.TabIndex = 6;
-			this.mtgCardtipBox.TabStop = false;
-			// 
-			// mtgCardtipImage
-			// 
-			this.mtgCardtipImage.Location = new System.Drawing.Point(0, 0);
-			this.mtgCardtipImage.Name = "mtgCardtipImage";
-			this.mtgCardtipImage.Size = new System.Drawing.Size(250, 350);
-			this.mtgCardtipImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.mtgCardtipImage.TabIndex = 0;
-			this.mtgCardtipImage.TabStop = false;
-			// 
-			// mtgDetailPrevButton
-			// 
-			this.mtgDetailPrevButton.Location = new System.Drawing.Point(5, 550);
-			this.mtgDetailPrevButton.Name = "mtgDetailPrevButton";
-			this.mtgDetailPrevButton.Size = new System.Drawing.Size(198, 29);
-			this.mtgDetailPrevButton.TabIndex = 9;
-			this.mtgDetailPrevButton.Text = "Previous Card";
-			this.mtgDetailPrevButton.UseVisualStyleBackColor = true;
-			// 
-			// mtgDetailNextButton
-			// 
-			this.mtgDetailNextButton.Location = new System.Drawing.Point(207, 550);
-			this.mtgDetailNextButton.Name = "mtgDetailNextButton";
-			this.mtgDetailNextButton.Size = new System.Drawing.Size(198, 29);
-			this.mtgDetailNextButton.TabIndex = 10;
-			this.mtgDetailNextButton.Text = "Next Card";
-			this.mtgDetailNextButton.UseVisualStyleBackColor = true;
-			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -2063,6 +2068,8 @@ namespace CollectionTracker {
 			this.mtgSetPage.ResumeLayout(false);
 			this.mtgCatalogPage.ResumeLayout(false);
 			this.mtgDetailPage.ResumeLayout(false);
+			this.mtgCardtipBox.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.mtgCardtipImage)).EndInit();
 			this.mtgDetailBox.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.mtgDetailImgbox)).EndInit();
 			this.mtgCardPage.ResumeLayout(false);
@@ -2093,8 +2100,6 @@ namespace CollectionTracker {
 			this.mtgSetGeneratorLayout.ResumeLayout(false);
 			this.mtgSetGeneratorHeaderBox.ResumeLayout(false);
 			this.ygoPage.ResumeLayout(false);
-			this.mtgCardtipBox.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.mtgCardtipImage)).EndInit();
 			this.ResumeLayout(false);
 
 		}
