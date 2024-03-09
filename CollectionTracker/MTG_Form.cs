@@ -266,6 +266,8 @@ namespace CollectionTracker {
 		public EventHandler mtgOnFlipCard = null;
 		public EventHandler mtgOnEditCard = null;
 		public EventHandler mtgOnEditPrint = null;
+		public EventHandler mtgOnPrevCard = null;
+		public EventHandler mtgOnNextCard = null;
 
 		//Load card data into details tab
 		private void MTG_LoadCardDetails(MTG_Printing print) {
@@ -386,6 +388,26 @@ namespace CollectionTracker {
 			mtgDetailImgbox.Click += mtgOnFlipCard;
 			mtgEditCardButton.Click += mtgOnEditCard;
 			mtgEditPrintButton.Click += mtgOnEditPrint;
+
+			//Nav buttons
+			MTG_Printing prev = mtgCatalog.printings.FirstOrDefault(p => p.set == print.set && p.cardNumber == (print.cardNumber - 1));
+			MTG_Printing next = mtgCatalog.printings.FirstOrDefault(p => p.set == print.set && p.cardNumber == (print.cardNumber + 1));
+			if (prev == null) { mtgDetailPrevButton.Hide(); }
+			else {
+				mtgDetailPrevButton.Show();
+				mtgDetailPrevButton.Click -= mtgOnPrevCard;
+				mtgOnPrevCard = new EventHandler((sender, e) => MTG_LoadCardDetails(prev));
+				mtgDetailPrevButton.Click += mtgOnPrevCard;
+				mtgDetailPrevButton.Text = prev.card.name;
+			}
+			if (next == null) { mtgDetailNextButton.Hide(); }
+			else {
+				mtgDetailNextButton.Show();
+				mtgDetailNextButton.Click -= mtgOnNextCard;
+				mtgOnNextCard = new EventHandler((sender, e) => MTG_LoadCardDetails(next));
+				mtgDetailNextButton.Click += mtgOnNextCard;
+				mtgDetailNextButton.Text = next.card.name;
+			}
 
 			//Hide tooltip
 			mtgTooltipBox.Hide();

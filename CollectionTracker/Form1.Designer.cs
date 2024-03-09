@@ -192,6 +192,8 @@ namespace CollectionTracker {
 			this.mtgIgnoreDuplicateEntryLabel = new System.Windows.Forms.Label();
 			this.mtgCardtipBox = new System.Windows.Forms.GroupBox();
 			this.mtgCardtipImage = new System.Windows.Forms.PictureBox();
+			this.mtgDetailPrevButton = new System.Windows.Forms.Button();
+			this.mtgDetailNextButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoAttackField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoDefenseField)).BeginInit();
@@ -1035,6 +1037,8 @@ namespace CollectionTracker {
 			// 
 			this.mtgDetailPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgDetailPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgDetailPage.Controls.Add(this.mtgDetailNextButton);
+			this.mtgDetailPage.Controls.Add(this.mtgDetailPrevButton);
 			this.mtgDetailPage.Controls.Add(this.mtgCardtipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgTooltipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailBox);
@@ -2010,6 +2014,24 @@ namespace CollectionTracker {
 			this.mtgCardtipImage.TabIndex = 0;
 			this.mtgCardtipImage.TabStop = false;
 			// 
+			// mtgDetailPrevButton
+			// 
+			this.mtgDetailPrevButton.Location = new System.Drawing.Point(5, 550);
+			this.mtgDetailPrevButton.Name = "mtgDetailPrevButton";
+			this.mtgDetailPrevButton.Size = new System.Drawing.Size(198, 29);
+			this.mtgDetailPrevButton.TabIndex = 9;
+			this.mtgDetailPrevButton.Text = "Previous Card";
+			this.mtgDetailPrevButton.UseVisualStyleBackColor = true;
+			// 
+			// mtgDetailNextButton
+			// 
+			this.mtgDetailNextButton.Location = new System.Drawing.Point(207, 550);
+			this.mtgDetailNextButton.Name = "mtgDetailNextButton";
+			this.mtgDetailNextButton.Size = new System.Drawing.Size(198, 29);
+			this.mtgDetailNextButton.TabIndex = 10;
+			this.mtgDetailNextButton.Text = "Next Card";
+			this.mtgDetailNextButton.UseVisualStyleBackColor = true;
+			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -2246,6 +2268,8 @@ namespace CollectionTracker {
 		private System.Windows.Forms.CheckBox mtgIgnoreDuplicateEntryBox;
 		private System.Windows.Forms.GroupBox mtgCardtipBox;
 		private System.Windows.Forms.PictureBox mtgCardtipImage;
+		private System.Windows.Forms.Button mtgDetailNextButton;
+		private System.Windows.Forms.Button mtgDetailPrevButton;
 	}
 }
 
