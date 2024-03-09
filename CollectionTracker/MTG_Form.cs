@@ -412,7 +412,7 @@ namespace CollectionTracker {
 				if (desc.StartsWith(" ")) { desc = desc.Substring(1); }
 
 				//Get index of next object
-				int i = IndexOfMany(desc, new List<char>() { '{', '[', '<' });
+				int i = MTG_Utils.IndexOfMany(desc, new List<char>() { '{', '[', '<' });
 
 				//We are at an object, generate it
 				if (i == 0) {
@@ -999,6 +999,28 @@ namespace CollectionTracker {
 			}
 		}
 
+		//Populate descriptor when card reference is selected
+		private void MTG_OnSelectCardref(object sender, EventArgs e) {
+
+			//Return if index or card is invalid
+			if (mtgCardrefField.SelectedIndex < 0) { return; }
+			MTG_Card card = (MTG_Card)mtgCardrefField.SelectedItem;
+			if (card == null) { return; }
+
+			//Build description string
+			string s = "";
+			string o = MTG_Utils.CleanOracleText(card.oracleText);
+			if (card.cardTypes.Contains("Creature") || card.cardTypes.Contains("Vehicle")) { s += card.power + '/' + card.toughness + ' '; }
+			if (card.cardTypes.Contains("Planeswalker")) { s += card.toughness + " Loyalty "; }
+			s += MTG_Utils.colourNames[card.colour] + ' ';
+			s += card.cardTypes;
+			if (o.Length > 0) { s += " with " + o; }
+
+			//Populate descriptor
+			mtgCardrefDescriptor.Text = s;
+
+		}
+
 		//Add printing to catalog
 		private void MTG_OnClickAddPrint(object sender, EventArgs e) {
 
@@ -1047,6 +1069,7 @@ namespace CollectionTracker {
 			else { mtgScryfallField.Text = ""; }
 			mtgPrintImgbox.Image = null;
 			mtgPrintImgboxBack.Load("resources/mtg/back.png");
+			mtgCardrefDescriptor.Text = "-";
 			mtgUpdatePrint = null;
 			mtgAddPrintButton.Text = "Add To Catalog";
 

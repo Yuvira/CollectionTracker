@@ -19,17 +19,5 @@ namespace CollectionTracker {
 		private void OnResizeBegin() { Controls.Remove(formTabControl); }
 		private void OnResizeEnd() { Controls.Add(formTabControl); }
 
-		//Get first index of a subset of symbols. Returns -1 if there are no instances of any of the provided symbols
-		private int IndexOfMany(string str, List<char> chars) {
-			int index = -1;
-			foreach (char c in chars) {
-				int i = str.IndexOf(c);
-				if (i != -1)
-					if (index == -1 || i < index)
-						index = i;
-			}
-			return index;
-		}
-
 	}
 }

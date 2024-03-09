@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace CollectionTracker {
 
@@ -384,6 +385,47 @@ namespace CollectionTracker {
 			{ MTG_Colour.Blue | MTG_Colour.Black | MTG_Colour.Red | MTG_Colour.Green, "Glint-Eye" },
 			{ MTG_Colour.White | MTG_Colour.Blue | MTG_Colour.Black | MTG_Colour.Red | MTG_Colour.Green, "WUBRG" },
 		};
+
+		//Returns string with tooltip text/markers removed
+		public static string CleanOracleText(string str) {
+
+			//Loop through text
+			while (true) {
+
+				//Get index of next object and return if we're done
+				int i = IndexOfMany(str, new List<char>() { '[', '<' });
+				if (i < 0) { return str; }
+
+				//Remove tooltip
+				else if (str[i] == '[') {
+					str = str.Remove(i, 1);
+					int i2 = str.IndexOf("|");
+					int i3 = str.IndexOf("]");
+					if (i2 > 0 && i3 > 0) { str = str.Remove(i2, i3 + 1 - i2); }
+				}
+
+				//Remove cardtip
+				else if (str[i] == '<') {
+					str = str.Remove(i, 1);
+					int i2 = str.IndexOf("|");
+					int i3 = str.IndexOf(">");
+					if (i2 > 0 && i3 > 0) { str = str.Remove(i2, i3 + 1 - i2); }
+				}
+
+			}
+		}
+
+		//Get first index of a subset of symbols. Returns -1 if there are no instances of any of the provided symbols
+		public static int IndexOfMany(string str, List<char> chars) {
+			int index = -1;
+			foreach (char c in chars) {
+				int i = str.IndexOf(c);
+				if (i != -1)
+					if (index == -1 || i < index)
+						index = i;
+			}
+			return index;
+		}
 
 	}
 

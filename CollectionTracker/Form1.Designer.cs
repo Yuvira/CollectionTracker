@@ -152,6 +152,7 @@ namespace CollectionTracker {
 			this.mtgColourLabel = new System.Windows.Forms.Label();
 			this.mtgCardTypeLabel = new System.Windows.Forms.Label();
 			this.mtgPrintPage = new System.Windows.Forms.TabPage();
+			this.mtgCardrefDescriptor = new System.Windows.Forms.Label();
 			this.mtgRarityField = new System.Windows.Forms.ComboBox();
 			this.mtgRarityLabel = new System.Windows.Forms.Label();
 			this.mtgScryfallLabel = new System.Windows.Forms.Label();
@@ -1043,9 +1044,9 @@ namespace CollectionTracker {
 			this.mtgDetailPage.Controls.Add(this.mtgTooltipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailImgbox);
-			this.mtgDetailPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgDetailPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgDetailPage.Name = "mtgDetailPage";
-			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 618);
+			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgDetailPage.TabIndex = 4;
 			this.mtgDetailPage.Text = "Card Details";
 			// 
@@ -1579,6 +1580,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgPrintPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgPrintPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgPrintPage.Controls.Add(this.mtgCardrefDescriptor);
 			this.mtgPrintPage.Controls.Add(this.mtgRarityField);
 			this.mtgPrintPage.Controls.Add(this.mtgRarityLabel);
 			this.mtgPrintPage.Controls.Add(this.mtgScryfallLabel);
@@ -1607,12 +1609,24 @@ namespace CollectionTracker {
 			this.mtgPrintPage.Controls.Add(this.mtgNumberLabel);
 			this.mtgPrintPage.Controls.Add(this.mtgSetField);
 			this.mtgPrintPage.Controls.Add(this.mtgSetLabel);
-			this.mtgPrintPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgPrintPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgPrintPage.Name = "mtgPrintPage";
 			this.mtgPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgPrintPage.Size = new System.Drawing.Size(1262, 626);
+			this.mtgPrintPage.Size = new System.Drawing.Size(1262, 618);
 			this.mtgPrintPage.TabIndex = 1;
 			this.mtgPrintPage.Text = "Printing Entry";
+			// 
+			// mtgCardrefDescriptor
+			// 
+			this.mtgCardrefDescriptor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.mtgCardrefDescriptor.AutoSize = true;
+			this.mtgCardrefDescriptor.Location = new System.Drawing.Point(5, 555);
+			this.mtgCardrefDescriptor.MaximumSize = new System.Drawing.Size(0, 21);
+			this.mtgCardrefDescriptor.Name = "mtgCardrefDescriptor";
+			this.mtgCardrefDescriptor.Size = new System.Drawing.Size(16, 21);
+			this.mtgCardrefDescriptor.TabIndex = 28;
+			this.mtgCardrefDescriptor.Text = "-";
+			this.mtgCardrefDescriptor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgRarityField
 			// 
@@ -1691,7 +1705,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.mtgIODialog.AutoSize = true;
-			this.mtgIODialog.Location = new System.Drawing.Point(260, 590);
+			this.mtgIODialog.Location = new System.Drawing.Point(260, 582);
 			this.mtgIODialog.Name = "mtgIODialog";
 			this.mtgIODialog.Size = new System.Drawing.Size(16, 21);
 			this.mtgIODialog.TabIndex = 25;
@@ -1701,7 +1715,7 @@ namespace CollectionTracker {
 			// mtgSaveButton
 			// 
 			this.mtgSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mtgSaveButton.Location = new System.Drawing.Point(5, 587);
+			this.mtgSaveButton.Location = new System.Drawing.Point(5, 579);
 			this.mtgSaveButton.Name = "mtgSaveButton";
 			this.mtgSaveButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgSaveButton.TabIndex = 24;
@@ -1770,6 +1784,7 @@ namespace CollectionTracker {
 			this.mtgCardrefField.Size = new System.Drawing.Size(250, 29);
 			this.mtgCardrefField.Sorted = true;
 			this.mtgCardrefField.TabIndex = 19;
+			this.mtgCardrefField.SelectedIndexChanged += new System.EventHandler(this.MTG_OnSelectCardref);
 			// 
 			// mtgCardrefLabel
 			// 
@@ -2275,6 +2290,7 @@ namespace CollectionTracker {
 		private System.Windows.Forms.PictureBox mtgCardtipImage;
 		private System.Windows.Forms.Button mtgDetailNextButton;
 		private System.Windows.Forms.Button mtgDetailPrevButton;
+		private System.Windows.Forms.Label mtgCardrefDescriptor;
 	}
 }
 
