@@ -11,7 +11,7 @@ namespace CollectionTracker {
 		//Properties
 		public MTG_Catalog mtgCatalog;
 		public List<string> mtgTreatments;
-		public List<int> mtgPrintFilter;
+		public List<MTG_Printing> mtgPrintFilter;
 		public MTG_Card mtgUpdateCard = null;
 		public MTG_Printing mtgUpdatePrint = null;
 
@@ -21,7 +21,7 @@ namespace CollectionTracker {
 		public void MTG_Initialize() {
 			mtgTreatments = new List<string>();
 			mtgCatalog = new MTG_Catalog();
-			mtgPrintFilter = new List<int>();
+			mtgPrintFilter = new List<MTG_Printing>();
 			detailBoxes = new List<GroupBox>();
 			mtgNameField.LostFocus += new EventHandler((sender, e) => MTG_CheckCardNameExists());
 			mtgIdentityImgW.Load("resources/mtg/_icons/w.png");
@@ -157,8 +157,7 @@ namespace CollectionTracker {
 			for (int i = startIndex; i < maxIndex; ++i) {
 
 				//Get index/printing
-				int index = mtgPrintFilter[i];
-				MTG_Printing print = mtgCatalog.printings[mtgPrintFilter[i]];
+				MTG_Printing print = mtgPrintFilter[i];
 
 				//Card box
 				GroupBox box = new GroupBox();
@@ -208,7 +207,7 @@ namespace CollectionTracker {
 					leftButton.Size = new Size(55, 29);
 					leftButton.Text = "<";
 					leftButton.UseVisualStyleBackColor = true;
-					leftButton.Click += new EventHandler((sender, e) => MTG_DecrementCardCount(box, label, index, treatment.name));
+					leftButton.Click += new EventHandler((sender, e) => MTG_DecrementCardCount(box, label, print, treatment.name));
 
 					//Increment
 					Button rightButton = new Button();
@@ -217,7 +216,7 @@ namespace CollectionTracker {
 					rightButton.Size = new Size(55, 29);
 					rightButton.Text = ">";
 					rightButton.UseVisualStyleBackColor = true;
-					rightButton.Click += new EventHandler((sender, e) => MTG_IncrementCardCount(box, label, index, treatment.name));
+					rightButton.Click += new EventHandler((sender, e) => MTG_IncrementCardCount(box, label, print, treatment.name));
 
 				}
 
@@ -229,27 +228,25 @@ namespace CollectionTracker {
 		}
 
 		//Increment card quantity
-		private void MTG_IncrementCardCount(GroupBox box, Label label, int index, string treatment) {
-			if (index < mtgCatalog.printings.Count) {
-				MTG_Printing print = mtgCatalog.printings[index];
+		private void MTG_IncrementCardCount(GroupBox box, Label label, MTG_Printing print, string treatment) {
+			if (print != null) {
 				print.Increment(treatment);
 				label.Text = print.OwnedCountOfTreatment(treatment).ToString();
 				if (!print.AnyOwned()) { box.BackColor = SystemColors.ControlDarkDark; }
 				else { box.BackColor = SystemColors.ControlDark; }
 			}
-			else { label.Text = $"IOOB: {index} | {mtgCatalog.printings.Count}"; }
+			else { label.Text = "Print is null!"; }
 		}
 
 		//Decrement card quantity
-		private void MTG_DecrementCardCount(GroupBox box, Label label, int index, string treatment) {
-			if (index < mtgCatalog.printings.Count) {
-				MTG_Printing print = mtgCatalog.printings[index];
+		private void MTG_DecrementCardCount(GroupBox box, Label label, MTG_Printing print, string treatment) {
+			if (print != null) {
 				print.Decrement(treatment);
 				label.Text = print.OwnedCountOfTreatment(treatment).ToString();
 				if (!print.AnyOwned()) { box.BackColor = SystemColors.ControlDarkDark; }
 				else { box.BackColor = SystemColors.ControlDark; }
 			}
-			else { label.Text = $"IOOB: {index} | {mtgCatalog.printings.Count}"; }
+			else { label.Text = "Print is null!"; }
 		}
 
 		#endregion
@@ -1361,11 +1358,12 @@ namespace CollectionTracker {
 		//Filter catalog by set ID
 		private void MTG_FilterCatalogBySet(MTG_Set set) {
 			mtgPrintFilter.Clear();
-			for (int i = 0; i < mtgCatalog.printings.Count; ++i) {
-				if (mtgCatalog.printings[i].set == set) {
-					mtgPrintFilter.Add(i);
+			foreach (MTG_Printing print in mtgCatalog.printings) {
+				if (print.set == set) {
+					mtgPrintFilter.Add(print);
 				}
 			}
+			mtgPrintFilter.Sort(new PrintComparer().Compare);
 			mtgCatalogPagenum = 0;
 			MTG_UpdateCatalog();
 			mtgTabControl.SelectedTab = mtgCatalogPage;
