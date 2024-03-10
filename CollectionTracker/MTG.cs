@@ -89,7 +89,11 @@ namespace CollectionTracker {
 		}
 
 		//ToString
-		public override string ToString() => name;
+		public override string ToString() {
+			if (cardTypes.Contains("Token")) { return "Token: " + name; }
+			if (cardTypes.Contains("Art Card")) { return "Art Card: " + name; }
+			return name;
+		}
 
 	}
 

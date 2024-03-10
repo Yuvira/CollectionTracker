@@ -1007,8 +1007,10 @@ namespace CollectionTracker {
 			//Build description string
 			string s = "";
 			string o = MTG_Utils.CleanOracleText(card.oracleText);
-			if (card.cardTypes.Contains("Creature") || card.cardTypes.Contains("Vehicle")) { s += card.power + '/' + card.toughness + ' '; }
-			if (card.cardTypes.Contains("Planeswalker")) { s += card.toughness + " Loyalty "; }
+			if (card.cardTypes.Contains("Planeswalker"))
+				s += card.toughness.ToString() + " Loyalty ";
+			if (card.cardTypes.Contains("Creature") || card.cardTypes.Contains("Vehicle"))
+				s += card.power.ToString() + '/' + card.toughness.ToString() + ' ';
 			s += MTG_Utils.colourNames[card.colour] + ' ';
 			s += card.cardTypes;
 			if (o.Length > 0) { s += " with " + o; }
@@ -1331,6 +1333,10 @@ namespace CollectionTracker {
 				filePath = filePath.Remove(filePath.IndexOf(curDir), curDir.Length + 1);
 				set.pathLabel.Text = filePath;
 				set.iconBox.Load(filePath);
+			}
+			else {
+				set.pathLabel.Text = "";
+				set.iconBox.Image = null;
 			}
 		}
 
