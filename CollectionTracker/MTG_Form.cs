@@ -54,8 +54,12 @@ namespace CollectionTracker {
 
 		#region Set List
 
+		//List of sets and controls
+		private List<(MTG_Set set, GroupBox box, bool expanded)> mtgSetlist = new List<(MTG_Set, GroupBox, bool)>();
+
 		//Clear set list and update data
 		private void MTG_UpdateSets() {
+			mtgSetlist.Clear();
 			mtgSetLayout.Controls.Clear();
 			mtgCatalog.sets.Sort(new SetComparer().Compare);
 			foreach (MTG_Set set in mtgCatalog.sets/*.OrderBy(set => set, new SetComparer())*/) {
@@ -71,8 +75,7 @@ namespace CollectionTracker {
 				//Set info box
 				GroupBox box = new GroupBox();
 				mtgSetLayout.Controls.Add(box);
-				box.Location = new Point(3, 3);
-				box.Size = new Size(700, 70);
+				box.Size = new Size(740, 70);
 
 				//Filter button
 				Button filter = new Button();
@@ -113,6 +116,40 @@ namespace CollectionTracker {
 				bar.Size = new Size(265, 30);
 				if (setCount > 0) { bar.Value = (int)(((float)setOwned / setCount) * 100); }
 
+				//Expand button
+				if (set.indent == 0) {
+					Button expand = new Button();
+					box.Controls.Add(expand);
+					expand.Location = new Point(700, 15);
+					expand.Size = new Size(35, 50);
+					expand.Text = "V";
+					expand.TextAlign = ContentAlignment.MiddleCenter;
+					expand.Click += new EventHandler((sender, e) => MTG_ExpandCollapseSet(set));
+				}
+
+				//Hide if not main set
+				else { box.Hide(); }
+
+				//Add to list
+				mtgSetlist.Add((set, box, false));
+
+			}
+		}
+
+		//Expand or collapse set box
+		private void MTG_ExpandCollapseSet(MTG_Set set) {
+			for (int i = 0; i < mtgSetlist.Count; ++i) {
+				(MTG_Set set, GroupBox box, bool expanded) listSet = mtgSetlist[i];
+				if (listSet.set == set) {
+					foreach ((MTG_Set set, GroupBox box, bool expanded) listSet2 in mtgSetlist) {
+						if (listSet2.set != listSet.set && listSet2.set.date.Date == set.date.Date) {
+							if (listSet.expanded) { listSet2.box.Hide(); }
+							else { listSet2.box.Show(); }
+						}
+					}
+					mtgSetlist[i] = (listSet.set, listSet.box, !listSet.expanded);
+					break;
+				}
 			}
 		}
 
