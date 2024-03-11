@@ -24,17 +24,17 @@ namespace CollectionTracker {
 			mtgPrintFilter = new List<MTG_Printing>();
 			detailBoxes = new List<GroupBox>();
 			mtgNameField.LostFocus += new EventHandler((sender, e) => MTG_CheckCardNameExists());
-			mtgIdentityImgW.Load("resources/mtg/_icons/w.png");
-			mtgIdentityImgU.Load("resources/mtg/_icons/u.png");
-			mtgIdentityImgB.Load("resources/mtg/_icons/b.png");
-			mtgIdentityImgR.Load("resources/mtg/_icons/r.png");
-			mtgIdentityImgG.Load("resources/mtg/_icons/g.png");
-			mtgColourImgW.Load("resources/mtg/_icons/w.png");
-			mtgColourImgU.Load("resources/mtg/_icons/u.png");
-			mtgColourImgB.Load("resources/mtg/_icons/b.png");
-			mtgColourImgR.Load("resources/mtg/_icons/r.png");
-			mtgColourImgG.Load("resources/mtg/_icons/g.png");
-			mtgPrintImgboxBack.Load("resources/mtg/back.png");
+			MTG_Utils.TryLoadImage(mtgIdentityImgW, "resources/mtg/_icons/w.png");
+			MTG_Utils.TryLoadImage(mtgIdentityImgU, "resources/mtg/_icons/u.png");
+			MTG_Utils.TryLoadImage(mtgIdentityImgB, "resources/mtg/_icons/b.png");
+			MTG_Utils.TryLoadImage(mtgIdentityImgR, "resources/mtg/_icons/r.png");
+			MTG_Utils.TryLoadImage(mtgIdentityImgG, "resources/mtg/_icons/g.png");
+			MTG_Utils.TryLoadImage(mtgColourImgW, "resources/mtg/_icons/w.png");
+			MTG_Utils.TryLoadImage(mtgColourImgU, "resources/mtg/_icons/u.png");
+			MTG_Utils.TryLoadImage(mtgColourImgB, "resources/mtg/_icons/b.png");
+			MTG_Utils.TryLoadImage(mtgColourImgR, "resources/mtg/_icons/r.png");
+			MTG_Utils.TryLoadImage(mtgColourImgG, "resources/mtg/_icons/g.png");
+			MTG_Utils.TryLoadCardImage(mtgPrintImgboxBack, MTG_Utils.CARD_BACK_PATH);
 			MTG_LoadCatalog();
 		}
 
@@ -211,7 +211,7 @@ namespace CollectionTracker {
 				img.SizeMode = PictureBoxSizeMode.StretchImage;
 				img.Location = new Point(0, 0);
 				img.Size = new Size(300, 420);
-				img.Load(print.imgPath);
+				MTG_Utils.TryLoadCardImage(img, print.imgPath);
 				img.Click += new EventHandler((sender, e) => MTG_LoadCardDetails(print));
 
 				//Loop treatments
@@ -305,7 +305,7 @@ namespace CollectionTracker {
 			mtgDetailPrint = print;
 
 			//Set image
-			mtgDetailImgbox.Load(print.imgPath);
+			MTG_Utils.TryLoadCardImage(mtgDetailImgbox, print.imgPath);
 			mtgDetailFlipped = false;
 
 			//Get card reference
@@ -672,7 +672,7 @@ namespace CollectionTracker {
 			icon.Location = location;
 			icon.Size = new Size(width, height);
 			icon.SizeMode = PictureBoxSizeMode.StretchImage;
-			icon.Load(symbol.imgPath);
+			MTG_Utils.TryLoadImage(icon, symbol.imgPath);
 			location = new Point(location.X + width, location.Y);
 			return location;
 
@@ -703,7 +703,7 @@ namespace CollectionTracker {
 				mtgCardtipBox.Show();
 				mtgCardtipBox.BringToFront();
 				mtgCardtipBox.Location = new Point(posX, posY);
-				mtgCardtipImage.Load(print.imgPath);
+				MTG_Utils.TryLoadCardImage(mtgCardtipImage, print.imgPath);
 			}
 		}
 
@@ -803,8 +803,8 @@ namespace CollectionTracker {
 
 			//Swap image if there's a back image reference
 			if (mtgDetailPrint.backImgPath.Length > 1) {
-				if (mtgDetailFlipped) { mtgDetailImgbox.Load(mtgDetailPrint.backImgPath); }
-				else { mtgDetailImgbox.Load(mtgDetailPrint.imgPath); }
+				if (mtgDetailFlipped) { MTG_Utils.TryLoadCardImage(mtgDetailImgbox, mtgDetailPrint.backImgPath); }
+				else { MTG_Utils.TryLoadImage(mtgDetailImgbox, mtgDetailPrint.imgPath); }
 			}
 
 			//Otherwise rotate 180
@@ -863,9 +863,9 @@ namespace CollectionTracker {
 			MTG_UpdateTreatmentList();
 			mtgFlavorTextField.Text = print.flavorText;
 			mtgImgpathLabel.Text = print.imgPath;
-			mtgPrintImgbox.Load(print.imgPath);
+			MTG_Utils.TryLoadCardImage(mtgPrintImgbox, print.imgPath);
 			mtgImgpathBackLabel.Text = print.backImgPath;
-			if (print.backImgPath.Length > 1) { mtgPrintImgboxBack.Load(print.backImgPath); }
+			if (print.backImgPath.Length > 1) { MTG_Utils.TryLoadCardImage(mtgPrintImgboxBack, print.backImgPath); }
 			else { /*Load default*/ }
 			mtgCardrefField.SelectedItem = print.card;
 			mtgScryfallField.Text = print.scryfallID;
@@ -1014,7 +1014,7 @@ namespace CollectionTracker {
 				}
 				filePath = filePath.Remove(filePath.IndexOf(curDir), curDir.Length + 1);
 				mtgImgpathLabel.Text = filePath;
-				mtgPrintImgbox.Load(filePath);
+				MTG_Utils.TryLoadCardImage(mtgPrintImgbox, filePath);
 			}
 		}
 
@@ -1029,7 +1029,7 @@ namespace CollectionTracker {
 				}
 				filePath = filePath.Remove(filePath.IndexOf(curDir), curDir.Length + 1);
 				mtgImgpathBackLabel.Text = filePath;
-				mtgPrintImgboxBack.Load(filePath);
+				MTG_Utils.TryLoadCardImage(mtgPrintImgboxBack, filePath);
 			}
 		}
 
@@ -1104,7 +1104,7 @@ namespace CollectionTracker {
 			}
 			else { mtgScryfallField.Text = ""; }
 			mtgPrintImgbox.Image = null;
-			mtgPrintImgboxBack.Load("resources/mtg/back.png");
+			MTG_Utils.TryLoadCardImage(mtgPrintImgboxBack, MTG_Utils.CARD_BACK_PATH);
 			mtgCardrefDescriptor.Text = "-";
 			mtgUpdatePrint = null;
 			mtgAddPrintButton.Text = "Add To Catalog";
@@ -1204,7 +1204,7 @@ namespace CollectionTracker {
 			//Load image if one is referenced
 			if (refSymbol.imgPath.Length > 0) {
 				path.Text = refSymbol.imgPath;
-				icon.Load(refSymbol.imgPath);
+				MTG_Utils.TryLoadImage(icon, refSymbol.imgPath);
 			}
 
 			//Create object and add box to layout
@@ -1221,7 +1221,7 @@ namespace CollectionTracker {
 				if (!filePath.Contains(curDir)) { return; }
 				filePath = filePath.Remove(filePath.IndexOf(curDir), curDir.Length + 1);
 				mtgFormSymbols[index].pathLabel.Text = filePath;
-				mtgFormSymbols[index].iconBox.Load(filePath);
+				MTG_Utils.TryLoadImage(mtgFormSymbols[index].iconBox, filePath);
 			}
 		}
 
@@ -1245,10 +1245,23 @@ namespace CollectionTracker {
 		#region Set Generator
 
 		//Properties
+		public int mtgSetGeneratorPagenum = 0;
+		public int mtgSetGeneratorSetsPage = 25;
 		private List<MTG_FormSet> mtgFormSets = new List<MTG_FormSet>();
+
+		//Paging
+		private void MTG_OnClickSetGeneratorPrev(object sender, EventArgs e) {
+			--mtgSetGeneratorPagenum;
+			MTG_RegenerateSets();
+		}
+		private void MTG_OnClickSetGeneratorNext(object sender, EventArgs e) {
+			++mtgSetGeneratorPagenum;
+			MTG_RegenerateSets();
+		}
 
 		//Symbol form class
 		private class MTG_FormSet {
+			public MTG_Set set;
 			public GroupBox box;
 			public TextBox nameBox;
 			public TextBox codeBox;
@@ -1257,8 +1270,9 @@ namespace CollectionTracker {
 			public NumericUpDown indentBox;
 			public Label pathLabel;
 			public PictureBox iconBox;
-			public MTG_FormSet() : this(null, null, null, null, null, null, null, null) { }
-			public MTG_FormSet(GroupBox box, TextBox nameBox, TextBox codeBox, DateTimePicker dateBox, NumericUpDown orderBox, NumericUpDown indentBox, Label pathLabel, PictureBox iconBox) {
+			public MTG_FormSet() : this(null, null, null, null, null, null, null, null, null) { }
+			public MTG_FormSet(MTG_Set set, GroupBox box, TextBox nameBox, TextBox codeBox, DateTimePicker dateBox, NumericUpDown orderBox, NumericUpDown indentBox, Label pathLabel, PictureBox iconBox) {
+				this.set = set;
 				this.box = box;
 				this.nameBox = nameBox;
 				this.codeBox = codeBox;
@@ -1273,10 +1287,32 @@ namespace CollectionTracker {
 		//Regenerate symbol controls
 		private void MTG_RegenerateSets(object sender, EventArgs e) => MTG_RegenerateSets();
 		private void MTG_RegenerateSets() {
+
+			//Quick null check
+			if (mtgCatalog.sets == null) { mtgCatalog.sets = new List<MTG_Set>(); }
+
+			//Pagination
+			int maxPage = mtgCatalog.sets.Count / mtgSetGeneratorSetsPage;
+			if (mtgSetGeneratorPagenum > maxPage) { mtgSetGeneratorPagenum = 0; }
+			if (mtgSetGeneratorPagenum < 0) { mtgSetGeneratorPagenum = maxPage; }
+			int startIndex = mtgSetGeneratorPagenum * mtgSetGeneratorSetsPage;
+			int maxIndex = mtgSetGeneratorSetsPage;
+			if (mtgSetGeneratorPagenum == maxPage) { maxIndex = mtgCatalog.sets.Count % mtgSetGeneratorSetsPage; }
+			maxIndex += startIndex;
+			mtgSetGeneratorPageLabel.Text = (mtgSetGeneratorPagenum + 1) + " / " + (maxPage + 1);
+
+			//Remove old
+			mtgSetGeneratorLayout.SuspendLayout();
 			foreach (MTG_FormSet set in mtgFormSets) { mtgSetGeneratorLayout.Controls.Remove(set.box); }
 			mtgFormSets.Clear();
-			if (mtgCatalog.sets == null) { mtgCatalog.sets = new List<MTG_Set>(); }
-			foreach (MTG_Set set in mtgCatalog.sets) { MTG_CreateSetGeneratorBox(set); }
+
+			//Add new
+			for (int i = startIndex; i < maxIndex; ++i) {
+				MTG_Set set = mtgCatalog.sets[i];
+				MTG_CreateSetGeneratorBox(set);
+			}
+			mtgSetGeneratorLayout.ResumeLayout();
+
 		}
 
 		//Add new symbol
@@ -1348,11 +1384,11 @@ namespace CollectionTracker {
 			//Load image if one is referenced
 			if (refSet.imgPath.Length > 0) {
 				path.Text = refSet.imgPath;
-				icon.Load(refSet.imgPath);
+				MTG_Utils.TryLoadImage(icon, refSet.imgPath);
 			}
 
 			//Create object and set up search event
-			MTG_FormSet set = new MTG_FormSet(box, name, code, date, order, indent, path, icon);
+			MTG_FormSet set = new MTG_FormSet(useRef ? refSet : null, box, name, code, date, order, indent, path, icon);
 			icon.Click += new EventHandler((sender, e) => MTG_OnClickSearchSetIcon(set));
 
 			//Add to list and layout
@@ -1369,7 +1405,7 @@ namespace CollectionTracker {
 				if (!filePath.Contains(curDir)) { return; }
 				filePath = filePath.Remove(filePath.IndexOf(curDir), curDir.Length + 1);
 				set.pathLabel.Text = filePath;
-				set.iconBox.Load(filePath);
+				MTG_Utils.TryLoadImage(set.iconBox, filePath);
 			}
 			else {
 				set.pathLabel.Text = "";
@@ -1379,17 +1415,17 @@ namespace CollectionTracker {
 
 		//Save current symbol list
 		private void MTG_OnClickSaveSets(object sender, EventArgs e) {
-			for (int i = 0; i < mtgFormSets.Count; ++i) {
+			foreach (MTG_FormSet formSet in mtgFormSets) {
 				MTG_Set set = new MTG_Set(
-					mtgFormSets[i].nameBox.Text,
-					mtgFormSets[i].codeBox.Text,
-					mtgFormSets[i].pathLabel.Text,
-					mtgFormSets[i].dateBox.Value,
-					(int)mtgFormSets[i].orderBox.Value,
-					(int)mtgFormSets[i].indentBox.Value
+					formSet.nameBox.Text,
+					formSet.codeBox.Text,
+					formSet.pathLabel.Text,
+					formSet.dateBox.Value,
+					(int)formSet.orderBox.Value,
+					(int)formSet.indentBox.Value
 				);
-				if (i < mtgCatalog.sets.Count) { mtgCatalog.sets[i].Copy(set); }
-				else { mtgCatalog.sets.Add(set); }
+				if (formSet.set == null) { mtgCatalog.sets.Add(set); }
+				else { formSet.set.Copy(set); }
 			}
 			MTG_UpdateSets();
 		}

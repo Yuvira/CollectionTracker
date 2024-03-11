@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Windows.Forms;
 
 namespace CollectionTracker {
 
@@ -363,7 +364,10 @@ namespace CollectionTracker {
 	#region Utils
 
 	//Utilities class
-	public static class MTG_Utils { 
+	public static class MTG_Utils {
+
+		//Card back image path
+		public static readonly string CARD_BACK_PATH = "resources/mtg/back.png";
 
 		//Colour identity to string dictionary
 		public static readonly Dictionary<MTG_Colour, string> colourNames = new Dictionary<MTG_Colour, string> {
@@ -440,6 +444,21 @@ namespace CollectionTracker {
 						index = i;
 			}
 			return index;
+		}
+
+		//Load image. Load nothing if it doesn't exist
+		public static void TryLoadImage(PictureBox box, string path) {
+			try { box.Load(path); }
+			catch (Exception) { }
+		}
+
+		//Load card image. If it doesn't exist, load default image
+		public static void TryLoadCardImage(PictureBox box, string path) {
+			try { box.Load(path); }
+			catch (Exception) {
+				try { box.Load(CARD_BACK_PATH); }
+				catch (Exception) { }
+			}
 		}
 
 	}

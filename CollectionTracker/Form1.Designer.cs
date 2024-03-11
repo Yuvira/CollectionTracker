@@ -188,11 +188,13 @@ namespace CollectionTracker {
 			this.mtgAddSymbolButton = new System.Windows.Forms.Button();
 			this.mtgSymbolLabel = new System.Windows.Forms.Label();
 			this.mtgSetsPage = new System.Windows.Forms.TabPage();
-			this.mtgSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
-			this.mtgSetGeneratorHeaderBox = new System.Windows.Forms.GroupBox();
 			this.mtgReloadSetsButton = new System.Windows.Forms.Button();
-			this.mtgSaveSetsButton = new System.Windows.Forms.Button();
+			this.mtgSetGeneratorPrev = new System.Windows.Forms.Button();
 			this.mtgAddSetButton = new System.Windows.Forms.Button();
+			this.mtgSaveSetsButton = new System.Windows.Forms.Button();
+			this.mtgSetGeneratorNext = new System.Windows.Forms.Button();
+			this.mtgSetGeneratorPageLabel = new System.Windows.Forms.Label();
+			this.mtgSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgSetGeneratorLabel = new System.Windows.Forms.Label();
 			this.ygoPage = new System.Windows.Forms.TabPage();
 			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).BeginInit();
@@ -243,8 +245,6 @@ namespace CollectionTracker {
 			this.mtgSymbolLayout.SuspendLayout();
 			this.mtgSymbolHeaderBox.SuspendLayout();
 			this.mtgSetsPage.SuspendLayout();
-			this.mtgSetGeneratorLayout.SuspendLayout();
-			this.mtgSetGeneratorHeaderBox.SuspendLayout();
 			this.ygoPage.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -1609,10 +1609,10 @@ namespace CollectionTracker {
 			this.mtgPrintPage.Controls.Add(this.mtgNumberLabel);
 			this.mtgPrintPage.Controls.Add(this.mtgSetField);
 			this.mtgPrintPage.Controls.Add(this.mtgSetLabel);
-			this.mtgPrintPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgPrintPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgPrintPage.Name = "mtgPrintPage";
 			this.mtgPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgPrintPage.Size = new System.Drawing.Size(1262, 618);
+			this.mtgPrintPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgPrintPage.TabIndex = 1;
 			this.mtgPrintPage.Text = "Printing Entry";
 			// 
@@ -1620,7 +1620,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgCardrefDescriptor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.mtgCardrefDescriptor.AutoSize = true;
-			this.mtgCardrefDescriptor.Location = new System.Drawing.Point(5, 555);
+			this.mtgCardrefDescriptor.Location = new System.Drawing.Point(5, 563);
 			this.mtgCardrefDescriptor.MaximumSize = new System.Drawing.Size(0, 21);
 			this.mtgCardrefDescriptor.Name = "mtgCardrefDescriptor";
 			this.mtgCardrefDescriptor.Size = new System.Drawing.Size(16, 21);
@@ -1705,7 +1705,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.mtgIODialog.AutoSize = true;
-			this.mtgIODialog.Location = new System.Drawing.Point(260, 582);
+			this.mtgIODialog.Location = new System.Drawing.Point(260, 590);
 			this.mtgIODialog.Name = "mtgIODialog";
 			this.mtgIODialog.Size = new System.Drawing.Size(16, 21);
 			this.mtgIODialog.TabIndex = 25;
@@ -1715,7 +1715,7 @@ namespace CollectionTracker {
 			// mtgSaveButton
 			// 
 			this.mtgSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mtgSaveButton.Location = new System.Drawing.Point(5, 579);
+			this.mtgSaveButton.Location = new System.Drawing.Point(5, 587);
 			this.mtgSaveButton.Name = "mtgSaveButton";
 			this.mtgSaveButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgSaveButton.TabIndex = 24;
@@ -1968,41 +1968,25 @@ namespace CollectionTracker {
 			// 
 			this.mtgSetsPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgSetsPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgSetsPage.Controls.Add(this.mtgReloadSetsButton);
+			this.mtgSetsPage.Controls.Add(this.mtgSetGeneratorPrev);
+			this.mtgSetsPage.Controls.Add(this.mtgAddSetButton);
+			this.mtgSetsPage.Controls.Add(this.mtgSaveSetsButton);
+			this.mtgSetsPage.Controls.Add(this.mtgSetGeneratorNext);
+			this.mtgSetsPage.Controls.Add(this.mtgSetGeneratorPageLabel);
 			this.mtgSetsPage.Controls.Add(this.mtgSetGeneratorLayout);
-			this.mtgSetsPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgSetsPage.Controls.Add(this.mtgSetGeneratorLabel);
+			this.mtgSetsPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgSetsPage.Name = "mtgSetsPage";
 			this.mtgSetsPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgSetsPage.Size = new System.Drawing.Size(1262, 626);
+			this.mtgSetsPage.Size = new System.Drawing.Size(1262, 618);
 			this.mtgSetsPage.TabIndex = 6;
 			this.mtgSetsPage.Text = "Sets";
-			// 
-			// mtgSetGeneratorLayout
-			// 
-			this.mtgSetGeneratorLayout.AutoScroll = true;
-			this.mtgSetGeneratorLayout.Controls.Add(this.mtgSetGeneratorHeaderBox);
-			this.mtgSetGeneratorLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mtgSetGeneratorLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.mtgSetGeneratorLayout.Location = new System.Drawing.Point(3, 3);
-			this.mtgSetGeneratorLayout.Name = "mtgSetGeneratorLayout";
-			this.mtgSetGeneratorLayout.Size = new System.Drawing.Size(1252, 616);
-			this.mtgSetGeneratorLayout.TabIndex = 1;
-			// 
-			// mtgSetGeneratorHeaderBox
-			// 
-			this.mtgSetGeneratorHeaderBox.Controls.Add(this.mtgReloadSetsButton);
-			this.mtgSetGeneratorHeaderBox.Controls.Add(this.mtgSaveSetsButton);
-			this.mtgSetGeneratorHeaderBox.Controls.Add(this.mtgAddSetButton);
-			this.mtgSetGeneratorHeaderBox.Controls.Add(this.mtgSetGeneratorLabel);
-			this.mtgSetGeneratorHeaderBox.Location = new System.Drawing.Point(3, 3);
-			this.mtgSetGeneratorHeaderBox.Name = "mtgSetGeneratorHeaderBox";
-			this.mtgSetGeneratorHeaderBox.Size = new System.Drawing.Size(350, 50);
-			this.mtgSetGeneratorHeaderBox.TabIndex = 1;
-			this.mtgSetGeneratorHeaderBox.TabStop = false;
 			// 
 			// mtgReloadSetsButton
 			// 
 			this.mtgReloadSetsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.mtgReloadSetsButton.Location = new System.Drawing.Point(170, 15);
+			this.mtgReloadSetsButton.Location = new System.Drawing.Point(880, 5);
 			this.mtgReloadSetsButton.Name = "mtgReloadSetsButton";
 			this.mtgReloadSetsButton.Size = new System.Drawing.Size(75, 29);
 			this.mtgReloadSetsButton.TabIndex = 3;
@@ -2010,21 +1994,21 @@ namespace CollectionTracker {
 			this.mtgReloadSetsButton.UseVisualStyleBackColor = true;
 			this.mtgReloadSetsButton.Click += new System.EventHandler(this.MTG_RegenerateSets);
 			// 
-			// mtgSaveSetsButton
+			// mtgSetGeneratorPrev
 			// 
-			this.mtgSaveSetsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.mtgSaveSetsButton.Location = new System.Drawing.Point(285, 15);
-			this.mtgSaveSetsButton.Name = "mtgSaveSetsButton";
-			this.mtgSaveSetsButton.Size = new System.Drawing.Size(60, 29);
-			this.mtgSaveSetsButton.TabIndex = 2;
-			this.mtgSaveSetsButton.Text = "Save";
-			this.mtgSaveSetsButton.UseVisualStyleBackColor = true;
-			this.mtgSaveSetsButton.Click += new System.EventHandler(this.MTG_OnClickSaveSets);
+			this.mtgSetGeneratorPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgSetGeneratorPrev.Location = new System.Drawing.Point(1060, 5);
+			this.mtgSetGeneratorPrev.Name = "mtgSetGeneratorPrev";
+			this.mtgSetGeneratorPrev.Size = new System.Drawing.Size(60, 29);
+			this.mtgSetGeneratorPrev.TabIndex = 5;
+			this.mtgSetGeneratorPrev.Text = "<";
+			this.mtgSetGeneratorPrev.UseVisualStyleBackColor = true;
+			this.mtgSetGeneratorPrev.Click += new System.EventHandler(this.MTG_OnClickSetGeneratorPrev);
 			// 
 			// mtgAddSetButton
 			// 
 			this.mtgAddSetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.mtgAddSetButton.Location = new System.Drawing.Point(250, 15);
+			this.mtgAddSetButton.Location = new System.Drawing.Point(960, 5);
 			this.mtgAddSetButton.Name = "mtgAddSetButton";
 			this.mtgAddSetButton.Size = new System.Drawing.Size(30, 29);
 			this.mtgAddSetButton.TabIndex = 1;
@@ -2032,11 +2016,56 @@ namespace CollectionTracker {
 			this.mtgAddSetButton.UseVisualStyleBackColor = true;
 			this.mtgAddSetButton.Click += new System.EventHandler(this.MTG_OnClickAddSet);
 			// 
+			// mtgSaveSetsButton
+			// 
+			this.mtgSaveSetsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgSaveSetsButton.Location = new System.Drawing.Point(995, 5);
+			this.mtgSaveSetsButton.Name = "mtgSaveSetsButton";
+			this.mtgSaveSetsButton.Size = new System.Drawing.Size(60, 29);
+			this.mtgSaveSetsButton.TabIndex = 2;
+			this.mtgSaveSetsButton.Text = "Save";
+			this.mtgSaveSetsButton.UseVisualStyleBackColor = true;
+			this.mtgSaveSetsButton.Click += new System.EventHandler(this.MTG_OnClickSaveSets);
+			// 
+			// mtgSetGeneratorNext
+			// 
+			this.mtgSetGeneratorNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgSetGeneratorNext.Location = new System.Drawing.Point(1190, 5);
+			this.mtgSetGeneratorNext.Name = "mtgSetGeneratorNext";
+			this.mtgSetGeneratorNext.Size = new System.Drawing.Size(60, 29);
+			this.mtgSetGeneratorNext.TabIndex = 4;
+			this.mtgSetGeneratorNext.Text = ">";
+			this.mtgSetGeneratorNext.UseVisualStyleBackColor = true;
+			this.mtgSetGeneratorNext.Click += new System.EventHandler(this.MTG_OnClickSetGeneratorNext);
+			// 
+			// mtgSetGeneratorPageLabel
+			// 
+			this.mtgSetGeneratorPageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgSetGeneratorPageLabel.Location = new System.Drawing.Point(1125, 5);
+			this.mtgSetGeneratorPageLabel.Name = "mtgSetGeneratorPageLabel";
+			this.mtgSetGeneratorPageLabel.Size = new System.Drawing.Size(60, 30);
+			this.mtgSetGeneratorPageLabel.TabIndex = 2;
+			this.mtgSetGeneratorPageLabel.Text = "X / X";
+			this.mtgSetGeneratorPageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// mtgSetGeneratorLayout
+			// 
+			this.mtgSetGeneratorLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgSetGeneratorLayout.AutoScroll = true;
+			this.mtgSetGeneratorLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.mtgSetGeneratorLayout.Location = new System.Drawing.Point(3, 38);
+			this.mtgSetGeneratorLayout.Name = "mtgSetGeneratorLayout";
+			this.mtgSetGeneratorLayout.Size = new System.Drawing.Size(1252, 572);
+			this.mtgSetGeneratorLayout.TabIndex = 1;
+			// 
 			// mtgSetGeneratorLabel
 			// 
-			this.mtgSetGeneratorLabel.Location = new System.Drawing.Point(5, 15);
+			this.mtgSetGeneratorLabel.AutoSize = true;
+			this.mtgSetGeneratorLabel.Location = new System.Drawing.Point(5, 8);
 			this.mtgSetGeneratorLabel.Name = "mtgSetGeneratorLabel";
-			this.mtgSetGeneratorLabel.Size = new System.Drawing.Size(150, 30);
+			this.mtgSetGeneratorLabel.Size = new System.Drawing.Size(39, 21);
 			this.mtgSetGeneratorLabel.TabIndex = 0;
 			this.mtgSetGeneratorLabel.Text = "Sets";
 			this.mtgSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2112,8 +2141,7 @@ namespace CollectionTracker {
 			this.mtgSymbolLayout.ResumeLayout(false);
 			this.mtgSymbolHeaderBox.ResumeLayout(false);
 			this.mtgSetsPage.ResumeLayout(false);
-			this.mtgSetGeneratorLayout.ResumeLayout(false);
-			this.mtgSetGeneratorHeaderBox.ResumeLayout(false);
+			this.mtgSetsPage.PerformLayout();
 			this.ygoPage.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -2277,7 +2305,6 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Button mtgSaveSymbolsButton;
 		private System.Windows.Forms.TabPage mtgSetsPage;
 		private System.Windows.Forms.FlowLayoutPanel mtgSetGeneratorLayout;
-		private System.Windows.Forms.GroupBox mtgSetGeneratorHeaderBox;
 		private System.Windows.Forms.Button mtgSaveSetsButton;
 		private System.Windows.Forms.Button mtgAddSetButton;
 		private System.Windows.Forms.Label mtgSetGeneratorLabel;
@@ -2291,6 +2318,9 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Button mtgDetailNextButton;
 		private System.Windows.Forms.Button mtgDetailPrevButton;
 		private System.Windows.Forms.Label mtgCardrefDescriptor;
+		private System.Windows.Forms.Button mtgSetGeneratorPrev;
+		private System.Windows.Forms.Button mtgSetGeneratorNext;
+		private System.Windows.Forms.Label mtgSetGeneratorPageLabel;
 	}
 }
 
