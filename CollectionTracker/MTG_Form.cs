@@ -54,86 +54,126 @@ namespace CollectionTracker {
 
 		#region Set List
 
-		//List of sets and controls
+		//Properties
 		private List<(MTG_Set set, GroupBox box, bool expanded)> mtgSetlist = new List<(MTG_Set, GroupBox, bool)>();
+		public int mtgSetPagenum = 0;
+		public int mtgSetsPerPage = 15;
+
+		//Paging
+		private void MTG_OnClickPrevSet(object sender, EventArgs e) {
+			--mtgSetPagenum;
+			MTG_UpdateSets();
+		}
+		private void MTG_OnClickNextSet(object sender, EventArgs e) {
+			++mtgSetPagenum;
+			MTG_UpdateSets();
+		}
 
 		//Clear set list and update data
 		private void MTG_UpdateSets() {
+
+			//Clear controls and sort sets
 			mtgSetlist.Clear();
 			mtgSetLayout.Controls.Clear();
 			mtgCatalog.sets.Sort(new SetComparer().Compare);
-			foreach (MTG_Set set in mtgCatalog.sets/*.OrderBy(set => set, new SetComparer())*/) {
 
-				//Horizontal indent
-				int indent = set.indent * 35;
+			//Get non-subsets
+			List<MTG_Set> sets = mtgCatalog.sets.Where(s => s.indent == 0).ToList();
 
-				//Important values
-				List<MTG_Printing> cardsInSet = mtgCatalog.printings.Where(print => print.set == set).ToList();
-				int setCount = cardsInSet.Count;
-				int setOwned = cardsInSet.Count(print => print.AnyOwned());
+			//Pagination
+			int maxPage = sets.Count / mtgSetsPerPage;
+			if (mtgSetPagenum > maxPage) { mtgSetPagenum = 0; }
+			if (mtgSetPagenum < 0) { mtgSetPagenum = maxPage; }
+			int startIndex = mtgSetPagenum * mtgSetsPerPage;
+			int maxIndex = mtgSetsPerPage;
+			if (mtgSetPagenum == maxPage) { maxIndex = sets.Count % mtgSetsPerPage; }
+			maxIndex += startIndex;
+			mtgSetPageLabel.Text = (mtgSetPagenum + 1) + " / " + (maxPage + 1);
 
-				//Set info box
-				GroupBox box = new GroupBox();
-				mtgSetLayout.Controls.Add(box);
-				box.Size = new Size(740, 70);
-
-				//Filter button
-				Button filter = new Button();
-				box.Controls.Add(filter);
-				filter.Location = new Point(5 + indent, 15);
-				filter.Size = new Size(350 - indent, 50);
-				filter.Text = set.name;
-				filter.UseVisualStyleBackColor = true;
-				if (set.imgPath.Length > 0) { filter.Image = new Bitmap(Image.FromFile(set.imgPath), new Size(35, 35)); }
-				filter.TextImageRelation = TextImageRelation.ImageBeforeText;
-				filter.ImageAlign = ContentAlignment.MiddleRight;
-				filter.TextAlign = ContentAlignment.MiddleCenter;
-				filter.Click += new EventHandler((sender, e) => MTG_FilterCatalogBySet(set));
-
-				//Arrow
-				if (indent > 0) {
-					Label arrow = new Label();
-					box.Controls.Add(arrow);
-					arrow.Location = new Point(indent - 25, 15);
-					arrow.Size = new Size(20, 50);
-					arrow.Text = "↳";
-					arrow.TextAlign = ContentAlignment.MiddleLeft;
-					arrow.Font = new Font(arrow.Font.Name, 20, arrow.Font.Style);
+			//Create set rows
+			for (int i = startIndex; i < maxIndex; ++i) {
+				MTG_CreateSetRow(sets[i]);
+				foreach (MTG_Set set in mtgCatalog.sets) {
+					if (set.indent > 0 && set.date.Date == sets[i].date.Date) {
+						MTG_CreateSetRow(set);
+					}
 				}
-
-				//Progress label
-				Label label = new Label();
-				box.Controls.Add(label);
-				label.Location = new Point(360, 15);
-				label.Size = new Size(60, 50);
-				label.Text = setOwned.ToString() + '/' + setCount.ToString();
-				label.TextAlign = ContentAlignment.MiddleCenter;
-
-				//Progress bar
-				ProgressBar bar = new ProgressBar();
-				box.Controls.Add(bar);
-				bar.Location = new Point(430, 25);
-				bar.Size = new Size(265, 30);
-				if (setCount > 0) { bar.Value = (int)(((float)setOwned / setCount) * 100); }
-
-				//Expand button
-				if (set.indent == 0) {
-					Button expand = new Button();
-					box.Controls.Add(expand);
-					expand.Location = new Point(700, 15);
-					expand.Size = new Size(35, 50);
-					expand.Text = "V";
-					expand.TextAlign = ContentAlignment.MiddleCenter;
-					expand.Click += new EventHandler((sender, e) => MTG_ExpandCollapseSet(set));
-				}
-
-				//Hide if not main set
-				else { box.Hide(); }
-
-				//Add to list
-				mtgSetlist.Add((set, box, false));
-
 			}
+
+		}
+
+		//Generate set info
+		private void MTG_CreateSetRow(MTG_Set set) {
+
+			//Horizontal indent
+			int indent = set.indent * 35;
+
+			//Important values
+			List<MTG_Printing> cardsInSet = mtgCatalog.printings.Where(print => print.set == set).ToList();
+			int setCount = cardsInSet.Count;
+			int setOwned = cardsInSet.Count(print => print.AnyOwned());
+
+			//Set info box
+			GroupBox box = new GroupBox();
+			mtgSetLayout.Controls.Add(box);
+			box.Size = new Size(740, 70);
+
+			//Filter button
+			Button filter = new Button();
+			box.Controls.Add(filter);
+			filter.Location = new Point(5 + indent, 15);
+			filter.Size = new Size(350 - indent, 50);
+			filter.Text = set.name;
+			filter.UseVisualStyleBackColor = true;
+			if (set.imgPath.Length > 0) { filter.Image = new Bitmap(Image.FromFile(set.imgPath), new Size(35, 35)); }
+			filter.TextImageRelation = TextImageRelation.ImageBeforeText;
+			filter.ImageAlign = ContentAlignment.MiddleRight;
+			filter.TextAlign = ContentAlignment.MiddleCenter;
+			filter.Click += new EventHandler((sender, e) => MTG_FilterCatalogBySet(set));
+
+			//Arrow
+			if (indent > 0) {
+				Label arrow = new Label();
+				box.Controls.Add(arrow);
+				arrow.Location = new Point(indent - 25, 15);
+				arrow.Size = new Size(20, 50);
+				arrow.Text = "↳";
+				arrow.TextAlign = ContentAlignment.MiddleLeft;
+				arrow.Font = new Font(arrow.Font.Name, 20, arrow.Font.Style);
+			}
+
+			//Progress label
+			Label label = new Label();
+			box.Controls.Add(label);
+			label.Location = new Point(360, 15);
+			label.Size = new Size(60, 50);
+			label.Text = setOwned.ToString() + '/' + setCount.ToString();
+			label.TextAlign = ContentAlignment.MiddleCenter;
+
+			//Progress bar
+			ProgressBar bar = new ProgressBar();
+			box.Controls.Add(bar);
+			bar.Location = new Point(430, 25);
+			bar.Size = new Size(265, 30);
+			if (setCount > 0) { bar.Value = (int)(((float)setOwned / setCount) * 100); }
+
+			//Expand button
+			if (set.indent == 0) {
+				Button expand = new Button();
+				box.Controls.Add(expand);
+				expand.Location = new Point(700, 15);
+				expand.Size = new Size(35, 50);
+				expand.Text = "V";
+				expand.TextAlign = ContentAlignment.MiddleCenter;
+				expand.Click += new EventHandler((sender, e) => MTG_ExpandCollapseSet(set));
+			}
+
+			//Hide if not main set
+			else { box.Hide(); }
+
+			//Add to list
+			mtgSetlist.Add((set, box, false));
+
 		}
 
 		//Expand or collapse set box
