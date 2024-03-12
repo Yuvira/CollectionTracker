@@ -447,17 +447,23 @@ namespace CollectionTracker {
 		}
 
 		//Load image. Load nothing if it doesn't exist
-		public static void TryLoadImage(PictureBox box, string path) {
-			try { box.Load(path); }
-			catch (Exception) { }
+		public static bool TryLoadImage(PictureBox box, string path) {
+			try { box.Load(path); return true; }
+			catch (Exception) { return false; }
 		}
 
 		//Load card image. If it doesn't exist, load default image
-		public static void TryLoadCardImage(PictureBox box, string path) {
-			try { box.Load(path); }
+		public static bool TryLoadCardImage(PictureBox box, string path, Label label = null) {
+			try {
+				box.Load(path);
+				if (label != null) { label.Text = path; }
+				return true;
+			}
 			catch (Exception) {
 				try { box.Load(CARD_BACK_PATH); }
 				catch (Exception) { }
+				if (label != null) { label.Text = ""; }
+				return false;
 			}
 		}
 

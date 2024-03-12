@@ -919,6 +919,14 @@ namespace CollectionTracker {
 		private void MTG_LoadPreviousInSet(object sender, EventArgs e) => MTG_LoadCardDetails(mtgDetailPrev);
 		private void MTG_LoadNextInSet(object sender, EventArgs e) => MTG_LoadCardDetails(mtgDetailNext);
 
+		//Delete printing from catalog
+		private void MTG_DeleteCurrentPrinting(object sender, EventArgs e) {
+			int index = mtgCatalog.printings.IndexOf(mtgDetailPrint);
+			mtgCatalog.printings.RemoveAt(index);
+			MTG_UpdateSets();
+			mtgDetailPrint = null;
+		}
+
 		#endregion
 
 		#endregion
@@ -1073,6 +1081,31 @@ namespace CollectionTracker {
 			}
 		}
 
+		//Autofill image
+		private void MTG_OnClickPrintAutofill(object sender, EventArgs e) => MTG_OnClickPrintAutofill();
+		private bool MTG_OnClickPrintAutofill() {
+			MTG_Set set = (MTG_Set)mtgSetField.SelectedItem;
+			if (set != null) {
+				mtgCardrefField.SelectedIndex = 1;
+				string code = set.code;
+				string num = mtgNumberField.Value.ToString().PadLeft(4, '0');
+				if (code.Length > 3) {
+					num = code[0] + num;
+					code = code.Substring(1);
+				}
+				string path = "resources/mtg/" + code + "/" + num;
+				if (MTG_Utils.TryLoadCardImage(mtgPrintImgbox, path + ".png", mtgImgpathLabel)) { return true; }
+				else {
+					if (MTG_Utils.TryLoadCardImage(mtgPrintImgbox, path + "a.png", mtgImgpathLabel)) {
+						if (MTG_Utils.TryLoadCardImage(mtgPrintImgboxBack, path + "b.png", mtgImgpathBackLabel)) {
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+
 		//Populate descriptor when card reference is selected
 		private void MTG_OnSelectCardref(object sender, EventArgs e) {
 
@@ -1098,7 +1131,8 @@ namespace CollectionTracker {
 		}
 
 		//Add printing to catalog
-		private void MTG_OnClickAddPrint(object sender, EventArgs e) {
+		private void MTG_OnClickAddPrint(object sender, EventArgs e) => MTG_OnClickAddPrint();
+		private void MTG_OnClickAddPrint() {
 
 			//Return if no set, treatments, images, or card reference set
 			if (mtgSetField.SelectedIndex < 0) { return; }
@@ -1149,6 +1183,18 @@ namespace CollectionTracker {
 			mtgUpdatePrint = null;
 			mtgAddPrintButton.Text = "Add To Catalog";
 
+		}
+
+		//Add card to catalog and autofill next
+		private void MTG_OnClickAddAndFill(object sender, EventArgs e) {
+			int lastIndex = -1;
+			while (true) {
+				MTG_OnClickAddPrint();
+				if (mtgNumberField.Value == lastIndex) { break; }
+				lastIndex = (int)mtgNumberField.Value;
+				if (!MTG_OnClickPrintAutofill()) { break; }
+				if (lastIndex > mtgPrintAutoLimit.Value) { break; }
+			}
 		}
 
 		#endregion

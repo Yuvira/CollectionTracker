@@ -156,6 +156,8 @@ namespace CollectionTracker {
 			this.mtgColourLabel = new System.Windows.Forms.Label();
 			this.mtgCardTypeLabel = new System.Windows.Forms.Label();
 			this.mtgPrintPage = new System.Windows.Forms.TabPage();
+			this.mtgPrintAutofillRangeButton = new System.Windows.Forms.Button();
+			this.mtgPrintAutofillButton = new System.Windows.Forms.Button();
 			this.mtgCardrefDescriptor = new System.Windows.Forms.Label();
 			this.mtgRarityField = new System.Windows.Forms.ComboBox();
 			this.mtgRarityLabel = new System.Windows.Forms.Label();
@@ -201,6 +203,8 @@ namespace CollectionTracker {
 			this.mtgSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgSetGeneratorLabel = new System.Windows.Forms.Label();
 			this.ygoPage = new System.Windows.Forms.TabPage();
+			this.mtgPrintAutoLimit = new System.Windows.Forms.NumericUpDown();
+			this.mtgDeletePrintingButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoAttackField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoDefenseField)).BeginInit();
@@ -250,6 +254,7 @@ namespace CollectionTracker {
 			this.mtgSymbolHeaderBox.SuspendLayout();
 			this.mtgSetsPage.SuspendLayout();
 			this.ygoPage.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.mtgPrintAutoLimit)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// ygoCardHeader
@@ -1091,15 +1096,16 @@ namespace CollectionTracker {
 			// 
 			this.mtgDetailPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgDetailPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgDetailPage.Controls.Add(this.mtgDeletePrintingButton);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailNextButton);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailPrevButton);
 			this.mtgDetailPage.Controls.Add(this.mtgCardtipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgTooltipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailImgbox);
-			this.mtgDetailPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgDetailPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgDetailPage.Name = "mtgDetailPage";
-			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 626);
+			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 618);
 			this.mtgDetailPage.TabIndex = 4;
 			this.mtgDetailPage.Text = "Card Details";
 			// 
@@ -1633,6 +1639,9 @@ namespace CollectionTracker {
 			// 
 			this.mtgPrintPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgPrintPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgPrintPage.Controls.Add(this.mtgPrintAutoLimit);
+			this.mtgPrintPage.Controls.Add(this.mtgPrintAutofillRangeButton);
+			this.mtgPrintPage.Controls.Add(this.mtgPrintAutofillButton);
 			this.mtgPrintPage.Controls.Add(this.mtgCardrefDescriptor);
 			this.mtgPrintPage.Controls.Add(this.mtgRarityField);
 			this.mtgPrintPage.Controls.Add(this.mtgRarityLabel);
@@ -1668,6 +1677,26 @@ namespace CollectionTracker {
 			this.mtgPrintPage.Size = new System.Drawing.Size(1262, 618);
 			this.mtgPrintPage.TabIndex = 1;
 			this.mtgPrintPage.Text = "Printing Entry";
+			// 
+			// mtgPrintAutofillRangeButton
+			// 
+			this.mtgPrintAutofillRangeButton.Location = new System.Drawing.Point(100, 510);
+			this.mtgPrintAutofillRangeButton.Name = "mtgPrintAutofillRangeButton";
+			this.mtgPrintAutofillRangeButton.Size = new System.Drawing.Size(115, 29);
+			this.mtgPrintAutofillRangeButton.TabIndex = 30;
+			this.mtgPrintAutofillRangeButton.Text = "Autofill to";
+			this.mtgPrintAutofillRangeButton.UseVisualStyleBackColor = true;
+			this.mtgPrintAutofillRangeButton.Click += new System.EventHandler(this.MTG_OnClickAddAndFill);
+			// 
+			// mtgPrintAutofillButton
+			// 
+			this.mtgPrintAutofillButton.Location = new System.Drawing.Point(355, 335);
+			this.mtgPrintAutofillButton.Name = "mtgPrintAutofillButton";
+			this.mtgPrintAutofillButton.Size = new System.Drawing.Size(115, 29);
+			this.mtgPrintAutofillButton.TabIndex = 29;
+			this.mtgPrintAutofillButton.Text = "Autofill";
+			this.mtgPrintAutofillButton.UseVisualStyleBackColor = true;
+			this.mtgPrintAutofillButton.Click += new System.EventHandler(this.MTG_OnClickPrintAutofill);
 			// 
 			// mtgCardrefDescriptor
 			// 
@@ -1852,7 +1881,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgImgsearchButton.Location = new System.Drawing.Point(100, 335);
 			this.mtgImgsearchButton.Name = "mtgImgsearchButton";
-			this.mtgImgsearchButton.Size = new System.Drawing.Size(370, 29);
+			this.mtgImgsearchButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgImgsearchButton.TabIndex = 15;
 			this.mtgImgsearchButton.Text = "Search";
 			this.mtgImgsearchButton.UseVisualStyleBackColor = true;
@@ -2135,6 +2164,29 @@ namespace CollectionTracker {
 			this.ygoPage.TabIndex = 0;
 			this.ygoPage.Text = "YGO";
 			// 
+			// mtgPrintAutoLimit
+			// 
+			this.mtgPrintAutoLimit.Location = new System.Drawing.Point(220, 510);
+			this.mtgPrintAutoLimit.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.mtgPrintAutoLimit.Name = "mtgPrintAutoLimit";
+			this.mtgPrintAutoLimit.Size = new System.Drawing.Size(250, 29);
+			this.mtgPrintAutoLimit.TabIndex = 31;
+			// 
+			// mtgDeletePrintingButton
+			// 
+			this.mtgDeletePrintingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.mtgDeletePrintingButton.Location = new System.Drawing.Point(5, 582);
+			this.mtgDeletePrintingButton.Name = "mtgDeletePrintingButton";
+			this.mtgDeletePrintingButton.Size = new System.Drawing.Size(250, 29);
+			this.mtgDeletePrintingButton.TabIndex = 25;
+			this.mtgDeletePrintingButton.Text = "Delete Printing!";
+			this.mtgDeletePrintingButton.UseVisualStyleBackColor = true;
+			this.mtgDeletePrintingButton.Click += new System.EventHandler(this.MTG_DeleteCurrentPrinting);
+			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -2198,6 +2250,7 @@ namespace CollectionTracker {
 			this.mtgSetsPage.ResumeLayout(false);
 			this.mtgSetsPage.PerformLayout();
 			this.ygoPage.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.mtgPrintAutoLimit)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -2380,6 +2433,10 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Label mtgSetPageLabel;
 		private System.Windows.Forms.Button mtgNextSetButton;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Button mtgPrintAutofillButton;
+		private System.Windows.Forms.Button mtgPrintAutofillRangeButton;
+		private System.Windows.Forms.NumericUpDown mtgPrintAutoLimit;
+		private System.Windows.Forms.Button mtgDeletePrintingButton;
 	}
 }
 
