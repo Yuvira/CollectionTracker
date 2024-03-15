@@ -1089,6 +1089,7 @@ namespace CollectionTracker {
 				mtgCardrefField.SelectedIndex = 1;
 				string code = set.code;
 				string num = mtgNumberField.Value.ToString().PadLeft(4, '0');
+				mtgScryfallField.Text = code.ToLower() + "/" + mtgNumberField.Value.ToString();
 				if (code.Length > 3) {
 					num = code[0] + num;
 					code = code.Substring(1);
