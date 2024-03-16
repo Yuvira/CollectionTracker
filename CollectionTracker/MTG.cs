@@ -412,22 +412,14 @@ namespace CollectionTracker {
 			while (true) {
 
 				//Get index of next object and return if we're done
-				int i = IndexOfMany(str, new List<char>() { '[', '<' });
-				if (i < 0) { return str; }
+				int i = str.IndexOf('[');
+				if (i < 0) { return str.Replace("\r\n", " || "); }
 
 				//Remove tooltip
 				else if (str[i] == '[') {
 					str = str.Remove(i, 1);
-					int i2 = str.IndexOf("|");
-					int i3 = str.IndexOf("]");
-					if (i2 > 0 && i3 > 0) { str = str.Remove(i2, i3 + 1 - i2); }
-				}
-
-				//Remove cardtip
-				else if (str[i] == '<') {
-					str = str.Remove(i, 1);
-					int i2 = str.IndexOf("|");
-					int i3 = str.IndexOf(">");
+					int i2 = str.IndexOf("|", i);
+					int i3 = str.IndexOf("]", i);
 					if (i2 > 0 && i3 > 0) { str = str.Remove(i2, i3 + 1 - i2); }
 				}
 
