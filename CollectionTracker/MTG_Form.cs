@@ -498,6 +498,7 @@ namespace CollectionTracker {
 							location = MTG_InsertSymbol(desc.Substring(0, i2 + 1), box, location, TEXT_HEIGHT);
 							desc = desc.Substring(i2 + 1);
 						}
+						else { desc = desc.Substring(1); }
 					}
 
 					//Tooltip
@@ -508,6 +509,7 @@ namespace CollectionTracker {
 							location = MTG_InsertTooltip(desc.Substring(1, i2 - 1), desc.Substring(i2 + 1, (i3 - i2) - 1), box, location);
 							desc = desc.Substring(i3 + 1);
 						}
+						else { desc = desc.Substring(1); }
 					}
 
 					//Cardtip
@@ -518,6 +520,7 @@ namespace CollectionTracker {
 							location = MTG_InsertCardtip(desc.Substring(1, i2 - 1), desc.Substring(i2 + 1, (i3 - i2) - 1), box, location);
 							desc = desc.Substring(i3 + 1);
 						}
+						else { desc = desc.Substring(1); }
 					}
 
 					//Skip anything else for now
