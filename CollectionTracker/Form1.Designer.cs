@@ -95,6 +95,36 @@ namespace CollectionTracker {
 			this.mtgNextSetButton = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.mtgSetLayout = new System.Windows.Forms.FlowLayoutPanel();
+			this.mtgSearchPage = new System.Windows.Forms.TabPage();
+			this.mtgSearchButton = new System.Windows.Forms.Button();
+			this.mtgSearchOracleField = new System.Windows.Forms.TextBox();
+			this.mtgSearchTypeField = new System.Windows.Forms.TextBox();
+			this.mtgSearchColImgG = new System.Windows.Forms.PictureBox();
+			this.mtgSearchColImgR = new System.Windows.Forms.PictureBox();
+			this.mtgSearchColImgB = new System.Windows.Forms.PictureBox();
+			this.mtgSearchColImgU = new System.Windows.Forms.PictureBox();
+			this.mtgSearchColImgW = new System.Windows.Forms.PictureBox();
+			this.mtgSearchColG = new System.Windows.Forms.CheckBox();
+			this.mtgSearchColR = new System.Windows.Forms.CheckBox();
+			this.mtgSearchColB = new System.Windows.Forms.CheckBox();
+			this.mtgSearchColU = new System.Windows.Forms.CheckBox();
+			this.mtgSearchColW = new System.Windows.Forms.CheckBox();
+			this.mtgSearchIDImgG = new System.Windows.Forms.PictureBox();
+			this.mtgSearchIDImgR = new System.Windows.Forms.PictureBox();
+			this.mtgSearchIDImgB = new System.Windows.Forms.PictureBox();
+			this.mtgSearchIDImgU = new System.Windows.Forms.PictureBox();
+			this.mtgSearchIDImgW = new System.Windows.Forms.PictureBox();
+			this.mtgSearchIDG = new System.Windows.Forms.CheckBox();
+			this.mtgSearchIDR = new System.Windows.Forms.CheckBox();
+			this.mtgSearchIDB = new System.Windows.Forms.CheckBox();
+			this.mtgSearchIDU = new System.Windows.Forms.CheckBox();
+			this.mtgSearchIDW = new System.Windows.Forms.CheckBox();
+			this.mtgSearchNameLabel = new System.Windows.Forms.Label();
+			this.mtgSearchNameField = new System.Windows.Forms.TextBox();
+			this.mtgSearchOracleLabel = new System.Windows.Forms.Label();
+			this.mtgSearchIdentityLabel = new System.Windows.Forms.Label();
+			this.mtgSearchColourLabel = new System.Windows.Forms.Label();
+			this.mtgSearchTypeLabel = new System.Windows.Forms.Label();
 			this.mtgCatalogPage = new System.Windows.Forms.TabPage();
 			this.mtgCatalogNextButton = new System.Windows.Forms.Button();
 			this.mtgCatalogPrevButton = new System.Windows.Forms.Button();
@@ -224,6 +254,17 @@ namespace CollectionTracker {
 			this.mtgPage.SuspendLayout();
 			this.mtgTabControl.SuspendLayout();
 			this.mtgSetPage.SuspendLayout();
+			this.mtgSearchPage.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchColImgG)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchColImgR)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchColImgB)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchColImgU)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchColImgW)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgG)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgR)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgB)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgU)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgW)).BeginInit();
 			this.mtgCatalogPage.SuspendLayout();
 			this.mtgDetailPage.SuspendLayout();
 			this.mtgCardtipBox.SuspendLayout();
@@ -948,6 +989,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgTabControl.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
 			this.mtgTabControl.Controls.Add(this.mtgSetPage);
+			this.mtgTabControl.Controls.Add(this.mtgSearchPage);
 			this.mtgTabControl.Controls.Add(this.mtgCatalogPage);
 			this.mtgTabControl.Controls.Add(this.mtgDetailPage);
 			this.mtgTabControl.Controls.Add(this.mtgCardPage);
@@ -1033,6 +1075,292 @@ namespace CollectionTracker {
 			this.mtgSetLayout.Size = new System.Drawing.Size(1252, 572);
 			this.mtgSetLayout.TabIndex = 0;
 			this.mtgSetLayout.WrapContents = false;
+			// 
+			// mtgSearchPage
+			// 
+			this.mtgSearchPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.mtgSearchPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgSearchPage.Controls.Add(this.mtgSearchButton);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchOracleField);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchTypeField);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColImgG);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColImgR);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColImgB);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColImgU);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColImgW);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColG);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColR);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColB);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColU);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColW);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIDImgG);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIDImgR);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIDImgB);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIDImgU);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIDImgW);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIDG);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIDR);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIDB);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIDU);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIDW);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchNameLabel);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchNameField);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchOracleLabel);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchIdentityLabel);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchColourLabel);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchTypeLabel);
+			this.mtgSearchPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgSearchPage.Name = "mtgSearchPage";
+			this.mtgSearchPage.Padding = new System.Windows.Forms.Padding(3);
+			this.mtgSearchPage.Size = new System.Drawing.Size(1262, 618);
+			this.mtgSearchPage.TabIndex = 7;
+			this.mtgSearchPage.Text = "Search";
+			// 
+			// mtgSearchButton
+			// 
+			this.mtgSearchButton.Location = new System.Drawing.Point(100, 180);
+			this.mtgSearchButton.Name = "mtgSearchButton";
+			this.mtgSearchButton.Size = new System.Drawing.Size(120, 30);
+			this.mtgSearchButton.TabIndex = 73;
+			this.mtgSearchButton.Text = "Search";
+			this.mtgSearchButton.UseVisualStyleBackColor = true;
+			this.mtgSearchButton.Click += new System.EventHandler(this.MTG_Search);
+			// 
+			// mtgSearchOracleField
+			// 
+			this.mtgSearchOracleField.Location = new System.Drawing.Point(100, 145);
+			this.mtgSearchOracleField.Name = "mtgSearchOracleField";
+			this.mtgSearchOracleField.Size = new System.Drawing.Size(370, 29);
+			this.mtgSearchOracleField.TabIndex = 72;
+			// 
+			// mtgSearchTypeField
+			// 
+			this.mtgSearchTypeField.Location = new System.Drawing.Point(100, 110);
+			this.mtgSearchTypeField.Name = "mtgSearchTypeField";
+			this.mtgSearchTypeField.Size = new System.Drawing.Size(370, 29);
+			this.mtgSearchTypeField.TabIndex = 59;
+			// 
+			// mtgSearchColImgG
+			// 
+			this.mtgSearchColImgG.Location = new System.Drawing.Point(320, 75);
+			this.mtgSearchColImgG.Name = "mtgSearchColImgG";
+			this.mtgSearchColImgG.Size = new System.Drawing.Size(30, 30);
+			this.mtgSearchColImgG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgSearchColImgG.TabIndex = 71;
+			this.mtgSearchColImgG.TabStop = false;
+			// 
+			// mtgSearchColImgR
+			// 
+			this.mtgSearchColImgR.Location = new System.Drawing.Point(270, 75);
+			this.mtgSearchColImgR.Name = "mtgSearchColImgR";
+			this.mtgSearchColImgR.Size = new System.Drawing.Size(30, 30);
+			this.mtgSearchColImgR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgSearchColImgR.TabIndex = 70;
+			this.mtgSearchColImgR.TabStop = false;
+			// 
+			// mtgSearchColImgB
+			// 
+			this.mtgSearchColImgB.Location = new System.Drawing.Point(220, 75);
+			this.mtgSearchColImgB.Name = "mtgSearchColImgB";
+			this.mtgSearchColImgB.Size = new System.Drawing.Size(30, 30);
+			this.mtgSearchColImgB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgSearchColImgB.TabIndex = 69;
+			this.mtgSearchColImgB.TabStop = false;
+			// 
+			// mtgSearchColImgU
+			// 
+			this.mtgSearchColImgU.Location = new System.Drawing.Point(170, 75);
+			this.mtgSearchColImgU.Name = "mtgSearchColImgU";
+			this.mtgSearchColImgU.Size = new System.Drawing.Size(30, 30);
+			this.mtgSearchColImgU.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgSearchColImgU.TabIndex = 68;
+			this.mtgSearchColImgU.TabStop = false;
+			// 
+			// mtgSearchColImgW
+			// 
+			this.mtgSearchColImgW.Location = new System.Drawing.Point(120, 75);
+			this.mtgSearchColImgW.Name = "mtgSearchColImgW";
+			this.mtgSearchColImgW.Size = new System.Drawing.Size(30, 30);
+			this.mtgSearchColImgW.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgSearchColImgW.TabIndex = 67;
+			this.mtgSearchColImgW.TabStop = false;
+			// 
+			// mtgSearchColG
+			// 
+			this.mtgSearchColG.Location = new System.Drawing.Point(305, 75);
+			this.mtgSearchColG.Name = "mtgSearchColG";
+			this.mtgSearchColG.Size = new System.Drawing.Size(14, 30);
+			this.mtgSearchColG.TabIndex = 57;
+			this.mtgSearchColG.UseVisualStyleBackColor = true;
+			// 
+			// mtgSearchColR
+			// 
+			this.mtgSearchColR.Location = new System.Drawing.Point(255, 75);
+			this.mtgSearchColR.Name = "mtgSearchColR";
+			this.mtgSearchColR.Size = new System.Drawing.Size(14, 30);
+			this.mtgSearchColR.TabIndex = 56;
+			this.mtgSearchColR.UseVisualStyleBackColor = true;
+			// 
+			// mtgSearchColB
+			// 
+			this.mtgSearchColB.Location = new System.Drawing.Point(205, 75);
+			this.mtgSearchColB.Name = "mtgSearchColB";
+			this.mtgSearchColB.Size = new System.Drawing.Size(14, 30);
+			this.mtgSearchColB.TabIndex = 55;
+			this.mtgSearchColB.UseVisualStyleBackColor = true;
+			// 
+			// mtgSearchColU
+			// 
+			this.mtgSearchColU.Location = new System.Drawing.Point(155, 75);
+			this.mtgSearchColU.Name = "mtgSearchColU";
+			this.mtgSearchColU.Size = new System.Drawing.Size(14, 30);
+			this.mtgSearchColU.TabIndex = 54;
+			this.mtgSearchColU.UseVisualStyleBackColor = true;
+			// 
+			// mtgSearchColW
+			// 
+			this.mtgSearchColW.Location = new System.Drawing.Point(105, 75);
+			this.mtgSearchColW.Name = "mtgSearchColW";
+			this.mtgSearchColW.Size = new System.Drawing.Size(14, 30);
+			this.mtgSearchColW.TabIndex = 53;
+			this.mtgSearchColW.UseVisualStyleBackColor = true;
+			// 
+			// mtgSearchIDImgG
+			// 
+			this.mtgSearchIDImgG.Location = new System.Drawing.Point(320, 40);
+			this.mtgSearchIDImgG.Name = "mtgSearchIDImgG";
+			this.mtgSearchIDImgG.Size = new System.Drawing.Size(30, 30);
+			this.mtgSearchIDImgG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgSearchIDImgG.TabIndex = 66;
+			this.mtgSearchIDImgG.TabStop = false;
+			// 
+			// mtgSearchIDImgR
+			// 
+			this.mtgSearchIDImgR.Location = new System.Drawing.Point(270, 40);
+			this.mtgSearchIDImgR.Name = "mtgSearchIDImgR";
+			this.mtgSearchIDImgR.Size = new System.Drawing.Size(30, 30);
+			this.mtgSearchIDImgR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgSearchIDImgR.TabIndex = 65;
+			this.mtgSearchIDImgR.TabStop = false;
+			// 
+			// mtgSearchIDImgB
+			// 
+			this.mtgSearchIDImgB.Location = new System.Drawing.Point(220, 40);
+			this.mtgSearchIDImgB.Name = "mtgSearchIDImgB";
+			this.mtgSearchIDImgB.Size = new System.Drawing.Size(30, 30);
+			this.mtgSearchIDImgB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgSearchIDImgB.TabIndex = 64;
+			this.mtgSearchIDImgB.TabStop = false;
+			// 
+			// mtgSearchIDImgU
+			// 
+			this.mtgSearchIDImgU.Location = new System.Drawing.Point(170, 40);
+			this.mtgSearchIDImgU.Name = "mtgSearchIDImgU";
+			this.mtgSearchIDImgU.Size = new System.Drawing.Size(30, 30);
+			this.mtgSearchIDImgU.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgSearchIDImgU.TabIndex = 63;
+			this.mtgSearchIDImgU.TabStop = false;
+			// 
+			// mtgSearchIDImgW
+			// 
+			this.mtgSearchIDImgW.Location = new System.Drawing.Point(120, 40);
+			this.mtgSearchIDImgW.Name = "mtgSearchIDImgW";
+			this.mtgSearchIDImgW.Size = new System.Drawing.Size(30, 30);
+			this.mtgSearchIDImgW.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.mtgSearchIDImgW.TabIndex = 62;
+			this.mtgSearchIDImgW.TabStop = false;
+			// 
+			// mtgSearchIDG
+			// 
+			this.mtgSearchIDG.Location = new System.Drawing.Point(305, 40);
+			this.mtgSearchIDG.Name = "mtgSearchIDG";
+			this.mtgSearchIDG.Size = new System.Drawing.Size(14, 30);
+			this.mtgSearchIDG.TabIndex = 51;
+			this.mtgSearchIDG.UseVisualStyleBackColor = true;
+			// 
+			// mtgSearchIDR
+			// 
+			this.mtgSearchIDR.Location = new System.Drawing.Point(255, 40);
+			this.mtgSearchIDR.Name = "mtgSearchIDR";
+			this.mtgSearchIDR.Size = new System.Drawing.Size(14, 30);
+			this.mtgSearchIDR.TabIndex = 50;
+			this.mtgSearchIDR.UseVisualStyleBackColor = true;
+			// 
+			// mtgSearchIDB
+			// 
+			this.mtgSearchIDB.Location = new System.Drawing.Point(205, 40);
+			this.mtgSearchIDB.Name = "mtgSearchIDB";
+			this.mtgSearchIDB.Size = new System.Drawing.Size(14, 30);
+			this.mtgSearchIDB.TabIndex = 49;
+			this.mtgSearchIDB.UseVisualStyleBackColor = true;
+			// 
+			// mtgSearchIDU
+			// 
+			this.mtgSearchIDU.Location = new System.Drawing.Point(155, 40);
+			this.mtgSearchIDU.Name = "mtgSearchIDU";
+			this.mtgSearchIDU.Size = new System.Drawing.Size(14, 30);
+			this.mtgSearchIDU.TabIndex = 48;
+			this.mtgSearchIDU.UseVisualStyleBackColor = true;
+			// 
+			// mtgSearchIDW
+			// 
+			this.mtgSearchIDW.Location = new System.Drawing.Point(105, 40);
+			this.mtgSearchIDW.Name = "mtgSearchIDW";
+			this.mtgSearchIDW.Size = new System.Drawing.Size(14, 30);
+			this.mtgSearchIDW.TabIndex = 47;
+			this.mtgSearchIDW.UseVisualStyleBackColor = true;
+			// 
+			// mtgSearchNameLabel
+			// 
+			this.mtgSearchNameLabel.Location = new System.Drawing.Point(5, 5);
+			this.mtgSearchNameLabel.Name = "mtgSearchNameLabel";
+			this.mtgSearchNameLabel.Size = new System.Drawing.Size(90, 30);
+			this.mtgSearchNameLabel.TabIndex = 44;
+			this.mtgSearchNameLabel.Text = "Name:";
+			this.mtgSearchNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// mtgSearchNameField
+			// 
+			this.mtgSearchNameField.Location = new System.Drawing.Point(100, 5);
+			this.mtgSearchNameField.Name = "mtgSearchNameField";
+			this.mtgSearchNameField.Size = new System.Drawing.Size(370, 29);
+			this.mtgSearchNameField.TabIndex = 45;
+			// 
+			// mtgSearchOracleLabel
+			// 
+			this.mtgSearchOracleLabel.Location = new System.Drawing.Point(5, 145);
+			this.mtgSearchOracleLabel.Name = "mtgSearchOracleLabel";
+			this.mtgSearchOracleLabel.Size = new System.Drawing.Size(90, 30);
+			this.mtgSearchOracleLabel.TabIndex = 60;
+			this.mtgSearchOracleLabel.Text = "Oracle Text:";
+			this.mtgSearchOracleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// mtgSearchIdentityLabel
+			// 
+			this.mtgSearchIdentityLabel.Location = new System.Drawing.Point(5, 40);
+			this.mtgSearchIdentityLabel.Name = "mtgSearchIdentityLabel";
+			this.mtgSearchIdentityLabel.Size = new System.Drawing.Size(90, 30);
+			this.mtgSearchIdentityLabel.TabIndex = 46;
+			this.mtgSearchIdentityLabel.Text = "Identity:";
+			this.mtgSearchIdentityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// mtgSearchColourLabel
+			// 
+			this.mtgSearchColourLabel.Location = new System.Drawing.Point(5, 75);
+			this.mtgSearchColourLabel.Name = "mtgSearchColourLabel";
+			this.mtgSearchColourLabel.Size = new System.Drawing.Size(90, 30);
+			this.mtgSearchColourLabel.TabIndex = 52;
+			this.mtgSearchColourLabel.Text = "Colours:";
+			this.mtgSearchColourLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// mtgSearchTypeLabel
+			// 
+			this.mtgSearchTypeLabel.Location = new System.Drawing.Point(5, 110);
+			this.mtgSearchTypeLabel.Name = "mtgSearchTypeLabel";
+			this.mtgSearchTypeLabel.Size = new System.Drawing.Size(90, 30);
+			this.mtgSearchTypeLabel.TabIndex = 58;
+			this.mtgSearchTypeLabel.Text = "Card Types:";
+			this.mtgSearchTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgCatalogPage
 			// 
@@ -1682,10 +2010,10 @@ namespace CollectionTracker {
 			this.mtgPrintPage.Controls.Add(this.mtgNumberLabel);
 			this.mtgPrintPage.Controls.Add(this.mtgSetField);
 			this.mtgPrintPage.Controls.Add(this.mtgSetLabel);
-			this.mtgPrintPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgPrintPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgPrintPage.Name = "mtgPrintPage";
 			this.mtgPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgPrintPage.Size = new System.Drawing.Size(1262, 618);
+			this.mtgPrintPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgPrintPage.TabIndex = 1;
 			this.mtgPrintPage.Text = "Printing Entry";
 			// 
@@ -1725,7 +2053,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgCardrefDescriptor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.mtgCardrefDescriptor.AutoSize = true;
-			this.mtgCardrefDescriptor.Location = new System.Drawing.Point(5, 555);
+			this.mtgCardrefDescriptor.Location = new System.Drawing.Point(5, 563);
 			this.mtgCardrefDescriptor.MaximumSize = new System.Drawing.Size(0, 21);
 			this.mtgCardrefDescriptor.Name = "mtgCardrefDescriptor";
 			this.mtgCardrefDescriptor.Size = new System.Drawing.Size(16, 21);
@@ -1810,7 +2138,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.mtgIODialog.AutoSize = true;
-			this.mtgIODialog.Location = new System.Drawing.Point(260, 582);
+			this.mtgIODialog.Location = new System.Drawing.Point(260, 590);
 			this.mtgIODialog.Name = "mtgIODialog";
 			this.mtgIODialog.Size = new System.Drawing.Size(16, 21);
 			this.mtgIODialog.TabIndex = 25;
@@ -1820,7 +2148,7 @@ namespace CollectionTracker {
 			// mtgSaveButton
 			// 
 			this.mtgSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mtgSaveButton.Location = new System.Drawing.Point(5, 579);
+			this.mtgSaveButton.Location = new System.Drawing.Point(5, 587);
 			this.mtgSaveButton.Name = "mtgSaveButton";
 			this.mtgSaveButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgSaveButton.TabIndex = 24;
@@ -2217,6 +2545,18 @@ namespace CollectionTracker {
 			this.mtgTabControl.ResumeLayout(false);
 			this.mtgSetPage.ResumeLayout(false);
 			this.mtgSetPage.PerformLayout();
+			this.mtgSearchPage.ResumeLayout(false);
+			this.mtgSearchPage.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchColImgG)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchColImgR)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchColImgB)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchColImgU)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchColImgW)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgG)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgR)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgB)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgU)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgW)).EndInit();
 			this.mtgCatalogPage.ResumeLayout(false);
 			this.mtgDetailPage.ResumeLayout(false);
 			this.mtgCardtipBox.ResumeLayout(false);
@@ -2437,6 +2777,36 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Button mtgPrintAutofillRangeButton;
 		private System.Windows.Forms.NumericUpDown mtgPrintAutoLimit;
 		private System.Windows.Forms.Button mtgDeletePrintingButton;
+		private System.Windows.Forms.TabPage mtgSearchPage;
+		private System.Windows.Forms.Button mtgSearchButton;
+		private System.Windows.Forms.TextBox mtgSearchOracleField;
+		private System.Windows.Forms.TextBox mtgSearchTypeField;
+		private System.Windows.Forms.PictureBox mtgSearchColImgG;
+		private System.Windows.Forms.PictureBox mtgSearchColImgR;
+		private System.Windows.Forms.PictureBox mtgSearchColImgB;
+		private System.Windows.Forms.PictureBox mtgSearchColImgU;
+		private System.Windows.Forms.PictureBox mtgSearchColImgW;
+		private System.Windows.Forms.CheckBox mtgSearchColG;
+		private System.Windows.Forms.CheckBox mtgSearchColR;
+		private System.Windows.Forms.CheckBox mtgSearchColB;
+		private System.Windows.Forms.CheckBox mtgSearchColU;
+		private System.Windows.Forms.CheckBox mtgSearchColW;
+		private System.Windows.Forms.PictureBox mtgSearchIDImgG;
+		private System.Windows.Forms.PictureBox mtgSearchIDImgR;
+		private System.Windows.Forms.PictureBox mtgSearchIDImgB;
+		private System.Windows.Forms.PictureBox mtgSearchIDImgU;
+		private System.Windows.Forms.PictureBox mtgSearchIDImgW;
+		private System.Windows.Forms.CheckBox mtgSearchIDG;
+		private System.Windows.Forms.CheckBox mtgSearchIDR;
+		private System.Windows.Forms.CheckBox mtgSearchIDB;
+		private System.Windows.Forms.CheckBox mtgSearchIDU;
+		private System.Windows.Forms.CheckBox mtgSearchIDW;
+		private System.Windows.Forms.Label mtgSearchNameLabel;
+		private System.Windows.Forms.TextBox mtgSearchNameField;
+		private System.Windows.Forms.Label mtgSearchOracleLabel;
+		private System.Windows.Forms.Label mtgSearchIdentityLabel;
+		private System.Windows.Forms.Label mtgSearchColourLabel;
+		private System.Windows.Forms.Label mtgSearchTypeLabel;
 	}
 }
 

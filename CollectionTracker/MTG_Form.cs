@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace CollectionTracker {
 	public partial class Form1 : Form {
@@ -34,6 +35,16 @@ namespace CollectionTracker {
 			MTG_Utils.TryLoadImage(mtgColourImgB, "resources/mtg/_icons/b.png");
 			MTG_Utils.TryLoadImage(mtgColourImgR, "resources/mtg/_icons/r.png");
 			MTG_Utils.TryLoadImage(mtgColourImgG, "resources/mtg/_icons/g.png");
+			MTG_Utils.TryLoadImage(mtgSearchIDImgW, "resources/mtg/_icons/w.png");
+			MTG_Utils.TryLoadImage(mtgSearchIDImgU, "resources/mtg/_icons/u.png");
+			MTG_Utils.TryLoadImage(mtgSearchIDImgB, "resources/mtg/_icons/b.png");
+			MTG_Utils.TryLoadImage(mtgSearchIDImgR, "resources/mtg/_icons/r.png");
+			MTG_Utils.TryLoadImage(mtgSearchIDImgG, "resources/mtg/_icons/g.png");
+			MTG_Utils.TryLoadImage(mtgSearchColImgW, "resources/mtg/_icons/w.png");
+			MTG_Utils.TryLoadImage(mtgSearchColImgU, "resources/mtg/_icons/u.png");
+			MTG_Utils.TryLoadImage(mtgSearchColImgB, "resources/mtg/_icons/b.png");
+			MTG_Utils.TryLoadImage(mtgSearchColImgR, "resources/mtg/_icons/r.png");
+			MTG_Utils.TryLoadImage(mtgSearchColImgG, "resources/mtg/_icons/g.png");
 			MTG_Utils.TryLoadCardImage(mtgPrintImgboxBack, MTG_Utils.CARD_BACK_PATH);
 			MTG_LoadCatalog();
 		}
@@ -191,6 +202,100 @@ namespace CollectionTracker {
 					break;
 				}
 			}
+		}
+
+		//Filter catalog by set ID
+		private void MTG_FilterCatalogBySet(MTG_Set set) {
+			mtgPrintFilter.Clear();
+			foreach (MTG_Printing print in mtgCatalog.printings) {
+				if (print.set == set) {
+					mtgPrintFilter.Add(print);
+				}
+			}
+			mtgPrintFilter.Sort(new PrintComparer().Compare);
+			mtgCatalogPagenum = 0;
+			MTG_UpdateCatalog();
+			mtgTabControl.SelectedTab = mtgCatalogPage;
+		}
+
+		#endregion
+
+		#region Search
+
+		//Search for card matching given criteria
+		private void MTG_Search(object sender, EventArgs e) {
+
+			//Clear print filter
+			mtgPrintFilter.Clear();
+			mtgPrintFilter = new List<MTG_Printing>(mtgCatalog.printings);
+
+			//Name
+			if (mtgSearchNameField.Text.Length > 0) {
+				string[] names = mtgSearchNameField.Text.Split('|');
+				foreach (string name in names) {
+					mtgPrintFilter = mtgCatalog.printings.Where(
+						p => p.card.name.ToLower().Contains(name.ToLower())
+						  && mtgPrintFilter.Contains(p)
+					).ToList();
+				}
+			}
+
+			//Colour
+			MTG_Colour colour = MTG_Colour.None;
+			if (mtgSearchColW.Checked) { colour |= MTG_Colour.White; }
+			if (mtgSearchColU.Checked) { colour |= MTG_Colour.Blue; }
+			if (mtgSearchColB.Checked) { colour |= MTG_Colour.Black; }
+			if (mtgSearchColR.Checked) { colour |= MTG_Colour.Red; }
+			if (mtgSearchColG.Checked) { colour |= MTG_Colour.Green; }
+			if (colour != MTG_Colour.None) {
+				mtgPrintFilter = mtgCatalog.printings.Where(
+					p => p.card.colour == colour
+					  && mtgPrintFilter.Contains(p)
+				).ToList();
+			}
+
+			//Identity
+			MTG_Colour identity = MTG_Colour.None;
+			if (mtgSearchIDW.Checked) { identity |= MTG_Colour.White; }
+			if (mtgSearchIDU.Checked) { identity |= MTG_Colour.Blue; }
+			if (mtgSearchIDB.Checked) { identity |= MTG_Colour.Black; }
+			if (mtgSearchIDR.Checked) { identity |= MTG_Colour.Red; }
+			if (mtgSearchIDG.Checked) { identity |= MTG_Colour.Green; }
+			if (identity != MTG_Colour.None) {
+				mtgPrintFilter = mtgCatalog.printings.Where(
+					p => identity.HasFlag(p.card.identity)
+					  && mtgPrintFilter.Contains(p)
+				).ToList();
+			}
+
+			//Card types
+			if (mtgSearchTypeField.Text.Length > 0) {
+				string[] types = mtgSearchTypeField.Text.Split('|');
+				foreach (string type in types) {
+					mtgPrintFilter = mtgCatalog.printings.Where(
+						p => p.card.cardTypes.ToLower().Contains(type.ToLower())
+						  && mtgPrintFilter.Contains(p)
+					).ToList();
+				}
+			}
+
+			//Oracle text
+			if (mtgSearchOracleField.Text.Length > 0) {
+				string[] oracles = mtgSearchOracleField.Text.Split('|');
+				foreach (string oracle in oracles) {
+					mtgPrintFilter = mtgCatalog.printings.Where(
+						p => p.card.oracleText.ToLower().Contains(oracle.ToLower())
+						  && mtgPrintFilter.Contains(p)
+					).ToList();
+				}
+			}
+
+			//Show catalog
+			mtgPrintFilter.Sort(new PrintComparer().Compare);
+			mtgCatalogPagenum = 0;
+			MTG_UpdateCatalog();
+			mtgTabControl.SelectedTab = mtgCatalogPage;
+
 		}
 
 		#endregion
@@ -739,15 +844,48 @@ namespace CollectionTracker {
 
 		//Show tooltip window relative to given control with given text
 		private void MTG_ShowCardtip(Control control, string str) {
+
+			//Get modifier
+			char mod = ' ';
+			if (str.Contains('|')) {
+				mod = str[str.Length - 1];
+				str = str.Substring(0, str.Length - 2);
+			}
+
+			//Load printing
 			MTG_Printing print = mtgCatalog.printings.FirstOrDefault(p => p.scryfallID.Equals(str));
 			if (print != null) {
+
+				//Size
+				if (mod == 's' || mod == 'S') {
+					mtgCardtipBox.Size = new Size(350, 250);
+					mtgCardtipImage.Size = new Size(350, 250);
+				}
+				else {
+					mtgCardtipBox.Size = new Size(250, 350);
+					mtgCardtipImage.Size = new Size(250, 350);
+				}
+
+				//Position
 				int posX = control.Parent.Location.X + control.Location.X + (control.Width / 2) - (mtgCardtipBox.Width / 2);
 				int posY = control.Parent.Location.Y + control.Location.Y + TEXT_HEIGHT;
+
+				//Show
 				mtgCardtipBox.Show();
 				mtgCardtipBox.BringToFront();
 				mtgCardtipBox.Location = new Point(posX, posY);
-				MTG_Utils.TryLoadCardImage(mtgCardtipImage, print.imgPath);
+
+				//Load image
+				if (mod == 'b' || mod == 'B') { MTG_Utils.TryLoadCardImage(mtgCardtipImage, print.backImgPath); }
+				else { MTG_Utils.TryLoadCardImage(mtgCardtipImage, print.imgPath); }
+
+				//Rotation
+				Image img = mtgCardtipImage.Image;
+				if (mod == 'u' || mod == 'U') { img.RotateFlip(RotateFlipType.Rotate180FlipNone); }
+				if (mod == 's' || mod == 'S') { img.RotateFlip(RotateFlipType.Rotate90FlipNone); }
+
 			}
+
 		}
 
 		//Show tooltip window relative to given control with given text
@@ -1518,24 +1656,6 @@ namespace CollectionTracker {
 				else { formSet.set.Copy(set); }
 			}
 			MTG_UpdateSets();
-		}
-
-		#endregion
-
-		#region Filters
-
-		//Filter catalog by set ID
-		private void MTG_FilterCatalogBySet(MTG_Set set) {
-			mtgPrintFilter.Clear();
-			foreach (MTG_Printing print in mtgCatalog.printings) {
-				if (print.set == set) {
-					mtgPrintFilter.Add(print);
-				}
-			}
-			mtgPrintFilter.Sort(new PrintComparer().Compare);
-			mtgCatalogPagenum = 0;
-			MTG_UpdateCatalog();
-			mtgTabControl.SelectedTab = mtgCatalogPage;
 		}
 
 		#endregion
