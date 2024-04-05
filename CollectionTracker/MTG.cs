@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -139,6 +138,14 @@ namespace CollectionTracker {
 			imgPath = print.imgPath;
 			backImgPath = print.backImgPath;
 			rarity = print.rarity;
+			foreach (MTG_Treatment treatment in print.treatments) {
+				foreach (MTG_Treatment treatment2 in treatments) {
+					if (treatment.name.Equals(treatment2.name)) {
+						treatment.locations = new List<string>(treatment2.locations);
+						treatment.quantities = new List<int>(treatment2.quantities);
+					}
+				}
+			}
 			treatments = new List<MTG_Treatment>();
 			foreach (MTG_Treatment treatment in print.treatments) { treatments.Add(new MTG_Treatment(treatment)); }
 			card = print.card;
