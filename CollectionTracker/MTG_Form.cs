@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace CollectionTracker {
 	public partial class Form1 : Form {
@@ -910,11 +912,11 @@ namespace CollectionTracker {
 					string rar = treatment.name;
 					string loc = treatment.locations[i];
 					mtgLocationTable.Size = new Size(mtgLocationTable.Size.Width, mtgLocationTable.Size.Height + 35);
-			
+
 					//Add row
 					++mtgLocationTable.RowCount;
 					mtgLocationTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
-			
+
 					//Rarity label
 					Label treatmentLabel = new Label();
 					mtgLocationTable.Controls.Add(treatmentLabel, 0, mtgLocationTable.RowCount - 1);
@@ -922,7 +924,7 @@ namespace CollectionTracker {
 					treatmentLabel.TextAlign = ContentAlignment.MiddleLeft;
 					treatmentLabel.Text = rar;
 					treatmentLabel.AutoEllipsis = true;
-			
+
 					//Location label
 					Label locationLabel = new Label();
 					mtgLocationTable.Controls.Add(locationLabel, 1, mtgLocationTable.RowCount - 1);
@@ -930,14 +932,14 @@ namespace CollectionTracker {
 					locationLabel.TextAlign = ContentAlignment.MiddleLeft;
 					locationLabel.Text = loc;
 					locationLabel.AutoEllipsis = true;
-			
+
 					//Count label
 					Label countLabel = new Label();
 					mtgLocationTable.Controls.Add(countLabel, 2, mtgLocationTable.RowCount - 1);
 					countLabel.Dock = DockStyle.Fill;
 					countLabel.TextAlign = ContentAlignment.MiddleLeft;
 					countLabel.Text = treatment.quantities[i].ToString();
-			
+
 					//Move button
 					Button moveButton = new Button();
 					mtgLocationTable.Controls.Add(moveButton, 3, mtgLocationTable.RowCount - 1);
@@ -945,7 +947,7 @@ namespace CollectionTracker {
 					moveButton.Text = "Move 1";
 					moveButton.UseVisualStyleBackColor = true;
 					moveButton.Click += new EventHandler((sender, e) => MTG_MoveOne(print, loc, rar));
-			
+
 				}
 			}
 
@@ -990,7 +992,7 @@ namespace CollectionTracker {
 
 			//Otherwise rotate 180
 			else { mtgDetailImgbox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone); }
-			
+
 		}
 
 		//Edit card data
@@ -1060,6 +1062,186 @@ namespace CollectionTracker {
 		private void MTG_LoadPreviousInSet(object sender, EventArgs e) => MTG_LoadCardDetails(mtgDetailPrev);
 		private void MTG_LoadNextInSet(object sender, EventArgs e) => MTG_LoadCardDetails(mtgDetailNext);
 
+		//Autogen card details, then move to the next card in the set every two seconds
+		private async void MTG_AutogenDetailRef(object sender, EventArgs e) {
+			await MTG_AutogenDetailRef();
+			while (mtgDetailNext != null) {
+				Thread.Sleep(1000);
+				MTG_LoadCardDetails(mtgDetailNext);
+				Thread.Sleep(1000);
+				await MTG_AutogenDetailRef();
+			}
+		}
+
+		//Get card name from Scryfall, generate card object if it doesn't exist, then set printing reference
+		private async Task MTG_AutogenDetailRef() { 
+
+			//Set up result and get card page
+			string result = "";
+			string name = "";
+			string[] lines = (await GetWebpage("https://scryfall.com/card/" + mtgDetailPrint.scryfallID)).Split('\n');
+
+			//Return if error
+			if (lines.Length == 1) {
+				mtgDetailDialog.Text = lines[0];
+				return;
+			}
+
+			//Find JSON link
+			for (int i = 0; i < lines.Length; ++i) {
+				if (lines[i].Contains("Copy-pasteable JSON")) {
+					result = lines[i - 3];
+					int idx = result.IndexOf("href=");
+					result = result.Substring(idx + 6);
+					idx = result.IndexOf('?');
+					result = result.Substring(0, idx);
+					break;
+				}
+			}
+
+			//Get JSON
+			result = await GetWebpage(result);
+			if (result.Contains("Error: ")) {
+				mtgDetailDialog.Text = result;
+				return;
+			}
+
+			//Find name
+			if (result.Contains("\"name\":")) {
+				int idx = result.IndexOf("\"name\":");
+				name = result.Substring(idx + 8);
+				idx = name.IndexOf("\",\"");
+				name = name.Substring(0, idx);
+				mtgNameField.Text = name;
+			}
+
+			//Find identity
+			if (result.Contains("\"color_identity\":")) {
+				int idx = result.IndexOf("\"color_identity\":");
+				string identity = result.Substring(idx + 18);
+				idx = identity.IndexOf("],");
+				identity = identity.Substring(0, idx);
+				mtgIdentityW.Checked = identity.Contains("W");
+				mtgIdentityU.Checked = identity.Contains("U");
+				mtgIdentityB.Checked = identity.Contains("B");
+				mtgIdentityR.Checked = identity.Contains("R");
+				mtgIdentityG.Checked = identity.Contains("G");
+			}
+
+			//Find colors
+			if (result.Contains("\"colors\":")) {
+				int idx = result.IndexOf("\"colors\":");
+				string color = result.Substring(idx + 10);
+				idx = color.IndexOf("],");
+				color = color.Substring(0, idx);
+				mtgColourW.Checked = color.Contains("W");
+				mtgColourU.Checked = color.Contains("U");
+				mtgColourB.Checked = color.Contains("B");
+				mtgColourR.Checked = color.Contains("R");
+				mtgColourG.Checked = color.Contains("G");
+			}
+
+			//Find type line
+			if (result.Contains("\"type_line\":")) {
+				int idx = result.IndexOf("\"type_line\":");
+				string type = result.Substring(idx + 13);
+				idx = type.IndexOf("\",\"");
+				type = type.Substring(0, idx);
+				mtgCardTypeField.Text = type;
+			}
+
+			//Find mana cost(s)
+			if (result.Contains("\"mana_cost\":")) {
+				int idx = result.IndexOf("\"mana_cost\":");
+				string costs = result.Substring(idx + 13);
+				idx = costs.IndexOf("\",\"");
+				string cost = costs.Substring(0, idx);
+				if (costs.Contains("\"mana_cost\":")) {
+					idx = costs.IndexOf("\"mana_cost\":");
+					string cost2 = costs.Substring(idx + 13);
+					idx = cost2.IndexOf("\",\"");
+					cost2 = cost2.Substring(0, idx);
+					cost += " // " + cost2;
+				}
+				mtgCostField.Text = cost;
+			}
+
+			//Find oracle text
+			if (result.Contains("\"oracle_text\":")) {
+				int idx = result.IndexOf("\"oracle_text\":");
+				string oracles = result.Substring(idx + 15);
+				idx = oracles.IndexOf("\",\"");
+				string oracle = oracles.Substring(0, idx);
+				if (oracles.Contains("\"oracle_text\":")) {
+					idx = oracles.IndexOf("\"oracle_text\":");
+					string oracle2 = oracles.Substring(idx + 15);
+					idx = oracle2.IndexOf("\",\"");
+					oracle2 = oracle2.Substring(0, idx);
+					oracle += "\r\n//\r\n" + oracle2;
+				}
+				oracle = oracle.Replace("\\n", "\r\n\r\n");
+				mtgOracleTextField.Text = oracle;
+			}
+
+			//Find powers
+			if (result.Contains("\"power\":")) {
+				int idx = result.IndexOf("\"power\":");
+				string powers = result.Substring(idx + 9);
+				idx = powers.IndexOf("\",\"");
+				string power = powers.Substring(0, idx);
+				try { mtgPowerField.Value = decimal.Parse(power); }
+				catch { }
+				if (powers.Contains("\"power\":")) {
+					idx = powers.IndexOf("\"power\":");
+					string power2 = powers.Substring(idx + 9);
+					idx = power2.IndexOf("\",\"");
+					power2 = power2.Substring(0, idx);
+					try { mtgPowerBackField.Value = decimal.Parse(power2); }
+					catch { }
+				}
+			}
+
+			//Find toughnesses
+			if (result.Contains("\"toughness\":")) {
+				int idx = result.IndexOf("\"toughness\":");
+				string toughnesses = result.Substring(idx + 13);
+				idx = toughnesses.IndexOf("\",\"");
+				string toughness = toughnesses.Substring(0, idx);
+				try { mtgToughnessField.Value = decimal.Parse(toughness); }
+				catch { }
+				if (toughnesses.Contains("\"toughness\":")) {
+					idx = toughnesses.IndexOf("\"toughness\":");
+					string toughness2 = toughnesses.Substring(idx + 13);
+					idx = toughness2.IndexOf("\",\"");
+					toughness2 = toughness2.Substring(0, idx);
+					try { mtgToughnessBackField.Value = decimal.Parse(toughness2); }
+					catch { }
+				}
+			}
+
+			//Generate card
+			mtgIgnoreDuplicateEntryBox.Checked = false;
+			MTG_AddCard();
+			MTG_Card card = mtgCatalog.cards.FirstOrDefault(c => c.name.Equals(name));
+			if (card != null) { mtgDetailPrint.card = card; }
+			MTG_LoadCardDetails(mtgDetailPrint);
+			mtgDetailDialog.Text = result;
+
+		}
+
+		//HTTP Client
+		static readonly HttpClient client = new HttpClient();
+		static async Task<string> GetWebpage(string url) {
+			try {
+				string data = await client.GetStringAsync(url);
+				return data;
+			}
+			catch (Exception e) {
+				string error = "Error: " + e.ToString();
+				return error;
+			}
+		}
+
 		//Delete printing from catalog
 		private void MTG_DeleteCurrentPrinting(object sender, EventArgs e) {
 			int index = mtgCatalog.printings.IndexOf(mtgDetailPrint);
@@ -1082,7 +1264,8 @@ namespace CollectionTracker {
 		}
 
 		//Add card to catalog
-		private void MTG_OnClickAddCard(object sender, EventArgs e) {
+		private void MTG_OnClickAddCard(object sender, EventArgs e) => MTG_AddCard();
+		private void MTG_AddCard() {
 
 			//Get colour identity
 			MTG_Colour identity = MTG_Colour.None;

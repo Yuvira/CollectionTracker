@@ -131,6 +131,7 @@ namespace CollectionTracker {
 			this.mtgCatalogLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgCatalogIndex = new System.Windows.Forms.Label();
 			this.mtgDetailPage = new System.Windows.Forms.TabPage();
+			this.mtgDetailAutogenButton = new System.Windows.Forms.Button();
 			this.mtgDeletePrintingButton = new System.Windows.Forms.Button();
 			this.mtgDetailNextButton = new System.Windows.Forms.Button();
 			this.mtgDetailPrevButton = new System.Windows.Forms.Button();
@@ -235,6 +236,7 @@ namespace CollectionTracker {
 			this.mtgSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgSetGeneratorLabel = new System.Windows.Forms.Label();
 			this.ygoPage = new System.Windows.Forms.TabPage();
+			this.mtgDetailDialog = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoAttackField)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoDefenseField)).BeginInit();
@@ -1109,10 +1111,10 @@ namespace CollectionTracker {
 			this.mtgSearchPage.Controls.Add(this.mtgSearchIdentityLabel);
 			this.mtgSearchPage.Controls.Add(this.mtgSearchColourLabel);
 			this.mtgSearchPage.Controls.Add(this.mtgSearchTypeLabel);
-			this.mtgSearchPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgSearchPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgSearchPage.Name = "mtgSearchPage";
 			this.mtgSearchPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgSearchPage.Size = new System.Drawing.Size(1262, 618);
+			this.mtgSearchPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgSearchPage.TabIndex = 7;
 			this.mtgSearchPage.Text = "Search";
 			// 
@@ -1424,6 +1426,8 @@ namespace CollectionTracker {
 			// 
 			this.mtgDetailPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgDetailPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgDetailPage.Controls.Add(this.mtgDetailDialog);
+			this.mtgDetailPage.Controls.Add(this.mtgDetailAutogenButton);
 			this.mtgDetailPage.Controls.Add(this.mtgDeletePrintingButton);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailNextButton);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailPrevButton);
@@ -1431,16 +1435,26 @@ namespace CollectionTracker {
 			this.mtgDetailPage.Controls.Add(this.mtgTooltipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailImgbox);
-			this.mtgDetailPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgDetailPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgDetailPage.Name = "mtgDetailPage";
-			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 626);
+			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 618);
 			this.mtgDetailPage.TabIndex = 4;
 			this.mtgDetailPage.Text = "Card Details";
+			// 
+			// mtgDetailAutogenButton
+			// 
+			this.mtgDetailAutogenButton.Location = new System.Drawing.Point(130, 550);
+			this.mtgDetailAutogenButton.Name = "mtgDetailAutogenButton";
+			this.mtgDetailAutogenButton.Size = new System.Drawing.Size(150, 29);
+			this.mtgDetailAutogenButton.TabIndex = 26;
+			this.mtgDetailAutogenButton.Text = "Autogen";
+			this.mtgDetailAutogenButton.UseVisualStyleBackColor = true;
+			this.mtgDetailAutogenButton.Click += new System.EventHandler(this.MTG_AutogenDetailRef);
 			// 
 			// mtgDeletePrintingButton
 			// 
 			this.mtgDeletePrintingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mtgDeletePrintingButton.Location = new System.Drawing.Point(5, 590);
+			this.mtgDeletePrintingButton.Location = new System.Drawing.Point(5, 582);
 			this.mtgDeletePrintingButton.Name = "mtgDeletePrintingButton";
 			this.mtgDeletePrintingButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgDeletePrintingButton.TabIndex = 25;
@@ -1450,9 +1464,9 @@ namespace CollectionTracker {
 			// 
 			// mtgDetailNextButton
 			// 
-			this.mtgDetailNextButton.Location = new System.Drawing.Point(207, 550);
+			this.mtgDetailNextButton.Location = new System.Drawing.Point(285, 550);
 			this.mtgDetailNextButton.Name = "mtgDetailNextButton";
-			this.mtgDetailNextButton.Size = new System.Drawing.Size(198, 29);
+			this.mtgDetailNextButton.Size = new System.Drawing.Size(120, 29);
 			this.mtgDetailNextButton.TabIndex = 10;
 			this.mtgDetailNextButton.Text = "Next Card";
 			this.mtgDetailNextButton.UseVisualStyleBackColor = true;
@@ -1462,7 +1476,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgDetailPrevButton.Location = new System.Drawing.Point(5, 550);
 			this.mtgDetailPrevButton.Name = "mtgDetailPrevButton";
-			this.mtgDetailPrevButton.Size = new System.Drawing.Size(198, 29);
+			this.mtgDetailPrevButton.Size = new System.Drawing.Size(120, 29);
 			this.mtgDetailPrevButton.TabIndex = 9;
 			this.mtgDetailPrevButton.Text = "Previous Card";
 			this.mtgDetailPrevButton.UseVisualStyleBackColor = true;
@@ -1630,10 +1644,10 @@ namespace CollectionTracker {
 			this.mtgCardPage.Controls.Add(this.mtgOracleTextField);
 			this.mtgCardPage.Controls.Add(this.mtgColourLabel);
 			this.mtgCardPage.Controls.Add(this.mtgCardTypeLabel);
-			this.mtgCardPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgCardPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgCardPage.Name = "mtgCardPage";
 			this.mtgCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgCardPage.Size = new System.Drawing.Size(1262, 626);
+			this.mtgCardPage.Size = new System.Drawing.Size(1262, 618);
 			this.mtgCardPage.TabIndex = 0;
 			this.mtgCardPage.Text = "Card Entry";
 			// 
@@ -2515,6 +2529,18 @@ namespace CollectionTracker {
 			this.ygoPage.TabIndex = 0;
 			this.ygoPage.Text = "YGO";
 			// 
+			// mtgDetailDialog
+			// 
+			this.mtgDetailDialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.mtgDetailDialog.AutoSize = true;
+			this.mtgDetailDialog.Location = new System.Drawing.Point(260, 582);
+			this.mtgDetailDialog.MinimumSize = new System.Drawing.Size(0, 29);
+			this.mtgDetailDialog.Name = "mtgDetailDialog";
+			this.mtgDetailDialog.Size = new System.Drawing.Size(16, 29);
+			this.mtgDetailDialog.TabIndex = 27;
+			this.mtgDetailDialog.Text = "-";
+			this.mtgDetailDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -2559,6 +2585,7 @@ namespace CollectionTracker {
 			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgW)).EndInit();
 			this.mtgCatalogPage.ResumeLayout(false);
 			this.mtgDetailPage.ResumeLayout(false);
+			this.mtgDetailPage.PerformLayout();
 			this.mtgCardtipBox.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.mtgCardtipImage)).EndInit();
 			this.mtgDetailBox.ResumeLayout(false);
@@ -2807,6 +2834,8 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Label mtgSearchIdentityLabel;
 		private System.Windows.Forms.Label mtgSearchColourLabel;
 		private System.Windows.Forms.Label mtgSearchTypeLabel;
+		private System.Windows.Forms.Button mtgDetailAutogenButton;
+		private System.Windows.Forms.Label mtgDetailDialog;
 	}
 }
 
