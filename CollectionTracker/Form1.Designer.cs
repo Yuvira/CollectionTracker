@@ -25,66 +25,122 @@ namespace CollectionTracker {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.ygoCardHeader = new System.Windows.Forms.Label();
 			this.ygoNameLabel = new System.Windows.Forms.Label();
-			this.ygoNameField = new System.Windows.Forms.TextBox();
-			this.ygoCardTypeField = new System.Windows.Forms.ComboBox();
-			this.ygoAttributeField = new System.Windows.Forms.ComboBox();
-			this.ygoMonsterTypeField = new System.Windows.Forms.ComboBox();
-			this.ygoCardTypeLabel = new System.Windows.Forms.Label();
-			this.ygoAttributeLabel = new System.Windows.Forms.Label();
-			this.ygoMonsterTypeLabel = new System.Windows.Forms.Label();
-			this.ygoOracleTextField = new System.Windows.Forms.TextBox();
-			this.ygoOracleTextLabel = new System.Windows.Forms.Label();
-			this.ygoLevelField = new System.Windows.Forms.NumericUpDown();
-			this.ygoLevelLabel = new System.Windows.Forms.Label();
-			this.ygoAttackField = new System.Windows.Forms.NumericUpDown();
-			this.ygoDefenseField = new System.Windows.Forms.NumericUpDown();
-			this.ygoAtkDefLabel = new System.Windows.Forms.Label();
-			this.ygoAddCardButton = new System.Windows.Forms.Button();
 			this.ygoTabControl = new System.Windows.Forms.TabControl();
 			this.ygoSetPage = new System.Windows.Forms.TabPage();
-			this.ygoSetLayout = new System.Windows.Forms.FlowLayoutPanel();
+			this.ygoSetPageLabel = new System.Windows.Forms.Label();
+			this.ygoNextSetButton = new System.Windows.Forms.Button();
+			this.ygoPrevSetButton = new System.Windows.Forms.Button();
+			this.ygoSetlistLabel = new System.Windows.Forms.Label();
+			this.ygoSetlistLayout = new System.Windows.Forms.FlowLayoutPanel();
+			this.ygoSearchPage = new System.Windows.Forms.TabPage();
+			this.ygoSearchLocationField = new System.Windows.Forms.ComboBox();
+			this.ygoSearchSetField = new System.Windows.Forms.ComboBox();
+			this.ygoSearchOracleField = new System.Windows.Forms.TextBox();
+			this.ygoSearchTypesField = new System.Windows.Forms.TextBox();
+			this.ygoSearchPropertyField = new System.Windows.Forms.TextBox();
+			this.ygoSearchAttributeField = new System.Windows.Forms.TextBox();
+			this.ygoSearchCardTypeField = new System.Windows.Forms.TextBox();
+			this.ygoSearchNameField = new System.Windows.Forms.TextBox();
+			this.ygoSearchButton = new System.Windows.Forms.Button();
+			this.ygoSearchSetLabel = new System.Windows.Forms.Label();
+			this.ygoSearchLocationLabel = new System.Windows.Forms.Label();
+			this.ygoSearchNameLabel = new System.Windows.Forms.Label();
+			this.ygoSearchCardTypeLabel = new System.Windows.Forms.Label();
+			this.ygoSearchTypesLabel = new System.Windows.Forms.Label();
+			this.ygoSearchPropertyLabel = new System.Windows.Forms.Label();
+			this.ygoSearchOracleLabel = new System.Windows.Forms.Label();
+			this.ygoSearchAttributeLabel = new System.Windows.Forms.Label();
 			this.ygoCatalogPage = new System.Windows.Forms.TabPage();
+			this.ygoSortAlphabeticalButton = new System.Windows.Forms.RadioButton();
+			this.ygoSortNumericButton = new System.Windows.Forms.RadioButton();
+			this.ygoCatalogNextButton = new System.Windows.Forms.Button();
+			this.ygoCatalogPrevButton = new System.Windows.Forms.Button();
 			this.ygoCatalogLayout = new System.Windows.Forms.FlowLayoutPanel();
+			this.ygoCatalogIndex = new System.Windows.Forms.Label();
 			this.ygoDetailPage = new System.Windows.Forms.TabPage();
+			this.ygoPrintingsBox = new System.Windows.Forms.GroupBox();
+			this.ygoDeletePrintingButton = new System.Windows.Forms.Button();
+			this.ygoDetailDialog = new System.Windows.Forms.Label();
+			this.ygoCardtipBox = new System.Windows.Forms.GroupBox();
+			this.ygoCardtipImage = new System.Windows.Forms.PictureBox();
+			this.ygoTooltipBox = new System.Windows.Forms.GroupBox();
+			this.ygoDetailNextButton = new System.Windows.Forms.Button();
+			this.ygoDetailAutogenButton = new System.Windows.Forms.Button();
+			this.ygoDetailPrevButton = new System.Windows.Forms.Button();
 			this.ygoDetailBox = new System.Windows.Forms.GroupBox();
+			this.ygoReloadLocationsButton = new System.Windows.Forms.Button();
+			this.ygoMoveField = new System.Windows.Forms.ComboBox();
 			this.ygoEditPrintButton = new System.Windows.Forms.Button();
 			this.ygoEditCardButton = new System.Windows.Forms.Button();
 			this.ygoMoveLabel = new System.Windows.Forms.Label();
 			this.ygoLocationTable = new System.Windows.Forms.TableLayoutPanel();
-			this.ygoMoveField = new System.Windows.Forms.ComboBox();
 			this.ygoDetailImgbox = new System.Windows.Forms.PictureBox();
 			this.ygoCardPage = new System.Windows.Forms.TabPage();
+			this.ygoImportButton = new System.Windows.Forms.Button();
+			this.ygoImportField = new System.Windows.Forms.TextBox();
+			this.ygoScaleField = new System.Windows.Forms.NumericUpDown();
+			this.ygoLevelField = new System.Windows.Forms.NumericUpDown();
+			this.ygoDefField = new System.Windows.Forms.NumericUpDown();
+			this.ygoAtkField = new System.Windows.Forms.NumericUpDown();
 			this.ygoCardDialog = new System.Windows.Forms.Label();
-			this.ygoPendulumRight = new System.Windows.Forms.NumericUpDown();
-			this.ygoPendulumLeft = new System.Windows.Forms.NumericUpDown();
-			this.ygoPendulumLabel = new System.Windows.Forms.Label();
-			this.ygoSubMonsterTypeButton = new System.Windows.Forms.Button();
-			this.ygoAddMonsterTypeButton = new System.Windows.Forms.Button();
-			this.ygoMonsterTypeValue = new System.Windows.Forms.Label();
+			this.ygoIgnoreDuplicateEntryLabel = new System.Windows.Forms.Label();
+			this.ygoIgnoreDuplicateEntryBox = new System.Windows.Forms.CheckBox();
+			this.ygoAddCardButton = new System.Windows.Forms.Button();
+			this.ygoScaleLabel = new System.Windows.Forms.Label();
+			this.ygoAtkDefLabel = new System.Windows.Forms.Label();
+			this.ygoLevelLabel = new System.Windows.Forms.Label();
+			this.ygoOracleField = new System.Windows.Forms.TextBox();
+			this.ygoCardTypeField = new System.Windows.Forms.TextBox();
+			this.ygoAttributeField = new System.Windows.Forms.TextBox();
+			this.ygoPropertyField = new System.Windows.Forms.TextBox();
+			this.ygoTypesField = new System.Windows.Forms.TextBox();
+			this.ygoNameField = new System.Windows.Forms.TextBox();
+			this.ygoOracleLabel = new System.Windows.Forms.Label();
+			this.ygoTypesLabel = new System.Windows.Forms.Label();
+			this.ygoPropertyLabel = new System.Windows.Forms.Label();
+			this.ygoAttributeLabel = new System.Windows.Forms.Label();
+			this.ygoCardTypeLabel = new System.Windows.Forms.Label();
 			this.ygoPrintPage = new System.Windows.Forms.TabPage();
+			this.ygoImgpathBackLabel = new System.Windows.Forms.Label();
+			this.ygoPrintAutoLimit = new System.Windows.Forms.NumericUpDown();
+			this.ygoPrintAutofillRangeButton = new System.Windows.Forms.Button();
+			this.ygoPrintAutofillButton = new System.Windows.Forms.Button();
+			this.ygoCardrefDescriptor = new System.Windows.Forms.Label();
+			this.ygoPrintIDLabel = new System.Windows.Forms.Label();
+			this.ygoPrintIDField = new System.Windows.Forms.TextBox();
+			this.ygoPrintImgboxBack = new System.Windows.Forms.PictureBox();
+			this.ygoImgsearchBackButton = new System.Windows.Forms.Button();
+			this.ygoImgBackLabel = new System.Windows.Forms.Label();
 			this.ygoIODialog = new System.Windows.Forms.Label();
 			this.ygoSaveButton = new System.Windows.Forms.Button();
 			this.ygoImgpathLabel = new System.Windows.Forms.Label();
-			this.ygoSubRarityButton = new System.Windows.Forms.Button();
+			this.ygoRemoveRarityButton = new System.Windows.Forms.Button();
 			this.ygoAddRarityButton = new System.Windows.Forms.Button();
 			this.ygoPrintImgbox = new System.Windows.Forms.PictureBox();
 			this.ygoAddPrintButton = new System.Windows.Forms.Button();
 			this.ygoCardrefField = new System.Windows.Forms.ComboBox();
 			this.ygoCardrefLabel = new System.Windows.Forms.Label();
 			this.ygoImgsearchButton = new System.Windows.Forms.Button();
-			this.ygoImgsearchLabel = new System.Windows.Forms.Label();
-			this.ygoFlavorTextField = new System.Windows.Forms.TextBox();
-			this.ygoFlavorTextLabel = new System.Windows.Forms.Label();
-			this.ygoTreatmentsValue = new System.Windows.Forms.Label();
+			this.ygoImageLabel = new System.Windows.Forms.Label();
+			this.ygoFlavorField = new System.Windows.Forms.TextBox();
+			this.ygoFlavorLabel = new System.Windows.Forms.Label();
+			this.ygoRaritiesValue = new System.Windows.Forms.Label();
 			this.ygoRaritiesField = new System.Windows.Forms.ComboBox();
-			this.ygoTreatmentsLabel = new System.Windows.Forms.Label();
+			this.ygoRaritiesLabel = new System.Windows.Forms.Label();
 			this.ygoNumberField = new System.Windows.Forms.NumericUpDown();
 			this.ygoNumberLabel = new System.Windows.Forms.Label();
 			this.ygoSetField = new System.Windows.Forms.ComboBox();
 			this.ygoSetLabel = new System.Windows.Forms.Label();
-			this.ygoPrintHeader = new System.Windows.Forms.Label();
+			this.ygoSetsPage = new System.Windows.Forms.TabPage();
+			this.ygoSetGeneratorPageLabel = new System.Windows.Forms.Label();
+			this.ygoSetGeneratorNext = new System.Windows.Forms.Button();
+			this.ygoSetGeneratorPrev = new System.Windows.Forms.Button();
+			this.ygoSaveSetsButton = new System.Windows.Forms.Button();
+			this.ygoAddSetButton = new System.Windows.Forms.Button();
+			this.ygoReloadSetsButton = new System.Windows.Forms.Button();
+			this.ygoSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
+			this.ygoSetGeneratorLabel = new System.Windows.Forms.Label();
 			this.imageFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.formTabControl = new System.Windows.Forms.TabControl();
 			this.mtgPage = new System.Windows.Forms.TabPage();
@@ -93,9 +149,13 @@ namespace CollectionTracker {
 			this.mtgPrevSetButton = new System.Windows.Forms.Button();
 			this.mtgSetPageLabel = new System.Windows.Forms.Label();
 			this.mtgNextSetButton = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
+			this.mtgSetlistLabel = new System.Windows.Forms.Label();
 			this.mtgSetLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgSearchPage = new System.Windows.Forms.TabPage();
+			this.mtgSearchSetField = new System.Windows.Forms.ComboBox();
+			this.mtgSearchSetLabel = new System.Windows.Forms.Label();
+			this.mtgSearchLocationField = new System.Windows.Forms.ComboBox();
+			this.mtgSearchLocationLabel = new System.Windows.Forms.Label();
 			this.mtgSearchButton = new System.Windows.Forms.Button();
 			this.mtgSearchOracleField = new System.Windows.Forms.TextBox();
 			this.mtgSearchTypeField = new System.Windows.Forms.TextBox();
@@ -126,11 +186,15 @@ namespace CollectionTracker {
 			this.mtgSearchColourLabel = new System.Windows.Forms.Label();
 			this.mtgSearchTypeLabel = new System.Windows.Forms.Label();
 			this.mtgCatalogPage = new System.Windows.Forms.TabPage();
+			this.mtgSortAlphabeticalButton = new System.Windows.Forms.RadioButton();
+			this.mtgSortNumericButton = new System.Windows.Forms.RadioButton();
 			this.mtgCatalogNextButton = new System.Windows.Forms.Button();
 			this.mtgCatalogPrevButton = new System.Windows.Forms.Button();
 			this.mtgCatalogLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgCatalogIndex = new System.Windows.Forms.Label();
 			this.mtgDetailPage = new System.Windows.Forms.TabPage();
+			this.mtgPrintingsBox = new System.Windows.Forms.GroupBox();
+			this.mtgDetailDialog = new System.Windows.Forms.Label();
 			this.mtgDetailAutogenButton = new System.Windows.Forms.Button();
 			this.mtgDeletePrintingButton = new System.Windows.Forms.Button();
 			this.mtgDetailNextButton = new System.Windows.Forms.Button();
@@ -188,6 +252,7 @@ namespace CollectionTracker {
 			this.mtgColourLabel = new System.Windows.Forms.Label();
 			this.mtgCardTypeLabel = new System.Windows.Forms.Label();
 			this.mtgPrintPage = new System.Windows.Forms.TabPage();
+			this.mtgPrintTokenCheck = new System.Windows.Forms.CheckBox();
 			this.mtgPrintAutoLimit = new System.Windows.Forms.NumericUpDown();
 			this.mtgPrintAutofillRangeButton = new System.Windows.Forms.Button();
 			this.mtgPrintAutofillButton = new System.Windows.Forms.Button();
@@ -236,22 +301,147 @@ namespace CollectionTracker {
 			this.mtgSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.mtgSetGeneratorLabel = new System.Windows.Forms.Label();
 			this.ygoPage = new System.Windows.Forms.TabPage();
-			this.mtgDetailDialog = new System.Windows.Forms.Label();
-			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.ygoAttackField)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.ygoDefenseField)).BeginInit();
+			this.pkmnPage = new System.Windows.Forms.TabPage();
+			this.pkmnTabControl = new System.Windows.Forms.TabControl();
+			this.pkmnSetlistPage = new System.Windows.Forms.TabPage();
+			this.pkmnPrevSetButton = new System.Windows.Forms.Button();
+			this.pkmnSetPageLabel = new System.Windows.Forms.Label();
+			this.pkmnNextSetButton = new System.Windows.Forms.Button();
+			this.pkmnSetlistLabel = new System.Windows.Forms.Label();
+			this.pkmnSetlistLayout = new System.Windows.Forms.FlowLayoutPanel();
+			this.pkmnSearchPage = new System.Windows.Forms.TabPage();
+			this.pkmnSearchSetField = new System.Windows.Forms.ComboBox();
+			this.pkmnSearchSetLabel = new System.Windows.Forms.Label();
+			this.pkmnSearchLocationField = new System.Windows.Forms.ComboBox();
+			this.pkmnSearchLocationLabel = new System.Windows.Forms.Label();
+			this.pkmnSearchButton = new System.Windows.Forms.Button();
+			this.pkmnSearchOracleField = new System.Windows.Forms.TextBox();
+			this.pkmnSearchTypeField = new System.Windows.Forms.TextBox();
+			this.pkmnSearchNameLabel = new System.Windows.Forms.Label();
+			this.pkmnSearchNameField = new System.Windows.Forms.TextBox();
+			this.pkmnSearchOracleLabel = new System.Windows.Forms.Label();
+			this.pkmnSearchTypeLabel = new System.Windows.Forms.Label();
+			this.pkmnCatalogPage = new System.Windows.Forms.TabPage();
+			this.pkmnSortAlphabeticalButton = new System.Windows.Forms.RadioButton();
+			this.pkmnSortNumericButton = new System.Windows.Forms.RadioButton();
+			this.pkmnCatalogNextButton = new System.Windows.Forms.Button();
+			this.pkmnCatalogPrevButton = new System.Windows.Forms.Button();
+			this.pkmnCatalogLayout = new System.Windows.Forms.FlowLayoutPanel();
+			this.pkmnCatalogIndex = new System.Windows.Forms.Label();
+			this.pkmnDetailPage = new System.Windows.Forms.TabPage();
+			this.pkmnPrintingsBox = new System.Windows.Forms.GroupBox();
+			this.pkmnDetailDialog = new System.Windows.Forms.Label();
+			this.pkmnDetailAutogenButton = new System.Windows.Forms.Button();
+			this.pkmnDeletePrintingButton = new System.Windows.Forms.Button();
+			this.pkmnDetailNextButton = new System.Windows.Forms.Button();
+			this.pkmnDetailPrevButton = new System.Windows.Forms.Button();
+			this.pkmnCardtipBox = new System.Windows.Forms.GroupBox();
+			this.pkmnCardtipImage = new System.Windows.Forms.PictureBox();
+			this.pkmnTooltipBox = new System.Windows.Forms.GroupBox();
+			this.pkmnDetailBox = new System.Windows.Forms.GroupBox();
+			this.pkmnReloadLocationsButton = new System.Windows.Forms.Button();
+			this.pkmnEditPrintButton = new System.Windows.Forms.Button();
+			this.pkmnEditCardButton = new System.Windows.Forms.Button();
+			this.pkmnMoveLabel = new System.Windows.Forms.Label();
+			this.pkmnLocationTable = new System.Windows.Forms.TableLayoutPanel();
+			this.pkmnMoveField = new System.Windows.Forms.ComboBox();
+			this.pkmnDetailImgbox = new System.Windows.Forms.PictureBox();
+			this.pkmnCardPage = new System.Windows.Forms.TabPage();
+			this.pkmnTrainerButton = new System.Windows.Forms.Button();
+			this.pkmnImportButton = new System.Windows.Forms.Button();
+			this.pkmnImportField = new System.Windows.Forms.TextBox();
+			this.pkmnRetreatField = new System.Windows.Forms.TextBox();
+			this.pkmnResistField = new System.Windows.Forms.TextBox();
+			this.pkmnWeakField = new System.Windows.Forms.TextBox();
+			this.pkmnRetreatLabel = new System.Windows.Forms.Label();
+			this.pkmnWeakLabel = new System.Windows.Forms.Label();
+			this.pkmnStageLabel = new System.Windows.Forms.Label();
+			this.pkmnStageField = new System.Windows.Forms.TextBox();
+			this.pkmnIgnorDuplicateEntryLabel = new System.Windows.Forms.Label();
+			this.pkmnIgnorDuplicateEntryBox = new System.Windows.Forms.CheckBox();
+			this.pkmnTypeField = new System.Windows.Forms.TextBox();
+			this.pkmnResistLabel = new System.Windows.Forms.Label();
+			this.pkmnETypeField = new System.Windows.Forms.TextBox();
+			this.pkmnETypeLabel = new System.Windows.Forms.Label();
+			this.pkmnCardDialog = new System.Windows.Forms.Label();
+			this.pkmnHPField = new System.Windows.Forms.NumericUpDown();
+			this.pkmnHPLabel = new System.Windows.Forms.Label();
+			this.pkmnAddCardButton = new System.Windows.Forms.Button();
+			this.pkmnNameLabel = new System.Windows.Forms.Label();
+			this.pkmnNameField = new System.Windows.Forms.TextBox();
+			this.pkmnOracleLabel = new System.Windows.Forms.Label();
+			this.pkmnOracleField = new System.Windows.Forms.TextBox();
+			this.pkmnTypeLabel = new System.Windows.Forms.Label();
+			this.pkmnPrintPage = new System.Windows.Forms.TabPage();
+			this.pkmnPrintHoloButton = new System.Windows.Forms.Button();
+			this.pkmnPrintNormalButton = new System.Windows.Forms.Button();
+			this.pkmnPrintAutoLimit = new System.Windows.Forms.NumericUpDown();
+			this.pkmnPrintAutofillRangeButton = new System.Windows.Forms.Button();
+			this.pkmnPrintAutofillButton = new System.Windows.Forms.Button();
+			this.pkmnCardrefDescriptor = new System.Windows.Forms.Label();
+			this.pkmnRarityField = new System.Windows.Forms.ComboBox();
+			this.pkmnRarityLabel = new System.Windows.Forms.Label();
+			this.pkmnPrintIDLabel = new System.Windows.Forms.Label();
+			this.pkmnPrintIDField = new System.Windows.Forms.TextBox();
+			this.pkmnImgpathBackLabel = new System.Windows.Forms.Label();
+			this.pkmnPrintImgboxBack = new System.Windows.Forms.PictureBox();
+			this.pkmnImgsearchBackButton = new System.Windows.Forms.Button();
+			this.pkmnImgBackLabel = new System.Windows.Forms.Label();
+			this.pkmnIODialog = new System.Windows.Forms.Label();
+			this.pkmnSaveButton = new System.Windows.Forms.Button();
+			this.pkmnImgpathLabel = new System.Windows.Forms.Label();
+			this.pkmnRemTreatmentButton = new System.Windows.Forms.Button();
+			this.pkmnAddTreatmentButton = new System.Windows.Forms.Button();
+			this.pkmnPrintImgbox = new System.Windows.Forms.PictureBox();
+			this.pkmnAddPrintButton = new System.Windows.Forms.Button();
+			this.pkmnCardrefField = new System.Windows.Forms.ComboBox();
+			this.pkmnCardrefLabel = new System.Windows.Forms.Label();
+			this.pkmnImgsearchButton = new System.Windows.Forms.Button();
+			this.pkmnImgLabel = new System.Windows.Forms.Label();
+			this.pkmnFlavorField = new System.Windows.Forms.TextBox();
+			this.pkmnFlavorLabel = new System.Windows.Forms.Label();
+			this.pkmnTreatmentsValue = new System.Windows.Forms.Label();
+			this.pkmnTreatmentField = new System.Windows.Forms.ComboBox();
+			this.pkmnTreatmentLabel = new System.Windows.Forms.Label();
+			this.pkmnNumberField = new System.Windows.Forms.NumericUpDown();
+			this.pkmnNumberLabel = new System.Windows.Forms.Label();
+			this.pkmnSetField = new System.Windows.Forms.ComboBox();
+			this.pkmnSetLabel = new System.Windows.Forms.Label();
+			this.pkmnSymbolPage = new System.Windows.Forms.TabPage();
+			this.pkmnSymbolLayout = new System.Windows.Forms.FlowLayoutPanel();
+			this.pkmnSymbolHeaderBox = new System.Windows.Forms.GroupBox();
+			this.pkmnSaveSymbolsButton = new System.Windows.Forms.Button();
+			this.pkmnAddSymbolButton = new System.Windows.Forms.Button();
+			this.pkmnSymbolLabel = new System.Windows.Forms.Label();
+			this.pkmnSetPage = new System.Windows.Forms.TabPage();
+			this.pkmnReloadSetsButton = new System.Windows.Forms.Button();
+			this.pkmnSetGeneratorPrev = new System.Windows.Forms.Button();
+			this.pkmnAddSetButton = new System.Windows.Forms.Button();
+			this.pkmnSaveSetsButton = new System.Windows.Forms.Button();
+			this.pkmnSetGeneratorNext = new System.Windows.Forms.Button();
+			this.pkmnSetGeneratorPageLabel = new System.Windows.Forms.Label();
+			this.pkmnSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
+			this.pkmnSetGeneratorLabel = new System.Windows.Forms.Label();
 			this.ygoTabControl.SuspendLayout();
 			this.ygoSetPage.SuspendLayout();
+			this.ygoSearchPage.SuspendLayout();
 			this.ygoCatalogPage.SuspendLayout();
 			this.ygoDetailPage.SuspendLayout();
+			this.ygoCardtipBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.ygoCardtipImage)).BeginInit();
 			this.ygoDetailBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ygoDetailImgbox)).BeginInit();
 			this.ygoCardPage.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.ygoPendulumRight)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.ygoPendulumLeft)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.ygoScaleField)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.ygoDefField)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.ygoAtkField)).BeginInit();
 			this.ygoPrintPage.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.ygoPrintAutoLimit)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.ygoPrintImgboxBack)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoPrintImgbox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoNumberField)).BeginInit();
+			this.ygoSetsPage.SuspendLayout();
 			this.formTabControl.SuspendLayout();
 			this.mtgPage.SuspendLayout();
 			this.mtgTabControl.SuspendLayout();
@@ -298,189 +488,48 @@ namespace CollectionTracker {
 			this.mtgSymbolHeaderBox.SuspendLayout();
 			this.mtgSetsPage.SuspendLayout();
 			this.ygoPage.SuspendLayout();
+			this.pkmnPage.SuspendLayout();
+			this.pkmnTabControl.SuspendLayout();
+			this.pkmnSetlistPage.SuspendLayout();
+			this.pkmnSearchPage.SuspendLayout();
+			this.pkmnCatalogPage.SuspendLayout();
+			this.pkmnDetailPage.SuspendLayout();
+			this.pkmnCardtipBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnCardtipImage)).BeginInit();
+			this.pkmnDetailBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnDetailImgbox)).BeginInit();
+			this.pkmnCardPage.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnHPField)).BeginInit();
+			this.pkmnPrintPage.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnPrintAutoLimit)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnPrintImgboxBack)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnPrintImgbox)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnNumberField)).BeginInit();
+			this.pkmnSymbolPage.SuspendLayout();
+			this.pkmnSymbolLayout.SuspendLayout();
+			this.pkmnSymbolHeaderBox.SuspendLayout();
+			this.pkmnSetPage.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// ygoCardHeader
-			// 
-			this.ygoCardHeader.AutoSize = true;
-			this.ygoCardHeader.Location = new System.Drawing.Point(5, 5);
-			this.ygoCardHeader.Name = "ygoCardHeader";
-			this.ygoCardHeader.Size = new System.Drawing.Size(119, 21);
-			this.ygoCardHeader.TabIndex = 0;
-			this.ygoCardHeader.Text = "New Card Entry";
 			// 
 			// ygoNameLabel
 			// 
-			this.ygoNameLabel.AutoSize = true;
-			this.ygoNameLabel.Location = new System.Drawing.Point(5, 25);
+			this.ygoNameLabel.Location = new System.Drawing.Point(5, 5);
 			this.ygoNameLabel.Name = "ygoNameLabel";
-			this.ygoNameLabel.Size = new System.Drawing.Size(55, 21);
+			this.ygoNameLabel.Size = new System.Drawing.Size(90, 30);
 			this.ygoNameLabel.TabIndex = 1;
 			this.ygoNameLabel.Text = "Name:";
-			// 
-			// ygoNameField
-			// 
-			this.ygoNameField.Location = new System.Drawing.Point(100, 25);
-			this.ygoNameField.Name = "ygoNameField";
-			this.ygoNameField.Size = new System.Drawing.Size(170, 29);
-			this.ygoNameField.TabIndex = 2;
-			// 
-			// ygoCardTypeField
-			// 
-			this.ygoCardTypeField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.ygoCardTypeField.FormattingEnabled = true;
-			this.ygoCardTypeField.Location = new System.Drawing.Point(100, 50);
-			this.ygoCardTypeField.Name = "ygoCardTypeField";
-			this.ygoCardTypeField.Size = new System.Drawing.Size(170, 29);
-			this.ygoCardTypeField.TabIndex = 4;
-			// 
-			// ygoAttributeField
-			// 
-			this.ygoAttributeField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.ygoAttributeField.FormattingEnabled = true;
-			this.ygoAttributeField.Location = new System.Drawing.Point(100, 75);
-			this.ygoAttributeField.Name = "ygoAttributeField";
-			this.ygoAttributeField.Size = new System.Drawing.Size(170, 29);
-			this.ygoAttributeField.TabIndex = 6;
-			// 
-			// ygoMonsterTypeField
-			// 
-			this.ygoMonsterTypeField.DropDownHeight = 550;
-			this.ygoMonsterTypeField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.ygoMonsterTypeField.FormattingEnabled = true;
-			this.ygoMonsterTypeField.IntegralHeight = false;
-			this.ygoMonsterTypeField.Location = new System.Drawing.Point(100, 100);
-			this.ygoMonsterTypeField.Name = "ygoMonsterTypeField";
-			this.ygoMonsterTypeField.Size = new System.Drawing.Size(170, 29);
-			this.ygoMonsterTypeField.TabIndex = 8;
-			// 
-			// ygoCardTypeLabel
-			// 
-			this.ygoCardTypeLabel.AutoSize = true;
-			this.ygoCardTypeLabel.Location = new System.Drawing.Point(5, 50);
-			this.ygoCardTypeLabel.Name = "ygoCardTypeLabel";
-			this.ygoCardTypeLabel.Size = new System.Drawing.Size(82, 21);
-			this.ygoCardTypeLabel.TabIndex = 3;
-			this.ygoCardTypeLabel.Text = "Card Type:";
-			// 
-			// ygoAttributeLabel
-			// 
-			this.ygoAttributeLabel.AutoSize = true;
-			this.ygoAttributeLabel.Location = new System.Drawing.Point(5, 75);
-			this.ygoAttributeLabel.Name = "ygoAttributeLabel";
-			this.ygoAttributeLabel.Size = new System.Drawing.Size(74, 21);
-			this.ygoAttributeLabel.TabIndex = 5;
-			this.ygoAttributeLabel.Text = "Attribute:";
-			// 
-			// ygoMonsterTypeLabel
-			// 
-			this.ygoMonsterTypeLabel.AutoSize = true;
-			this.ygoMonsterTypeLabel.Location = new System.Drawing.Point(5, 100);
-			this.ygoMonsterTypeLabel.Name = "ygoMonsterTypeLabel";
-			this.ygoMonsterTypeLabel.Size = new System.Drawing.Size(114, 21);
-			this.ygoMonsterTypeLabel.TabIndex = 7;
-			this.ygoMonsterTypeLabel.Text = "Monster Types:";
-			// 
-			// ygoOracleTextField
-			// 
-			this.ygoOracleTextField.Location = new System.Drawing.Point(100, 150);
-			this.ygoOracleTextField.Multiline = true;
-			this.ygoOracleTextField.Name = "ygoOracleTextField";
-			this.ygoOracleTextField.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.ygoOracleTextField.Size = new System.Drawing.Size(350, 94);
-			this.ygoOracleTextField.TabIndex = 13;
-			// 
-			// ygoOracleTextLabel
-			// 
-			this.ygoOracleTextLabel.AutoSize = true;
-			this.ygoOracleTextLabel.Location = new System.Drawing.Point(5, 150);
-			this.ygoOracleTextLabel.Name = "ygoOracleTextLabel";
-			this.ygoOracleTextLabel.Size = new System.Drawing.Size(88, 21);
-			this.ygoOracleTextLabel.TabIndex = 12;
-			this.ygoOracleTextLabel.Text = "Oracle Text:";
-			// 
-			// ygoLevelField
-			// 
-			this.ygoLevelField.Location = new System.Drawing.Point(100, 250);
-			this.ygoLevelField.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-			this.ygoLevelField.Name = "ygoLevelField";
-			this.ygoLevelField.Size = new System.Drawing.Size(170, 29);
-			this.ygoLevelField.TabIndex = 15;
-			// 
-			// ygoLevelLabel
-			// 
-			this.ygoLevelLabel.AutoSize = true;
-			this.ygoLevelLabel.Location = new System.Drawing.Point(5, 250);
-			this.ygoLevelLabel.Name = "ygoLevelLabel";
-			this.ygoLevelLabel.Size = new System.Drawing.Size(49, 21);
-			this.ygoLevelLabel.TabIndex = 14;
-			this.ygoLevelLabel.Text = "Level:";
-			// 
-			// ygoAttackField
-			// 
-			this.ygoAttackField.Increment = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-			this.ygoAttackField.Location = new System.Drawing.Point(100, 300);
-			this.ygoAttackField.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-			this.ygoAttackField.Name = "ygoAttackField";
-			this.ygoAttackField.Size = new System.Drawing.Size(80, 29);
-			this.ygoAttackField.TabIndex = 20;
-			// 
-			// ygoDefenseField
-			// 
-			this.ygoDefenseField.Increment = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-			this.ygoDefenseField.Location = new System.Drawing.Point(190, 300);
-			this.ygoDefenseField.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-			this.ygoDefenseField.Name = "ygoDefenseField";
-			this.ygoDefenseField.Size = new System.Drawing.Size(80, 29);
-			this.ygoDefenseField.TabIndex = 21;
-			// 
-			// ygoAtkDefLabel
-			// 
-			this.ygoAtkDefLabel.AutoSize = true;
-			this.ygoAtkDefLabel.Location = new System.Drawing.Point(5, 300);
-			this.ygoAtkDefLabel.Name = "ygoAtkDefLabel";
-			this.ygoAtkDefLabel.Size = new System.Drawing.Size(118, 21);
-			this.ygoAtkDefLabel.TabIndex = 19;
-			this.ygoAtkDefLabel.Text = "Attack/Defense:";
-			// 
-			// ygoAddCardButton
-			// 
-			this.ygoAddCardButton.Location = new System.Drawing.Point(100, 325);
-			this.ygoAddCardButton.Name = "ygoAddCardButton";
-			this.ygoAddCardButton.Size = new System.Drawing.Size(170, 23);
-			this.ygoAddCardButton.TabIndex = 22;
-			this.ygoAddCardButton.Text = "Add To Catalog";
-			this.ygoAddCardButton.UseVisualStyleBackColor = true;
-			this.ygoAddCardButton.Click += new System.EventHandler(this.YGO_OnClickAddCard);
+			this.ygoNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ygoTabControl
 			// 
 			this.ygoTabControl.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
 			this.ygoTabControl.Controls.Add(this.ygoSetPage);
+			this.ygoTabControl.Controls.Add(this.ygoSearchPage);
 			this.ygoTabControl.Controls.Add(this.ygoCatalogPage);
 			this.ygoTabControl.Controls.Add(this.ygoDetailPage);
 			this.ygoTabControl.Controls.Add(this.ygoCardPage);
 			this.ygoTabControl.Controls.Add(this.ygoPrintPage);
+			this.ygoTabControl.Controls.Add(this.ygoSetsPage);
 			this.ygoTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ygoTabControl.Location = new System.Drawing.Point(3, 3);
 			this.ygoTabControl.Name = "ygoTabControl";
@@ -492,31 +541,259 @@ namespace CollectionTracker {
 			// 
 			this.ygoSetPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ygoSetPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.ygoSetPage.Controls.Add(this.ygoSetLayout);
+			this.ygoSetPage.Controls.Add(this.ygoSetPageLabel);
+			this.ygoSetPage.Controls.Add(this.ygoNextSetButton);
+			this.ygoSetPage.Controls.Add(this.ygoPrevSetButton);
+			this.ygoSetPage.Controls.Add(this.ygoSetlistLabel);
+			this.ygoSetPage.Controls.Add(this.ygoSetlistLayout);
 			this.ygoSetPage.Location = new System.Drawing.Point(4, 33);
 			this.ygoSetPage.Name = "ygoSetPage";
 			this.ygoSetPage.Padding = new System.Windows.Forms.Padding(3);
 			this.ygoSetPage.Size = new System.Drawing.Size(1262, 626);
 			this.ygoSetPage.TabIndex = 3;
-			this.ygoSetPage.Text = "Sets";
+			this.ygoSetPage.Text = "Set List";
 			// 
-			// ygoSetLayout
+			// ygoSetPageLabel
 			// 
-			this.ygoSetLayout.AutoScroll = true;
-			this.ygoSetLayout.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.ygoSetLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ygoSetLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.ygoSetLayout.Location = new System.Drawing.Point(3, 3);
-			this.ygoSetLayout.Name = "ygoSetLayout";
-			this.ygoSetLayout.Size = new System.Drawing.Size(1252, 616);
-			this.ygoSetLayout.TabIndex = 0;
-			this.ygoSetLayout.WrapContents = false;
+			this.ygoSetPageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoSetPageLabel.Location = new System.Drawing.Point(1125, 5);
+			this.ygoSetPageLabel.Name = "ygoSetPageLabel";
+			this.ygoSetPageLabel.Size = new System.Drawing.Size(60, 30);
+			this.ygoSetPageLabel.TabIndex = 10;
+			this.ygoSetPageLabel.Text = "X / X";
+			this.ygoSetPageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// ygoNextSetButton
+			// 
+			this.ygoNextSetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoNextSetButton.Location = new System.Drawing.Point(1190, 5);
+			this.ygoNextSetButton.Name = "ygoNextSetButton";
+			this.ygoNextSetButton.Size = new System.Drawing.Size(60, 29);
+			this.ygoNextSetButton.TabIndex = 9;
+			this.ygoNextSetButton.Text = ">";
+			this.ygoNextSetButton.UseVisualStyleBackColor = true;
+			this.ygoNextSetButton.Click += new System.EventHandler(this.YGO_OnClickNextSet);
+			// 
+			// ygoPrevSetButton
+			// 
+			this.ygoPrevSetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoPrevSetButton.Location = new System.Drawing.Point(1060, 5);
+			this.ygoPrevSetButton.Name = "ygoPrevSetButton";
+			this.ygoPrevSetButton.Size = new System.Drawing.Size(60, 29);
+			this.ygoPrevSetButton.TabIndex = 8;
+			this.ygoPrevSetButton.Text = "<";
+			this.ygoPrevSetButton.UseVisualStyleBackColor = true;
+			this.ygoPrevSetButton.Click += new System.EventHandler(this.YGO_OnClickPrevSet);
+			// 
+			// ygoSetlistLabel
+			// 
+			this.ygoSetlistLabel.AutoSize = true;
+			this.ygoSetlistLabel.Location = new System.Drawing.Point(5, 8);
+			this.ygoSetlistLabel.Name = "ygoSetlistLabel";
+			this.ygoSetlistLabel.Size = new System.Drawing.Size(60, 21);
+			this.ygoSetlistLabel.TabIndex = 2;
+			this.ygoSetlistLabel.Text = "Set List";
+			this.ygoSetlistLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoSetlistLayout
+			// 
+			this.ygoSetlistLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoSetlistLayout.AutoScroll = true;
+			this.ygoSetlistLayout.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.ygoSetlistLayout.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoSetlistLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.ygoSetlistLayout.Location = new System.Drawing.Point(3, 38);
+			this.ygoSetlistLayout.Name = "ygoSetlistLayout";
+			this.ygoSetlistLayout.Size = new System.Drawing.Size(1252, 580);
+			this.ygoSetlistLayout.TabIndex = 1;
+			this.ygoSetlistLayout.WrapContents = false;
+			// 
+			// ygoSearchPage
+			// 
+			this.ygoSearchPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.ygoSearchPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoSearchPage.Controls.Add(this.ygoSearchLocationField);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchSetField);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchOracleField);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchTypesField);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchPropertyField);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchAttributeField);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchCardTypeField);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchNameField);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchButton);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchSetLabel);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchLocationLabel);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchNameLabel);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchCardTypeLabel);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchTypesLabel);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchPropertyLabel);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchOracleLabel);
+			this.ygoSearchPage.Controls.Add(this.ygoSearchAttributeLabel);
+			this.ygoSearchPage.Location = new System.Drawing.Point(4, 25);
+			this.ygoSearchPage.Name = "ygoSearchPage";
+			this.ygoSearchPage.Size = new System.Drawing.Size(1262, 634);
+			this.ygoSearchPage.TabIndex = 6;
+			this.ygoSearchPage.Text = "Search";
+			// 
+			// ygoSearchLocationField
+			// 
+			this.ygoSearchLocationField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.ygoSearchLocationField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.ygoSearchLocationField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.ygoSearchLocationField.FormattingEnabled = true;
+			this.ygoSearchLocationField.Location = new System.Drawing.Point(100, 250);
+			this.ygoSearchLocationField.Name = "ygoSearchLocationField";
+			this.ygoSearchLocationField.Size = new System.Drawing.Size(370, 29);
+			this.ygoSearchLocationField.TabIndex = 82;
+			// 
+			// ygoSearchSetField
+			// 
+			this.ygoSearchSetField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.ygoSearchSetField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.ygoSearchSetField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.ygoSearchSetField.FormattingEnabled = true;
+			this.ygoSearchSetField.Location = new System.Drawing.Point(100, 215);
+			this.ygoSearchSetField.Name = "ygoSearchSetField";
+			this.ygoSearchSetField.Size = new System.Drawing.Size(370, 29);
+			this.ygoSearchSetField.Sorted = true;
+			this.ygoSearchSetField.TabIndex = 81;
+			// 
+			// ygoSearchOracleField
+			// 
+			this.ygoSearchOracleField.Location = new System.Drawing.Point(100, 180);
+			this.ygoSearchOracleField.Name = "ygoSearchOracleField";
+			this.ygoSearchOracleField.Size = new System.Drawing.Size(370, 29);
+			this.ygoSearchOracleField.TabIndex = 80;
+			// 
+			// ygoSearchTypesField
+			// 
+			this.ygoSearchTypesField.Location = new System.Drawing.Point(100, 145);
+			this.ygoSearchTypesField.Name = "ygoSearchTypesField";
+			this.ygoSearchTypesField.Size = new System.Drawing.Size(370, 29);
+			this.ygoSearchTypesField.TabIndex = 79;
+			// 
+			// ygoSearchPropertyField
+			// 
+			this.ygoSearchPropertyField.Location = new System.Drawing.Point(100, 110);
+			this.ygoSearchPropertyField.Name = "ygoSearchPropertyField";
+			this.ygoSearchPropertyField.Size = new System.Drawing.Size(370, 29);
+			this.ygoSearchPropertyField.TabIndex = 78;
+			// 
+			// ygoSearchAttributeField
+			// 
+			this.ygoSearchAttributeField.Location = new System.Drawing.Point(100, 75);
+			this.ygoSearchAttributeField.Name = "ygoSearchAttributeField";
+			this.ygoSearchAttributeField.Size = new System.Drawing.Size(370, 29);
+			this.ygoSearchAttributeField.TabIndex = 77;
+			// 
+			// ygoSearchCardTypeField
+			// 
+			this.ygoSearchCardTypeField.Location = new System.Drawing.Point(100, 40);
+			this.ygoSearchCardTypeField.Name = "ygoSearchCardTypeField";
+			this.ygoSearchCardTypeField.Size = new System.Drawing.Size(370, 29);
+			this.ygoSearchCardTypeField.TabIndex = 76;
+			// 
+			// ygoSearchNameField
+			// 
+			this.ygoSearchNameField.Location = new System.Drawing.Point(100, 5);
+			this.ygoSearchNameField.Name = "ygoSearchNameField";
+			this.ygoSearchNameField.Size = new System.Drawing.Size(370, 29);
+			this.ygoSearchNameField.TabIndex = 75;
+			// 
+			// ygoSearchButton
+			// 
+			this.ygoSearchButton.Location = new System.Drawing.Point(100, 285);
+			this.ygoSearchButton.Name = "ygoSearchButton";
+			this.ygoSearchButton.Size = new System.Drawing.Size(120, 30);
+			this.ygoSearchButton.TabIndex = 74;
+			this.ygoSearchButton.Text = "Search";
+			this.ygoSearchButton.UseVisualStyleBackColor = true;
+			this.ygoSearchButton.Click += new System.EventHandler(this.YGO_Search);
+			// 
+			// ygoSearchSetLabel
+			// 
+			this.ygoSearchSetLabel.Location = new System.Drawing.Point(5, 215);
+			this.ygoSearchSetLabel.Name = "ygoSearchSetLabel";
+			this.ygoSearchSetLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoSearchSetLabel.TabIndex = 52;
+			this.ygoSearchSetLabel.Text = "Set:";
+			this.ygoSearchSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoSearchLocationLabel
+			// 
+			this.ygoSearchLocationLabel.Location = new System.Drawing.Point(5, 250);
+			this.ygoSearchLocationLabel.Name = "ygoSearchLocationLabel";
+			this.ygoSearchLocationLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoSearchLocationLabel.TabIndex = 51;
+			this.ygoSearchLocationLabel.Text = "Location:";
+			this.ygoSearchLocationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoSearchNameLabel
+			// 
+			this.ygoSearchNameLabel.Location = new System.Drawing.Point(5, 5);
+			this.ygoSearchNameLabel.Name = "ygoSearchNameLabel";
+			this.ygoSearchNameLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoSearchNameLabel.TabIndex = 50;
+			this.ygoSearchNameLabel.Text = "Name:";
+			this.ygoSearchNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoSearchCardTypeLabel
+			// 
+			this.ygoSearchCardTypeLabel.Location = new System.Drawing.Point(5, 40);
+			this.ygoSearchCardTypeLabel.Name = "ygoSearchCardTypeLabel";
+			this.ygoSearchCardTypeLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoSearchCardTypeLabel.TabIndex = 49;
+			this.ygoSearchCardTypeLabel.Text = "Card Type:";
+			this.ygoSearchCardTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoSearchTypesLabel
+			// 
+			this.ygoSearchTypesLabel.Location = new System.Drawing.Point(5, 145);
+			this.ygoSearchTypesLabel.Name = "ygoSearchTypesLabel";
+			this.ygoSearchTypesLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoSearchTypesLabel.TabIndex = 48;
+			this.ygoSearchTypesLabel.Text = "Types:";
+			this.ygoSearchTypesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoSearchPropertyLabel
+			// 
+			this.ygoSearchPropertyLabel.Location = new System.Drawing.Point(5, 110);
+			this.ygoSearchPropertyLabel.Name = "ygoSearchPropertyLabel";
+			this.ygoSearchPropertyLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoSearchPropertyLabel.TabIndex = 47;
+			this.ygoSearchPropertyLabel.Text = "Property:";
+			this.ygoSearchPropertyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoSearchOracleLabel
+			// 
+			this.ygoSearchOracleLabel.Location = new System.Drawing.Point(5, 180);
+			this.ygoSearchOracleLabel.Name = "ygoSearchOracleLabel";
+			this.ygoSearchOracleLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoSearchOracleLabel.TabIndex = 46;
+			this.ygoSearchOracleLabel.Text = "Oracle Text:";
+			this.ygoSearchOracleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoSearchAttributeLabel
+			// 
+			this.ygoSearchAttributeLabel.Location = new System.Drawing.Point(5, 75);
+			this.ygoSearchAttributeLabel.Name = "ygoSearchAttributeLabel";
+			this.ygoSearchAttributeLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoSearchAttributeLabel.TabIndex = 45;
+			this.ygoSearchAttributeLabel.Text = "Attribute:";
+			this.ygoSearchAttributeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ygoCatalogPage
 			// 
 			this.ygoCatalogPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ygoCatalogPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoCatalogPage.Controls.Add(this.ygoSortAlphabeticalButton);
+			this.ygoCatalogPage.Controls.Add(this.ygoSortNumericButton);
+			this.ygoCatalogPage.Controls.Add(this.ygoCatalogNextButton);
+			this.ygoCatalogPage.Controls.Add(this.ygoCatalogPrevButton);
 			this.ygoCatalogPage.Controls.Add(this.ygoCatalogLayout);
+			this.ygoCatalogPage.Controls.Add(this.ygoCatalogIndex);
 			this.ygoCatalogPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoCatalogPage.Name = "ygoCatalogPage";
 			this.ygoCatalogPage.Padding = new System.Windows.Forms.Padding(3);
@@ -524,19 +801,87 @@ namespace CollectionTracker {
 			this.ygoCatalogPage.TabIndex = 2;
 			this.ygoCatalogPage.Text = "Catalog";
 			// 
+			// ygoSortAlphabeticalButton
+			// 
+			this.ygoSortAlphabeticalButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoSortAlphabeticalButton.AutoSize = true;
+			this.ygoSortAlphabeticalButton.Location = new System.Drawing.Point(929, 8);
+			this.ygoSortAlphabeticalButton.Name = "ygoSortAlphabeticalButton";
+			this.ygoSortAlphabeticalButton.Size = new System.Drawing.Size(113, 25);
+			this.ygoSortAlphabeticalButton.TabIndex = 6;
+			this.ygoSortAlphabeticalButton.Text = "Alphabetical";
+			this.ygoSortAlphabeticalButton.UseVisualStyleBackColor = true;
+			this.ygoSortAlphabeticalButton.CheckedChanged += new System.EventHandler(this.YGO_OnClickSortAlphabetical);
+			// 
+			// ygoSortNumericButton
+			// 
+			this.ygoSortNumericButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoSortNumericButton.AutoSize = true;
+			this.ygoSortNumericButton.Checked = true;
+			this.ygoSortNumericButton.Location = new System.Drawing.Point(835, 7);
+			this.ygoSortNumericButton.Name = "ygoSortNumericButton";
+			this.ygoSortNumericButton.Size = new System.Drawing.Size(88, 25);
+			this.ygoSortNumericButton.TabIndex = 5;
+			this.ygoSortNumericButton.TabStop = true;
+			this.ygoSortNumericButton.Text = "Numeric";
+			this.ygoSortNumericButton.UseVisualStyleBackColor = true;
+			this.ygoSortNumericButton.CheckedChanged += new System.EventHandler(this.YGO_OnClickSortNumeric);
+			// 
+			// ygoCatalogNextButton
+			// 
+			this.ygoCatalogNextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoCatalogNextButton.Location = new System.Drawing.Point(1178, 5);
+			this.ygoCatalogNextButton.Name = "ygoCatalogNextButton";
+			this.ygoCatalogNextButton.Size = new System.Drawing.Size(75, 29);
+			this.ygoCatalogNextButton.TabIndex = 3;
+			this.ygoCatalogNextButton.Text = ">";
+			this.ygoCatalogNextButton.UseVisualStyleBackColor = true;
+			this.ygoCatalogNextButton.Click += new System.EventHandler(this.YGO_OnClickCatalogNext);
+			// 
+			// ygoCatalogPrevButton
+			// 
+			this.ygoCatalogPrevButton.Location = new System.Drawing.Point(5, 5);
+			this.ygoCatalogPrevButton.Name = "ygoCatalogPrevButton";
+			this.ygoCatalogPrevButton.Size = new System.Drawing.Size(75, 29);
+			this.ygoCatalogPrevButton.TabIndex = 2;
+			this.ygoCatalogPrevButton.Text = "<";
+			this.ygoCatalogPrevButton.UseVisualStyleBackColor = true;
+			this.ygoCatalogPrevButton.Click += new System.EventHandler(this.YGO_OnClickCatalogPrev);
+			// 
 			// ygoCatalogLayout
 			// 
+			this.ygoCatalogLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.ygoCatalogLayout.AutoScroll = true;
-			this.ygoCatalogLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ygoCatalogLayout.Location = new System.Drawing.Point(3, 3);
+			this.ygoCatalogLayout.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoCatalogLayout.Location = new System.Drawing.Point(3, 38);
 			this.ygoCatalogLayout.Name = "ygoCatalogLayout";
-			this.ygoCatalogLayout.Size = new System.Drawing.Size(1252, 624);
-			this.ygoCatalogLayout.TabIndex = 0;
+			this.ygoCatalogLayout.Size = new System.Drawing.Size(1252, 588);
+			this.ygoCatalogLayout.TabIndex = 1;
+			// 
+			// ygoCatalogIndex
+			// 
+			this.ygoCatalogIndex.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ygoCatalogIndex.Location = new System.Drawing.Point(3, 3);
+			this.ygoCatalogIndex.Name = "ygoCatalogIndex";
+			this.ygoCatalogIndex.Size = new System.Drawing.Size(1252, 30);
+			this.ygoCatalogIndex.TabIndex = 4;
+			this.ygoCatalogIndex.Text = "Showing 0 - 0 of 0";
+			this.ygoCatalogIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// ygoDetailPage
 			// 
 			this.ygoDetailPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ygoDetailPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoDetailPage.Controls.Add(this.ygoPrintingsBox);
+			this.ygoDetailPage.Controls.Add(this.ygoDeletePrintingButton);
+			this.ygoDetailPage.Controls.Add(this.ygoDetailDialog);
+			this.ygoDetailPage.Controls.Add(this.ygoCardtipBox);
+			this.ygoDetailPage.Controls.Add(this.ygoTooltipBox);
+			this.ygoDetailPage.Controls.Add(this.ygoDetailNextButton);
+			this.ygoDetailPage.Controls.Add(this.ygoDetailAutogenButton);
+			this.ygoDetailPage.Controls.Add(this.ygoDetailPrevButton);
 			this.ygoDetailPage.Controls.Add(this.ygoDetailBox);
 			this.ygoDetailPage.Controls.Add(this.ygoDetailImgbox);
 			this.ygoDetailPage.Location = new System.Drawing.Point(4, 25);
@@ -545,48 +890,158 @@ namespace CollectionTracker {
 			this.ygoDetailPage.TabIndex = 4;
 			this.ygoDetailPage.Text = "Card Details";
 			// 
+			// ygoPrintingsBox
+			// 
+			this.ygoPrintingsBox.Location = new System.Drawing.Point(865, 5);
+			this.ygoPrintingsBox.Name = "ygoPrintingsBox";
+			this.ygoPrintingsBox.Size = new System.Drawing.Size(380, 100);
+			this.ygoPrintingsBox.TabIndex = 30;
+			this.ygoPrintingsBox.TabStop = false;
+			// 
+			// ygoDeletePrintingButton
+			// 
+			this.ygoDeletePrintingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.ygoDeletePrintingButton.Location = new System.Drawing.Point(5, 598);
+			this.ygoDeletePrintingButton.Name = "ygoDeletePrintingButton";
+			this.ygoDeletePrintingButton.Size = new System.Drawing.Size(250, 29);
+			this.ygoDeletePrintingButton.TabIndex = 32;
+			this.ygoDeletePrintingButton.Text = "Delete Printing!";
+			this.ygoDeletePrintingButton.UseVisualStyleBackColor = true;
+			this.ygoDeletePrintingButton.Click += new System.EventHandler(this.YGO_DeleteCurrentPrinting);
+			// 
+			// ygoDetailDialog
+			// 
+			this.ygoDetailDialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.ygoDetailDialog.AutoSize = true;
+			this.ygoDetailDialog.Location = new System.Drawing.Point(261, 598);
+			this.ygoDetailDialog.MinimumSize = new System.Drawing.Size(0, 29);
+			this.ygoDetailDialog.Name = "ygoDetailDialog";
+			this.ygoDetailDialog.Size = new System.Drawing.Size(16, 29);
+			this.ygoDetailDialog.TabIndex = 31;
+			this.ygoDetailDialog.Text = "-";
+			this.ygoDetailDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoCardtipBox
+			// 
+			this.ygoCardtipBox.Controls.Add(this.ygoCardtipImage);
+			this.ygoCardtipBox.Location = new System.Drawing.Point(865, 215);
+			this.ygoCardtipBox.Name = "ygoCardtipBox";
+			this.ygoCardtipBox.Size = new System.Drawing.Size(250, 350);
+			this.ygoCardtipBox.TabIndex = 30;
+			this.ygoCardtipBox.TabStop = false;
+			// 
+			// ygoCardtipImage
+			// 
+			this.ygoCardtipImage.Location = new System.Drawing.Point(0, 0);
+			this.ygoCardtipImage.Name = "ygoCardtipImage";
+			this.ygoCardtipImage.Size = new System.Drawing.Size(250, 350);
+			this.ygoCardtipImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.ygoCardtipImage.TabIndex = 0;
+			this.ygoCardtipImage.TabStop = false;
+			// 
+			// ygoTooltipBox
+			// 
+			this.ygoTooltipBox.Location = new System.Drawing.Point(865, 110);
+			this.ygoTooltipBox.Name = "ygoTooltipBox";
+			this.ygoTooltipBox.Size = new System.Drawing.Size(300, 100);
+			this.ygoTooltipBox.TabIndex = 29;
+			this.ygoTooltipBox.TabStop = false;
+			// 
+			// ygoDetailNextButton
+			// 
+			this.ygoDetailNextButton.Location = new System.Drawing.Point(285, 550);
+			this.ygoDetailNextButton.Name = "ygoDetailNextButton";
+			this.ygoDetailNextButton.Size = new System.Drawing.Size(120, 29);
+			this.ygoDetailNextButton.TabIndex = 28;
+			this.ygoDetailNextButton.Text = "Next Card";
+			this.ygoDetailNextButton.UseVisualStyleBackColor = true;
+			this.ygoDetailNextButton.Click += new System.EventHandler(this.YGO_LoadNextInSelection);
+			// 
+			// ygoDetailAutogenButton
+			// 
+			this.ygoDetailAutogenButton.Location = new System.Drawing.Point(130, 550);
+			this.ygoDetailAutogenButton.Name = "ygoDetailAutogenButton";
+			this.ygoDetailAutogenButton.Size = new System.Drawing.Size(150, 29);
+			this.ygoDetailAutogenButton.TabIndex = 27;
+			this.ygoDetailAutogenButton.Text = "Autogen";
+			this.ygoDetailAutogenButton.UseVisualStyleBackColor = true;
+			this.ygoDetailAutogenButton.Click += new System.EventHandler(this.YGO_AutogenDetailRef);
+			// 
+			// ygoDetailPrevButton
+			// 
+			this.ygoDetailPrevButton.Location = new System.Drawing.Point(5, 550);
+			this.ygoDetailPrevButton.Name = "ygoDetailPrevButton";
+			this.ygoDetailPrevButton.Size = new System.Drawing.Size(120, 29);
+			this.ygoDetailPrevButton.TabIndex = 10;
+			this.ygoDetailPrevButton.Text = "Previous Card";
+			this.ygoDetailPrevButton.UseVisualStyleBackColor = true;
+			this.ygoDetailPrevButton.Click += new System.EventHandler(this.YGO_LoadPreviousInSelection);
+			// 
 			// ygoDetailBox
 			// 
+			this.ygoDetailBox.Controls.Add(this.ygoReloadLocationsButton);
+			this.ygoDetailBox.Controls.Add(this.ygoMoveField);
 			this.ygoDetailBox.Controls.Add(this.ygoEditPrintButton);
 			this.ygoDetailBox.Controls.Add(this.ygoEditCardButton);
 			this.ygoDetailBox.Controls.Add(this.ygoMoveLabel);
 			this.ygoDetailBox.Controls.Add(this.ygoLocationTable);
-			this.ygoDetailBox.Controls.Add(this.ygoMoveField);
-			this.ygoDetailBox.Location = new System.Drawing.Point(411, 5);
+			this.ygoDetailBox.Location = new System.Drawing.Point(410, 5);
 			this.ygoDetailBox.Name = "ygoDetailBox";
 			this.ygoDetailBox.Size = new System.Drawing.Size(450, 540);
 			this.ygoDetailBox.TabIndex = 4;
 			this.ygoDetailBox.TabStop = false;
-			this.ygoDetailBox.Text = "Details";
+			this.ygoDetailBox.Text = "Owned Printings";
+			// 
+			// ygoReloadLocationsButton
+			// 
+			this.ygoReloadLocationsButton.Location = new System.Drawing.Point(295, 25);
+			this.ygoReloadLocationsButton.Name = "ygoReloadLocationsButton";
+			this.ygoReloadLocationsButton.Size = new System.Drawing.Size(150, 29);
+			this.ygoReloadLocationsButton.TabIndex = 9;
+			this.ygoReloadLocationsButton.Text = "Reload Locations";
+			this.ygoReloadLocationsButton.UseVisualStyleBackColor = true;
+			this.ygoReloadLocationsButton.Click += new System.EventHandler(this.YGO_OnClickReloadLocations);
+			// 
+			// ygoMoveField
+			// 
+			this.ygoMoveField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.ygoMoveField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.ygoMoveField.FormattingEnabled = true;
+			this.ygoMoveField.Location = new System.Drawing.Point(75, 25);
+			this.ygoMoveField.Name = "ygoMoveField";
+			this.ygoMoveField.Size = new System.Drawing.Size(215, 29);
+			this.ygoMoveField.TabIndex = 6;
 			// 
 			// ygoEditPrintButton
 			// 
 			this.ygoEditPrintButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.ygoEditPrintButton.Location = new System.Drawing.Point(325, 510);
+			this.ygoEditPrintButton.Location = new System.Drawing.Point(300, 505);
 			this.ygoEditPrintButton.Name = "ygoEditPrintButton";
-			this.ygoEditPrintButton.Size = new System.Drawing.Size(120, 23);
+			this.ygoEditPrintButton.Size = new System.Drawing.Size(145, 29);
 			this.ygoEditPrintButton.TabIndex = 5;
 			this.ygoEditPrintButton.Text = "Edit Printing Data";
 			this.ygoEditPrintButton.UseVisualStyleBackColor = true;
+			this.ygoEditPrintButton.Click += new System.EventHandler(this.YGO_EditPrint);
 			// 
 			// ygoEditCardButton
 			// 
 			this.ygoEditCardButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.ygoEditCardButton.Location = new System.Drawing.Point(200, 510);
+			this.ygoEditCardButton.Location = new System.Drawing.Point(150, 505);
 			this.ygoEditCardButton.Name = "ygoEditCardButton";
-			this.ygoEditCardButton.Size = new System.Drawing.Size(120, 23);
+			this.ygoEditCardButton.Size = new System.Drawing.Size(145, 29);
 			this.ygoEditCardButton.TabIndex = 4;
 			this.ygoEditCardButton.Text = "Edit Card Data";
 			this.ygoEditCardButton.UseVisualStyleBackColor = true;
+			this.ygoEditCardButton.Click += new System.EventHandler(this.YGO_EditCard);
 			// 
 			// ygoMoveLabel
 			// 
-			this.ygoMoveLabel.AutoSize = true;
-			this.ygoMoveLabel.Location = new System.Drawing.Point(5, 20);
+			this.ygoMoveLabel.Location = new System.Drawing.Point(5, 25);
 			this.ygoMoveLabel.Name = "ygoMoveLabel";
-			this.ygoMoveLabel.Size = new System.Drawing.Size(70, 21);
+			this.ygoMoveLabel.Size = new System.Drawing.Size(70, 30);
 			this.ygoMoveLabel.TabIndex = 3;
 			this.ygoMoveLabel.Text = "Move to:";
+			this.ygoMoveLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ygoLocationTable
 			// 
@@ -596,21 +1051,12 @@ namespace CollectionTracker {
 			this.ygoLocationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
 			this.ygoLocationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
 			this.ygoLocationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-			this.ygoLocationTable.Location = new System.Drawing.Point(9, 45);
+			this.ygoLocationTable.Location = new System.Drawing.Point(9, 60);
 			this.ygoLocationTable.Name = "ygoLocationTable";
 			this.ygoLocationTable.RowCount = 1;
 			this.ygoLocationTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.ygoLocationTable.Size = new System.Drawing.Size(435, 30);
 			this.ygoLocationTable.TabIndex = 1;
-			// 
-			// ygoMoveField
-			// 
-			this.ygoMoveField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.ygoMoveField.FormattingEnabled = true;
-			this.ygoMoveField.Location = new System.Drawing.Point(60, 15);
-			this.ygoMoveField.Name = "ygoMoveField";
-			this.ygoMoveField.Size = new System.Drawing.Size(170, 29);
-			this.ygoMoveField.TabIndex = 2;
 			// 
 			// ygoDetailImgbox
 			// 
@@ -626,30 +1072,31 @@ namespace CollectionTracker {
 			// 
 			this.ygoCardPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ygoCardPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.ygoCardPage.Controls.Add(this.ygoCardDialog);
-			this.ygoCardPage.Controls.Add(this.ygoPendulumRight);
-			this.ygoCardPage.Controls.Add(this.ygoPendulumLeft);
-			this.ygoCardPage.Controls.Add(this.ygoPendulumLabel);
-			this.ygoCardPage.Controls.Add(this.ygoSubMonsterTypeButton);
-			this.ygoCardPage.Controls.Add(this.ygoAddMonsterTypeButton);
-			this.ygoCardPage.Controls.Add(this.ygoMonsterTypeValue);
-			this.ygoCardPage.Controls.Add(this.ygoCardHeader);
-			this.ygoCardPage.Controls.Add(this.ygoAddCardButton);
-			this.ygoCardPage.Controls.Add(this.ygoNameLabel);
-			this.ygoCardPage.Controls.Add(this.ygoNameField);
-			this.ygoCardPage.Controls.Add(this.ygoAtkDefLabel);
-			this.ygoCardPage.Controls.Add(this.ygoCardTypeField);
-			this.ygoCardPage.Controls.Add(this.ygoDefenseField);
-			this.ygoCardPage.Controls.Add(this.ygoAttributeField);
-			this.ygoCardPage.Controls.Add(this.ygoAttackField);
-			this.ygoCardPage.Controls.Add(this.ygoMonsterTypeField);
-			this.ygoCardPage.Controls.Add(this.ygoLevelLabel);
+			this.ygoCardPage.Controls.Add(this.ygoImportButton);
+			this.ygoCardPage.Controls.Add(this.ygoImportField);
+			this.ygoCardPage.Controls.Add(this.ygoScaleField);
 			this.ygoCardPage.Controls.Add(this.ygoLevelField);
-			this.ygoCardPage.Controls.Add(this.ygoOracleTextLabel);
-			this.ygoCardPage.Controls.Add(this.ygoCardTypeLabel);
-			this.ygoCardPage.Controls.Add(this.ygoOracleTextField);
+			this.ygoCardPage.Controls.Add(this.ygoDefField);
+			this.ygoCardPage.Controls.Add(this.ygoAtkField);
+			this.ygoCardPage.Controls.Add(this.ygoCardDialog);
+			this.ygoCardPage.Controls.Add(this.ygoIgnoreDuplicateEntryLabel);
+			this.ygoCardPage.Controls.Add(this.ygoIgnoreDuplicateEntryBox);
+			this.ygoCardPage.Controls.Add(this.ygoAddCardButton);
+			this.ygoCardPage.Controls.Add(this.ygoScaleLabel);
+			this.ygoCardPage.Controls.Add(this.ygoAtkDefLabel);
+			this.ygoCardPage.Controls.Add(this.ygoLevelLabel);
+			this.ygoCardPage.Controls.Add(this.ygoOracleField);
+			this.ygoCardPage.Controls.Add(this.ygoCardTypeField);
+			this.ygoCardPage.Controls.Add(this.ygoAttributeField);
+			this.ygoCardPage.Controls.Add(this.ygoPropertyField);
+			this.ygoCardPage.Controls.Add(this.ygoTypesField);
+			this.ygoCardPage.Controls.Add(this.ygoNameField);
+			this.ygoCardPage.Controls.Add(this.ygoOracleLabel);
+			this.ygoCardPage.Controls.Add(this.ygoTypesLabel);
+			this.ygoCardPage.Controls.Add(this.ygoPropertyLabel);
 			this.ygoCardPage.Controls.Add(this.ygoAttributeLabel);
-			this.ygoCardPage.Controls.Add(this.ygoMonsterTypeLabel);
+			this.ygoCardPage.Controls.Add(this.ygoCardTypeLabel);
+			this.ygoCardPage.Controls.Add(this.ygoNameLabel);
 			this.ygoCardPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoCardPage.Name = "ygoCardPage";
 			this.ygoCardPage.Padding = new System.Windows.Forms.Padding(3);
@@ -657,102 +1104,270 @@ namespace CollectionTracker {
 			this.ygoCardPage.TabIndex = 0;
 			this.ygoCardPage.Text = "Card Entry";
 			// 
+			// ygoImportButton
+			// 
+			this.ygoImportButton.Location = new System.Drawing.Point(555, 355);
+			this.ygoImportButton.Name = "ygoImportButton";
+			this.ygoImportButton.Size = new System.Drawing.Size(250, 30);
+			this.ygoImportButton.TabIndex = 55;
+			this.ygoImportButton.Text = "Import!";
+			this.ygoImportButton.UseVisualStyleBackColor = true;
+			this.ygoImportButton.Click += new System.EventHandler(this.YGO_OnClickImport);
+			// 
+			// ygoImportField
+			// 
+			this.ygoImportField.Location = new System.Drawing.Point(555, 180);
+			this.ygoImportField.Multiline = true;
+			this.ygoImportField.Name = "ygoImportField";
+			this.ygoImportField.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.ygoImportField.Size = new System.Drawing.Size(250, 170);
+			this.ygoImportField.TabIndex = 24;
+			// 
+			// ygoScaleField
+			// 
+			this.ygoScaleField.Location = new System.Drawing.Point(100, 460);
+			this.ygoScaleField.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+			this.ygoScaleField.Name = "ygoScaleField";
+			this.ygoScaleField.Size = new System.Drawing.Size(250, 29);
+			this.ygoScaleField.TabIndex = 16;
+			// 
+			// ygoLevelField
+			// 
+			this.ygoLevelField.Location = new System.Drawing.Point(100, 425);
+			this.ygoLevelField.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+			this.ygoLevelField.Name = "ygoLevelField";
+			this.ygoLevelField.Size = new System.Drawing.Size(250, 29);
+			this.ygoLevelField.TabIndex = 14;
+			// 
+			// ygoDefField
+			// 
+			this.ygoDefField.Increment = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+			this.ygoDefField.Location = new System.Drawing.Point(227, 495);
+			this.ygoDefField.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.ygoDefField.Name = "ygoDefField";
+			this.ygoDefField.Size = new System.Drawing.Size(123, 29);
+			this.ygoDefField.TabIndex = 19;
+			// 
+			// ygoAtkField
+			// 
+			this.ygoAtkField.Increment = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+			this.ygoAtkField.Location = new System.Drawing.Point(100, 495);
+			this.ygoAtkField.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.ygoAtkField.Name = "ygoAtkField";
+			this.ygoAtkField.Size = new System.Drawing.Size(123, 29);
+			this.ygoAtkField.TabIndex = 18;
+			// 
 			// ygoCardDialog
 			// 
 			this.ygoCardDialog.AutoSize = true;
-			this.ygoCardDialog.Location = new System.Drawing.Point(276, 330);
+			this.ygoCardDialog.Location = new System.Drawing.Point(355, 533);
 			this.ygoCardDialog.Name = "ygoCardDialog";
 			this.ygoCardDialog.Size = new System.Drawing.Size(16, 21);
-			this.ygoCardDialog.TabIndex = 23;
+			this.ygoCardDialog.TabIndex = 21;
 			this.ygoCardDialog.Text = "-";
+			this.ygoCardDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// ygoPendulumRight
+			// ygoIgnoreDuplicateEntryLabel
 			// 
-			this.ygoPendulumRight.Location = new System.Drawing.Point(190, 275);
-			this.ygoPendulumRight.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-			this.ygoPendulumRight.Name = "ygoPendulumRight";
-			this.ygoPendulumRight.Size = new System.Drawing.Size(80, 29);
-			this.ygoPendulumRight.TabIndex = 18;
+			this.ygoIgnoreDuplicateEntryLabel.Location = new System.Drawing.Point(115, 565);
+			this.ygoIgnoreDuplicateEntryLabel.Name = "ygoIgnoreDuplicateEntryLabel";
+			this.ygoIgnoreDuplicateEntryLabel.Size = new System.Drawing.Size(235, 30);
+			this.ygoIgnoreDuplicateEntryLabel.TabIndex = 23;
+			this.ygoIgnoreDuplicateEntryLabel.Text = "Ignore Duplicate Entry";
+			this.ygoIgnoreDuplicateEntryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// ygoPendulumLeft
+			// ygoIgnoreDuplicateEntryBox
 			// 
-			this.ygoPendulumLeft.Location = new System.Drawing.Point(100, 275);
-			this.ygoPendulumLeft.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-			this.ygoPendulumLeft.Name = "ygoPendulumLeft";
-			this.ygoPendulumLeft.Size = new System.Drawing.Size(80, 29);
-			this.ygoPendulumLeft.TabIndex = 17;
+			this.ygoIgnoreDuplicateEntryBox.Location = new System.Drawing.Point(100, 565);
+			this.ygoIgnoreDuplicateEntryBox.Name = "ygoIgnoreDuplicateEntryBox";
+			this.ygoIgnoreDuplicateEntryBox.Size = new System.Drawing.Size(14, 30);
+			this.ygoIgnoreDuplicateEntryBox.TabIndex = 22;
+			this.ygoIgnoreDuplicateEntryBox.UseVisualStyleBackColor = true;
 			// 
-			// ygoPendulumLabel
+			// ygoAddCardButton
 			// 
-			this.ygoPendulumLabel.AutoSize = true;
-			this.ygoPendulumLabel.Location = new System.Drawing.Point(5, 275);
-			this.ygoPendulumLabel.Name = "ygoPendulumLabel";
-			this.ygoPendulumLabel.Size = new System.Drawing.Size(123, 21);
-			this.ygoPendulumLabel.TabIndex = 16;
-			this.ygoPendulumLabel.Text = "Pendulum Scale:";
+			this.ygoAddCardButton.Location = new System.Drawing.Point(100, 530);
+			this.ygoAddCardButton.Name = "ygoAddCardButton";
+			this.ygoAddCardButton.Size = new System.Drawing.Size(250, 30);
+			this.ygoAddCardButton.TabIndex = 20;
+			this.ygoAddCardButton.Text = "Add To Catalog";
+			this.ygoAddCardButton.UseVisualStyleBackColor = true;
+			this.ygoAddCardButton.Click += new System.EventHandler(this.YGO_OnClickAddCard);
 			// 
-			// ygoSubMonsterTypeButton
+			// ygoScaleLabel
 			// 
-			this.ygoSubMonsterTypeButton.Location = new System.Drawing.Point(300, 100);
-			this.ygoSubMonsterTypeButton.Name = "ygoSubMonsterTypeButton";
-			this.ygoSubMonsterTypeButton.Size = new System.Drawing.Size(23, 23);
-			this.ygoSubMonsterTypeButton.TabIndex = 10;
-			this.ygoSubMonsterTypeButton.Text = "-";
-			this.ygoSubMonsterTypeButton.UseVisualStyleBackColor = true;
-			this.ygoSubMonsterTypeButton.Click += new System.EventHandler(this.YGO_OnClickSubMonsterType);
+			this.ygoScaleLabel.Location = new System.Drawing.Point(5, 460);
+			this.ygoScaleLabel.Name = "ygoScaleLabel";
+			this.ygoScaleLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoScaleLabel.TabIndex = 15;
+			this.ygoScaleLabel.Text = "Scale:";
+			this.ygoScaleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// ygoAddMonsterTypeButton
+			// ygoAtkDefLabel
 			// 
-			this.ygoAddMonsterTypeButton.Location = new System.Drawing.Point(275, 100);
-			this.ygoAddMonsterTypeButton.Name = "ygoAddMonsterTypeButton";
-			this.ygoAddMonsterTypeButton.Size = new System.Drawing.Size(23, 23);
-			this.ygoAddMonsterTypeButton.TabIndex = 9;
-			this.ygoAddMonsterTypeButton.Text = "+";
-			this.ygoAddMonsterTypeButton.UseVisualStyleBackColor = true;
-			this.ygoAddMonsterTypeButton.Click += new System.EventHandler(this.YGO_OnClickAddMonsterType);
+			this.ygoAtkDefLabel.Location = new System.Drawing.Point(5, 495);
+			this.ygoAtkDefLabel.Name = "ygoAtkDefLabel";
+			this.ygoAtkDefLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoAtkDefLabel.TabIndex = 17;
+			this.ygoAtkDefLabel.Text = "ATK/DEF:";
+			this.ygoAtkDefLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// ygoMonsterTypeValue
+			// ygoLevelLabel
 			// 
-			this.ygoMonsterTypeValue.AutoSize = true;
-			this.ygoMonsterTypeValue.Location = new System.Drawing.Point(100, 125);
-			this.ygoMonsterTypeValue.Name = "ygoMonsterTypeValue";
-			this.ygoMonsterTypeValue.Size = new System.Drawing.Size(16, 21);
-			this.ygoMonsterTypeValue.TabIndex = 11;
-			this.ygoMonsterTypeValue.Text = "-";
+			this.ygoLevelLabel.Location = new System.Drawing.Point(5, 425);
+			this.ygoLevelLabel.Name = "ygoLevelLabel";
+			this.ygoLevelLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoLevelLabel.TabIndex = 13;
+			this.ygoLevelLabel.Text = "Level:";
+			this.ygoLevelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoOracleField
+			// 
+			this.ygoOracleField.Location = new System.Drawing.Point(100, 180);
+			this.ygoOracleField.Multiline = true;
+			this.ygoOracleField.Name = "ygoOracleField";
+			this.ygoOracleField.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.ygoOracleField.Size = new System.Drawing.Size(450, 240);
+			this.ygoOracleField.TabIndex = 12;
+			// 
+			// ygoCardTypeField
+			// 
+			this.ygoCardTypeField.Location = new System.Drawing.Point(100, 40);
+			this.ygoCardTypeField.Name = "ygoCardTypeField";
+			this.ygoCardTypeField.Size = new System.Drawing.Size(370, 29);
+			this.ygoCardTypeField.TabIndex = 4;
+			// 
+			// ygoAttributeField
+			// 
+			this.ygoAttributeField.Location = new System.Drawing.Point(100, 75);
+			this.ygoAttributeField.Name = "ygoAttributeField";
+			this.ygoAttributeField.Size = new System.Drawing.Size(370, 29);
+			this.ygoAttributeField.TabIndex = 6;
+			// 
+			// ygoPropertyField
+			// 
+			this.ygoPropertyField.Location = new System.Drawing.Point(100, 110);
+			this.ygoPropertyField.Name = "ygoPropertyField";
+			this.ygoPropertyField.Size = new System.Drawing.Size(370, 29);
+			this.ygoPropertyField.TabIndex = 8;
+			// 
+			// ygoTypesField
+			// 
+			this.ygoTypesField.Location = new System.Drawing.Point(100, 145);
+			this.ygoTypesField.Name = "ygoTypesField";
+			this.ygoTypesField.Size = new System.Drawing.Size(370, 29);
+			this.ygoTypesField.TabIndex = 10;
+			// 
+			// ygoNameField
+			// 
+			this.ygoNameField.Location = new System.Drawing.Point(100, 5);
+			this.ygoNameField.Name = "ygoNameField";
+			this.ygoNameField.Size = new System.Drawing.Size(370, 29);
+			this.ygoNameField.TabIndex = 2;
+			// 
+			// ygoOracleLabel
+			// 
+			this.ygoOracleLabel.Location = new System.Drawing.Point(5, 180);
+			this.ygoOracleLabel.Name = "ygoOracleLabel";
+			this.ygoOracleLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoOracleLabel.TabIndex = 11;
+			this.ygoOracleLabel.Text = "Oracle Text:";
+			this.ygoOracleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoTypesLabel
+			// 
+			this.ygoTypesLabel.Location = new System.Drawing.Point(5, 145);
+			this.ygoTypesLabel.Name = "ygoTypesLabel";
+			this.ygoTypesLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoTypesLabel.TabIndex = 9;
+			this.ygoTypesLabel.Text = "Types:";
+			this.ygoTypesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoPropertyLabel
+			// 
+			this.ygoPropertyLabel.Location = new System.Drawing.Point(5, 110);
+			this.ygoPropertyLabel.Name = "ygoPropertyLabel";
+			this.ygoPropertyLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoPropertyLabel.TabIndex = 7;
+			this.ygoPropertyLabel.Text = "Property:";
+			this.ygoPropertyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoAttributeLabel
+			// 
+			this.ygoAttributeLabel.Location = new System.Drawing.Point(5, 75);
+			this.ygoAttributeLabel.Name = "ygoAttributeLabel";
+			this.ygoAttributeLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoAttributeLabel.TabIndex = 5;
+			this.ygoAttributeLabel.Text = "Attribute:";
+			this.ygoAttributeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoCardTypeLabel
+			// 
+			this.ygoCardTypeLabel.Location = new System.Drawing.Point(5, 40);
+			this.ygoCardTypeLabel.Name = "ygoCardTypeLabel";
+			this.ygoCardTypeLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoCardTypeLabel.TabIndex = 3;
+			this.ygoCardTypeLabel.Text = "Card Type:";
+			this.ygoCardTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ygoPrintPage
 			// 
 			this.ygoPrintPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ygoPrintPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoPrintPage.Controls.Add(this.ygoImgpathBackLabel);
+			this.ygoPrintPage.Controls.Add(this.ygoPrintAutoLimit);
+			this.ygoPrintPage.Controls.Add(this.ygoPrintAutofillRangeButton);
+			this.ygoPrintPage.Controls.Add(this.ygoPrintAutofillButton);
+			this.ygoPrintPage.Controls.Add(this.ygoCardrefDescriptor);
+			this.ygoPrintPage.Controls.Add(this.ygoPrintIDLabel);
+			this.ygoPrintPage.Controls.Add(this.ygoPrintIDField);
+			this.ygoPrintPage.Controls.Add(this.ygoPrintImgboxBack);
+			this.ygoPrintPage.Controls.Add(this.ygoImgsearchBackButton);
+			this.ygoPrintPage.Controls.Add(this.ygoImgBackLabel);
 			this.ygoPrintPage.Controls.Add(this.ygoIODialog);
 			this.ygoPrintPage.Controls.Add(this.ygoSaveButton);
 			this.ygoPrintPage.Controls.Add(this.ygoImgpathLabel);
-			this.ygoPrintPage.Controls.Add(this.ygoSubRarityButton);
+			this.ygoPrintPage.Controls.Add(this.ygoRemoveRarityButton);
 			this.ygoPrintPage.Controls.Add(this.ygoAddRarityButton);
 			this.ygoPrintPage.Controls.Add(this.ygoPrintImgbox);
 			this.ygoPrintPage.Controls.Add(this.ygoAddPrintButton);
 			this.ygoPrintPage.Controls.Add(this.ygoCardrefField);
 			this.ygoPrintPage.Controls.Add(this.ygoCardrefLabel);
 			this.ygoPrintPage.Controls.Add(this.ygoImgsearchButton);
-			this.ygoPrintPage.Controls.Add(this.ygoImgsearchLabel);
-			this.ygoPrintPage.Controls.Add(this.ygoFlavorTextField);
-			this.ygoPrintPage.Controls.Add(this.ygoFlavorTextLabel);
-			this.ygoPrintPage.Controls.Add(this.ygoTreatmentsValue);
+			this.ygoPrintPage.Controls.Add(this.ygoImageLabel);
+			this.ygoPrintPage.Controls.Add(this.ygoFlavorField);
+			this.ygoPrintPage.Controls.Add(this.ygoFlavorLabel);
+			this.ygoPrintPage.Controls.Add(this.ygoRaritiesValue);
 			this.ygoPrintPage.Controls.Add(this.ygoRaritiesField);
-			this.ygoPrintPage.Controls.Add(this.ygoTreatmentsLabel);
+			this.ygoPrintPage.Controls.Add(this.ygoRaritiesLabel);
 			this.ygoPrintPage.Controls.Add(this.ygoNumberField);
 			this.ygoPrintPage.Controls.Add(this.ygoNumberLabel);
 			this.ygoPrintPage.Controls.Add(this.ygoSetField);
 			this.ygoPrintPage.Controls.Add(this.ygoSetLabel);
-			this.ygoPrintPage.Controls.Add(this.ygoPrintHeader);
 			this.ygoPrintPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoPrintPage.Name = "ygoPrintPage";
 			this.ygoPrintPage.Padding = new System.Windows.Forms.Padding(3);
@@ -760,23 +1375,122 @@ namespace CollectionTracker {
 			this.ygoPrintPage.TabIndex = 1;
 			this.ygoPrintPage.Text = "Printing Entry";
 			// 
+			// ygoImgpathBackLabel
+			// 
+			this.ygoImgpathBackLabel.AutoSize = true;
+			this.ygoImgpathBackLabel.Location = new System.Drawing.Point(855, 505);
+			this.ygoImgpathBackLabel.Name = "ygoImgpathBackLabel";
+			this.ygoImgpathBackLabel.Size = new System.Drawing.Size(0, 21);
+			this.ygoImgpathBackLabel.TabIndex = 63;
+			// 
+			// ygoPrintAutoLimit
+			// 
+			this.ygoPrintAutoLimit.Location = new System.Drawing.Point(220, 475);
+			this.ygoPrintAutoLimit.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.ygoPrintAutoLimit.Name = "ygoPrintAutoLimit";
+			this.ygoPrintAutoLimit.Size = new System.Drawing.Size(250, 29);
+			this.ygoPrintAutoLimit.TabIndex = 62;
+			// 
+			// ygoPrintAutofillRangeButton
+			// 
+			this.ygoPrintAutofillRangeButton.Location = new System.Drawing.Point(100, 475);
+			this.ygoPrintAutofillRangeButton.Name = "ygoPrintAutofillRangeButton";
+			this.ygoPrintAutofillRangeButton.Size = new System.Drawing.Size(115, 29);
+			this.ygoPrintAutofillRangeButton.TabIndex = 61;
+			this.ygoPrintAutofillRangeButton.Text = "Autofill to";
+			this.ygoPrintAutofillRangeButton.UseVisualStyleBackColor = true;
+			this.ygoPrintAutofillRangeButton.Click += new System.EventHandler(this.YGO_OnClickAddAndFill);
+			// 
+			// ygoPrintAutofillButton
+			// 
+			this.ygoPrintAutofillButton.Location = new System.Drawing.Point(320, 300);
+			this.ygoPrintAutofillButton.Name = "ygoPrintAutofillButton";
+			this.ygoPrintAutofillButton.Size = new System.Drawing.Size(150, 29);
+			this.ygoPrintAutofillButton.TabIndex = 60;
+			this.ygoPrintAutofillButton.Text = "Autofill";
+			this.ygoPrintAutofillButton.UseVisualStyleBackColor = true;
+			this.ygoPrintAutofillButton.Click += new System.EventHandler(this.YGO_OnClickPrintAutofill);
+			// 
+			// ygoCardrefDescriptor
+			// 
+			this.ygoCardrefDescriptor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.ygoCardrefDescriptor.AutoSize = true;
+			this.ygoCardrefDescriptor.Location = new System.Drawing.Point(5, 571);
+			this.ygoCardrefDescriptor.MaximumSize = new System.Drawing.Size(0, 21);
+			this.ygoCardrefDescriptor.Name = "ygoCardrefDescriptor";
+			this.ygoCardrefDescriptor.Size = new System.Drawing.Size(16, 21);
+			this.ygoCardrefDescriptor.TabIndex = 59;
+			this.ygoCardrefDescriptor.Text = "-";
+			this.ygoCardrefDescriptor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoPrintIDLabel
+			// 
+			this.ygoPrintIDLabel.Location = new System.Drawing.Point(5, 405);
+			this.ygoPrintIDLabel.Name = "ygoPrintIDLabel";
+			this.ygoPrintIDLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoPrintIDLabel.TabIndex = 52;
+			this.ygoPrintIDLabel.Text = "Print ID:";
+			this.ygoPrintIDLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoPrintIDField
+			// 
+			this.ygoPrintIDField.Location = new System.Drawing.Point(100, 405);
+			this.ygoPrintIDField.Name = "ygoPrintIDField";
+			this.ygoPrintIDField.Size = new System.Drawing.Size(370, 29);
+			this.ygoPrintIDField.TabIndex = 53;
+			// 
+			// ygoPrintImgboxBack
+			// 
+			this.ygoPrintImgboxBack.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoPrintImgboxBack.InitialImage = null;
+			this.ygoPrintImgboxBack.Location = new System.Drawing.Point(855, 5);
+			this.ygoPrintImgboxBack.Name = "ygoPrintImgboxBack";
+			this.ygoPrintImgboxBack.Size = new System.Drawing.Size(375, 495);
+			this.ygoPrintImgboxBack.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.ygoPrintImgboxBack.TabIndex = 58;
+			this.ygoPrintImgboxBack.TabStop = false;
+			// 
+			// ygoImgsearchBackButton
+			// 
+			this.ygoImgsearchBackButton.Location = new System.Drawing.Point(100, 335);
+			this.ygoImgsearchBackButton.Name = "ygoImgsearchBackButton";
+			this.ygoImgsearchBackButton.Size = new System.Drawing.Size(370, 29);
+			this.ygoImgsearchBackButton.TabIndex = 48;
+			this.ygoImgsearchBackButton.Text = "Search";
+			this.ygoImgsearchBackButton.UseVisualStyleBackColor = true;
+			this.ygoImgsearchBackButton.Click += new System.EventHandler(this.YGO_OnClickSearchImgBack);
+			// 
+			// ygoImgBackLabel
+			// 
+			this.ygoImgBackLabel.Location = new System.Drawing.Point(5, 335);
+			this.ygoImgBackLabel.Name = "ygoImgBackLabel";
+			this.ygoImgBackLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoImgBackLabel.TabIndex = 47;
+			this.ygoImgBackLabel.Text = "Back:";
+			this.ygoImgBackLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// ygoIODialog
 			// 
 			this.ygoIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.ygoIODialog.AutoSize = true;
-			this.ygoIODialog.Location = new System.Drawing.Point(185, 605);
+			this.ygoIODialog.Location = new System.Drawing.Point(260, 598);
 			this.ygoIODialog.Name = "ygoIODialog";
 			this.ygoIODialog.Size = new System.Drawing.Size(16, 21);
-			this.ygoIODialog.TabIndex = 24;
+			this.ygoIODialog.TabIndex = 56;
 			this.ygoIODialog.Text = "-";
+			this.ygoIODialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ygoSaveButton
 			// 
 			this.ygoSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.ygoSaveButton.Location = new System.Drawing.Point(6, 600);
+			this.ygoSaveButton.Location = new System.Drawing.Point(5, 595);
 			this.ygoSaveButton.Name = "ygoSaveButton";
-			this.ygoSaveButton.Size = new System.Drawing.Size(170, 23);
-			this.ygoSaveButton.TabIndex = 22;
+			this.ygoSaveButton.Size = new System.Drawing.Size(250, 29);
+			this.ygoSaveButton.TabIndex = 55;
 			this.ygoSaveButton.Text = "Save Catalog";
 			this.ygoSaveButton.UseVisualStyleBackColor = true;
 			this.ygoSaveButton.Click += new System.EventHandler(this.YGO_OnClickSave);
@@ -784,28 +1498,28 @@ namespace CollectionTracker {
 			// ygoImgpathLabel
 			// 
 			this.ygoImgpathLabel.AutoSize = true;
-			this.ygoImgpathLabel.Location = new System.Drawing.Point(475, 325);
+			this.ygoImgpathLabel.Location = new System.Drawing.Point(475, 505);
 			this.ygoImgpathLabel.Name = "ygoImgpathLabel";
 			this.ygoImgpathLabel.Size = new System.Drawing.Size(16, 21);
-			this.ygoImgpathLabel.TabIndex = 21;
+			this.ygoImgpathLabel.TabIndex = 57;
 			this.ygoImgpathLabel.Text = "-";
 			// 
-			// ygoSubRarityButton
+			// ygoRemoveRarityButton
 			// 
-			this.ygoSubRarityButton.Location = new System.Drawing.Point(300, 75);
-			this.ygoSubRarityButton.Name = "ygoSubRarityButton";
-			this.ygoSubRarityButton.Size = new System.Drawing.Size(23, 23);
-			this.ygoSubRarityButton.TabIndex = 8;
-			this.ygoSubRarityButton.Text = "-";
-			this.ygoSubRarityButton.UseVisualStyleBackColor = true;
-			this.ygoSubRarityButton.Click += new System.EventHandler(this.YGO_OnClickSubRarity);
+			this.ygoRemoveRarityButton.Location = new System.Drawing.Point(440, 75);
+			this.ygoRemoveRarityButton.Name = "ygoRemoveRarityButton";
+			this.ygoRemoveRarityButton.Size = new System.Drawing.Size(30, 29);
+			this.ygoRemoveRarityButton.TabIndex = 41;
+			this.ygoRemoveRarityButton.Text = "-";
+			this.ygoRemoveRarityButton.UseVisualStyleBackColor = true;
+			this.ygoRemoveRarityButton.Click += new System.EventHandler(this.YGO_OnClickSubRarity);
 			// 
 			// ygoAddRarityButton
 			// 
-			this.ygoAddRarityButton.Location = new System.Drawing.Point(275, 75);
+			this.ygoAddRarityButton.Location = new System.Drawing.Point(405, 75);
 			this.ygoAddRarityButton.Name = "ygoAddRarityButton";
-			this.ygoAddRarityButton.Size = new System.Drawing.Size(23, 23);
-			this.ygoAddRarityButton.TabIndex = 7;
+			this.ygoAddRarityButton.Size = new System.Drawing.Size(30, 29);
+			this.ygoAddRarityButton.TabIndex = 40;
 			this.ygoAddRarityButton.Text = "+";
 			this.ygoAddRarityButton.UseVisualStyleBackColor = true;
 			this.ygoAddRarityButton.Click += new System.EventHandler(this.YGO_OnClickAddRarity);
@@ -816,148 +1530,254 @@ namespace CollectionTracker {
 			this.ygoPrintImgbox.InitialImage = null;
 			this.ygoPrintImgbox.Location = new System.Drawing.Point(475, 5);
 			this.ygoPrintImgbox.Name = "ygoPrintImgbox";
-			this.ygoPrintImgbox.Size = new System.Drawing.Size(225, 315);
+			this.ygoPrintImgbox.Size = new System.Drawing.Size(375, 495);
 			this.ygoPrintImgbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.ygoPrintImgbox.TabIndex = 20;
+			this.ygoPrintImgbox.TabIndex = 51;
 			this.ygoPrintImgbox.TabStop = false;
 			// 
 			// ygoAddPrintButton
 			// 
-			this.ygoAddPrintButton.Location = new System.Drawing.Point(100, 300);
+			this.ygoAddPrintButton.Location = new System.Drawing.Point(100, 440);
 			this.ygoAddPrintButton.Name = "ygoAddPrintButton";
-			this.ygoAddPrintButton.Size = new System.Drawing.Size(170, 23);
-			this.ygoAddPrintButton.TabIndex = 16;
+			this.ygoAddPrintButton.Size = new System.Drawing.Size(370, 29);
+			this.ygoAddPrintButton.TabIndex = 54;
 			this.ygoAddPrintButton.Text = "Add To Catalog";
 			this.ygoAddPrintButton.UseVisualStyleBackColor = true;
 			this.ygoAddPrintButton.Click += new System.EventHandler(this.YGO_OnClickAddPrint);
 			// 
 			// ygoCardrefField
 			// 
+			this.ygoCardrefField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.ygoCardrefField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
 			this.ygoCardrefField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.ygoCardrefField.FormattingEnabled = true;
-			this.ygoCardrefField.Location = new System.Drawing.Point(100, 275);
+			this.ygoCardrefField.Location = new System.Drawing.Point(100, 370);
 			this.ygoCardrefField.Name = "ygoCardrefField";
-			this.ygoCardrefField.Size = new System.Drawing.Size(170, 29);
-			this.ygoCardrefField.TabIndex = 15;
+			this.ygoCardrefField.Size = new System.Drawing.Size(370, 29);
+			this.ygoCardrefField.Sorted = true;
+			this.ygoCardrefField.TabIndex = 50;
+			this.ygoCardrefField.SelectedIndexChanged += new System.EventHandler(this.YGO_OnSelectCardref);
 			// 
 			// ygoCardrefLabel
 			// 
-			this.ygoCardrefLabel.AutoSize = true;
-			this.ygoCardrefLabel.Location = new System.Drawing.Point(5, 275);
+			this.ygoCardrefLabel.Location = new System.Drawing.Point(5, 370);
 			this.ygoCardrefLabel.Name = "ygoCardrefLabel";
-			this.ygoCardrefLabel.Size = new System.Drawing.Size(46, 21);
-			this.ygoCardrefLabel.TabIndex = 14;
+			this.ygoCardrefLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoCardrefLabel.TabIndex = 49;
 			this.ygoCardrefLabel.Text = "Card:";
+			this.ygoCardrefLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ygoImgsearchButton
 			// 
-			this.ygoImgsearchButton.Location = new System.Drawing.Point(100, 250);
+			this.ygoImgsearchButton.Location = new System.Drawing.Point(100, 300);
 			this.ygoImgsearchButton.Name = "ygoImgsearchButton";
-			this.ygoImgsearchButton.Size = new System.Drawing.Size(170, 23);
-			this.ygoImgsearchButton.TabIndex = 13;
+			this.ygoImgsearchButton.Size = new System.Drawing.Size(215, 29);
+			this.ygoImgsearchButton.TabIndex = 46;
 			this.ygoImgsearchButton.Text = "Search";
 			this.ygoImgsearchButton.UseVisualStyleBackColor = true;
 			this.ygoImgsearchButton.Click += new System.EventHandler(this.YGO_OnClickSearchImg);
 			// 
-			// ygoImgsearchLabel
+			// ygoImageLabel
 			// 
-			this.ygoImgsearchLabel.AutoSize = true;
-			this.ygoImgsearchLabel.Location = new System.Drawing.Point(5, 250);
-			this.ygoImgsearchLabel.Name = "ygoImgsearchLabel";
-			this.ygoImgsearchLabel.Size = new System.Drawing.Size(56, 21);
-			this.ygoImgsearchLabel.TabIndex = 12;
-			this.ygoImgsearchLabel.Text = "Image:";
+			this.ygoImageLabel.Location = new System.Drawing.Point(5, 300);
+			this.ygoImageLabel.Name = "ygoImageLabel";
+			this.ygoImageLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoImageLabel.TabIndex = 45;
+			this.ygoImageLabel.Text = "Image:";
+			this.ygoImageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// ygoFlavorTextField
+			// ygoFlavorField
 			// 
-			this.ygoFlavorTextField.Location = new System.Drawing.Point(100, 150);
-			this.ygoFlavorTextField.Multiline = true;
-			this.ygoFlavorTextField.Name = "ygoFlavorTextField";
-			this.ygoFlavorTextField.Size = new System.Drawing.Size(350, 94);
-			this.ygoFlavorTextField.TabIndex = 11;
+			this.ygoFlavorField.Location = new System.Drawing.Point(100, 145);
+			this.ygoFlavorField.Multiline = true;
+			this.ygoFlavorField.Name = "ygoFlavorField";
+			this.ygoFlavorField.Size = new System.Drawing.Size(370, 150);
+			this.ygoFlavorField.TabIndex = 44;
 			// 
-			// ygoFlavorTextLabel
+			// ygoFlavorLabel
 			// 
-			this.ygoFlavorTextLabel.AutoSize = true;
-			this.ygoFlavorTextLabel.Location = new System.Drawing.Point(5, 150);
-			this.ygoFlavorTextLabel.Name = "ygoFlavorTextLabel";
-			this.ygoFlavorTextLabel.Size = new System.Drawing.Size(86, 21);
-			this.ygoFlavorTextLabel.TabIndex = 10;
-			this.ygoFlavorTextLabel.Text = "Flavor Text:";
+			this.ygoFlavorLabel.Location = new System.Drawing.Point(5, 145);
+			this.ygoFlavorLabel.Name = "ygoFlavorLabel";
+			this.ygoFlavorLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoFlavorLabel.TabIndex = 43;
+			this.ygoFlavorLabel.Text = "Flavor Text:";
+			this.ygoFlavorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// ygoTreatmentsValue
+			// ygoRaritiesValue
 			// 
-			this.ygoTreatmentsValue.Location = new System.Drawing.Point(100, 100);
-			this.ygoTreatmentsValue.Name = "ygoTreatmentsValue";
-			this.ygoTreatmentsValue.Size = new System.Drawing.Size(350, 45);
-			this.ygoTreatmentsValue.TabIndex = 9;
-			this.ygoTreatmentsValue.Text = "-";
+			this.ygoRaritiesValue.Location = new System.Drawing.Point(100, 110);
+			this.ygoRaritiesValue.Name = "ygoRaritiesValue";
+			this.ygoRaritiesValue.Size = new System.Drawing.Size(350, 30);
+			this.ygoRaritiesValue.TabIndex = 42;
+			this.ygoRaritiesValue.Text = "-";
+			this.ygoRaritiesValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ygoRaritiesField
 			// 
-			this.ygoRaritiesField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.ygoRaritiesField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.ygoRaritiesField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
 			this.ygoRaritiesField.FormattingEnabled = true;
 			this.ygoRaritiesField.Location = new System.Drawing.Point(100, 75);
 			this.ygoRaritiesField.Name = "ygoRaritiesField";
-			this.ygoRaritiesField.Size = new System.Drawing.Size(170, 29);
-			this.ygoRaritiesField.TabIndex = 6;
+			this.ygoRaritiesField.Size = new System.Drawing.Size(300, 29);
+			this.ygoRaritiesField.Sorted = true;
+			this.ygoRaritiesField.TabIndex = 39;
 			// 
-			// ygoTreatmentsLabel
+			// ygoRaritiesLabel
 			// 
-			this.ygoTreatmentsLabel.AutoSize = true;
-			this.ygoTreatmentsLabel.Location = new System.Drawing.Point(5, 75);
-			this.ygoTreatmentsLabel.Name = "ygoTreatmentsLabel";
-			this.ygoTreatmentsLabel.Size = new System.Drawing.Size(65, 21);
-			this.ygoTreatmentsLabel.TabIndex = 5;
-			this.ygoTreatmentsLabel.Text = "Rarities:";
+			this.ygoRaritiesLabel.Location = new System.Drawing.Point(5, 75);
+			this.ygoRaritiesLabel.Name = "ygoRaritiesLabel";
+			this.ygoRaritiesLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoRaritiesLabel.TabIndex = 38;
+			this.ygoRaritiesLabel.Text = "Rarities:";
+			this.ygoRaritiesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ygoNumberField
 			// 
-			this.ygoNumberField.Location = new System.Drawing.Point(100, 50);
+			this.ygoNumberField.Location = new System.Drawing.Point(100, 40);
 			this.ygoNumberField.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
 			this.ygoNumberField.Name = "ygoNumberField";
-			this.ygoNumberField.Size = new System.Drawing.Size(170, 29);
-			this.ygoNumberField.TabIndex = 4;
+			this.ygoNumberField.Size = new System.Drawing.Size(370, 29);
+			this.ygoNumberField.TabIndex = 35;
 			// 
 			// ygoNumberLabel
 			// 
-			this.ygoNumberLabel.AutoSize = true;
-			this.ygoNumberLabel.Location = new System.Drawing.Point(5, 50);
+			this.ygoNumberLabel.Location = new System.Drawing.Point(5, 40);
 			this.ygoNumberLabel.Name = "ygoNumberLabel";
-			this.ygoNumberLabel.Size = new System.Drawing.Size(71, 21);
-			this.ygoNumberLabel.TabIndex = 3;
+			this.ygoNumberLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoNumberLabel.TabIndex = 34;
 			this.ygoNumberLabel.Text = "Number:";
+			this.ygoNumberLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ygoSetField
 			// 
 			this.ygoSetField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.ygoSetField.FormattingEnabled = true;
-			this.ygoSetField.Location = new System.Drawing.Point(100, 25);
+			this.ygoSetField.Location = new System.Drawing.Point(100, 5);
 			this.ygoSetField.Name = "ygoSetField";
-			this.ygoSetField.Size = new System.Drawing.Size(170, 29);
-			this.ygoSetField.TabIndex = 2;
+			this.ygoSetField.Size = new System.Drawing.Size(370, 29);
+			this.ygoSetField.Sorted = true;
+			this.ygoSetField.TabIndex = 33;
 			// 
 			// ygoSetLabel
 			// 
-			this.ygoSetLabel.AutoSize = true;
-			this.ygoSetLabel.Location = new System.Drawing.Point(5, 25);
+			this.ygoSetLabel.Location = new System.Drawing.Point(5, 5);
 			this.ygoSetLabel.Name = "ygoSetLabel";
-			this.ygoSetLabel.Size = new System.Drawing.Size(35, 21);
-			this.ygoSetLabel.TabIndex = 1;
+			this.ygoSetLabel.Size = new System.Drawing.Size(90, 30);
+			this.ygoSetLabel.TabIndex = 32;
 			this.ygoSetLabel.Text = "Set:";
+			this.ygoSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// ygoPrintHeader
+			// ygoSetsPage
 			// 
-			this.ygoPrintHeader.AutoSize = true;
-			this.ygoPrintHeader.Location = new System.Drawing.Point(5, 5);
-			this.ygoPrintHeader.Name = "ygoPrintHeader";
-			this.ygoPrintHeader.Size = new System.Drawing.Size(141, 21);
-			this.ygoPrintHeader.TabIndex = 0;
-			this.ygoPrintHeader.Text = "New Printing Entry";
+			this.ygoSetsPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.ygoSetsPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoSetsPage.Controls.Add(this.ygoSetGeneratorPageLabel);
+			this.ygoSetsPage.Controls.Add(this.ygoSetGeneratorNext);
+			this.ygoSetsPage.Controls.Add(this.ygoSetGeneratorPrev);
+			this.ygoSetsPage.Controls.Add(this.ygoSaveSetsButton);
+			this.ygoSetsPage.Controls.Add(this.ygoAddSetButton);
+			this.ygoSetsPage.Controls.Add(this.ygoReloadSetsButton);
+			this.ygoSetsPage.Controls.Add(this.ygoSetGeneratorLayout);
+			this.ygoSetsPage.Controls.Add(this.ygoSetGeneratorLabel);
+			this.ygoSetsPage.Location = new System.Drawing.Point(4, 25);
+			this.ygoSetsPage.Name = "ygoSetsPage";
+			this.ygoSetsPage.Padding = new System.Windows.Forms.Padding(3);
+			this.ygoSetsPage.Size = new System.Drawing.Size(1262, 634);
+			this.ygoSetsPage.TabIndex = 5;
+			this.ygoSetsPage.Text = "Sets";
+			// 
+			// ygoSetGeneratorPageLabel
+			// 
+			this.ygoSetGeneratorPageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoSetGeneratorPageLabel.Location = new System.Drawing.Point(1125, 5);
+			this.ygoSetGeneratorPageLabel.Name = "ygoSetGeneratorPageLabel";
+			this.ygoSetGeneratorPageLabel.Size = new System.Drawing.Size(60, 30);
+			this.ygoSetGeneratorPageLabel.TabIndex = 9;
+			this.ygoSetGeneratorPageLabel.Text = "X / X";
+			this.ygoSetGeneratorPageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// ygoSetGeneratorNext
+			// 
+			this.ygoSetGeneratorNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoSetGeneratorNext.Location = new System.Drawing.Point(1190, 5);
+			this.ygoSetGeneratorNext.Name = "ygoSetGeneratorNext";
+			this.ygoSetGeneratorNext.Size = new System.Drawing.Size(60, 29);
+			this.ygoSetGeneratorNext.TabIndex = 8;
+			this.ygoSetGeneratorNext.Text = ">";
+			this.ygoSetGeneratorNext.UseVisualStyleBackColor = true;
+			this.ygoSetGeneratorNext.Click += new System.EventHandler(this.YGO_OnClickSetGeneratorNext);
+			// 
+			// ygoSetGeneratorPrev
+			// 
+			this.ygoSetGeneratorPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoSetGeneratorPrev.Location = new System.Drawing.Point(1060, 5);
+			this.ygoSetGeneratorPrev.Name = "ygoSetGeneratorPrev";
+			this.ygoSetGeneratorPrev.Size = new System.Drawing.Size(60, 29);
+			this.ygoSetGeneratorPrev.TabIndex = 7;
+			this.ygoSetGeneratorPrev.Text = "<";
+			this.ygoSetGeneratorPrev.UseVisualStyleBackColor = true;
+			this.ygoSetGeneratorPrev.Click += new System.EventHandler(this.YGO_OnClickSetGeneratorPrev);
+			// 
+			// ygoSaveSetsButton
+			// 
+			this.ygoSaveSetsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoSaveSetsButton.Location = new System.Drawing.Point(995, 5);
+			this.ygoSaveSetsButton.Name = "ygoSaveSetsButton";
+			this.ygoSaveSetsButton.Size = new System.Drawing.Size(60, 29);
+			this.ygoSaveSetsButton.TabIndex = 6;
+			this.ygoSaveSetsButton.Text = "Save";
+			this.ygoSaveSetsButton.UseVisualStyleBackColor = true;
+			this.ygoSaveSetsButton.Click += new System.EventHandler(this.YGO_OnClickSaveSets);
+			// 
+			// ygoAddSetButton
+			// 
+			this.ygoAddSetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoAddSetButton.Location = new System.Drawing.Point(960, 5);
+			this.ygoAddSetButton.Name = "ygoAddSetButton";
+			this.ygoAddSetButton.Size = new System.Drawing.Size(30, 29);
+			this.ygoAddSetButton.TabIndex = 5;
+			this.ygoAddSetButton.Text = "+";
+			this.ygoAddSetButton.UseVisualStyleBackColor = true;
+			this.ygoAddSetButton.Click += new System.EventHandler(this.YGO_OnClickAddSet);
+			// 
+			// ygoReloadSetsButton
+			// 
+			this.ygoReloadSetsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoReloadSetsButton.Location = new System.Drawing.Point(880, 5);
+			this.ygoReloadSetsButton.Name = "ygoReloadSetsButton";
+			this.ygoReloadSetsButton.Size = new System.Drawing.Size(75, 29);
+			this.ygoReloadSetsButton.TabIndex = 4;
+			this.ygoReloadSetsButton.Text = "Reload";
+			this.ygoReloadSetsButton.UseVisualStyleBackColor = true;
+			this.ygoReloadSetsButton.Click += new System.EventHandler(this.YGO_RegenerateSets);
+			// 
+			// ygoSetGeneratorLayout
+			// 
+			this.ygoSetGeneratorLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.ygoSetGeneratorLayout.AutoScroll = true;
+			this.ygoSetGeneratorLayout.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoSetGeneratorLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.ygoSetGeneratorLayout.Location = new System.Drawing.Point(3, 38);
+			this.ygoSetGeneratorLayout.Name = "ygoSetGeneratorLayout";
+			this.ygoSetGeneratorLayout.Size = new System.Drawing.Size(1252, 588);
+			this.ygoSetGeneratorLayout.TabIndex = 2;
+			// 
+			// ygoSetGeneratorLabel
+			// 
+			this.ygoSetGeneratorLabel.AutoSize = true;
+			this.ygoSetGeneratorLabel.Location = new System.Drawing.Point(5, 8);
+			this.ygoSetGeneratorLabel.Name = "ygoSetGeneratorLabel";
+			this.ygoSetGeneratorLabel.Size = new System.Drawing.Size(69, 21);
+			this.ygoSetGeneratorLabel.TabIndex = 1;
+			this.ygoSetGeneratorLabel.Text = "Edit Sets";
+			this.ygoSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// imageFileDialog
 			// 
@@ -969,6 +1789,7 @@ namespace CollectionTracker {
 			this.formTabControl.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
 			this.formTabControl.Controls.Add(this.mtgPage);
 			this.formTabControl.Controls.Add(this.ygoPage);
+			this.formTabControl.Controls.Add(this.pkmnPage);
 			this.formTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.formTabControl.Location = new System.Drawing.Point(0, 0);
 			this.formTabControl.Name = "formTabControl";
@@ -1012,14 +1833,14 @@ namespace CollectionTracker {
 			this.mtgSetPage.Controls.Add(this.mtgPrevSetButton);
 			this.mtgSetPage.Controls.Add(this.mtgSetPageLabel);
 			this.mtgSetPage.Controls.Add(this.mtgNextSetButton);
-			this.mtgSetPage.Controls.Add(this.label1);
+			this.mtgSetPage.Controls.Add(this.mtgSetlistLabel);
 			this.mtgSetPage.Controls.Add(this.mtgSetLayout);
 			this.mtgSetPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgSetPage.Name = "mtgSetPage";
 			this.mtgSetPage.Padding = new System.Windows.Forms.Padding(3);
 			this.mtgSetPage.Size = new System.Drawing.Size(1262, 618);
 			this.mtgSetPage.TabIndex = 3;
-			this.mtgSetPage.Text = "Sets";
+			this.mtgSetPage.Text = "Set List";
 			// 
 			// mtgPrevSetButton
 			// 
@@ -1053,15 +1874,15 @@ namespace CollectionTracker {
 			this.mtgNextSetButton.UseVisualStyleBackColor = true;
 			this.mtgNextSetButton.Click += new System.EventHandler(this.MTG_OnClickNextSet);
 			// 
-			// label1
+			// mtgSetlistLabel
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(5, 8);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(60, 21);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "Set List";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.mtgSetlistLabel.AutoSize = true;
+			this.mtgSetlistLabel.Location = new System.Drawing.Point(5, 8);
+			this.mtgSetlistLabel.Name = "mtgSetlistLabel";
+			this.mtgSetlistLabel.Size = new System.Drawing.Size(60, 21);
+			this.mtgSetlistLabel.TabIndex = 1;
+			this.mtgSetlistLabel.Text = "Set List";
+			this.mtgSetlistLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgSetLayout
 			// 
@@ -1082,6 +1903,10 @@ namespace CollectionTracker {
 			// 
 			this.mtgSearchPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgSearchPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgSearchPage.Controls.Add(this.mtgSearchSetField);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchSetLabel);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchLocationField);
+			this.mtgSearchPage.Controls.Add(this.mtgSearchLocationLabel);
 			this.mtgSearchPage.Controls.Add(this.mtgSearchButton);
 			this.mtgSearchPage.Controls.Add(this.mtgSearchOracleField);
 			this.mtgSearchPage.Controls.Add(this.mtgSearchTypeField);
@@ -1118,9 +1943,50 @@ namespace CollectionTracker {
 			this.mtgSearchPage.TabIndex = 7;
 			this.mtgSearchPage.Text = "Search";
 			// 
+			// mtgSearchSetField
+			// 
+			this.mtgSearchSetField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.mtgSearchSetField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.mtgSearchSetField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.mtgSearchSetField.FormattingEnabled = true;
+			this.mtgSearchSetField.Location = new System.Drawing.Point(100, 180);
+			this.mtgSearchSetField.Name = "mtgSearchSetField";
+			this.mtgSearchSetField.Size = new System.Drawing.Size(370, 29);
+			this.mtgSearchSetField.Sorted = true;
+			this.mtgSearchSetField.TabIndex = 77;
+			// 
+			// mtgSearchSetLabel
+			// 
+			this.mtgSearchSetLabel.Location = new System.Drawing.Point(5, 180);
+			this.mtgSearchSetLabel.Name = "mtgSearchSetLabel";
+			this.mtgSearchSetLabel.Size = new System.Drawing.Size(90, 30);
+			this.mtgSearchSetLabel.TabIndex = 76;
+			this.mtgSearchSetLabel.Text = "Set:";
+			this.mtgSearchSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// mtgSearchLocationField
+			// 
+			this.mtgSearchLocationField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.mtgSearchLocationField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.mtgSearchLocationField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.mtgSearchLocationField.FormattingEnabled = true;
+			this.mtgSearchLocationField.Location = new System.Drawing.Point(100, 215);
+			this.mtgSearchLocationField.Name = "mtgSearchLocationField";
+			this.mtgSearchLocationField.Size = new System.Drawing.Size(370, 29);
+			this.mtgSearchLocationField.TabIndex = 75;
+			// 
+			// mtgSearchLocationLabel
+			// 
+			this.mtgSearchLocationLabel.Location = new System.Drawing.Point(5, 215);
+			this.mtgSearchLocationLabel.Name = "mtgSearchLocationLabel";
+			this.mtgSearchLocationLabel.Size = new System.Drawing.Size(90, 30);
+			this.mtgSearchLocationLabel.TabIndex = 74;
+			this.mtgSearchLocationLabel.Text = "Location:";
+			this.mtgSearchLocationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// mtgSearchButton
 			// 
-			this.mtgSearchButton.Location = new System.Drawing.Point(100, 180);
+			this.mtgSearchButton.Location = new System.Drawing.Point(100, 250);
 			this.mtgSearchButton.Name = "mtgSearchButton";
 			this.mtgSearchButton.Size = new System.Drawing.Size(120, 30);
 			this.mtgSearchButton.TabIndex = 73;
@@ -1368,6 +2234,8 @@ namespace CollectionTracker {
 			// 
 			this.mtgCatalogPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgCatalogPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgCatalogPage.Controls.Add(this.mtgSortAlphabeticalButton);
+			this.mtgCatalogPage.Controls.Add(this.mtgSortNumericButton);
 			this.mtgCatalogPage.Controls.Add(this.mtgCatalogNextButton);
 			this.mtgCatalogPage.Controls.Add(this.mtgCatalogPrevButton);
 			this.mtgCatalogPage.Controls.Add(this.mtgCatalogLayout);
@@ -1378,6 +2246,32 @@ namespace CollectionTracker {
 			this.mtgCatalogPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgCatalogPage.TabIndex = 2;
 			this.mtgCatalogPage.Text = "Catalog";
+			// 
+			// mtgSortAlphabeticalButton
+			// 
+			this.mtgSortAlphabeticalButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgSortAlphabeticalButton.AutoSize = true;
+			this.mtgSortAlphabeticalButton.Location = new System.Drawing.Point(929, 8);
+			this.mtgSortAlphabeticalButton.Name = "mtgSortAlphabeticalButton";
+			this.mtgSortAlphabeticalButton.Size = new System.Drawing.Size(113, 25);
+			this.mtgSortAlphabeticalButton.TabIndex = 5;
+			this.mtgSortAlphabeticalButton.Text = "Alphabetical";
+			this.mtgSortAlphabeticalButton.UseVisualStyleBackColor = true;
+			this.mtgSortAlphabeticalButton.CheckedChanged += new System.EventHandler(this.MTG_OnClickSortAlphabetical);
+			// 
+			// mtgSortNumericButton
+			// 
+			this.mtgSortNumericButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.mtgSortNumericButton.AutoSize = true;
+			this.mtgSortNumericButton.Checked = true;
+			this.mtgSortNumericButton.Location = new System.Drawing.Point(835, 7);
+			this.mtgSortNumericButton.Name = "mtgSortNumericButton";
+			this.mtgSortNumericButton.Size = new System.Drawing.Size(88, 25);
+			this.mtgSortNumericButton.TabIndex = 4;
+			this.mtgSortNumericButton.TabStop = true;
+			this.mtgSortNumericButton.Text = "Numeric";
+			this.mtgSortNumericButton.UseVisualStyleBackColor = true;
+			this.mtgSortNumericButton.CheckedChanged += new System.EventHandler(this.MTG_OnClickSortNumeric);
 			// 
 			// mtgCatalogNextButton
 			// 
@@ -1426,6 +2320,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgDetailPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgDetailPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgDetailPage.Controls.Add(this.mtgPrintingsBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailDialog);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailAutogenButton);
 			this.mtgDetailPage.Controls.Add(this.mtgDeletePrintingButton);
@@ -1435,11 +2330,31 @@ namespace CollectionTracker {
 			this.mtgDetailPage.Controls.Add(this.mtgTooltipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailImgbox);
-			this.mtgDetailPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgDetailPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgDetailPage.Name = "mtgDetailPage";
-			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 618);
+			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgDetailPage.TabIndex = 4;
 			this.mtgDetailPage.Text = "Card Details";
+			// 
+			// mtgPrintingsBox
+			// 
+			this.mtgPrintingsBox.Location = new System.Drawing.Point(865, 5);
+			this.mtgPrintingsBox.Name = "mtgPrintingsBox";
+			this.mtgPrintingsBox.Size = new System.Drawing.Size(380, 100);
+			this.mtgPrintingsBox.TabIndex = 6;
+			this.mtgPrintingsBox.TabStop = false;
+			// 
+			// mtgDetailDialog
+			// 
+			this.mtgDetailDialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.mtgDetailDialog.AutoSize = true;
+			this.mtgDetailDialog.Location = new System.Drawing.Point(261, 590);
+			this.mtgDetailDialog.MinimumSize = new System.Drawing.Size(0, 29);
+			this.mtgDetailDialog.Name = "mtgDetailDialog";
+			this.mtgDetailDialog.Size = new System.Drawing.Size(16, 29);
+			this.mtgDetailDialog.TabIndex = 27;
+			this.mtgDetailDialog.Text = "-";
+			this.mtgDetailDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// mtgDetailAutogenButton
 			// 
@@ -1454,7 +2369,7 @@ namespace CollectionTracker {
 			// mtgDeletePrintingButton
 			// 
 			this.mtgDeletePrintingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mtgDeletePrintingButton.Location = new System.Drawing.Point(5, 582);
+			this.mtgDeletePrintingButton.Location = new System.Drawing.Point(5, 590);
 			this.mtgDeletePrintingButton.Name = "mtgDeletePrintingButton";
 			this.mtgDeletePrintingButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgDeletePrintingButton.TabIndex = 25;
@@ -1470,7 +2385,7 @@ namespace CollectionTracker {
 			this.mtgDetailNextButton.TabIndex = 10;
 			this.mtgDetailNextButton.Text = "Next Card";
 			this.mtgDetailNextButton.UseVisualStyleBackColor = true;
-			this.mtgDetailNextButton.Click += new System.EventHandler(this.MTG_LoadNextInSet);
+			this.mtgDetailNextButton.Click += new System.EventHandler(this.MTG_LoadNextInSelection);
 			// 
 			// mtgDetailPrevButton
 			// 
@@ -1480,12 +2395,12 @@ namespace CollectionTracker {
 			this.mtgDetailPrevButton.TabIndex = 9;
 			this.mtgDetailPrevButton.Text = "Previous Card";
 			this.mtgDetailPrevButton.UseVisualStyleBackColor = true;
-			this.mtgDetailPrevButton.Click += new System.EventHandler(this.MTG_LoadPreviousInSet);
+			this.mtgDetailPrevButton.Click += new System.EventHandler(this.MTG_LoadPreviousInSelection);
 			// 
 			// mtgCardtipBox
 			// 
 			this.mtgCardtipBox.Controls.Add(this.mtgCardtipImage);
-			this.mtgCardtipBox.Location = new System.Drawing.Point(865, 110);
+			this.mtgCardtipBox.Location = new System.Drawing.Point(865, 215);
 			this.mtgCardtipBox.Name = "mtgCardtipBox";
 			this.mtgCardtipBox.Size = new System.Drawing.Size(250, 350);
 			this.mtgCardtipBox.TabIndex = 6;
@@ -1502,7 +2417,7 @@ namespace CollectionTracker {
 			// 
 			// mtgTooltipBox
 			// 
-			this.mtgTooltipBox.Location = new System.Drawing.Point(865, 5);
+			this.mtgTooltipBox.Location = new System.Drawing.Point(865, 110);
 			this.mtgTooltipBox.Name = "mtgTooltipBox";
 			this.mtgTooltipBox.Size = new System.Drawing.Size(300, 100);
 			this.mtgTooltipBox.TabIndex = 5;
@@ -1644,10 +2559,10 @@ namespace CollectionTracker {
 			this.mtgCardPage.Controls.Add(this.mtgOracleTextField);
 			this.mtgCardPage.Controls.Add(this.mtgColourLabel);
 			this.mtgCardPage.Controls.Add(this.mtgCardTypeLabel);
-			this.mtgCardPage.Location = new System.Drawing.Point(4, 33);
+			this.mtgCardPage.Location = new System.Drawing.Point(4, 25);
 			this.mtgCardPage.Name = "mtgCardPage";
 			this.mtgCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgCardPage.Size = new System.Drawing.Size(1262, 618);
+			this.mtgCardPage.Size = new System.Drawing.Size(1262, 626);
 			this.mtgCardPage.TabIndex = 0;
 			this.mtgCardPage.Text = "Card Entry";
 			// 
@@ -1992,6 +2907,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgPrintPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgPrintPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgPrintPage.Controls.Add(this.mtgPrintTokenCheck);
 			this.mtgPrintPage.Controls.Add(this.mtgPrintAutoLimit);
 			this.mtgPrintPage.Controls.Add(this.mtgPrintAutofillRangeButton);
 			this.mtgPrintPage.Controls.Add(this.mtgPrintAutofillButton);
@@ -2031,6 +2947,15 @@ namespace CollectionTracker {
 			this.mtgPrintPage.TabIndex = 1;
 			this.mtgPrintPage.Text = "Printing Entry";
 			// 
+			// mtgPrintTokenCheck
+			// 
+			this.mtgPrintTokenCheck.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.mtgPrintTokenCheck.Location = new System.Drawing.Point(440, 335);
+			this.mtgPrintTokenCheck.Name = "mtgPrintTokenCheck";
+			this.mtgPrintTokenCheck.Size = new System.Drawing.Size(29, 29);
+			this.mtgPrintTokenCheck.TabIndex = 32;
+			this.mtgPrintTokenCheck.UseVisualStyleBackColor = true;
+			// 
 			// mtgPrintAutoLimit
 			// 
 			this.mtgPrintAutoLimit.Location = new System.Drawing.Point(220, 510);
@@ -2055,7 +2980,7 @@ namespace CollectionTracker {
 			// 
 			// mtgPrintAutofillButton
 			// 
-			this.mtgPrintAutofillButton.Location = new System.Drawing.Point(355, 335);
+			this.mtgPrintAutofillButton.Location = new System.Drawing.Point(320, 335);
 			this.mtgPrintAutofillButton.Name = "mtgPrintAutofillButton";
 			this.mtgPrintAutofillButton.Size = new System.Drawing.Size(115, 29);
 			this.mtgPrintAutofillButton.TabIndex = 29;
@@ -2246,7 +3171,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgImgsearchButton.Location = new System.Drawing.Point(100, 335);
 			this.mtgImgsearchButton.Name = "mtgImgsearchButton";
-			this.mtgImgsearchButton.Size = new System.Drawing.Size(250, 29);
+			this.mtgImgsearchButton.Size = new System.Drawing.Size(215, 29);
 			this.mtgImgsearchButton.TabIndex = 15;
 			this.mtgImgsearchButton.Text = "Search";
 			this.mtgImgsearchButton.UseVisualStyleBackColor = true;
@@ -2529,17 +3454,1324 @@ namespace CollectionTracker {
 			this.ygoPage.TabIndex = 0;
 			this.ygoPage.Text = "YGO";
 			// 
-			// mtgDetailDialog
+			// pkmnPage
 			// 
-			this.mtgDetailDialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mtgDetailDialog.AutoSize = true;
-			this.mtgDetailDialog.Location = new System.Drawing.Point(260, 582);
-			this.mtgDetailDialog.MinimumSize = new System.Drawing.Size(0, 29);
-			this.mtgDetailDialog.Name = "mtgDetailDialog";
-			this.mtgDetailDialog.Size = new System.Drawing.Size(16, 29);
-			this.mtgDetailDialog.TabIndex = 27;
-			this.mtgDetailDialog.Text = "-";
-			this.mtgDetailDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.pkmnPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.pkmnPage.Controls.Add(this.pkmnTabControl);
+			this.pkmnPage.Location = new System.Drawing.Point(4, 33);
+			this.pkmnPage.Name = "pkmnPage";
+			this.pkmnPage.Padding = new System.Windows.Forms.Padding(3);
+			this.pkmnPage.Size = new System.Drawing.Size(1276, 661);
+			this.pkmnPage.TabIndex = 2;
+			this.pkmnPage.Text = "PKMN";
+			// 
+			// pkmnTabControl
+			// 
+			this.pkmnTabControl.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+			this.pkmnTabControl.Controls.Add(this.pkmnSetlistPage);
+			this.pkmnTabControl.Controls.Add(this.pkmnSearchPage);
+			this.pkmnTabControl.Controls.Add(this.pkmnCatalogPage);
+			this.pkmnTabControl.Controls.Add(this.pkmnDetailPage);
+			this.pkmnTabControl.Controls.Add(this.pkmnCardPage);
+			this.pkmnTabControl.Controls.Add(this.pkmnPrintPage);
+			this.pkmnTabControl.Controls.Add(this.pkmnSymbolPage);
+			this.pkmnTabControl.Controls.Add(this.pkmnSetPage);
+			this.pkmnTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pkmnTabControl.Location = new System.Drawing.Point(3, 3);
+			this.pkmnTabControl.Name = "pkmnTabControl";
+			this.pkmnTabControl.SelectedIndex = 0;
+			this.pkmnTabControl.Size = new System.Drawing.Size(1270, 655);
+			this.pkmnTabControl.TabIndex = 1;
+			// 
+			// pkmnSetlistPage
+			// 
+			this.pkmnSetlistPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.pkmnSetlistPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnSetlistPage.Controls.Add(this.pkmnPrevSetButton);
+			this.pkmnSetlistPage.Controls.Add(this.pkmnSetPageLabel);
+			this.pkmnSetlistPage.Controls.Add(this.pkmnNextSetButton);
+			this.pkmnSetlistPage.Controls.Add(this.pkmnSetlistLabel);
+			this.pkmnSetlistPage.Controls.Add(this.pkmnSetlistLayout);
+			this.pkmnSetlistPage.Location = new System.Drawing.Point(4, 33);
+			this.pkmnSetlistPage.Name = "pkmnSetlistPage";
+			this.pkmnSetlistPage.Padding = new System.Windows.Forms.Padding(3);
+			this.pkmnSetlistPage.Size = new System.Drawing.Size(1262, 618);
+			this.pkmnSetlistPage.TabIndex = 3;
+			this.pkmnSetlistPage.Text = "Set List";
+			// 
+			// pkmnPrevSetButton
+			// 
+			this.pkmnPrevSetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnPrevSetButton.Location = new System.Drawing.Point(1060, 5);
+			this.pkmnPrevSetButton.Name = "pkmnPrevSetButton";
+			this.pkmnPrevSetButton.Size = new System.Drawing.Size(60, 29);
+			this.pkmnPrevSetButton.TabIndex = 7;
+			this.pkmnPrevSetButton.Text = "<";
+			this.pkmnPrevSetButton.UseVisualStyleBackColor = true;
+			this.pkmnPrevSetButton.Click += new System.EventHandler(this.PKMN_OnClickPrevSet);
+			// 
+			// pkmnSetPageLabel
+			// 
+			this.pkmnSetPageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnSetPageLabel.Location = new System.Drawing.Point(1125, 5);
+			this.pkmnSetPageLabel.Name = "pkmnSetPageLabel";
+			this.pkmnSetPageLabel.Size = new System.Drawing.Size(60, 30);
+			this.pkmnSetPageLabel.TabIndex = 6;
+			this.pkmnSetPageLabel.Text = "X / X";
+			this.pkmnSetPageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// pkmnNextSetButton
+			// 
+			this.pkmnNextSetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnNextSetButton.Location = new System.Drawing.Point(1190, 5);
+			this.pkmnNextSetButton.Name = "pkmnNextSetButton";
+			this.pkmnNextSetButton.Size = new System.Drawing.Size(60, 29);
+			this.pkmnNextSetButton.TabIndex = 5;
+			this.pkmnNextSetButton.Text = ">";
+			this.pkmnNextSetButton.UseVisualStyleBackColor = true;
+			this.pkmnNextSetButton.Click += new System.EventHandler(this.PKMN_OnClickNextSet);
+			// 
+			// pkmnSetlistLabel
+			// 
+			this.pkmnSetlistLabel.AutoSize = true;
+			this.pkmnSetlistLabel.Location = new System.Drawing.Point(5, 8);
+			this.pkmnSetlistLabel.Name = "pkmnSetlistLabel";
+			this.pkmnSetlistLabel.Size = new System.Drawing.Size(60, 21);
+			this.pkmnSetlistLabel.TabIndex = 1;
+			this.pkmnSetlistLabel.Text = "Set List";
+			this.pkmnSetlistLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnSetlistLayout
+			// 
+			this.pkmnSetlistLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnSetlistLayout.AutoScroll = true;
+			this.pkmnSetlistLayout.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.pkmnSetlistLayout.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnSetlistLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.pkmnSetlistLayout.Location = new System.Drawing.Point(3, 38);
+			this.pkmnSetlistLayout.Name = "pkmnSetlistLayout";
+			this.pkmnSetlistLayout.Size = new System.Drawing.Size(1252, 572);
+			this.pkmnSetlistLayout.TabIndex = 0;
+			this.pkmnSetlistLayout.WrapContents = false;
+			// 
+			// pkmnSearchPage
+			// 
+			this.pkmnSearchPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.pkmnSearchPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchSetField);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchSetLabel);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchLocationField);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchLocationLabel);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchButton);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchOracleField);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchTypeField);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchNameLabel);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchNameField);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchOracleLabel);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchTypeLabel);
+			this.pkmnSearchPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnSearchPage.Name = "pkmnSearchPage";
+			this.pkmnSearchPage.Padding = new System.Windows.Forms.Padding(3);
+			this.pkmnSearchPage.Size = new System.Drawing.Size(1262, 626);
+			this.pkmnSearchPage.TabIndex = 7;
+			this.pkmnSearchPage.Text = "Search";
+			// 
+			// pkmnSearchSetField
+			// 
+			this.pkmnSearchSetField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.pkmnSearchSetField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.pkmnSearchSetField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.pkmnSearchSetField.FormattingEnabled = true;
+			this.pkmnSearchSetField.Location = new System.Drawing.Point(100, 110);
+			this.pkmnSearchSetField.Name = "pkmnSearchSetField";
+			this.pkmnSearchSetField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnSearchSetField.Sorted = true;
+			this.pkmnSearchSetField.TabIndex = 77;
+			// 
+			// pkmnSearchSetLabel
+			// 
+			this.pkmnSearchSetLabel.Location = new System.Drawing.Point(5, 110);
+			this.pkmnSearchSetLabel.Name = "pkmnSearchSetLabel";
+			this.pkmnSearchSetLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnSearchSetLabel.TabIndex = 76;
+			this.pkmnSearchSetLabel.Text = "Set:";
+			this.pkmnSearchSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnSearchLocationField
+			// 
+			this.pkmnSearchLocationField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.pkmnSearchLocationField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.pkmnSearchLocationField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.pkmnSearchLocationField.FormattingEnabled = true;
+			this.pkmnSearchLocationField.Location = new System.Drawing.Point(100, 145);
+			this.pkmnSearchLocationField.Name = "pkmnSearchLocationField";
+			this.pkmnSearchLocationField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnSearchLocationField.TabIndex = 75;
+			// 
+			// pkmnSearchLocationLabel
+			// 
+			this.pkmnSearchLocationLabel.Location = new System.Drawing.Point(5, 145);
+			this.pkmnSearchLocationLabel.Name = "pkmnSearchLocationLabel";
+			this.pkmnSearchLocationLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnSearchLocationLabel.TabIndex = 74;
+			this.pkmnSearchLocationLabel.Text = "Location:";
+			this.pkmnSearchLocationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnSearchButton
+			// 
+			this.pkmnSearchButton.Location = new System.Drawing.Point(100, 180);
+			this.pkmnSearchButton.Name = "pkmnSearchButton";
+			this.pkmnSearchButton.Size = new System.Drawing.Size(120, 30);
+			this.pkmnSearchButton.TabIndex = 73;
+			this.pkmnSearchButton.Text = "Search";
+			this.pkmnSearchButton.UseVisualStyleBackColor = true;
+			this.pkmnSearchButton.Click += new System.EventHandler(this.PKMN_Search);
+			// 
+			// pkmnSearchOracleField
+			// 
+			this.pkmnSearchOracleField.Location = new System.Drawing.Point(100, 75);
+			this.pkmnSearchOracleField.Name = "pkmnSearchOracleField";
+			this.pkmnSearchOracleField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnSearchOracleField.TabIndex = 72;
+			// 
+			// pkmnSearchTypeField
+			// 
+			this.pkmnSearchTypeField.Location = new System.Drawing.Point(100, 40);
+			this.pkmnSearchTypeField.Name = "pkmnSearchTypeField";
+			this.pkmnSearchTypeField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnSearchTypeField.TabIndex = 59;
+			// 
+			// pkmnSearchNameLabel
+			// 
+			this.pkmnSearchNameLabel.Location = new System.Drawing.Point(5, 5);
+			this.pkmnSearchNameLabel.Name = "pkmnSearchNameLabel";
+			this.pkmnSearchNameLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnSearchNameLabel.TabIndex = 44;
+			this.pkmnSearchNameLabel.Text = "Name:";
+			this.pkmnSearchNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnSearchNameField
+			// 
+			this.pkmnSearchNameField.Location = new System.Drawing.Point(100, 5);
+			this.pkmnSearchNameField.Name = "pkmnSearchNameField";
+			this.pkmnSearchNameField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnSearchNameField.TabIndex = 45;
+			// 
+			// pkmnSearchOracleLabel
+			// 
+			this.pkmnSearchOracleLabel.Location = new System.Drawing.Point(5, 75);
+			this.pkmnSearchOracleLabel.Name = "pkmnSearchOracleLabel";
+			this.pkmnSearchOracleLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnSearchOracleLabel.TabIndex = 60;
+			this.pkmnSearchOracleLabel.Text = "Oracle Text:";
+			this.pkmnSearchOracleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnSearchTypeLabel
+			// 
+			this.pkmnSearchTypeLabel.Location = new System.Drawing.Point(5, 40);
+			this.pkmnSearchTypeLabel.Name = "pkmnSearchTypeLabel";
+			this.pkmnSearchTypeLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnSearchTypeLabel.TabIndex = 58;
+			this.pkmnSearchTypeLabel.Text = "Card Types:";
+			this.pkmnSearchTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnCatalogPage
+			// 
+			this.pkmnCatalogPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.pkmnCatalogPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnCatalogPage.Controls.Add(this.pkmnSortAlphabeticalButton);
+			this.pkmnCatalogPage.Controls.Add(this.pkmnSortNumericButton);
+			this.pkmnCatalogPage.Controls.Add(this.pkmnCatalogNextButton);
+			this.pkmnCatalogPage.Controls.Add(this.pkmnCatalogPrevButton);
+			this.pkmnCatalogPage.Controls.Add(this.pkmnCatalogLayout);
+			this.pkmnCatalogPage.Controls.Add(this.pkmnCatalogIndex);
+			this.pkmnCatalogPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnCatalogPage.Name = "pkmnCatalogPage";
+			this.pkmnCatalogPage.Padding = new System.Windows.Forms.Padding(3);
+			this.pkmnCatalogPage.Size = new System.Drawing.Size(1262, 626);
+			this.pkmnCatalogPage.TabIndex = 2;
+			this.pkmnCatalogPage.Text = "Catalog";
+			// 
+			// pkmnSortAlphabeticalButton
+			// 
+			this.pkmnSortAlphabeticalButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnSortAlphabeticalButton.AutoSize = true;
+			this.pkmnSortAlphabeticalButton.Location = new System.Drawing.Point(929, 8);
+			this.pkmnSortAlphabeticalButton.Name = "pkmnSortAlphabeticalButton";
+			this.pkmnSortAlphabeticalButton.Size = new System.Drawing.Size(113, 25);
+			this.pkmnSortAlphabeticalButton.TabIndex = 5;
+			this.pkmnSortAlphabeticalButton.Text = "Alphabetical";
+			this.pkmnSortAlphabeticalButton.UseVisualStyleBackColor = true;
+			this.pkmnSortAlphabeticalButton.CheckedChanged += new System.EventHandler(this.PKMN_OnClickSortAlphabetical);
+			// 
+			// pkmnSortNumericButton
+			// 
+			this.pkmnSortNumericButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnSortNumericButton.AutoSize = true;
+			this.pkmnSortNumericButton.Checked = true;
+			this.pkmnSortNumericButton.Location = new System.Drawing.Point(835, 7);
+			this.pkmnSortNumericButton.Name = "pkmnSortNumericButton";
+			this.pkmnSortNumericButton.Size = new System.Drawing.Size(88, 25);
+			this.pkmnSortNumericButton.TabIndex = 4;
+			this.pkmnSortNumericButton.TabStop = true;
+			this.pkmnSortNumericButton.Text = "Numeric";
+			this.pkmnSortNumericButton.UseVisualStyleBackColor = true;
+			this.pkmnSortNumericButton.CheckedChanged += new System.EventHandler(this.PKMN_OnClickSortAlphabetical);
+			// 
+			// pkmnCatalogNextButton
+			// 
+			this.pkmnCatalogNextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnCatalogNextButton.Location = new System.Drawing.Point(1178, 5);
+			this.pkmnCatalogNextButton.Name = "pkmnCatalogNextButton";
+			this.pkmnCatalogNextButton.Size = new System.Drawing.Size(75, 29);
+			this.pkmnCatalogNextButton.TabIndex = 2;
+			this.pkmnCatalogNextButton.Text = ">";
+			this.pkmnCatalogNextButton.UseVisualStyleBackColor = true;
+			this.pkmnCatalogNextButton.Click += new System.EventHandler(this.PKMN_OnClickCatalogNext);
+			// 
+			// pkmnCatalogPrevButton
+			// 
+			this.pkmnCatalogPrevButton.Location = new System.Drawing.Point(5, 5);
+			this.pkmnCatalogPrevButton.Name = "pkmnCatalogPrevButton";
+			this.pkmnCatalogPrevButton.Size = new System.Drawing.Size(75, 29);
+			this.pkmnCatalogPrevButton.TabIndex = 1;
+			this.pkmnCatalogPrevButton.Text = "<";
+			this.pkmnCatalogPrevButton.UseVisualStyleBackColor = true;
+			this.pkmnCatalogPrevButton.Click += new System.EventHandler(this.PKMN_OnClickCatalogPrev);
+			// 
+			// pkmnCatalogLayout
+			// 
+			this.pkmnCatalogLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnCatalogLayout.AutoScroll = true;
+			this.pkmnCatalogLayout.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnCatalogLayout.Location = new System.Drawing.Point(3, 38);
+			this.pkmnCatalogLayout.Name = "pkmnCatalogLayout";
+			this.pkmnCatalogLayout.Size = new System.Drawing.Size(1252, 580);
+			this.pkmnCatalogLayout.TabIndex = 0;
+			// 
+			// pkmnCatalogIndex
+			// 
+			this.pkmnCatalogIndex.Dock = System.Windows.Forms.DockStyle.Top;
+			this.pkmnCatalogIndex.Location = new System.Drawing.Point(3, 3);
+			this.pkmnCatalogIndex.Name = "pkmnCatalogIndex";
+			this.pkmnCatalogIndex.Size = new System.Drawing.Size(1252, 30);
+			this.pkmnCatalogIndex.TabIndex = 3;
+			this.pkmnCatalogIndex.Text = "Showing 0 - 0 of 0";
+			this.pkmnCatalogIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// pkmnDetailPage
+			// 
+			this.pkmnDetailPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.pkmnDetailPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnDetailPage.Controls.Add(this.pkmnPrintingsBox);
+			this.pkmnDetailPage.Controls.Add(this.pkmnDetailDialog);
+			this.pkmnDetailPage.Controls.Add(this.pkmnDetailAutogenButton);
+			this.pkmnDetailPage.Controls.Add(this.pkmnDeletePrintingButton);
+			this.pkmnDetailPage.Controls.Add(this.pkmnDetailNextButton);
+			this.pkmnDetailPage.Controls.Add(this.pkmnDetailPrevButton);
+			this.pkmnDetailPage.Controls.Add(this.pkmnCardtipBox);
+			this.pkmnDetailPage.Controls.Add(this.pkmnTooltipBox);
+			this.pkmnDetailPage.Controls.Add(this.pkmnDetailBox);
+			this.pkmnDetailPage.Controls.Add(this.pkmnDetailImgbox);
+			this.pkmnDetailPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnDetailPage.Name = "pkmnDetailPage";
+			this.pkmnDetailPage.Size = new System.Drawing.Size(1262, 626);
+			this.pkmnDetailPage.TabIndex = 4;
+			this.pkmnDetailPage.Text = "Card Details";
+			// 
+			// pkmnPrintingsBox
+			// 
+			this.pkmnPrintingsBox.Location = new System.Drawing.Point(865, 5);
+			this.pkmnPrintingsBox.Name = "pkmnPrintingsBox";
+			this.pkmnPrintingsBox.Size = new System.Drawing.Size(380, 100);
+			this.pkmnPrintingsBox.TabIndex = 6;
+			this.pkmnPrintingsBox.TabStop = false;
+			// 
+			// pkmnDetailDialog
+			// 
+			this.pkmnDetailDialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.pkmnDetailDialog.AutoSize = true;
+			this.pkmnDetailDialog.Location = new System.Drawing.Point(261, 590);
+			this.pkmnDetailDialog.MinimumSize = new System.Drawing.Size(0, 29);
+			this.pkmnDetailDialog.Name = "pkmnDetailDialog";
+			this.pkmnDetailDialog.Size = new System.Drawing.Size(16, 29);
+			this.pkmnDetailDialog.TabIndex = 27;
+			this.pkmnDetailDialog.Text = "-";
+			this.pkmnDetailDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnDetailAutogenButton
+			// 
+			this.pkmnDetailAutogenButton.Location = new System.Drawing.Point(130, 550);
+			this.pkmnDetailAutogenButton.Name = "pkmnDetailAutogenButton";
+			this.pkmnDetailAutogenButton.Size = new System.Drawing.Size(150, 29);
+			this.pkmnDetailAutogenButton.TabIndex = 26;
+			this.pkmnDetailAutogenButton.Text = "Autogen";
+			this.pkmnDetailAutogenButton.UseVisualStyleBackColor = true;
+			this.pkmnDetailAutogenButton.Click += new System.EventHandler(this.PKMN_AutogenDetailRef);
+			// 
+			// pkmnDeletePrintingButton
+			// 
+			this.pkmnDeletePrintingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.pkmnDeletePrintingButton.Location = new System.Drawing.Point(5, 590);
+			this.pkmnDeletePrintingButton.Name = "pkmnDeletePrintingButton";
+			this.pkmnDeletePrintingButton.Size = new System.Drawing.Size(250, 29);
+			this.pkmnDeletePrintingButton.TabIndex = 25;
+			this.pkmnDeletePrintingButton.Text = "Delete Printing!";
+			this.pkmnDeletePrintingButton.UseVisualStyleBackColor = true;
+			this.pkmnDeletePrintingButton.Click += new System.EventHandler(this.PKMN_DeleteCurrentPrinting);
+			// 
+			// pkmnDetailNextButton
+			// 
+			this.pkmnDetailNextButton.Location = new System.Drawing.Point(285, 550);
+			this.pkmnDetailNextButton.Name = "pkmnDetailNextButton";
+			this.pkmnDetailNextButton.Size = new System.Drawing.Size(120, 29);
+			this.pkmnDetailNextButton.TabIndex = 10;
+			this.pkmnDetailNextButton.Text = "Next Card";
+			this.pkmnDetailNextButton.UseVisualStyleBackColor = true;
+			this.pkmnDetailNextButton.Click += new System.EventHandler(this.PKMN_LoadNextInSelection);
+			// 
+			// pkmnDetailPrevButton
+			// 
+			this.pkmnDetailPrevButton.Location = new System.Drawing.Point(5, 550);
+			this.pkmnDetailPrevButton.Name = "pkmnDetailPrevButton";
+			this.pkmnDetailPrevButton.Size = new System.Drawing.Size(120, 29);
+			this.pkmnDetailPrevButton.TabIndex = 9;
+			this.pkmnDetailPrevButton.Text = "Previous Card";
+			this.pkmnDetailPrevButton.UseVisualStyleBackColor = true;
+			this.pkmnDetailPrevButton.Click += new System.EventHandler(this.PKMN_LoadPreviousInSelection);
+			// 
+			// pkmnCardtipBox
+			// 
+			this.pkmnCardtipBox.Controls.Add(this.pkmnCardtipImage);
+			this.pkmnCardtipBox.Location = new System.Drawing.Point(865, 215);
+			this.pkmnCardtipBox.Name = "pkmnCardtipBox";
+			this.pkmnCardtipBox.Size = new System.Drawing.Size(250, 350);
+			this.pkmnCardtipBox.TabIndex = 6;
+			this.pkmnCardtipBox.TabStop = false;
+			// 
+			// pkmnCardtipImage
+			// 
+			this.pkmnCardtipImage.Location = new System.Drawing.Point(0, 0);
+			this.pkmnCardtipImage.Name = "pkmnCardtipImage";
+			this.pkmnCardtipImage.Size = new System.Drawing.Size(250, 350);
+			this.pkmnCardtipImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pkmnCardtipImage.TabIndex = 0;
+			this.pkmnCardtipImage.TabStop = false;
+			// 
+			// pkmnTooltipBox
+			// 
+			this.pkmnTooltipBox.Location = new System.Drawing.Point(865, 110);
+			this.pkmnTooltipBox.Name = "pkmnTooltipBox";
+			this.pkmnTooltipBox.Size = new System.Drawing.Size(300, 100);
+			this.pkmnTooltipBox.TabIndex = 5;
+			this.pkmnTooltipBox.TabStop = false;
+			// 
+			// pkmnDetailBox
+			// 
+			this.pkmnDetailBox.Controls.Add(this.pkmnReloadLocationsButton);
+			this.pkmnDetailBox.Controls.Add(this.pkmnEditPrintButton);
+			this.pkmnDetailBox.Controls.Add(this.pkmnEditCardButton);
+			this.pkmnDetailBox.Controls.Add(this.pkmnMoveLabel);
+			this.pkmnDetailBox.Controls.Add(this.pkmnLocationTable);
+			this.pkmnDetailBox.Controls.Add(this.pkmnMoveField);
+			this.pkmnDetailBox.Location = new System.Drawing.Point(410, 5);
+			this.pkmnDetailBox.Name = "pkmnDetailBox";
+			this.pkmnDetailBox.Size = new System.Drawing.Size(450, 540);
+			this.pkmnDetailBox.TabIndex = 4;
+			this.pkmnDetailBox.TabStop = false;
+			this.pkmnDetailBox.Text = "Owned Printings";
+			// 
+			// pkmnReloadLocationsButton
+			// 
+			this.pkmnReloadLocationsButton.Location = new System.Drawing.Point(295, 25);
+			this.pkmnReloadLocationsButton.Name = "pkmnReloadLocationsButton";
+			this.pkmnReloadLocationsButton.Size = new System.Drawing.Size(150, 29);
+			this.pkmnReloadLocationsButton.TabIndex = 8;
+			this.pkmnReloadLocationsButton.Text = "Reload Locations";
+			this.pkmnReloadLocationsButton.UseVisualStyleBackColor = true;
+			this.pkmnReloadLocationsButton.Click += new System.EventHandler(this.PKMN_OnClickReloadLocations);
+			// 
+			// pkmnEditPrintButton
+			// 
+			this.pkmnEditPrintButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnEditPrintButton.Location = new System.Drawing.Point(300, 505);
+			this.pkmnEditPrintButton.Name = "pkmnEditPrintButton";
+			this.pkmnEditPrintButton.Size = new System.Drawing.Size(145, 29);
+			this.pkmnEditPrintButton.TabIndex = 5;
+			this.pkmnEditPrintButton.Text = "Edit Printing Data";
+			this.pkmnEditPrintButton.UseVisualStyleBackColor = true;
+			this.pkmnEditPrintButton.Click += new System.EventHandler(this.PKMN_EditPrint);
+			// 
+			// pkmnEditCardButton
+			// 
+			this.pkmnEditCardButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnEditCardButton.Location = new System.Drawing.Point(150, 505);
+			this.pkmnEditCardButton.Name = "pkmnEditCardButton";
+			this.pkmnEditCardButton.Size = new System.Drawing.Size(145, 29);
+			this.pkmnEditCardButton.TabIndex = 4;
+			this.pkmnEditCardButton.Text = "Edit Card Data";
+			this.pkmnEditCardButton.UseVisualStyleBackColor = true;
+			this.pkmnEditCardButton.Click += new System.EventHandler(this.PKMN_EditCard);
+			// 
+			// pkmnMoveLabel
+			// 
+			this.pkmnMoveLabel.Location = new System.Drawing.Point(5, 25);
+			this.pkmnMoveLabel.Name = "pkmnMoveLabel";
+			this.pkmnMoveLabel.Size = new System.Drawing.Size(70, 30);
+			this.pkmnMoveLabel.TabIndex = 3;
+			this.pkmnMoveLabel.Text = "Move to:";
+			this.pkmnMoveLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnLocationTable
+			// 
+			this.pkmnLocationTable.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Outset;
+			this.pkmnLocationTable.ColumnCount = 4;
+			this.pkmnLocationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.pkmnLocationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.pkmnLocationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.pkmnLocationTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.pkmnLocationTable.Location = new System.Drawing.Point(9, 60);
+			this.pkmnLocationTable.Name = "pkmnLocationTable";
+			this.pkmnLocationTable.RowCount = 1;
+			this.pkmnLocationTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.pkmnLocationTable.Size = new System.Drawing.Size(435, 30);
+			this.pkmnLocationTable.TabIndex = 1;
+			// 
+			// pkmnMoveField
+			// 
+			this.pkmnMoveField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.pkmnMoveField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.pkmnMoveField.FormattingEnabled = true;
+			this.pkmnMoveField.Location = new System.Drawing.Point(75, 25);
+			this.pkmnMoveField.Name = "pkmnMoveField";
+			this.pkmnMoveField.Size = new System.Drawing.Size(215, 29);
+			this.pkmnMoveField.TabIndex = 2;
+			// 
+			// pkmnDetailImgbox
+			// 
+			this.pkmnDetailImgbox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnDetailImgbox.Location = new System.Drawing.Point(5, 5);
+			this.pkmnDetailImgbox.Name = "pkmnDetailImgbox";
+			this.pkmnDetailImgbox.Size = new System.Drawing.Size(400, 540);
+			this.pkmnDetailImgbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pkmnDetailImgbox.TabIndex = 0;
+			this.pkmnDetailImgbox.TabStop = false;
+			// 
+			// pkmnCardPage
+			// 
+			this.pkmnCardPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.pkmnCardPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnCardPage.Controls.Add(this.pkmnTrainerButton);
+			this.pkmnCardPage.Controls.Add(this.pkmnImportButton);
+			this.pkmnCardPage.Controls.Add(this.pkmnImportField);
+			this.pkmnCardPage.Controls.Add(this.pkmnRetreatField);
+			this.pkmnCardPage.Controls.Add(this.pkmnResistField);
+			this.pkmnCardPage.Controls.Add(this.pkmnWeakField);
+			this.pkmnCardPage.Controls.Add(this.pkmnRetreatLabel);
+			this.pkmnCardPage.Controls.Add(this.pkmnWeakLabel);
+			this.pkmnCardPage.Controls.Add(this.pkmnStageLabel);
+			this.pkmnCardPage.Controls.Add(this.pkmnStageField);
+			this.pkmnCardPage.Controls.Add(this.pkmnIgnorDuplicateEntryLabel);
+			this.pkmnCardPage.Controls.Add(this.pkmnIgnorDuplicateEntryBox);
+			this.pkmnCardPage.Controls.Add(this.pkmnTypeField);
+			this.pkmnCardPage.Controls.Add(this.pkmnResistLabel);
+			this.pkmnCardPage.Controls.Add(this.pkmnETypeField);
+			this.pkmnCardPage.Controls.Add(this.pkmnETypeLabel);
+			this.pkmnCardPage.Controls.Add(this.pkmnCardDialog);
+			this.pkmnCardPage.Controls.Add(this.pkmnHPField);
+			this.pkmnCardPage.Controls.Add(this.pkmnHPLabel);
+			this.pkmnCardPage.Controls.Add(this.pkmnAddCardButton);
+			this.pkmnCardPage.Controls.Add(this.pkmnNameLabel);
+			this.pkmnCardPage.Controls.Add(this.pkmnNameField);
+			this.pkmnCardPage.Controls.Add(this.pkmnOracleLabel);
+			this.pkmnCardPage.Controls.Add(this.pkmnOracleField);
+			this.pkmnCardPage.Controls.Add(this.pkmnTypeLabel);
+			this.pkmnCardPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnCardPage.Name = "pkmnCardPage";
+			this.pkmnCardPage.Padding = new System.Windows.Forms.Padding(3);
+			this.pkmnCardPage.Size = new System.Drawing.Size(1262, 626);
+			this.pkmnCardPage.TabIndex = 0;
+			this.pkmnCardPage.Text = "Card Entry";
+			// 
+			// pkmnTrainerButton
+			// 
+			this.pkmnTrainerButton.Location = new System.Drawing.Point(475, 75);
+			this.pkmnTrainerButton.Name = "pkmnTrainerButton";
+			this.pkmnTrainerButton.Size = new System.Drawing.Size(120, 29);
+			this.pkmnTrainerButton.TabIndex = 55;
+			this.pkmnTrainerButton.Text = "Trainer";
+			this.pkmnTrainerButton.UseVisualStyleBackColor = true;
+			this.pkmnTrainerButton.Click += new System.EventHandler(this.PKMN_OnClickTrainer);
+			// 
+			// pkmnImportButton
+			// 
+			this.pkmnImportButton.Location = new System.Drawing.Point(555, 355);
+			this.pkmnImportButton.Name = "pkmnImportButton";
+			this.pkmnImportButton.Size = new System.Drawing.Size(250, 30);
+			this.pkmnImportButton.TabIndex = 54;
+			this.pkmnImportButton.Text = "Import!";
+			this.pkmnImportButton.UseVisualStyleBackColor = true;
+			this.pkmnImportButton.Click += new System.EventHandler(this.PKMN_OnClickImport);
+			// 
+			// pkmnImportField
+			// 
+			this.pkmnImportField.Location = new System.Drawing.Point(555, 180);
+			this.pkmnImportField.Multiline = true;
+			this.pkmnImportField.Name = "pkmnImportField";
+			this.pkmnImportField.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.pkmnImportField.Size = new System.Drawing.Size(250, 170);
+			this.pkmnImportField.TabIndex = 53;
+			// 
+			// pkmnRetreatField
+			// 
+			this.pkmnRetreatField.Location = new System.Drawing.Point(100, 495);
+			this.pkmnRetreatField.Name = "pkmnRetreatField";
+			this.pkmnRetreatField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnRetreatField.TabIndex = 52;
+			// 
+			// pkmnResistField
+			// 
+			this.pkmnResistField.Location = new System.Drawing.Point(100, 460);
+			this.pkmnResistField.Name = "pkmnResistField";
+			this.pkmnResistField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnResistField.TabIndex = 51;
+			// 
+			// pkmnWeakField
+			// 
+			this.pkmnWeakField.Location = new System.Drawing.Point(100, 425);
+			this.pkmnWeakField.Name = "pkmnWeakField";
+			this.pkmnWeakField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnWeakField.TabIndex = 50;
+			// 
+			// pkmnRetreatLabel
+			// 
+			this.pkmnRetreatLabel.Location = new System.Drawing.Point(5, 495);
+			this.pkmnRetreatLabel.Name = "pkmnRetreatLabel";
+			this.pkmnRetreatLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnRetreatLabel.TabIndex = 49;
+			this.pkmnRetreatLabel.Text = "Retreat:";
+			this.pkmnRetreatLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnWeakLabel
+			// 
+			this.pkmnWeakLabel.Location = new System.Drawing.Point(5, 425);
+			this.pkmnWeakLabel.Name = "pkmnWeakLabel";
+			this.pkmnWeakLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnWeakLabel.TabIndex = 48;
+			this.pkmnWeakLabel.Text = "Weakness:";
+			this.pkmnWeakLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnStageLabel
+			// 
+			this.pkmnStageLabel.Location = new System.Drawing.Point(5, 110);
+			this.pkmnStageLabel.Name = "pkmnStageLabel";
+			this.pkmnStageLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnStageLabel.TabIndex = 47;
+			this.pkmnStageLabel.Text = "Stage:";
+			this.pkmnStageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnStageField
+			// 
+			this.pkmnStageField.Location = new System.Drawing.Point(100, 110);
+			this.pkmnStageField.Name = "pkmnStageField";
+			this.pkmnStageField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnStageField.TabIndex = 46;
+			// 
+			// pkmnIgnorDuplicateEntryLabel
+			// 
+			this.pkmnIgnorDuplicateEntryLabel.Location = new System.Drawing.Point(115, 565);
+			this.pkmnIgnorDuplicateEntryLabel.Name = "pkmnIgnorDuplicateEntryLabel";
+			this.pkmnIgnorDuplicateEntryLabel.Size = new System.Drawing.Size(235, 30);
+			this.pkmnIgnorDuplicateEntryLabel.TabIndex = 45;
+			this.pkmnIgnorDuplicateEntryLabel.Text = "Ignore Duplicate Entry";
+			this.pkmnIgnorDuplicateEntryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnIgnorDuplicateEntryBox
+			// 
+			this.pkmnIgnorDuplicateEntryBox.Location = new System.Drawing.Point(100, 565);
+			this.pkmnIgnorDuplicateEntryBox.Name = "pkmnIgnorDuplicateEntryBox";
+			this.pkmnIgnorDuplicateEntryBox.Size = new System.Drawing.Size(14, 30);
+			this.pkmnIgnorDuplicateEntryBox.TabIndex = 44;
+			this.pkmnIgnorDuplicateEntryBox.UseVisualStyleBackColor = true;
+			// 
+			// pkmnTypeField
+			// 
+			this.pkmnTypeField.Location = new System.Drawing.Point(100, 75);
+			this.pkmnTypeField.Name = "pkmnTypeField";
+			this.pkmnTypeField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnTypeField.TabIndex = 18;
+			// 
+			// pkmnResistLabel
+			// 
+			this.pkmnResistLabel.Location = new System.Drawing.Point(5, 460);
+			this.pkmnResistLabel.Name = "pkmnResistLabel";
+			this.pkmnResistLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnResistLabel.TabIndex = 27;
+			this.pkmnResistLabel.Text = "Resistance:";
+			this.pkmnResistLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnETypeField
+			// 
+			this.pkmnETypeField.Location = new System.Drawing.Point(100, 40);
+			this.pkmnETypeField.Name = "pkmnETypeField";
+			this.pkmnETypeField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnETypeField.TabIndex = 16;
+			// 
+			// pkmnETypeLabel
+			// 
+			this.pkmnETypeLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.pkmnETypeLabel.Location = new System.Drawing.Point(5, 40);
+			this.pkmnETypeLabel.Name = "pkmnETypeLabel";
+			this.pkmnETypeLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnETypeLabel.TabIndex = 15;
+			this.pkmnETypeLabel.Text = "Energy:";
+			this.pkmnETypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnCardDialog
+			// 
+			this.pkmnCardDialog.AutoSize = true;
+			this.pkmnCardDialog.Location = new System.Drawing.Point(355, 533);
+			this.pkmnCardDialog.Name = "pkmnCardDialog";
+			this.pkmnCardDialog.Size = new System.Drawing.Size(16, 21);
+			this.pkmnCardDialog.TabIndex = 31;
+			this.pkmnCardDialog.Text = "-";
+			this.pkmnCardDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnHPField
+			// 
+			this.pkmnHPField.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.pkmnHPField.Location = new System.Drawing.Point(100, 145);
+			this.pkmnHPField.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+			this.pkmnHPField.Name = "pkmnHPField";
+			this.pkmnHPField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnHPField.TabIndex = 25;
+			// 
+			// pkmnHPLabel
+			// 
+			this.pkmnHPLabel.Location = new System.Drawing.Point(5, 145);
+			this.pkmnHPLabel.Name = "pkmnHPLabel";
+			this.pkmnHPLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnHPLabel.TabIndex = 24;
+			this.pkmnHPLabel.Text = "HP:";
+			this.pkmnHPLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnAddCardButton
+			// 
+			this.pkmnAddCardButton.Location = new System.Drawing.Point(100, 530);
+			this.pkmnAddCardButton.Name = "pkmnAddCardButton";
+			this.pkmnAddCardButton.Size = new System.Drawing.Size(250, 30);
+			this.pkmnAddCardButton.TabIndex = 30;
+			this.pkmnAddCardButton.Text = "Add To Catalog";
+			this.pkmnAddCardButton.UseVisualStyleBackColor = true;
+			this.pkmnAddCardButton.Click += new System.EventHandler(this.PKMN_OnClickAddCard);
+			// 
+			// pkmnNameLabel
+			// 
+			this.pkmnNameLabel.Location = new System.Drawing.Point(5, 5);
+			this.pkmnNameLabel.Name = "pkmnNameLabel";
+			this.pkmnNameLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnNameLabel.TabIndex = 1;
+			this.pkmnNameLabel.Text = "Name:";
+			this.pkmnNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnNameField
+			// 
+			this.pkmnNameField.Location = new System.Drawing.Point(100, 5);
+			this.pkmnNameField.Name = "pkmnNameField";
+			this.pkmnNameField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnNameField.TabIndex = 2;
+			// 
+			// pkmnOracleLabel
+			// 
+			this.pkmnOracleLabel.Location = new System.Drawing.Point(5, 180);
+			this.pkmnOracleLabel.Name = "pkmnOracleLabel";
+			this.pkmnOracleLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnOracleLabel.TabIndex = 22;
+			this.pkmnOracleLabel.Text = "Oracle Text:";
+			this.pkmnOracleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnOracleField
+			// 
+			this.pkmnOracleField.Location = new System.Drawing.Point(100, 180);
+			this.pkmnOracleField.Multiline = true;
+			this.pkmnOracleField.Name = "pkmnOracleField";
+			this.pkmnOracleField.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.pkmnOracleField.Size = new System.Drawing.Size(450, 240);
+			this.pkmnOracleField.TabIndex = 23;
+			// 
+			// pkmnTypeLabel
+			// 
+			this.pkmnTypeLabel.Location = new System.Drawing.Point(5, 75);
+			this.pkmnTypeLabel.Name = "pkmnTypeLabel";
+			this.pkmnTypeLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnTypeLabel.TabIndex = 17;
+			this.pkmnTypeLabel.Text = "Card Types:";
+			this.pkmnTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnPrintPage
+			// 
+			this.pkmnPrintPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.pkmnPrintPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnPrintPage.Controls.Add(this.pkmnPrintHoloButton);
+			this.pkmnPrintPage.Controls.Add(this.pkmnPrintNormalButton);
+			this.pkmnPrintPage.Controls.Add(this.pkmnPrintAutoLimit);
+			this.pkmnPrintPage.Controls.Add(this.pkmnPrintAutofillRangeButton);
+			this.pkmnPrintPage.Controls.Add(this.pkmnPrintAutofillButton);
+			this.pkmnPrintPage.Controls.Add(this.pkmnCardrefDescriptor);
+			this.pkmnPrintPage.Controls.Add(this.pkmnRarityField);
+			this.pkmnPrintPage.Controls.Add(this.pkmnRarityLabel);
+			this.pkmnPrintPage.Controls.Add(this.pkmnPrintIDLabel);
+			this.pkmnPrintPage.Controls.Add(this.pkmnPrintIDField);
+			this.pkmnPrintPage.Controls.Add(this.pkmnImgpathBackLabel);
+			this.pkmnPrintPage.Controls.Add(this.pkmnPrintImgboxBack);
+			this.pkmnPrintPage.Controls.Add(this.pkmnImgsearchBackButton);
+			this.pkmnPrintPage.Controls.Add(this.pkmnImgBackLabel);
+			this.pkmnPrintPage.Controls.Add(this.pkmnIODialog);
+			this.pkmnPrintPage.Controls.Add(this.pkmnSaveButton);
+			this.pkmnPrintPage.Controls.Add(this.pkmnImgpathLabel);
+			this.pkmnPrintPage.Controls.Add(this.pkmnRemTreatmentButton);
+			this.pkmnPrintPage.Controls.Add(this.pkmnAddTreatmentButton);
+			this.pkmnPrintPage.Controls.Add(this.pkmnPrintImgbox);
+			this.pkmnPrintPage.Controls.Add(this.pkmnAddPrintButton);
+			this.pkmnPrintPage.Controls.Add(this.pkmnCardrefField);
+			this.pkmnPrintPage.Controls.Add(this.pkmnCardrefLabel);
+			this.pkmnPrintPage.Controls.Add(this.pkmnImgsearchButton);
+			this.pkmnPrintPage.Controls.Add(this.pkmnImgLabel);
+			this.pkmnPrintPage.Controls.Add(this.pkmnFlavorField);
+			this.pkmnPrintPage.Controls.Add(this.pkmnFlavorLabel);
+			this.pkmnPrintPage.Controls.Add(this.pkmnTreatmentsValue);
+			this.pkmnPrintPage.Controls.Add(this.pkmnTreatmentField);
+			this.pkmnPrintPage.Controls.Add(this.pkmnTreatmentLabel);
+			this.pkmnPrintPage.Controls.Add(this.pkmnNumberField);
+			this.pkmnPrintPage.Controls.Add(this.pkmnNumberLabel);
+			this.pkmnPrintPage.Controls.Add(this.pkmnSetField);
+			this.pkmnPrintPage.Controls.Add(this.pkmnSetLabel);
+			this.pkmnPrintPage.Location = new System.Drawing.Point(4, 33);
+			this.pkmnPrintPage.Name = "pkmnPrintPage";
+			this.pkmnPrintPage.Padding = new System.Windows.Forms.Padding(3);
+			this.pkmnPrintPage.Size = new System.Drawing.Size(1262, 618);
+			this.pkmnPrintPage.TabIndex = 1;
+			this.pkmnPrintPage.Text = "Printing Entry";
+			// 
+			// pkmnPrintHoloButton
+			// 
+			this.pkmnPrintHoloButton.Location = new System.Drawing.Point(440, 145);
+			this.pkmnPrintHoloButton.Name = "pkmnPrintHoloButton";
+			this.pkmnPrintHoloButton.Size = new System.Drawing.Size(30, 29);
+			this.pkmnPrintHoloButton.TabIndex = 33;
+			this.pkmnPrintHoloButton.Text = "H";
+			this.pkmnPrintHoloButton.UseVisualStyleBackColor = true;
+			this.pkmnPrintHoloButton.Click += new System.EventHandler(this.PKMN_OnClickHoloTreatment);
+			// 
+			// pkmnPrintNormalButton
+			// 
+			this.pkmnPrintNormalButton.Location = new System.Drawing.Point(405, 145);
+			this.pkmnPrintNormalButton.Name = "pkmnPrintNormalButton";
+			this.pkmnPrintNormalButton.Size = new System.Drawing.Size(30, 29);
+			this.pkmnPrintNormalButton.TabIndex = 32;
+			this.pkmnPrintNormalButton.Text = "N";
+			this.pkmnPrintNormalButton.UseVisualStyleBackColor = true;
+			this.pkmnPrintNormalButton.Click += new System.EventHandler(this.PKMN_OnClickNormalTreatment);
+			// 
+			// pkmnPrintAutoLimit
+			// 
+			this.pkmnPrintAutoLimit.Location = new System.Drawing.Point(220, 510);
+			this.pkmnPrintAutoLimit.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.pkmnPrintAutoLimit.Name = "pkmnPrintAutoLimit";
+			this.pkmnPrintAutoLimit.Size = new System.Drawing.Size(250, 29);
+			this.pkmnPrintAutoLimit.TabIndex = 31;
+			// 
+			// pkmnPrintAutofillRangeButton
+			// 
+			this.pkmnPrintAutofillRangeButton.Location = new System.Drawing.Point(100, 510);
+			this.pkmnPrintAutofillRangeButton.Name = "pkmnPrintAutofillRangeButton";
+			this.pkmnPrintAutofillRangeButton.Size = new System.Drawing.Size(115, 29);
+			this.pkmnPrintAutofillRangeButton.TabIndex = 30;
+			this.pkmnPrintAutofillRangeButton.Text = "Autofill to";
+			this.pkmnPrintAutofillRangeButton.UseVisualStyleBackColor = true;
+			this.pkmnPrintAutofillRangeButton.Click += new System.EventHandler(this.PKMN_OnClickAddAndFill);
+			// 
+			// pkmnPrintAutofillButton
+			// 
+			this.pkmnPrintAutofillButton.Location = new System.Drawing.Point(320, 335);
+			this.pkmnPrintAutofillButton.Name = "pkmnPrintAutofillButton";
+			this.pkmnPrintAutofillButton.Size = new System.Drawing.Size(150, 29);
+			this.pkmnPrintAutofillButton.TabIndex = 29;
+			this.pkmnPrintAutofillButton.Text = "Autofill";
+			this.pkmnPrintAutofillButton.UseVisualStyleBackColor = true;
+			this.pkmnPrintAutofillButton.Click += new System.EventHandler(this.PKMN_OnClickPrintAutofill);
+			// 
+			// pkmnCardrefDescriptor
+			// 
+			this.pkmnCardrefDescriptor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.pkmnCardrefDescriptor.AutoSize = true;
+			this.pkmnCardrefDescriptor.Location = new System.Drawing.Point(5, 555);
+			this.pkmnCardrefDescriptor.MaximumSize = new System.Drawing.Size(0, 21);
+			this.pkmnCardrefDescriptor.Name = "pkmnCardrefDescriptor";
+			this.pkmnCardrefDescriptor.Size = new System.Drawing.Size(16, 21);
+			this.pkmnCardrefDescriptor.TabIndex = 28;
+			this.pkmnCardrefDescriptor.Text = "-";
+			this.pkmnCardrefDescriptor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnRarityField
+			// 
+			this.pkmnRarityField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.pkmnRarityField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.pkmnRarityField.FormattingEnabled = true;
+			this.pkmnRarityField.Location = new System.Drawing.Point(100, 75);
+			this.pkmnRarityField.Name = "pkmnRarityField";
+			this.pkmnRarityField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnRarityField.Sorted = true;
+			this.pkmnRarityField.TabIndex = 6;
+			// 
+			// pkmnRarityLabel
+			// 
+			this.pkmnRarityLabel.Location = new System.Drawing.Point(5, 75);
+			this.pkmnRarityLabel.Name = "pkmnRarityLabel";
+			this.pkmnRarityLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnRarityLabel.TabIndex = 5;
+			this.pkmnRarityLabel.Text = "Rarity:";
+			this.pkmnRarityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnPrintIDLabel
+			// 
+			this.pkmnPrintIDLabel.Location = new System.Drawing.Point(5, 440);
+			this.pkmnPrintIDLabel.Name = "pkmnPrintIDLabel";
+			this.pkmnPrintIDLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnPrintIDLabel.TabIndex = 20;
+			this.pkmnPrintIDLabel.Text = "Print ID:";
+			this.pkmnPrintIDLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnPrintIDField
+			// 
+			this.pkmnPrintIDField.Location = new System.Drawing.Point(100, 440);
+			this.pkmnPrintIDField.Name = "pkmnPrintIDField";
+			this.pkmnPrintIDField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnPrintIDField.TabIndex = 21;
+			// 
+			// pkmnImgpathBackLabel
+			// 
+			this.pkmnImgpathBackLabel.AutoSize = true;
+			this.pkmnImgpathBackLabel.Location = new System.Drawing.Point(855, 505);
+			this.pkmnImgpathBackLabel.Name = "pkmnImgpathBackLabel";
+			this.pkmnImgpathBackLabel.Size = new System.Drawing.Size(0, 21);
+			this.pkmnImgpathBackLabel.TabIndex = 27;
+			// 
+			// pkmnPrintImgboxBack
+			// 
+			this.pkmnPrintImgboxBack.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnPrintImgboxBack.InitialImage = null;
+			this.pkmnPrintImgboxBack.Location = new System.Drawing.Point(855, 5);
+			this.pkmnPrintImgboxBack.Name = "pkmnPrintImgboxBack";
+			this.pkmnPrintImgboxBack.Size = new System.Drawing.Size(375, 495);
+			this.pkmnPrintImgboxBack.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pkmnPrintImgboxBack.TabIndex = 27;
+			this.pkmnPrintImgboxBack.TabStop = false;
+			// 
+			// pkmnImgsearchBackButton
+			// 
+			this.pkmnImgsearchBackButton.Location = new System.Drawing.Point(100, 370);
+			this.pkmnImgsearchBackButton.Name = "pkmnImgsearchBackButton";
+			this.pkmnImgsearchBackButton.Size = new System.Drawing.Size(370, 29);
+			this.pkmnImgsearchBackButton.TabIndex = 17;
+			this.pkmnImgsearchBackButton.Text = "Search";
+			this.pkmnImgsearchBackButton.UseVisualStyleBackColor = true;
+			this.pkmnImgsearchBackButton.Click += new System.EventHandler(this.PKMN_OnClickSearchImgBack);
+			// 
+			// pkmnImgBackLabel
+			// 
+			this.pkmnImgBackLabel.Location = new System.Drawing.Point(5, 370);
+			this.pkmnImgBackLabel.Name = "pkmnImgBackLabel";
+			this.pkmnImgBackLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnImgBackLabel.TabIndex = 16;
+			this.pkmnImgBackLabel.Text = "Back:";
+			this.pkmnImgBackLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnIODialog
+			// 
+			this.pkmnIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.pkmnIODialog.AutoSize = true;
+			this.pkmnIODialog.Location = new System.Drawing.Point(260, 582);
+			this.pkmnIODialog.Name = "pkmnIODialog";
+			this.pkmnIODialog.Size = new System.Drawing.Size(16, 21);
+			this.pkmnIODialog.TabIndex = 25;
+			this.pkmnIODialog.Text = "-";
+			this.pkmnIODialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnSaveButton
+			// 
+			this.pkmnSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.pkmnSaveButton.Location = new System.Drawing.Point(5, 579);
+			this.pkmnSaveButton.Name = "pkmnSaveButton";
+			this.pkmnSaveButton.Size = new System.Drawing.Size(250, 29);
+			this.pkmnSaveButton.TabIndex = 24;
+			this.pkmnSaveButton.Text = "Save Catalog";
+			this.pkmnSaveButton.UseVisualStyleBackColor = true;
+			this.pkmnSaveButton.Click += new System.EventHandler(this.PKMN_OnClickSave);
+			// 
+			// pkmnImgpathLabel
+			// 
+			this.pkmnImgpathLabel.AutoSize = true;
+			this.pkmnImgpathLabel.Location = new System.Drawing.Point(475, 505);
+			this.pkmnImgpathLabel.Name = "pkmnImgpathLabel";
+			this.pkmnImgpathLabel.Size = new System.Drawing.Size(16, 21);
+			this.pkmnImgpathLabel.TabIndex = 26;
+			this.pkmnImgpathLabel.Text = "-";
+			// 
+			// pkmnRemTreatmentButton
+			// 
+			this.pkmnRemTreatmentButton.Location = new System.Drawing.Point(440, 110);
+			this.pkmnRemTreatmentButton.Name = "pkmnRemTreatmentButton";
+			this.pkmnRemTreatmentButton.Size = new System.Drawing.Size(30, 29);
+			this.pkmnRemTreatmentButton.TabIndex = 10;
+			this.pkmnRemTreatmentButton.Text = "-";
+			this.pkmnRemTreatmentButton.UseVisualStyleBackColor = true;
+			this.pkmnRemTreatmentButton.Click += new System.EventHandler(this.PKMN_OnClickSubTreatment);
+			// 
+			// pkmnAddTreatmentButton
+			// 
+			this.pkmnAddTreatmentButton.Location = new System.Drawing.Point(405, 110);
+			this.pkmnAddTreatmentButton.Name = "pkmnAddTreatmentButton";
+			this.pkmnAddTreatmentButton.Size = new System.Drawing.Size(30, 29);
+			this.pkmnAddTreatmentButton.TabIndex = 9;
+			this.pkmnAddTreatmentButton.Text = "+";
+			this.pkmnAddTreatmentButton.UseVisualStyleBackColor = true;
+			this.pkmnAddTreatmentButton.Click += new System.EventHandler(this.PKMN_OnClickAddTreatment);
+			// 
+			// pkmnPrintImgbox
+			// 
+			this.pkmnPrintImgbox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnPrintImgbox.InitialImage = null;
+			this.pkmnPrintImgbox.Location = new System.Drawing.Point(475, 5);
+			this.pkmnPrintImgbox.Name = "pkmnPrintImgbox";
+			this.pkmnPrintImgbox.Size = new System.Drawing.Size(375, 495);
+			this.pkmnPrintImgbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pkmnPrintImgbox.TabIndex = 20;
+			this.pkmnPrintImgbox.TabStop = false;
+			// 
+			// pkmnAddPrintButton
+			// 
+			this.pkmnAddPrintButton.Location = new System.Drawing.Point(100, 475);
+			this.pkmnAddPrintButton.Name = "pkmnAddPrintButton";
+			this.pkmnAddPrintButton.Size = new System.Drawing.Size(370, 29);
+			this.pkmnAddPrintButton.TabIndex = 22;
+			this.pkmnAddPrintButton.Text = "Add To Catalog";
+			this.pkmnAddPrintButton.UseVisualStyleBackColor = true;
+			this.pkmnAddPrintButton.Click += new System.EventHandler(this.PKMN_OnClickAddPrint);
+			// 
+			// pkmnCardrefField
+			// 
+			this.pkmnCardrefField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.pkmnCardrefField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.pkmnCardrefField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.pkmnCardrefField.FormattingEnabled = true;
+			this.pkmnCardrefField.Location = new System.Drawing.Point(100, 405);
+			this.pkmnCardrefField.Name = "pkmnCardrefField";
+			this.pkmnCardrefField.Size = new System.Drawing.Size(750, 29);
+			this.pkmnCardrefField.Sorted = true;
+			this.pkmnCardrefField.TabIndex = 19;
+			this.pkmnCardrefField.SelectedIndexChanged += new System.EventHandler(this.PKMN_OnSelectCardref);
+			// 
+			// pkmnCardrefLabel
+			// 
+			this.pkmnCardrefLabel.Location = new System.Drawing.Point(5, 405);
+			this.pkmnCardrefLabel.Name = "pkmnCardrefLabel";
+			this.pkmnCardrefLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnCardrefLabel.TabIndex = 18;
+			this.pkmnCardrefLabel.Text = "Card:";
+			this.pkmnCardrefLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnImgsearchButton
+			// 
+			this.pkmnImgsearchButton.Location = new System.Drawing.Point(100, 335);
+			this.pkmnImgsearchButton.Name = "pkmnImgsearchButton";
+			this.pkmnImgsearchButton.Size = new System.Drawing.Size(215, 29);
+			this.pkmnImgsearchButton.TabIndex = 15;
+			this.pkmnImgsearchButton.Text = "Search";
+			this.pkmnImgsearchButton.UseVisualStyleBackColor = true;
+			this.pkmnImgsearchButton.Click += new System.EventHandler(this.PKMN_OnClickSearchImg);
+			// 
+			// pkmnImgLabel
+			// 
+			this.pkmnImgLabel.Location = new System.Drawing.Point(5, 335);
+			this.pkmnImgLabel.Name = "pkmnImgLabel";
+			this.pkmnImgLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnImgLabel.TabIndex = 14;
+			this.pkmnImgLabel.Text = "Image:";
+			this.pkmnImgLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnFlavorField
+			// 
+			this.pkmnFlavorField.Location = new System.Drawing.Point(100, 180);
+			this.pkmnFlavorField.Multiline = true;
+			this.pkmnFlavorField.Name = "pkmnFlavorField";
+			this.pkmnFlavorField.Size = new System.Drawing.Size(370, 150);
+			this.pkmnFlavorField.TabIndex = 13;
+			// 
+			// pkmnFlavorLabel
+			// 
+			this.pkmnFlavorLabel.Location = new System.Drawing.Point(5, 180);
+			this.pkmnFlavorLabel.Name = "pkmnFlavorLabel";
+			this.pkmnFlavorLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnFlavorLabel.TabIndex = 12;
+			this.pkmnFlavorLabel.Text = "Flavor Text:";
+			this.pkmnFlavorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnTreatmentsValue
+			// 
+			this.pkmnTreatmentsValue.Location = new System.Drawing.Point(100, 145);
+			this.pkmnTreatmentsValue.Name = "pkmnTreatmentsValue";
+			this.pkmnTreatmentsValue.Size = new System.Drawing.Size(350, 30);
+			this.pkmnTreatmentsValue.TabIndex = 11;
+			this.pkmnTreatmentsValue.Text = "-";
+			this.pkmnTreatmentsValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnTreatmentField
+			// 
+			this.pkmnTreatmentField.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.pkmnTreatmentField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.pkmnTreatmentField.FormattingEnabled = true;
+			this.pkmnTreatmentField.Location = new System.Drawing.Point(100, 110);
+			this.pkmnTreatmentField.Name = "pkmnTreatmentField";
+			this.pkmnTreatmentField.Size = new System.Drawing.Size(300, 29);
+			this.pkmnTreatmentField.TabIndex = 8;
+			// 
+			// pkmnTreatmentLabel
+			// 
+			this.pkmnTreatmentLabel.Location = new System.Drawing.Point(5, 110);
+			this.pkmnTreatmentLabel.Name = "pkmnTreatmentLabel";
+			this.pkmnTreatmentLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnTreatmentLabel.TabIndex = 7;
+			this.pkmnTreatmentLabel.Text = "Treatments:";
+			this.pkmnTreatmentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnNumberField
+			// 
+			this.pkmnNumberField.Location = new System.Drawing.Point(100, 40);
+			this.pkmnNumberField.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.pkmnNumberField.Name = "pkmnNumberField";
+			this.pkmnNumberField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnNumberField.TabIndex = 4;
+			// 
+			// pkmnNumberLabel
+			// 
+			this.pkmnNumberLabel.Location = new System.Drawing.Point(5, 40);
+			this.pkmnNumberLabel.Name = "pkmnNumberLabel";
+			this.pkmnNumberLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnNumberLabel.TabIndex = 3;
+			this.pkmnNumberLabel.Text = "Number:";
+			this.pkmnNumberLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnSetField
+			// 
+			this.pkmnSetField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.pkmnSetField.FormattingEnabled = true;
+			this.pkmnSetField.Location = new System.Drawing.Point(100, 5);
+			this.pkmnSetField.Name = "pkmnSetField";
+			this.pkmnSetField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnSetField.Sorted = true;
+			this.pkmnSetField.TabIndex = 2;
+			// 
+			// pkmnSetLabel
+			// 
+			this.pkmnSetLabel.Location = new System.Drawing.Point(5, 5);
+			this.pkmnSetLabel.Name = "pkmnSetLabel";
+			this.pkmnSetLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnSetLabel.TabIndex = 1;
+			this.pkmnSetLabel.Text = "Set:";
+			this.pkmnSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnSymbolPage
+			// 
+			this.pkmnSymbolPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.pkmnSymbolPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnSymbolPage.Controls.Add(this.pkmnSymbolLayout);
+			this.pkmnSymbolPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnSymbolPage.Name = "pkmnSymbolPage";
+			this.pkmnSymbolPage.Padding = new System.Windows.Forms.Padding(3);
+			this.pkmnSymbolPage.Size = new System.Drawing.Size(1262, 626);
+			this.pkmnSymbolPage.TabIndex = 5;
+			this.pkmnSymbolPage.Text = "Symbols";
+			// 
+			// pkmnSymbolLayout
+			// 
+			this.pkmnSymbolLayout.AutoScroll = true;
+			this.pkmnSymbolLayout.Controls.Add(this.pkmnSymbolHeaderBox);
+			this.pkmnSymbolLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pkmnSymbolLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.pkmnSymbolLayout.Location = new System.Drawing.Point(3, 3);
+			this.pkmnSymbolLayout.Name = "pkmnSymbolLayout";
+			this.pkmnSymbolLayout.Size = new System.Drawing.Size(1252, 616);
+			this.pkmnSymbolLayout.TabIndex = 0;
+			// 
+			// pkmnSymbolHeaderBox
+			// 
+			this.pkmnSymbolHeaderBox.Controls.Add(this.pkmnSaveSymbolsButton);
+			this.pkmnSymbolHeaderBox.Controls.Add(this.pkmnAddSymbolButton);
+			this.pkmnSymbolHeaderBox.Controls.Add(this.pkmnSymbolLabel);
+			this.pkmnSymbolHeaderBox.Location = new System.Drawing.Point(3, 3);
+			this.pkmnSymbolHeaderBox.Name = "pkmnSymbolHeaderBox";
+			this.pkmnSymbolHeaderBox.Size = new System.Drawing.Size(325, 50);
+			this.pkmnSymbolHeaderBox.TabIndex = 1;
+			this.pkmnSymbolHeaderBox.TabStop = false;
+			// 
+			// pkmnSaveSymbolsButton
+			// 
+			this.pkmnSaveSymbolsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnSaveSymbolsButton.Location = new System.Drawing.Point(260, 15);
+			this.pkmnSaveSymbolsButton.Name = "pkmnSaveSymbolsButton";
+			this.pkmnSaveSymbolsButton.Size = new System.Drawing.Size(60, 29);
+			this.pkmnSaveSymbolsButton.TabIndex = 2;
+			this.pkmnSaveSymbolsButton.Text = "Save";
+			this.pkmnSaveSymbolsButton.UseVisualStyleBackColor = true;
+			this.pkmnSaveSymbolsButton.Click += new System.EventHandler(this.PKMN_OnClickSaveSymbols);
+			// 
+			// pkmnAddSymbolButton
+			// 
+			this.pkmnAddSymbolButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnAddSymbolButton.Location = new System.Drawing.Point(225, 15);
+			this.pkmnAddSymbolButton.Name = "pkmnAddSymbolButton";
+			this.pkmnAddSymbolButton.Size = new System.Drawing.Size(30, 29);
+			this.pkmnAddSymbolButton.TabIndex = 1;
+			this.pkmnAddSymbolButton.Text = "+";
+			this.pkmnAddSymbolButton.UseVisualStyleBackColor = true;
+			this.pkmnAddSymbolButton.Click += new System.EventHandler(this.PKMN_OnClickAddSymbol);
+			// 
+			// pkmnSymbolLabel
+			// 
+			this.pkmnSymbolLabel.Location = new System.Drawing.Point(5, 15);
+			this.pkmnSymbolLabel.Name = "pkmnSymbolLabel";
+			this.pkmnSymbolLabel.Size = new System.Drawing.Size(150, 30);
+			this.pkmnSymbolLabel.TabIndex = 0;
+			this.pkmnSymbolLabel.Text = "Symbols";
+			this.pkmnSymbolLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// pkmnSetPage
+			// 
+			this.pkmnSetPage.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.pkmnSetPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnSetPage.Controls.Add(this.pkmnReloadSetsButton);
+			this.pkmnSetPage.Controls.Add(this.pkmnSetGeneratorPrev);
+			this.pkmnSetPage.Controls.Add(this.pkmnAddSetButton);
+			this.pkmnSetPage.Controls.Add(this.pkmnSaveSetsButton);
+			this.pkmnSetPage.Controls.Add(this.pkmnSetGeneratorNext);
+			this.pkmnSetPage.Controls.Add(this.pkmnSetGeneratorPageLabel);
+			this.pkmnSetPage.Controls.Add(this.pkmnSetGeneratorLayout);
+			this.pkmnSetPage.Controls.Add(this.pkmnSetGeneratorLabel);
+			this.pkmnSetPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnSetPage.Name = "pkmnSetPage";
+			this.pkmnSetPage.Padding = new System.Windows.Forms.Padding(3);
+			this.pkmnSetPage.Size = new System.Drawing.Size(1262, 626);
+			this.pkmnSetPage.TabIndex = 6;
+			this.pkmnSetPage.Text = "Sets";
+			// 
+			// pkmnReloadSetsButton
+			// 
+			this.pkmnReloadSetsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnReloadSetsButton.Location = new System.Drawing.Point(880, 5);
+			this.pkmnReloadSetsButton.Name = "pkmnReloadSetsButton";
+			this.pkmnReloadSetsButton.Size = new System.Drawing.Size(75, 29);
+			this.pkmnReloadSetsButton.TabIndex = 3;
+			this.pkmnReloadSetsButton.Text = "Reload";
+			this.pkmnReloadSetsButton.UseVisualStyleBackColor = true;
+			this.pkmnReloadSetsButton.Click += new System.EventHandler(this.PKMN_RegenerateSets);
+			// 
+			// pkmnSetGeneratorPrev
+			// 
+			this.pkmnSetGeneratorPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnSetGeneratorPrev.Location = new System.Drawing.Point(1060, 5);
+			this.pkmnSetGeneratorPrev.Name = "pkmnSetGeneratorPrev";
+			this.pkmnSetGeneratorPrev.Size = new System.Drawing.Size(60, 29);
+			this.pkmnSetGeneratorPrev.TabIndex = 5;
+			this.pkmnSetGeneratorPrev.Text = "<";
+			this.pkmnSetGeneratorPrev.UseVisualStyleBackColor = true;
+			this.pkmnSetGeneratorPrev.Click += new System.EventHandler(this.PKMN_OnClickSetGeneratorPrev);
+			// 
+			// pkmnAddSetButton
+			// 
+			this.pkmnAddSetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnAddSetButton.Location = new System.Drawing.Point(960, 5);
+			this.pkmnAddSetButton.Name = "pkmnAddSetButton";
+			this.pkmnAddSetButton.Size = new System.Drawing.Size(30, 29);
+			this.pkmnAddSetButton.TabIndex = 1;
+			this.pkmnAddSetButton.Text = "+";
+			this.pkmnAddSetButton.UseVisualStyleBackColor = true;
+			this.pkmnAddSetButton.Click += new System.EventHandler(this.PKMN_OnClickAddSet);
+			// 
+			// pkmnSaveSetsButton
+			// 
+			this.pkmnSaveSetsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnSaveSetsButton.Location = new System.Drawing.Point(995, 5);
+			this.pkmnSaveSetsButton.Name = "pkmnSaveSetsButton";
+			this.pkmnSaveSetsButton.Size = new System.Drawing.Size(60, 29);
+			this.pkmnSaveSetsButton.TabIndex = 2;
+			this.pkmnSaveSetsButton.Text = "Save";
+			this.pkmnSaveSetsButton.UseVisualStyleBackColor = true;
+			this.pkmnSaveSetsButton.Click += new System.EventHandler(this.PKMN_OnClickSaveSets);
+			// 
+			// pkmnSetGeneratorNext
+			// 
+			this.pkmnSetGeneratorNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnSetGeneratorNext.Location = new System.Drawing.Point(1190, 5);
+			this.pkmnSetGeneratorNext.Name = "pkmnSetGeneratorNext";
+			this.pkmnSetGeneratorNext.Size = new System.Drawing.Size(60, 29);
+			this.pkmnSetGeneratorNext.TabIndex = 4;
+			this.pkmnSetGeneratorNext.Text = ">";
+			this.pkmnSetGeneratorNext.UseVisualStyleBackColor = true;
+			this.pkmnSetGeneratorNext.Click += new System.EventHandler(this.PKMN_OnClickSetGeneratorNext);
+			// 
+			// pkmnSetGeneratorPageLabel
+			// 
+			this.pkmnSetGeneratorPageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnSetGeneratorPageLabel.Location = new System.Drawing.Point(1125, 5);
+			this.pkmnSetGeneratorPageLabel.Name = "pkmnSetGeneratorPageLabel";
+			this.pkmnSetGeneratorPageLabel.Size = new System.Drawing.Size(60, 30);
+			this.pkmnSetGeneratorPageLabel.TabIndex = 2;
+			this.pkmnSetGeneratorPageLabel.Text = "X / X";
+			this.pkmnSetGeneratorPageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// pkmnSetGeneratorLayout
+			// 
+			this.pkmnSetGeneratorLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.pkmnSetGeneratorLayout.AutoScroll = true;
+			this.pkmnSetGeneratorLayout.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnSetGeneratorLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.pkmnSetGeneratorLayout.Location = new System.Drawing.Point(3, 38);
+			this.pkmnSetGeneratorLayout.Name = "pkmnSetGeneratorLayout";
+			this.pkmnSetGeneratorLayout.Size = new System.Drawing.Size(1252, 580);
+			this.pkmnSetGeneratorLayout.TabIndex = 1;
+			// 
+			// pkmnSetGeneratorLabel
+			// 
+			this.pkmnSetGeneratorLabel.AutoSize = true;
+			this.pkmnSetGeneratorLabel.Location = new System.Drawing.Point(5, 8);
+			this.pkmnSetGeneratorLabel.Name = "pkmnSetGeneratorLabel";
+			this.pkmnSetGeneratorLabel.Size = new System.Drawing.Size(69, 21);
+			this.pkmnSetGeneratorLabel.TabIndex = 0;
+			this.pkmnSetGeneratorLabel.Text = "Edit Sets";
+			this.pkmnSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// Form1
 			// 
@@ -2548,24 +4780,33 @@ namespace CollectionTracker {
 			this.Controls.Add(this.formTabControl);
 			this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "Form1";
-			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.ygoAttackField)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.ygoDefenseField)).EndInit();
 			this.ygoTabControl.ResumeLayout(false);
 			this.ygoSetPage.ResumeLayout(false);
+			this.ygoSetPage.PerformLayout();
+			this.ygoSearchPage.ResumeLayout(false);
+			this.ygoSearchPage.PerformLayout();
 			this.ygoCatalogPage.ResumeLayout(false);
+			this.ygoCatalogPage.PerformLayout();
 			this.ygoDetailPage.ResumeLayout(false);
+			this.ygoDetailPage.PerformLayout();
+			this.ygoCardtipBox.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.ygoCardtipImage)).EndInit();
 			this.ygoDetailBox.ResumeLayout(false);
-			this.ygoDetailBox.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ygoDetailImgbox)).EndInit();
 			this.ygoCardPage.ResumeLayout(false);
 			this.ygoCardPage.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.ygoPendulumRight)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.ygoPendulumLeft)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.ygoScaleField)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.ygoLevelField)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.ygoDefField)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.ygoAtkField)).EndInit();
 			this.ygoPrintPage.ResumeLayout(false);
 			this.ygoPrintPage.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.ygoPrintAutoLimit)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.ygoPrintImgboxBack)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoPrintImgbox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.ygoNumberField)).EndInit();
+			this.ygoSetsPage.ResumeLayout(false);
+			this.ygoSetsPage.PerformLayout();
 			this.formTabControl.ResumeLayout(false);
 			this.mtgPage.ResumeLayout(false);
 			this.mtgTabControl.ResumeLayout(false);
@@ -2584,6 +4825,7 @@ namespace CollectionTracker {
 			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgU)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.mtgSearchIDImgW)).EndInit();
 			this.mtgCatalogPage.ResumeLayout(false);
+			this.mtgCatalogPage.PerformLayout();
 			this.mtgDetailPage.ResumeLayout(false);
 			this.mtgDetailPage.PerformLayout();
 			this.mtgCardtipBox.ResumeLayout(false);
@@ -2618,70 +4860,50 @@ namespace CollectionTracker {
 			this.mtgSetsPage.ResumeLayout(false);
 			this.mtgSetsPage.PerformLayout();
 			this.ygoPage.ResumeLayout(false);
+			this.pkmnPage.ResumeLayout(false);
+			this.pkmnTabControl.ResumeLayout(false);
+			this.pkmnSetlistPage.ResumeLayout(false);
+			this.pkmnSetlistPage.PerformLayout();
+			this.pkmnSearchPage.ResumeLayout(false);
+			this.pkmnSearchPage.PerformLayout();
+			this.pkmnCatalogPage.ResumeLayout(false);
+			this.pkmnCatalogPage.PerformLayout();
+			this.pkmnDetailPage.ResumeLayout(false);
+			this.pkmnDetailPage.PerformLayout();
+			this.pkmnCardtipBox.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.pkmnCardtipImage)).EndInit();
+			this.pkmnDetailBox.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.pkmnDetailImgbox)).EndInit();
+			this.pkmnCardPage.ResumeLayout(false);
+			this.pkmnCardPage.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnHPField)).EndInit();
+			this.pkmnPrintPage.ResumeLayout(false);
+			this.pkmnPrintPage.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnPrintAutoLimit)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnPrintImgboxBack)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnPrintImgbox)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnNumberField)).EndInit();
+			this.pkmnSymbolPage.ResumeLayout(false);
+			this.pkmnSymbolLayout.ResumeLayout(false);
+			this.pkmnSymbolHeaderBox.ResumeLayout(false);
+			this.pkmnSetPage.ResumeLayout(false);
+			this.pkmnSetPage.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.Label ygoCardHeader;
 		private System.Windows.Forms.Label ygoNameLabel;
-		private System.Windows.Forms.TextBox ygoNameField;
-		private System.Windows.Forms.ComboBox ygoCardTypeField;
-		private System.Windows.Forms.ComboBox ygoAttributeField;
-		private System.Windows.Forms.ComboBox ygoMonsterTypeField;
-		private System.Windows.Forms.Label ygoCardTypeLabel;
-		private System.Windows.Forms.Label ygoAttributeLabel;
-		private System.Windows.Forms.Label ygoMonsterTypeLabel;
-		private System.Windows.Forms.TextBox ygoOracleTextField;
-		private System.Windows.Forms.Label ygoOracleTextLabel;
-		private System.Windows.Forms.NumericUpDown ygoLevelField;
-		private System.Windows.Forms.Label ygoLevelLabel;
-		private System.Windows.Forms.NumericUpDown ygoAttackField;
-		private System.Windows.Forms.NumericUpDown ygoDefenseField;
-		private System.Windows.Forms.Label ygoAtkDefLabel;
-		private System.Windows.Forms.Button ygoAddCardButton;
 		private System.Windows.Forms.TabControl ygoTabControl;
 		private System.Windows.Forms.TabPage ygoCardPage;
 		private System.Windows.Forms.TabPage ygoPrintPage;
 		private System.Windows.Forms.TabPage ygoCatalogPage;
-		private System.Windows.Forms.Button ygoAddMonsterTypeButton;
-		private System.Windows.Forms.Label ygoMonsterTypeValue;
-		private System.Windows.Forms.Button ygoSubMonsterTypeButton;
-		private System.Windows.Forms.Label ygoPrintHeader;
-		private System.Windows.Forms.PictureBox ygoPrintImgbox;
-		private System.Windows.Forms.Button ygoAddPrintButton;
-		private System.Windows.Forms.ComboBox ygoCardrefField;
-		private System.Windows.Forms.Label ygoCardrefLabel;
-		private System.Windows.Forms.Button ygoImgsearchButton;
-		private System.Windows.Forms.Label ygoImgsearchLabel;
-		private System.Windows.Forms.TextBox ygoFlavorTextField;
-		private System.Windows.Forms.Label ygoFlavorTextLabel;
-		private System.Windows.Forms.Label ygoTreatmentsValue;
-		private System.Windows.Forms.ComboBox ygoRaritiesField;
-		private System.Windows.Forms.Label ygoTreatmentsLabel;
-		private System.Windows.Forms.NumericUpDown ygoNumberField;
-		private System.Windows.Forms.Label ygoNumberLabel;
-		private System.Windows.Forms.ComboBox ygoSetField;
-		private System.Windows.Forms.Label ygoSetLabel;
-		private System.Windows.Forms.Button ygoSubRarityButton;
-		private System.Windows.Forms.Button ygoAddRarityButton;
 		private System.Windows.Forms.OpenFileDialog imageFileDialog;
-		private System.Windows.Forms.Label ygoImgpathLabel;
-		private System.Windows.Forms.FlowLayoutPanel ygoCatalogLayout;
-		private System.Windows.Forms.Button ygoSaveButton;
-		private System.Windows.Forms.Label ygoIODialog;
 		private System.Windows.Forms.TabPage ygoSetPage;
-		private System.Windows.Forms.FlowLayoutPanel ygoSetLayout;
 		private System.Windows.Forms.TabPage ygoDetailPage;
 		private System.Windows.Forms.TableLayoutPanel ygoLocationTable;
 		private System.Windows.Forms.PictureBox ygoDetailImgbox;
 		private System.Windows.Forms.Label ygoMoveLabel;
-		private System.Windows.Forms.ComboBox ygoMoveField;
-		private System.Windows.Forms.NumericUpDown ygoPendulumRight;
-		private System.Windows.Forms.NumericUpDown ygoPendulumLeft;
-		private System.Windows.Forms.Label ygoPendulumLabel;
-		private System.Windows.Forms.Label ygoCardDialog;
 		private System.Windows.Forms.GroupBox ygoDetailBox;
 		private System.Windows.Forms.Button ygoEditPrintButton;
 		private System.Windows.Forms.Button ygoEditCardButton;
@@ -2799,7 +5021,7 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Button mtgPrevSetButton;
 		private System.Windows.Forms.Label mtgSetPageLabel;
 		private System.Windows.Forms.Button mtgNextSetButton;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label mtgSetlistLabel;
 		private System.Windows.Forms.Button mtgPrintAutofillButton;
 		private System.Windows.Forms.Button mtgPrintAutofillRangeButton;
 		private System.Windows.Forms.NumericUpDown mtgPrintAutoLimit;
@@ -2836,6 +5058,238 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Label mtgSearchTypeLabel;
 		private System.Windows.Forms.Button mtgDetailAutogenButton;
 		private System.Windows.Forms.Label mtgDetailDialog;
+		private System.Windows.Forms.RadioButton mtgSortNumericButton;
+		private System.Windows.Forms.RadioButton mtgSortAlphabeticalButton;
+		private System.Windows.Forms.ComboBox mtgSearchLocationField;
+		private System.Windows.Forms.Label mtgSearchLocationLabel;
+		private System.Windows.Forms.ComboBox mtgSearchSetField;
+		private System.Windows.Forms.Label mtgSearchSetLabel;
+		private System.Windows.Forms.CheckBox mtgPrintTokenCheck;
+		private System.Windows.Forms.TabPage pkmnPage;
+		private System.Windows.Forms.TabControl pkmnTabControl;
+		private System.Windows.Forms.TabPage pkmnSetlistPage;
+		private System.Windows.Forms.Button pkmnPrevSetButton;
+		private System.Windows.Forms.Label pkmnSetPageLabel;
+		private System.Windows.Forms.Button pkmnNextSetButton;
+		private System.Windows.Forms.Label pkmnSetlistLabel;
+		private System.Windows.Forms.FlowLayoutPanel pkmnSetlistLayout;
+		private System.Windows.Forms.TabPage pkmnSearchPage;
+		private System.Windows.Forms.ComboBox pkmnSearchSetField;
+		private System.Windows.Forms.Label pkmnSearchSetLabel;
+		private System.Windows.Forms.ComboBox pkmnSearchLocationField;
+		private System.Windows.Forms.Label pkmnSearchLocationLabel;
+		private System.Windows.Forms.Button pkmnSearchButton;
+		private System.Windows.Forms.TextBox pkmnSearchOracleField;
+		private System.Windows.Forms.TextBox pkmnSearchTypeField;
+		private System.Windows.Forms.Label pkmnSearchNameLabel;
+		private System.Windows.Forms.TextBox pkmnSearchNameField;
+		private System.Windows.Forms.Label pkmnSearchOracleLabel;
+		private System.Windows.Forms.Label pkmnSearchTypeLabel;
+		private System.Windows.Forms.TabPage pkmnCatalogPage;
+		private System.Windows.Forms.RadioButton pkmnSortAlphabeticalButton;
+		private System.Windows.Forms.RadioButton pkmnSortNumericButton;
+		private System.Windows.Forms.Button pkmnCatalogNextButton;
+		private System.Windows.Forms.Button pkmnCatalogPrevButton;
+		private System.Windows.Forms.FlowLayoutPanel pkmnCatalogLayout;
+		private System.Windows.Forms.Label pkmnCatalogIndex;
+		private System.Windows.Forms.TabPage pkmnDetailPage;
+		private System.Windows.Forms.Label pkmnDetailDialog;
+		private System.Windows.Forms.Button pkmnDetailAutogenButton;
+		private System.Windows.Forms.Button pkmnDeletePrintingButton;
+		private System.Windows.Forms.Button pkmnDetailNextButton;
+		private System.Windows.Forms.Button pkmnDetailPrevButton;
+		private System.Windows.Forms.GroupBox pkmnCardtipBox;
+		private System.Windows.Forms.PictureBox pkmnCardtipImage;
+		private System.Windows.Forms.GroupBox pkmnTooltipBox;
+		private System.Windows.Forms.GroupBox pkmnDetailBox;
+		private System.Windows.Forms.Button pkmnReloadLocationsButton;
+		private System.Windows.Forms.Button pkmnEditPrintButton;
+		private System.Windows.Forms.Button pkmnEditCardButton;
+		private System.Windows.Forms.Label pkmnMoveLabel;
+		private System.Windows.Forms.TableLayoutPanel pkmnLocationTable;
+		private System.Windows.Forms.ComboBox pkmnMoveField;
+		private System.Windows.Forms.PictureBox pkmnDetailImgbox;
+		private System.Windows.Forms.TabPage pkmnCardPage;
+		private System.Windows.Forms.Label pkmnIgnorDuplicateEntryLabel;
+		private System.Windows.Forms.CheckBox pkmnIgnorDuplicateEntryBox;
+		private System.Windows.Forms.TextBox pkmnTypeField;
+		private System.Windows.Forms.Label pkmnResistLabel;
+		private System.Windows.Forms.TextBox pkmnETypeField;
+		private System.Windows.Forms.Label pkmnETypeLabel;
+		private System.Windows.Forms.Label pkmnCardDialog;
+		private System.Windows.Forms.NumericUpDown pkmnHPField;
+		private System.Windows.Forms.Label pkmnHPLabel;
+		private System.Windows.Forms.Button pkmnAddCardButton;
+		private System.Windows.Forms.Label pkmnNameLabel;
+		private System.Windows.Forms.TextBox pkmnNameField;
+		private System.Windows.Forms.Label pkmnOracleLabel;
+		private System.Windows.Forms.TextBox pkmnOracleField;
+		private System.Windows.Forms.Label pkmnTypeLabel;
+		private System.Windows.Forms.TabPage pkmnPrintPage;
+		private System.Windows.Forms.NumericUpDown pkmnPrintAutoLimit;
+		private System.Windows.Forms.Button pkmnPrintAutofillRangeButton;
+		private System.Windows.Forms.Button pkmnPrintAutofillButton;
+		private System.Windows.Forms.Label pkmnCardrefDescriptor;
+		private System.Windows.Forms.Label pkmnPrintIDLabel;
+		private System.Windows.Forms.TextBox pkmnPrintIDField;
+		private System.Windows.Forms.Label pkmnImgpathBackLabel;
+		private System.Windows.Forms.PictureBox pkmnPrintImgboxBack;
+		private System.Windows.Forms.Button pkmnImgsearchBackButton;
+		private System.Windows.Forms.Label pkmnImgBackLabel;
+		private System.Windows.Forms.Label pkmnIODialog;
+		private System.Windows.Forms.Button pkmnSaveButton;
+		private System.Windows.Forms.Label pkmnImgpathLabel;
+		private System.Windows.Forms.Button pkmnRemTreatmentButton;
+		private System.Windows.Forms.Button pkmnAddTreatmentButton;
+		private System.Windows.Forms.PictureBox pkmnPrintImgbox;
+		private System.Windows.Forms.Button pkmnAddPrintButton;
+		private System.Windows.Forms.ComboBox pkmnCardrefField;
+		private System.Windows.Forms.Label pkmnCardrefLabel;
+		private System.Windows.Forms.Button pkmnImgsearchButton;
+		private System.Windows.Forms.Label pkmnImgLabel;
+		private System.Windows.Forms.TextBox pkmnFlavorField;
+		private System.Windows.Forms.Label pkmnFlavorLabel;
+		private System.Windows.Forms.Label pkmnTreatmentsValue;
+		private System.Windows.Forms.ComboBox pkmnTreatmentField;
+		private System.Windows.Forms.Label pkmnTreatmentLabel;
+		private System.Windows.Forms.NumericUpDown pkmnNumberField;
+		private System.Windows.Forms.Label pkmnNumberLabel;
+		private System.Windows.Forms.ComboBox pkmnSetField;
+		private System.Windows.Forms.Label pkmnSetLabel;
+		private System.Windows.Forms.TabPage pkmnSymbolPage;
+		private System.Windows.Forms.FlowLayoutPanel pkmnSymbolLayout;
+		private System.Windows.Forms.GroupBox pkmnSymbolHeaderBox;
+		private System.Windows.Forms.Button pkmnSaveSymbolsButton;
+		private System.Windows.Forms.Button pkmnAddSymbolButton;
+		private System.Windows.Forms.Label pkmnSymbolLabel;
+		private System.Windows.Forms.TabPage pkmnSetPage;
+		private System.Windows.Forms.Button pkmnReloadSetsButton;
+		private System.Windows.Forms.Button pkmnSetGeneratorPrev;
+		private System.Windows.Forms.Button pkmnAddSetButton;
+		private System.Windows.Forms.Button pkmnSaveSetsButton;
+		private System.Windows.Forms.Button pkmnSetGeneratorNext;
+		private System.Windows.Forms.Label pkmnSetGeneratorPageLabel;
+		private System.Windows.Forms.FlowLayoutPanel pkmnSetGeneratorLayout;
+		private System.Windows.Forms.Label pkmnSetGeneratorLabel;
+		private System.Windows.Forms.Label pkmnStageLabel;
+		private System.Windows.Forms.TextBox pkmnStageField;
+		private System.Windows.Forms.Label pkmnWeakLabel;
+		private System.Windows.Forms.TextBox pkmnWeakField;
+		private System.Windows.Forms.Label pkmnRetreatLabel;
+		private System.Windows.Forms.TextBox pkmnRetreatField;
+		private System.Windows.Forms.TextBox pkmnResistField;
+		private System.Windows.Forms.Button pkmnImportButton;
+		private System.Windows.Forms.TextBox pkmnImportField;
+		private System.Windows.Forms.Button pkmnPrintHoloButton;
+		private System.Windows.Forms.Button pkmnPrintNormalButton;
+		private System.Windows.Forms.Label ygoCardTypeLabel;
+		private System.Windows.Forms.NumericUpDown ygoScaleField;
+		private System.Windows.Forms.NumericUpDown ygoLevelField;
+		private System.Windows.Forms.NumericUpDown ygoDefField;
+		private System.Windows.Forms.NumericUpDown ygoAtkField;
+		private System.Windows.Forms.Label ygoCardDialog;
+		private System.Windows.Forms.Label ygoIgnoreDuplicateEntryLabel;
+		private System.Windows.Forms.CheckBox ygoIgnoreDuplicateEntryBox;
+		private System.Windows.Forms.Button ygoAddCardButton;
+		private System.Windows.Forms.Label ygoScaleLabel;
+		private System.Windows.Forms.Label ygoAtkDefLabel;
+		private System.Windows.Forms.Label ygoLevelLabel;
+		private System.Windows.Forms.TextBox ygoOracleField;
+		private System.Windows.Forms.TextBox ygoCardTypeField;
+		private System.Windows.Forms.TextBox ygoAttributeField;
+		private System.Windows.Forms.TextBox ygoPropertyField;
+		private System.Windows.Forms.TextBox ygoTypesField;
+		private System.Windows.Forms.TextBox ygoNameField;
+		private System.Windows.Forms.Label ygoOracleLabel;
+		private System.Windows.Forms.Label ygoTypesLabel;
+		private System.Windows.Forms.Label ygoPropertyLabel;
+		private System.Windows.Forms.Label ygoAttributeLabel;
+		private System.Windows.Forms.NumericUpDown ygoPrintAutoLimit;
+		private System.Windows.Forms.Button ygoPrintAutofillRangeButton;
+		private System.Windows.Forms.Button ygoPrintAutofillButton;
+		private System.Windows.Forms.Label ygoCardrefDescriptor;
+		private System.Windows.Forms.Label ygoPrintIDLabel;
+		private System.Windows.Forms.TextBox ygoPrintIDField;
+		private System.Windows.Forms.PictureBox ygoPrintImgboxBack;
+		private System.Windows.Forms.Button ygoImgsearchBackButton;
+		private System.Windows.Forms.Label ygoImgBackLabel;
+		private System.Windows.Forms.Label ygoIODialog;
+		private System.Windows.Forms.Button ygoSaveButton;
+		private System.Windows.Forms.Label ygoImgpathLabel;
+		private System.Windows.Forms.Button ygoRemoveRarityButton;
+		private System.Windows.Forms.Button ygoAddRarityButton;
+		private System.Windows.Forms.PictureBox ygoPrintImgbox;
+		private System.Windows.Forms.Button ygoAddPrintButton;
+		private System.Windows.Forms.ComboBox ygoCardrefField;
+		private System.Windows.Forms.Button ygoImgsearchButton;
+		private System.Windows.Forms.Label ygoImageLabel;
+		private System.Windows.Forms.TextBox ygoFlavorField;
+		private System.Windows.Forms.Label ygoFlavorLabel;
+		private System.Windows.Forms.Label ygoRaritiesValue;
+		private System.Windows.Forms.ComboBox ygoRaritiesField;
+		private System.Windows.Forms.Label ygoRaritiesLabel;
+		private System.Windows.Forms.NumericUpDown ygoNumberField;
+		private System.Windows.Forms.Label ygoNumberLabel;
+		private System.Windows.Forms.ComboBox ygoSetField;
+		private System.Windows.Forms.Label ygoSetLabel;
+		private System.Windows.Forms.TabPage ygoSetsPage;
+		private System.Windows.Forms.Label ygoSetGeneratorPageLabel;
+		private System.Windows.Forms.Button ygoSetGeneratorNext;
+		private System.Windows.Forms.Button ygoSetGeneratorPrev;
+		private System.Windows.Forms.Button ygoSaveSetsButton;
+		private System.Windows.Forms.Button ygoAddSetButton;
+		private System.Windows.Forms.Button ygoReloadSetsButton;
+		private System.Windows.Forms.FlowLayoutPanel ygoSetGeneratorLayout;
+		private System.Windows.Forms.Label ygoSetGeneratorLabel;
+		private System.Windows.Forms.ComboBox pkmnRarityField;
+		private System.Windows.Forms.Label pkmnRarityLabel;
+		private System.Windows.Forms.Label ygoCardrefLabel;
+		private System.Windows.Forms.Label ygoSetPageLabel;
+		private System.Windows.Forms.Button ygoNextSetButton;
+		private System.Windows.Forms.Button ygoPrevSetButton;
+		private System.Windows.Forms.Label ygoSetlistLabel;
+		private System.Windows.Forms.FlowLayoutPanel ygoSetlistLayout;
+		private System.Windows.Forms.TabPage ygoSearchPage;
+		private System.Windows.Forms.Label ygoSearchNameLabel;
+		private System.Windows.Forms.Label ygoSearchCardTypeLabel;
+		private System.Windows.Forms.Label ygoSearchTypesLabel;
+		private System.Windows.Forms.Label ygoSearchPropertyLabel;
+		private System.Windows.Forms.Label ygoSearchOracleLabel;
+		private System.Windows.Forms.Label ygoSearchAttributeLabel;
+		private System.Windows.Forms.ComboBox ygoSearchLocationField;
+		private System.Windows.Forms.ComboBox ygoSearchSetField;
+		private System.Windows.Forms.TextBox ygoSearchOracleField;
+		private System.Windows.Forms.TextBox ygoSearchTypesField;
+		private System.Windows.Forms.TextBox ygoSearchPropertyField;
+		private System.Windows.Forms.TextBox ygoSearchAttributeField;
+		private System.Windows.Forms.TextBox ygoSearchCardTypeField;
+		private System.Windows.Forms.TextBox ygoSearchNameField;
+		private System.Windows.Forms.Button ygoSearchButton;
+		private System.Windows.Forms.Label ygoSearchSetLabel;
+		private System.Windows.Forms.Label ygoSearchLocationLabel;
+		private System.Windows.Forms.GroupBox ygoCardtipBox;
+		private System.Windows.Forms.PictureBox ygoCardtipImage;
+		private System.Windows.Forms.GroupBox ygoTooltipBox;
+		private System.Windows.Forms.Button ygoDetailNextButton;
+		private System.Windows.Forms.Button ygoDetailAutogenButton;
+		private System.Windows.Forms.Button ygoDetailPrevButton;
+		private System.Windows.Forms.Button ygoReloadLocationsButton;
+		private System.Windows.Forms.ComboBox ygoMoveField;
+		private System.Windows.Forms.RadioButton ygoSortAlphabeticalButton;
+		private System.Windows.Forms.RadioButton ygoSortNumericButton;
+		private System.Windows.Forms.Button ygoCatalogNextButton;
+		private System.Windows.Forms.Button ygoCatalogPrevButton;
+		private System.Windows.Forms.FlowLayoutPanel ygoCatalogLayout;
+		private System.Windows.Forms.Label ygoCatalogIndex;
+		private System.Windows.Forms.Label ygoImgpathBackLabel;
+		private System.Windows.Forms.Button ygoDeletePrintingButton;
+		private System.Windows.Forms.Label ygoDetailDialog;
+		private System.Windows.Forms.Button ygoImportButton;
+		private System.Windows.Forms.TextBox ygoImportField;
+		private System.Windows.Forms.GroupBox ygoPrintingsBox;
+		private System.Windows.Forms.GroupBox mtgPrintingsBox;
+		private System.Windows.Forms.GroupBox pkmnPrintingsBox;
+		private System.Windows.Forms.Button pkmnTrainerButton;
 	}
 }
 

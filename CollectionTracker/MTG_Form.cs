@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,7 +27,7 @@ namespace CollectionTracker {
 			mtgTreatments = new List<string>();
 			mtgCatalog = new MTG_Catalog();
 			mtgPrintFilter = new List<MTG_Printing>();
-			detailBoxes = new List<GroupBox>();
+			mtgDetailBoxes = new List<GroupBox>();
 			mtgNameField.LostFocus += new EventHandler((sender, e) => MTG_CheckCardNameExists());
 			MTG_Utils.TryLoadImage(mtgIdentityImgW, "resources/mtg/_icons/w.png");
 			MTG_Utils.TryLoadImage(mtgIdentityImgU, "resources/mtg/_icons/u.png");
@@ -48,6 +50,8 @@ namespace CollectionTracker {
 			MTG_Utils.TryLoadImage(mtgSearchColImgR, "resources/mtg/_icons/r.png");
 			MTG_Utils.TryLoadImage(mtgSearchColImgG, "resources/mtg/_icons/g.png");
 			MTG_Utils.TryLoadCardImage(mtgPrintImgboxBack, MTG_Utils.CARD_BACK_PATH);
+			mtgClient.DefaultRequestHeaders.Add("User-Agent", "CollectionTracker");
+			mtgClient.DefaultRequestHeaders.Add("Accept", "application/json");
 			MTG_LoadCatalog();
 		}
 
@@ -57,10 +61,18 @@ namespace CollectionTracker {
 			mtgRarityField.Items.Clear();
 			mtgTreatmentField.Items.Clear();
 			mtgMoveField.Items.Clear();
-			foreach (MTG_Set set in mtgCatalog.sets) { mtgSetField.Items.Add(set); }
+			mtgSearchSetField.Items.Clear();
+			mtgSearchSetField.Items.Add("--");
+			mtgSearchLocationField.Items.Clear();
+			mtgSearchLocationField.Items.Add("--");
+			foreach (MTG_Set set in mtgCatalog.sets) {
+				mtgSetField.Items.Add(set);
+				mtgSearchSetField.Items.Add(set);
+			}
 			foreach (string name in mtgCatalog.printings.Select(p => p.rarity).Distinct()) { mtgRarityField.Items.Add(name); }
 			foreach (string name in mtgCatalog.printings.SelectMany(p => p.treatments).Select(t => t.name).Distinct()) { mtgTreatmentField.Items.Add(name); }
 			foreach (string name in mtgCatalog.printings.SelectMany(p => p.treatments).SelectMany(t => t.locations).Distinct()) { mtgMoveField.Items.Add(name); }
+			foreach (string name in mtgCatalog.printings.SelectMany(p => p.treatments).SelectMany(t => t.locations).Distinct()) { mtgSearchLocationField.Items.Add(name); }
 		}
 
 		#endregion
@@ -125,11 +137,12 @@ namespace CollectionTracker {
 			List<MTG_Printing> cardsInSet = mtgCatalog.printings.Where(print => print.set == set).ToList();
 			int setCount = cardsInSet.Count;
 			int setOwned = cardsInSet.Count(print => print.AnyOwned());
+			bool missingCardref = cardsInSet.Count(print => print.card.name.Equals("") || print.card.name.Equals("_")) > 0;
 
 			//Set info box
 			GroupBox box = new GroupBox();
 			mtgSetLayout.Controls.Add(box);
-			box.Size = new Size(740, 70);
+			box.Size = new Size(820, 70);
 
 			//Filter button
 			Button filter = new Button();
@@ -159,14 +172,14 @@ namespace CollectionTracker {
 			Label label = new Label();
 			box.Controls.Add(label);
 			label.Location = new Point(360, 15);
-			label.Size = new Size(60, 50);
+			label.Size = new Size(100, 50);
 			label.Text = setOwned.ToString() + '/' + setCount.ToString();
 			label.TextAlign = ContentAlignment.MiddleCenter;
 
 			//Progress bar
 			ProgressBar bar = new ProgressBar();
 			box.Controls.Add(bar);
-			bar.Location = new Point(430, 25);
+			bar.Location = new Point(470, 25);
 			bar.Size = new Size(265, 30);
 			if (setCount > 0) { bar.Value = (int)(((float)setOwned / setCount) * 100); }
 
@@ -174,7 +187,7 @@ namespace CollectionTracker {
 			if (set.indent == 0) {
 				Button expand = new Button();
 				box.Controls.Add(expand);
-				expand.Location = new Point(700, 15);
+				expand.Location = new Point(740, 15);
 				expand.Size = new Size(35, 50);
 				expand.Text = "V";
 				expand.TextAlign = ContentAlignment.MiddleCenter;
@@ -183,6 +196,16 @@ namespace CollectionTracker {
 
 			//Hide if not main set
 			else { box.Hide(); }
+
+			//Missing cardref label
+			if (missingCardref) {
+				Label cardrefLabel = new Label();
+				box.Controls.Add(cardrefLabel);
+				cardrefLabel.Location = new Point(780, 15);
+				cardrefLabel.Size = new Size(35, 50);
+				cardrefLabel.Text = "*";
+				cardrefLabel.TextAlign = ContentAlignment.MiddleCenter;
+			}
 
 			//Add to list
 			mtgSetlist.Add((set, box, false));
@@ -214,7 +237,8 @@ namespace CollectionTracker {
 					mtgPrintFilter.Add(print);
 				}
 			}
-			mtgPrintFilter.Sort(new PrintComparer().Compare);
+			if (mtgSortMode) { mtgPrintFilter.Sort(new PrintComparerNumeric().Compare); }
+			else { mtgPrintFilter.Sort(new PrintComparerAlphabetical().Compare); }
 			mtgCatalogPagenum = 0;
 			MTG_UpdateCatalog();
 			mtgTabControl.SelectedTab = mtgCatalogPage;
@@ -224,76 +248,69 @@ namespace CollectionTracker {
 
 		#region Search
 
+		//Check if string contains all in a given array of substrings
+		private bool MTG_CheckSubstring(string s, string[] arr) {
+			foreach (string ss in arr) {
+				if (!s.ToLower().Contains(ss.ToLower())) {
+					return false;
+				}
+			}
+			return true;
+		}
+
 		//Search for card matching given criteria
 		private void MTG_Search(object sender, EventArgs e) {
 
 			//Clear print filter
 			mtgPrintFilter.Clear();
-			mtgPrintFilter = new List<MTG_Printing>(mtgCatalog.printings);
+			mtgPrintFilter = new List<MTG_Printing>();
 
-			//Name
-			if (mtgSearchNameField.Text.Length > 0) {
-				string[] names = mtgSearchNameField.Text.Split('|');
-				foreach (string name in names) {
-					mtgPrintFilter = mtgCatalog.printings.Where(
-						p => p.card.name.ToLower().Contains(name.ToLower())
-						  && mtgPrintFilter.Contains(p)
-					).ToList();
-				}
-			}
+			//Parameters
+			bool searchName = mtgSearchNameField.Text.Length > 0;
+			bool searchTypes = mtgSearchTypeField.Text.Length > 0;
+			bool searchOracle = mtgSearchOracleField.Text.Length > 0;
+			string set = mtgSearchSetField.SelectedItem?.ToString() ?? "";
+			string loc = mtgSearchLocationField.SelectedItem?.ToString() ?? "";
+			bool searchSet = !set.Equals("") && !set.Equals("--");
+			bool searchLoc = !loc.Equals("") && !loc.Equals("--");
 
-			//Colour
+			//Colour and identity
 			MTG_Colour colour = MTG_Colour.None;
 			if (mtgSearchColW.Checked) { colour |= MTG_Colour.White; }
 			if (mtgSearchColU.Checked) { colour |= MTG_Colour.Blue; }
 			if (mtgSearchColB.Checked) { colour |= MTG_Colour.Black; }
 			if (mtgSearchColR.Checked) { colour |= MTG_Colour.Red; }
 			if (mtgSearchColG.Checked) { colour |= MTG_Colour.Green; }
-			if (colour != MTG_Colour.None) {
-				mtgPrintFilter = mtgCatalog.printings.Where(
-					p => p.card.colour == colour
-					  && mtgPrintFilter.Contains(p)
-				).ToList();
-			}
-
-			//Identity
 			MTG_Colour identity = MTG_Colour.None;
 			if (mtgSearchIDW.Checked) { identity |= MTG_Colour.White; }
 			if (mtgSearchIDU.Checked) { identity |= MTG_Colour.Blue; }
 			if (mtgSearchIDB.Checked) { identity |= MTG_Colour.Black; }
 			if (mtgSearchIDR.Checked) { identity |= MTG_Colour.Red; }
 			if (mtgSearchIDG.Checked) { identity |= MTG_Colour.Green; }
-			if (identity != MTG_Colour.None) {
-				mtgPrintFilter = mtgCatalog.printings.Where(
-					p => identity.HasFlag(p.card.identity)
-					  && mtgPrintFilter.Contains(p)
-				).ToList();
-			}
 
-			//Card types
-			if (mtgSearchTypeField.Text.Length > 0) {
-				string[] types = mtgSearchTypeField.Text.Split('|');
-				foreach (string type in types) {
-					mtgPrintFilter = mtgCatalog.printings.Where(
-						p => p.card.cardTypes.ToLower().Contains(type.ToLower())
-						  && mtgPrintFilter.Contains(p)
-					).ToList();
+			//Search
+			foreach(MTG_Printing print in mtgCatalog.printings) {
+				if (colour != MTG_Colour.None && print.card.colour != colour) { continue; }
+				if (identity != MTG_Colour.None && !identity.HasFlag(print.card.identity)) { continue; }
+				if (searchName && !MTG_CheckSubstring(print.card.name, mtgSearchNameField.Text.Split('|'))) { continue; }
+				if (searchTypes && !MTG_CheckSubstring(print.card.cardTypes, mtgSearchTypeField.Text.Split('|'))) { continue; }
+				if (searchOracle && !MTG_CheckSubstring(print.card.oracleText, mtgSearchOracleField.Text.Split('|'))) { continue; }
+				if (searchSet && print.set != mtgSearchSetField.SelectedItem) { continue; }
+				if (searchLoc) {
+					bool add = false;
+					foreach (MTG_Treatment treatment in print.treatments) {
+						if (treatment.locations.Contains(loc)) {
+							add = true;
+						}
+					}
+					if (!add) { continue; }
 				}
-			}
-
-			//Oracle text
-			if (mtgSearchOracleField.Text.Length > 0) {
-				string[] oracles = mtgSearchOracleField.Text.Split('|');
-				foreach (string oracle in oracles) {
-					mtgPrintFilter = mtgCatalog.printings.Where(
-						p => p.card.oracleText.ToLower().Contains(oracle.ToLower())
-						  && mtgPrintFilter.Contains(p)
-					).ToList();
-				}
+				mtgPrintFilter.Add(print);
 			}
 
 			//Show catalog
-			mtgPrintFilter.Sort(new PrintComparer().Compare);
+			if (mtgSortMode) { mtgPrintFilter.Sort(new PrintComparerNumeric().Compare); }
+			else { mtgPrintFilter.Sort(new PrintComparerAlphabetical().Compare); }
 			mtgCatalogPagenum = 0;
 			MTG_UpdateCatalog();
 			mtgTabControl.SelectedTab = mtgCatalogPage;
@@ -307,6 +324,19 @@ namespace CollectionTracker {
 		//Properties
 		public int mtgCatalogPagenum = 0;
 		public int mtgCardsPerPage = 50;
+		public bool mtgSortMode = true;
+
+		//Sort buttons
+		private void MTG_OnClickSortAlphabetical(object sender, EventArgs e) => MTG_UpdateSortMode(false);
+		private void MTG_OnClickSortNumeric(object sender, EventArgs e) => MTG_UpdateSortMode(true);
+		private void MTG_UpdateSortMode(bool mode) {
+			mtgSortMode = mode;
+			if (mtgSortMode) { mtgPrintFilter.Sort(new PrintComparerNumeric().Compare); }
+			else { mtgPrintFilter.Sort(new PrintComparerAlphabetical().Compare); }
+			mtgCatalogPagenum = 0;
+			MTG_UpdateCatalog();
+			mtgTabControl.SelectedTab = mtgCatalogPage;
+		}
 
 		//Paging
 		private void MTG_OnClickCatalogPrev(object sender, EventArgs e) {
@@ -440,7 +470,7 @@ namespace CollectionTracker {
 		//Properties
 		public const int TEXT_HEIGHT = 21;
 		public bool mtgDetailFlipped = false;
-		public List<GroupBox> detailBoxes;
+		public List<GroupBox> mtgDetailBoxes;
 		public MTG_Printing mtgDetailPrint = null;
 		public MTG_Printing mtgDetailPrev = null;
 		public MTG_Printing mtgDetailNext = null;
@@ -459,8 +489,8 @@ namespace CollectionTracker {
 			MTG_Card card = print.card;
 
 			//Clear old boxes
-			foreach (GroupBox box in detailBoxes) { mtgDetailPage.Controls.Remove(box); }
-			detailBoxes.Clear();
+			foreach (GroupBox box in mtgDetailBoxes) { mtgDetailPage.Controls.Remove(box); }
+			mtgDetailBoxes.Clear();
 
 			//Y position to create elements at
 			int y = 5;
@@ -548,7 +578,7 @@ namespace CollectionTracker {
 				y2 += 5;
 				box.Location = new Point(mtgDetailBox.Location.X, y);
 				box.Size = new Size(mtgDetailBox.Size.Width, y2);
-				detailBoxes.Add(box);
+				mtgDetailBoxes.Add(box);
 				y += 10 + y2;
 
 			}
@@ -557,19 +587,28 @@ namespace CollectionTracker {
 			mtgDetailBox.Location = new Point(mtgDetailBox.Location.X, y);
 			MTG_LoadLocationTable(print);
 
+			//Load printings
+			MTG_LoadPrintingsList(print.card, print);
+
 			//Nav buttons
-			mtgDetailPrev = mtgCatalog.printings.FirstOrDefault(p => p.set == print.set && p.cardNumber == (print.cardNumber - 1));
-			if (mtgDetailPrev == null) { mtgDetailPrevButton.Hide(); }
-			else {
-				mtgDetailPrevButton.Show();
-				mtgDetailPrevButton.Text = mtgDetailPrev.card.name;
+			int idx = mtgPrintFilter.IndexOf(print);
+			if (idx == -1) {
+				mtgDetailPrevButton.Hide();
+				mtgDetailNextButton.Hide();
+				return;
 			}
-			mtgDetailNext = mtgCatalog.printings.FirstOrDefault(p => p.set == print.set && p.cardNumber == (print.cardNumber + 1));
-			if (mtgDetailNext == null) { mtgDetailNextButton.Hide(); }
-			else {
-				mtgDetailNextButton.Show();
-				mtgDetailNextButton.Text = mtgDetailNext.card.name;
-			}
+			if (idx > 0)
+				mtgDetailPrev = mtgPrintFilter[idx - 1];
+			else
+				mtgDetailPrev = mtgPrintFilter[mtgPrintFilter.Count - 1];
+			if (idx < mtgPrintFilter.Count - 1)
+				mtgDetailNext = mtgPrintFilter[idx + 1];
+			else
+				mtgDetailNext = mtgPrintFilter[0];
+			mtgDetailPrevButton.Show();
+			mtgDetailPrevButton.Text = mtgDetailPrev.card.name;
+			mtgDetailNextButton.Show();
+			mtgDetailNextButton.Text = mtgDetailNext.card.name;
 
 			//Hide tooltip
 			mtgTooltipBox.Hide();
@@ -968,7 +1007,38 @@ namespace CollectionTracker {
 		//Reload location data
 		private void MTG_OnClickReloadLocations(object sender, EventArgs e) {
 			mtgMoveField.Items.Clear();
+			mtgSearchLocationField.Items.Clear();
+			mtgSearchLocationField.Items.Add("--");
 			foreach (string name in mtgCatalog.printings.SelectMany(p => p.treatments).SelectMany(t => t.locations).Distinct()) { mtgMoveField.Items.Add(name); }
+			foreach (string name in mtgCatalog.printings.SelectMany(p => p.treatments).SelectMany(t => t.locations).Distinct()) { mtgSearchLocationField.Items.Add(name); }
+		}
+
+		//Load printings list
+		private void MTG_LoadPrintingsList(MTG_Card card, MTG_Printing curPrint) {
+			mtgPrintingsBox.Controls.Clear();
+			if (card.name.Equals("_"))
+				return;
+			List<MTG_Printing> prints = mtgCatalog.printings.Where(p => p.card == card).ToList();
+			prints.Sort(new PrintComparerNumeric().Compare);
+			for (int i = 0; i < prints.Count; ++i) {
+				Label label = new Label();
+				if (prints[i] != curPrint) {
+					label.Font = new Font(Font, FontStyle.Underline);
+					label.ForeColor = Color.Blue;
+				}
+				mtgPrintingsBox.Controls.Add(label);
+				label.Location = new Point(5, 20 + (i * 30));
+				label.Size = new Size(mtgPrintingsBox.Width - 10, TEXT_HEIGHT);
+				label.Text = prints[i].scryfallID.ToUpper() + " - " + prints[i].set.name;
+				label.TextAlign = ContentAlignment.MiddleLeft;
+				if (prints[i] != curPrint) {
+					string id = prints[i].scryfallID;
+					label.Click += new EventHandler((sender, e) => MTG_LoadCardtip(id));
+					label.MouseEnter += new EventHandler((sender, e) => MTG_ShowCardtip(label, id));
+					label.MouseLeave += new EventHandler((sender, e) => mtgCardtipBox.Hide());
+				}
+			}
+			mtgPrintingsBox.Height = 20 + (prints.Count * 30);
 		}
 
 		//Flip card image
@@ -1059,16 +1129,24 @@ namespace CollectionTracker {
 		}
 
 		//Navigation
-		private void MTG_LoadPreviousInSet(object sender, EventArgs e) => MTG_LoadCardDetails(mtgDetailPrev);
-		private void MTG_LoadNextInSet(object sender, EventArgs e) => MTG_LoadCardDetails(mtgDetailNext);
+		private void MTG_LoadPreviousInSelection(object sender, EventArgs e) => MTG_LoadPreviousInSelection();
+		private void MTG_LoadPreviousInSelection() {
+			if (mtgDetailPrev != null)
+				MTG_LoadCardDetails(mtgDetailPrev);
+		}
+		private void MTG_LoadNextInSelection(object sender, EventArgs e) => MTG_LoadNextInSelection();
+		private void MTG_LoadNextInSelection() {
+			if (mtgDetailNext != null)
+				MTG_LoadCardDetails(mtgDetailNext);
+		}
 
 		//Autogen card details, then move to the next card in the set every two seconds
 		private async void MTG_AutogenDetailRef(object sender, EventArgs e) {
 			await MTG_AutogenDetailRef();
 			while (mtgDetailNext != null) {
-				Thread.Sleep(1000);
+				Thread.Sleep(250);
 				MTG_LoadCardDetails(mtgDetailNext);
-				Thread.Sleep(1000);
+				Thread.Sleep(250);
 				await MTG_AutogenDetailRef();
 			}
 		}
@@ -1077,30 +1155,10 @@ namespace CollectionTracker {
 		private async Task MTG_AutogenDetailRef() { 
 
 			//Set up result and get card page
-			string result = "";
 			string name = "";
-			string[] lines = (await GetWebpage("https://scryfall.com/card/" + mtgDetailPrint.scryfallID)).Split('\n');
+			string result = await MTG_GetWebpage("https://api.scryfall.com/cards/" + mtgDetailPrint.scryfallID);
 
 			//Return if error
-			if (lines.Length == 1) {
-				mtgDetailDialog.Text = lines[0];
-				return;
-			}
-
-			//Find JSON link
-			for (int i = 0; i < lines.Length; ++i) {
-				if (lines[i].Contains("Copy-pasteable JSON")) {
-					result = lines[i - 3];
-					int idx = result.IndexOf("href=");
-					result = result.Substring(idx + 6);
-					idx = result.IndexOf('?');
-					result = result.Substring(0, idx);
-					break;
-				}
-			}
-
-			//Get JSON
-			result = await GetWebpage(result);
 			if (result.Contains("Error: ")) {
 				mtgDetailDialog.Text = result;
 				return;
@@ -1230,10 +1288,10 @@ namespace CollectionTracker {
 		}
 
 		//HTTP Client
-		static readonly HttpClient client = new HttpClient();
-		static async Task<string> GetWebpage(string url) {
+		static readonly HttpClient mtgClient = new HttpClient();
+		static async Task<string> MTG_GetWebpage(string url) {
 			try {
-				string data = await client.GetStringAsync(url);
+				string data = await mtgClient.GetStringAsync(url);
 				return data;
 			}
 			catch (Exception e) {
@@ -1414,11 +1472,12 @@ namespace CollectionTracker {
 				string code = set.code;
 				string num = mtgNumberField.Value.ToString().PadLeft(4, '0');
 				mtgScryfallField.Text = code.ToLower() + "/" + mtgNumberField.Value.ToString();
-				if (code.Length > 3) {
+				if (mtgPrintTokenCheck.Checked) {
 					num = code[0] + num;
 					code = code.Substring(1);
 				}
 				string path = "resources/mtg/" + code + "/" + num;
+				mtgCardrefDescriptor.Text = path;
 				if (MTG_Utils.TryLoadCardImage(mtgPrintImgbox, path + ".png", mtgImgpathLabel)) { return true; }
 				else {
 					if (MTG_Utils.TryLoadCardImage(mtgPrintImgbox, path + "a.png", mtgImgpathLabel)) {
@@ -1549,7 +1608,7 @@ namespace CollectionTracker {
 		}
 
 		//Regenerate symbol controls
-		private void RegenerateSymbols() {
+		private void MTG_RegenerateSymbols() {
 			foreach (MTG_FormSymbol symbol in mtgFormSymbols) { mtgSymbolLayout.Controls.Remove(symbol.box); }
 			mtgFormSymbols.Clear();
 			if (mtgCatalog.symbols == null) { mtgCatalog.symbols = new List<MTG_Symbol>(); }
@@ -1839,6 +1898,13 @@ namespace CollectionTracker {
 				else { formSet.set.Copy(set); }
 			}
 			MTG_UpdateSets();
+			mtgSetField.Items.Clear();
+			mtgSearchSetField.Items.Clear();
+			mtgSearchSetField.Items.Add("--");
+			foreach (MTG_Set set in mtgCatalog.sets) {
+				mtgSetField.Items.Add(set);
+				mtgSearchSetField.Items.Add(set);
+			}
 		}
 
 		#endregion
@@ -1876,7 +1942,7 @@ namespace CollectionTracker {
 			}
 
 			//Generate symbol controls
-			RegenerateSymbols();
+			MTG_RegenerateSymbols();
 			MTG_RegenerateSets();
 
 			//Update lists
