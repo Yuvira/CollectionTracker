@@ -1,20 +1,21 @@
-﻿using System;
+﻿using ProtoBuf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
 
+	#region Catalog
+
 	//Catalog object containing all card references and printing information
-	[Serializable]
+	[ProtoContract]
 	public class YGO_Catalog {
 
-		//Card and printing lists
-		public List<YGO_Card> cards;
-		public List<YGO_Printing> printings;
-
-		//Additional lists
-		public List<YGO_Set> sets;
+		//Properties
+		[ProtoMember(1)] public List<YGO_Card> cards;
+		[ProtoMember(2)] public List<YGO_Printing> printings;
+		[ProtoMember(3)] public List<YGO_Set> sets;
 
 		//Constructor
 		public YGO_Catalog() {
@@ -23,25 +24,37 @@ namespace CollectionTracker {
 			sets = new List<YGO_Set>();
 		}
 
+		//Save and load print references
+		public void SavePrintRefs() {
+			foreach (YGO_Printing print in printings)
+				print.SaveRefs(this);
+		}
+		public void LoadPrintRefs() {
+			foreach (YGO_Printing print in printings)
+				print.LoadRefs(this);
+		}
+
 	}
+
+	#endregion
 
 	#region Card Data
 
 	//Unique card data
-	[Serializable]
+	[ProtoContract]
 	public class YGO_Card {
 
 		//Properties
-		public string name;
-		public string cardType;
-		public string attribute;
-		public string property;
-		public string types;
-		public string oracleText;
-		public int level;
-		public int pendulumScale;
-		public int atk;
-		public int def;
+		[ProtoMember(1)]  public string name;
+		[ProtoMember(2)]  public string cardType;
+		[ProtoMember(3)]  public string attribute;
+		[ProtoMember(4)]  public string property;
+		[ProtoMember(5)]  public string types;
+		[ProtoMember(6)]  public string oracleText;
+		[ProtoMember(7)]  public int level;
+		[ProtoMember(8)]  public int pendulumScale;
+		[ProtoMember(9)]  public int atk;
+		[ProtoMember(10)] public int def;
 
 		//Constructor
 		public YGO_Card() : this("", "", "", "", "", "", 0, 0, 0, 0) { }
@@ -82,18 +95,18 @@ namespace CollectionTracker {
 	#region Printing Data
 
 	//Unique information for each printing of a card, as well as collection status
-	[Serializable]
+	[ProtoContract]
 	public class YGO_Printing {
 
 		//Properties
-		public YGO_Set set;
-		public int cardNumber;
-		public string flavorText;
-		public string imgPath;
-		public string backImgPath;
-		public List<YGO_Rarity> rarities;
-		public YGO_Card card;
-		public string printID;
+		[ProtoMember(1)] private int setIndex; public YGO_Set set;
+		[ProtoMember(2)] public int cardNumber;
+		[ProtoMember(3)] public string flavorText;
+		[ProtoMember(4)] public string imgPath;
+		[ProtoMember(5)] public string backImgPath;
+		[ProtoMember(6)] public List<YGO_Rarity> rarities;
+		[ProtoMember(7)] private int cardIndex; public YGO_Card card;
+		[ProtoMember(8)] public string printID;
 
 		//Constructor
 		public YGO_Printing() : this(null, 0, "", "", "", new List<YGO_Rarity>(), new YGO_Card(), "") { }
@@ -217,6 +230,16 @@ namespace CollectionTracker {
 			return false;
 		}
 
+		//Save and load reference objects
+		public void SaveRefs(YGO_Catalog catalog) {
+			setIndex = catalog.sets.IndexOf(set);
+			cardIndex = catalog.cards.IndexOf(card);
+		}
+		public void LoadRefs(YGO_Catalog catalog) {
+			set = catalog.sets[setIndex];
+			card = catalog.cards[cardIndex];
+		}
+
 	}
 
 	//Numeric comparer
@@ -241,14 +264,14 @@ namespace CollectionTracker {
 
 	#region Set Data
 
-	[Serializable]
+	[ProtoContract]
 	public class YGO_Set {
 
 		//Properties
-		public string name;
-		public string code;
-		public string imgPath;
-		public DateTime date;
+		[ProtoMember(1)] public string name;
+		[ProtoMember(2)] public string code;
+		[ProtoMember(3)] public string imgPath;
+		[ProtoMember(4)] public DateTime date;
 
 		//Constructor
 		public YGO_Set() : this("", "", "", DateTime.Now) { }
@@ -286,15 +309,16 @@ namespace CollectionTracker {
 	#region Rarity Data
 
 	//Class containing the name of a treatment along with its owned quantities and their locations
-	[Serializable]
+	[ProtoContract]
 	public class YGO_Rarity {
 
 		//Properties
-		public string name;
-		public List<string> locations;
-		public List<int> quantities;
+		[ProtoMember(1)] public string name;
+		[ProtoMember(2)] public List<string> locations;
+		[ProtoMember(3)] public List<int> quantities;
 
 		//Constructor
+		public YGO_Rarity() : this("") { }
 		public YGO_Rarity(string name) {
 			this.name = name;
 			locations = new List<string>();
@@ -302,16 +326,16 @@ namespace CollectionTracker {
 		}
 
 		//Copy constructor
-		public YGO_Rarity(YGO_Rarity treatment) {
-			name = treatment.name;
-			locations = new List<string>(treatment.locations);
-			quantities = new List<int>(treatment.quantities);
+		public YGO_Rarity(YGO_Rarity rarity) {
+			name = rarity.name;
+			locations = new List<string>(rarity.locations);
+			quantities = new List<int>(rarity.quantities);
 		}
 
 		//Static default list generator
-		public static List<YGO_Rarity> GenerateTreatments(List<string> treatments) {
+		public static List<YGO_Rarity> GenerateTreatments(List<string> rarities) {
 			List<YGO_Rarity> list = new List<YGO_Rarity>();
-			foreach (string treatment in treatments) { list.Add(new YGO_Rarity(treatment)); }
+			foreach (string rarity in rarities) { list.Add(new YGO_Rarity(rarity)); }
 			return list;
 		}
 

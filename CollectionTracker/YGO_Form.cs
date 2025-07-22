@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ProtoBuf;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -1878,10 +1880,9 @@ namespace CollectionTracker {
 		private void YGO_SaveCatalog() {
 
 			//Serialize catalog to file
-			using (Stream stream = File.Open("resources/ygo/catalog.bin", FileMode.Create)) {
-				var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-				binaryFormatter.Serialize(stream, ygoCatalog);
-			}
+			ygoCatalog.SavePrintRefs();
+			using (Stream stream = File.Open("resources/ygo/catalog.bin", FileMode.Create))
+				Serializer.Serialize(stream, ygoCatalog);
 
 			//Log
 			ygoIODialog.Text = "Catalog saved";
@@ -1893,10 +1894,9 @@ namespace CollectionTracker {
 
 			//Deserialize catalog from file
 			try {
-				using (Stream stream = File.Open("resources/ygo/catalog.bin", FileMode.Open)) {
-					var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-					ygoCatalog = (YGO_Catalog)binaryFormatter.Deserialize(stream);
-				}
+				using (Stream stream = File.Open("resources/ygo/catalog.bin", FileMode.Open))
+					ygoCatalog = Serializer.Deserialize<YGO_Catalog>(stream);
+				ygoCatalog.LoadPrintRefs();
 			}
 			catch (Exception ex) {
 				ygoIODialog.Text = "Error: " + ex.Message;
