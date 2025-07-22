@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProtoBuf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -20,17 +21,17 @@ namespace CollectionTracker {
 
 	#endregion
 
+	#region Catalog
+
 	//Catalog object containing all card references and printing information
-	[Serializable]
+	[ProtoContract]
 	public class MTG_Catalog {
 
-		//Card and printing lists
-		public List<MTG_Card> cards;
-		public List<MTG_Printing> printings;
-
-		//Additional lists
-		public List<MTG_Set> sets;
-		public List<MTG_Symbol> symbols;
+		//Properties
+		[ProtoMember(1)] public List<MTG_Card> cards;
+		[ProtoMember(2)] public List<MTG_Printing> printings;
+		[ProtoMember(3)] public List<MTG_Set> sets;
+		[ProtoMember(4)] public List<MTG_Symbol> symbols;
 
 		//Constructor
 		public MTG_Catalog() {
@@ -40,25 +41,37 @@ namespace CollectionTracker {
 			symbols = new List<MTG_Symbol>();
 		}
 
+		//Save and load print references
+		public void SavePrintRefs() {
+			foreach (MTG_Printing print in printings)
+				print.SaveRefs(this);
+		}
+		public void LoadPrintRefs() {
+			foreach (MTG_Printing print in printings)
+				print.LoadRefs(this);
+		}
+
 	}
+
+	#endregion
 
 	#region Card Data
 
 	//Unique card data
-	[Serializable]
+	[ProtoContract]
 	public class MTG_Card {
 
 		//Properties
-		public string name;
-		public MTG_Colour identity;
-		public MTG_Colour colour;
-		public string cost;
-		public string cardTypes;
-		public string oracleText;
-		public int power;
-		public int toughness;
-		public int power2;
-		public int toughness2;
+		[ProtoMember(1)]  public string name;
+		[ProtoMember(2)]  public MTG_Colour identity;
+		[ProtoMember(3)]  public MTG_Colour colour;
+		[ProtoMember(4)]  public string cost;
+		[ProtoMember(5)]  public string cardTypes;
+		[ProtoMember(6)]  public string oracleText;
+		[ProtoMember(7)]  public int power;
+		[ProtoMember(8)]  public int toughness;
+		[ProtoMember(9)]  public int power2;
+		[ProtoMember(10)] public int toughness2;
 
 		//Constructor
 		public MTG_Card() : this("", 0, 0, "", "", "", 0, 0, 0, 0) { }
@@ -103,19 +116,19 @@ namespace CollectionTracker {
 	#region Printing Data
 
 	//Unique information for each printing of a card, as well as collection status
-	[Serializable]
+	[ProtoContract]
 	public class MTG_Printing {
 
 		//Properties
-		public MTG_Set set;
-		public int cardNumber;
-		public string flavorText;
-		public string imgPath;
-		public string backImgPath;
-		public string rarity;
-		public List<MTG_Treatment> treatments;
-		public MTG_Card card;
-		public string scryfallID;
+		[ProtoMember(1)] private int setIndex; public MTG_Set set;
+		[ProtoMember(2)] public int cardNumber;
+		[ProtoMember(3)] public string flavorText;
+		[ProtoMember(4)] public string imgPath;
+		[ProtoMember(5)] public string backImgPath;
+		[ProtoMember(6)] public string rarity;
+		[ProtoMember(7)] public List<MTG_Treatment> treatments;
+		[ProtoMember(8)] private int cardIndex; public MTG_Card card;
+		[ProtoMember(9)] public string scryfallID;
 
 		//Constructor
 		public MTG_Printing() : this(null, 0, "", "", "", "", new List<MTG_Treatment>(), new MTG_Card(), "") { }
@@ -241,6 +254,16 @@ namespace CollectionTracker {
 			return false;
 		}
 
+		//Save and load reference objects
+		public void SaveRefs(MTG_Catalog catalog) {
+			setIndex = catalog.sets.IndexOf(set);
+			cardIndex = catalog.cards.IndexOf(card);
+		}
+		public void LoadRefs(MTG_Catalog catalog) {
+			set = catalog.sets[setIndex];
+			card = catalog.cards[cardIndex];
+		}
+
 	}
 
 	//Numeric comparer
@@ -265,16 +288,16 @@ namespace CollectionTracker {
 
 	#region Set Data
 
-	[Serializable]
+	[ProtoContract]
 	public class MTG_Set {
 
 		//Properties
-		public string name;
-		public string code;
-		public string imgPath;
-		public DateTime date;
-		public int order;
-		public int indent;
+		[ProtoMember(1)] public string name;
+		[ProtoMember(2)] public string code;
+		[ProtoMember(3)] public string imgPath;
+		[ProtoMember(4)] public DateTime date;
+		[ProtoMember(5)] public int order;
+		[ProtoMember(6)] public int indent;
 
 		//Constructor
 		public MTG_Set() : this("", "", "", DateTime.Now, 0, 0) { }
@@ -318,14 +341,14 @@ namespace CollectionTracker {
 	#region Symbol Data
 
 	//Symbol data
-	[Serializable]
+	[ProtoContract]
 	public class MTG_Symbol {
 
 		//Properties
-		public string name;
-		public string symbol;
-		public string imgPath;
-		public decimal aspect;
+		[ProtoMember(1)] public string name;
+		[ProtoMember(2)] public string symbol;
+		[ProtoMember(3)] public string imgPath;
+		[ProtoMember(4)] public decimal aspect;
 
 		//Constructor
 		public MTG_Symbol() : this("", "", "", 1.00m) { }
@@ -343,15 +366,16 @@ namespace CollectionTracker {
 	#region Treatment Data
 
 	//Class containing the name of a treatment along with its owned quantities and their locations
-	[Serializable]
+	[ProtoContract]
 	public class MTG_Treatment {
 
 		//Properties
-		public string name;
-		public List<string> locations;
-		public List<int> quantities;
+		[ProtoMember(1)] public string name;
+		[ProtoMember(2)] public List<string> locations;
+		[ProtoMember(3)] public List<int> quantities;
 
 		//Constructor
+		public MTG_Treatment() : this("") { }
 		public MTG_Treatment(string name) {
 			this.name = name;
 			locations = new List<string>();

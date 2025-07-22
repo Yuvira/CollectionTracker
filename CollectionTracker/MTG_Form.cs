@@ -1,11 +1,11 @@
-﻿using System;
+﻿using ProtoBuf;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -1916,10 +1916,9 @@ namespace CollectionTracker {
 		private void MTG_SaveCatalog() {
 
 			//Serialize catalog to file
-			using (Stream stream = File.Open("resources/mtg/catalog.bin", FileMode.Create)) {
-				var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-				binaryFormatter.Serialize(stream, mtgCatalog);
-			}
+			mtgCatalog.SavePrintRefs();
+			using (Stream stream = File.Open("resources/mtg/catalog.bin", FileMode.Create))
+				Serializer.Serialize(stream, mtgCatalog);
 
 			//Log
 			mtgIODialog.Text = "Catalog saved";
@@ -1931,10 +1930,9 @@ namespace CollectionTracker {
 
 			//Deserialize catalog from file
 			try {
-				using (Stream stream = File.Open("resources/mtg/catalog.bin", FileMode.Open)) {
-					var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-					mtgCatalog = (MTG_Catalog)binaryFormatter.Deserialize(stream);
-				}
+				using (Stream stream = File.Open("resources/mtg/catalog.bin", FileMode.Open))
+					mtgCatalog = Serializer.Deserialize<MTG_Catalog>(stream);
+				mtgCatalog.LoadPrintRefs();
 			}
 			catch (Exception ex) {
 				mtgIODialog.Text = "Error: " + ex.Message;
