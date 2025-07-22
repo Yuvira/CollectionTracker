@@ -1,12 +1,11 @@
-﻿using System;
+﻿using ProtoBuf;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.NetworkInformation;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -1998,10 +1997,9 @@ namespace CollectionTracker {
 		private void PKMN_SaveCatalog() {
 
 			//Serialize catalog to file
-			using (Stream stream = File.Open("resources/pkmn/catalog.bin", FileMode.Create)) {
-				var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-				binaryFormatter.Serialize(stream, pkmnCatalog);
-			}
+			pkmnCatalog.SavePrintRefs();
+			using (Stream stream = File.Open("resources/pkmn/catalog.bin", FileMode.Create))
+				Serializer.Serialize(stream, pkmnCatalog);
 
 			//Log
 			pkmnIODialog.Text = "Catalog saved";
@@ -2013,10 +2011,9 @@ namespace CollectionTracker {
 
 			//Deserialize catalog from file
 			try {
-				using (Stream stream = File.Open("resources/pkmn/catalog.bin", FileMode.Open)) {
-					var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-					pkmnCatalog = (PKMN_Catalog)binaryFormatter.Deserialize(stream);
-				}
+				using (Stream stream = File.Open("resources/pkmn/catalog.bin", FileMode.Open))
+					pkmnCatalog = Serializer.Deserialize<PKMN_Catalog>(stream);
+				pkmnCatalog.LoadPrintRefs();
 			}
 			catch (Exception ex) {
 				pkmnIODialog.Text = "Error: " + ex.Message;

@@ -1,22 +1,22 @@
-﻿using System;
+﻿using ProtoBuf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
 
+	#region Catalog
+
 	//Catalog object containing all card references and printing information
-	[Serializable]
+	[ProtoContract]
 	public class PKMN_Catalog {
 
-		//Card and printing lists
-		public List<PKMN_Card> cards;
-		public List<PKMN_Printing> printings;
-
-		//Additional lists
-		public List<PKMN_Set> sets;
-		public List<PKMN_Symbol> symbols;
+		//Properties
+		[ProtoMember(1)] public List<PKMN_Card> cards;
+		[ProtoMember(2)] public List<PKMN_Printing> printings;
+		[ProtoMember(3)] public List<PKMN_Set> sets;
+		[ProtoMember(4)] public List<PKMN_Symbol> symbols;
 
 		//Constructor
 		public PKMN_Catalog() {
@@ -26,24 +26,36 @@ namespace CollectionTracker {
 			symbols = new List<PKMN_Symbol>();
 		}
 
+		//Save and load print references
+		public void SavePrintRefs() {
+			foreach (PKMN_Printing print in printings)
+				print.SaveRefs(this);
+		}
+		public void LoadPrintRefs() {
+			foreach (PKMN_Printing print in printings)
+				print.LoadRefs(this);
+		}
+
 	}
+
+	#endregion
 
 	#region Card Data
 
 	//Unique card data
-	[Serializable]
+	[ProtoContract]
 	public class PKMN_Card {
 
 		//Properties
-		public string name;
-		public string energyType;
-		public string cardTypes;
-		public string stage;
-		public string oracleText;
-		public string weakness;
-		public string resistance;
-		public string retreatCost;
-		public int hp;
+		[ProtoMember(1)] public string name;
+		[ProtoMember(2)] public string energyType;
+		[ProtoMember(3)] public string cardTypes;
+		[ProtoMember(4)] public string stage;
+		[ProtoMember(5)] public string oracleText;
+		[ProtoMember(6)] public string weakness;
+		[ProtoMember(7)] public string resistance;
+		[ProtoMember(8)] public string retreatCost;
+		[ProtoMember(9)] public int hp;
 
 		//Constructor
 		public PKMN_Card() : this("", "", "", "", "", "", "", "", 0) { }
@@ -93,19 +105,19 @@ namespace CollectionTracker {
 	#region Printing Data
 
 	//Unique information for each printing of a card, as well as collection status
-	[Serializable]
+	[ProtoContract]
 	public class PKMN_Printing {
 
 		//Properties
-		public PKMN_Set set;
-		public int cardNumber;
-		public string flavorText;
-		public string imgPath;
-		public string backImgPath;
-		public string rarity;
-		public List<PKMN_Treatment> treatments;
-		public PKMN_Card card;
-		public string printID;
+		[ProtoMember(1)] private int setIndex; public PKMN_Set set;
+		[ProtoMember(2)] public int cardNumber;
+		[ProtoMember(3)] public string flavorText;
+		[ProtoMember(4)] public string imgPath;
+		[ProtoMember(5)] public string backImgPath;
+		[ProtoMember(6)] public string rarity;
+		[ProtoMember(7)] public List<PKMN_Treatment> treatments;
+		[ProtoMember(8)] private int cardIndex; public PKMN_Card card;
+		[ProtoMember(9)] public string printID;
 
 		//Constructor
 		public PKMN_Printing() : this(null, 0, "", "", "", "", new List<PKMN_Treatment>(), new PKMN_Card(), "") { }
@@ -239,6 +251,16 @@ namespace CollectionTracker {
 			return false;
 		}
 
+		//Save and load reference objects
+		public void SaveRefs(PKMN_Catalog catalog) {
+			setIndex = catalog.sets.IndexOf(set);
+			cardIndex = catalog.cards.IndexOf(card);
+		}
+		public void LoadRefs(PKMN_Catalog catalog) {
+			set = catalog.sets[setIndex];
+			card = catalog.cards[cardIndex];
+		}
+
 	}
 
 	//Numeric comparer
@@ -265,14 +287,14 @@ namespace CollectionTracker {
 
 	#region Set Data
 
-	[Serializable]
+	[ProtoContract]
 	public class PKMN_Set {
 
 		//Properties
-		public string name;
-		public string code;
-		public string imgPath;
-		public DateTime date;
+		[ProtoMember(1)] public string name;
+		[ProtoMember(2)] public string code;
+		[ProtoMember(3)] public string imgPath;
+		[ProtoMember(4)] public DateTime date;
 
 		//Constructor
 		public PKMN_Set() : this("", "", "", DateTime.Now) { }
@@ -310,14 +332,14 @@ namespace CollectionTracker {
 	#region Symbol Data
 
 	//Symbol data
-	[Serializable]
+	[ProtoContract]
 	public class PKMN_Symbol {
 
 		//Properties
-		public string name;
-		public string symbol;
-		public string imgPath;
-		public decimal aspect;
+		[ProtoMember(1)] public string name;
+		[ProtoMember(2)] public string symbol;
+		[ProtoMember(3)] public string imgPath;
+		[ProtoMember(4)] public decimal aspect;
 
 		//Constructor
 		public PKMN_Symbol() : this("", "", "", 1.00m) { }
@@ -335,15 +357,16 @@ namespace CollectionTracker {
 	#region Treatment Data
 
 	//Class containing the name of a treatment along with its owned quantities and their locations
-	[Serializable]
+	[ProtoContract]
 	public class PKMN_Treatment {
 
 		//Properties
-		public string name;
-		public List<string> locations;
-		public List<int> quantities;
+		[ProtoMember(1)] public string name;
+		[ProtoMember(2)] public List<string> locations;
+		[ProtoMember(3)] public List<int> quantities;
 
 		//Constructor
+		public PKMN_Treatment() : this("") { }
 		public PKMN_Treatment(string name) {
 			this.name = name;
 			locations = new List<string>();
