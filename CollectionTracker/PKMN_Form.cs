@@ -1604,18 +1604,8 @@ namespace CollectionTracker {
 			PKMN_Card card = (PKMN_Card)pkmnCardrefField.SelectedItem;
 			if (card == null) { return; }
 
-			//Build description string
-			string s = "";
-			if (card.hp > 0)
-				s += card.hp.ToString();
-			if (card.energyType.Length > 0)
-				s += " " + card.energyType + " ";
-			s += card.name;
-			s += " | " + card.cardTypes;
-			s += " | " + card.oracleText;
-
 			//Populate descriptor
-			pkmnCardrefDescriptor.Text = s;
+			pkmnCardrefDescriptor.Text = card.ToString();
 
 		}
 

@@ -90,8 +90,11 @@ namespace CollectionTracker {
 			if (cardTypes.Contains("Pokémon")) {
 				s += " | " + energyType + " " + hp.ToString();
 				string[] lines = oracleText.Split(new string[] { "\r\n" }, StringSplitOptions.None);
-				for (int i = 0; i < lines.Length; i += 3)
-					s += " | " + lines[i];
+				foreach (string line in lines) {
+					if (line.StartsWith("{") || line.StartsWith("Pokémon Power") || line.StartsWith("Poké-POWER") || line.StartsWith("Poké-BODY") || line.StartsWith("Card Effect"))
+						s += " | " + line;
+				}
+				s += " | " + weakness + " | " + resistance + " | " + retreatCost;
 			}
 			else if (hp != 0)
 				s += " | " + hp.ToString();
