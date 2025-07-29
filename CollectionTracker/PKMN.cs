@@ -415,6 +415,7 @@ namespace CollectionTracker {
 			{ "Fire"      , "{R}" },
 			{ "Water"     , "{W}" },
 			{ "Fairy"     , "{Y}" },
+			{ "Typeless"  , "{A}" },
 		};
 
 		//Returns string with tooltip text/markers removed
