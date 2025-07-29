@@ -607,7 +607,7 @@ namespace CollectionTracker {
 					lines[i] = lines[i].Insert(0, "`^");
 				else if (lines[i].StartsWith("Poké-BODY"))
 					lines[i] = lines[i].Insert(0, "`*");
-				else if (lines[i].StartsWith("Card Effect"))
+				else if (lines[i].StartsWith("Card Effect") || lines[i].StartsWith("Held Item"))
 					lines[i] = lines[i].Insert(0, "`~");
 			}
 			return string.Join("\r\n", lines);
@@ -1360,7 +1360,7 @@ namespace CollectionTracker {
 						o += "\r\n\r\n";
 
 					//Powers
-					if (lines[i].Contains("Pokémon Power") || lines[i].Contains("Poké-POWER") || lines[i].Contains("Poké-BODY") || lines[i].Contains("Card Effect")) {
+					if (lines[i].Contains("Pokémon Power") || lines[i].Contains("Poké-POWER") || lines[i].Contains("Poké-BODY") || lines[i].Contains("Card Effect") || lines[i].Contains("Held Item")) {
 						o += lines[i] + " — " + lines[i + 1] + "\r\n" + PKMN_Utils.ReplaceSymbolsInText(lines[i + 3]);
 						i += 4;
 					}
