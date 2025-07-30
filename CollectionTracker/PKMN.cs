@@ -280,6 +280,19 @@ namespace CollectionTracker {
 		}
 	}
 
+	//Reverse numeric comparer
+	public class PKMN_PrintComparerNumericReverse : IComparer<PKMN_Printing> {
+		public int Compare(PKMN_Printing print1, PKMN_Printing print2) {
+			int setCompare = new PKMN_SetComparer().Compare(print1.set, print2.set);
+			if (setCompare != 0) { return setCompare; }
+			if (print1.HasSpecialCN() && !print2.HasSpecialCN()) { return 1; }
+			if (print2.HasSpecialCN() && !print1.HasSpecialCN()) { return -1; }
+			if (print1.cardNumber < print2.cardNumber) { return 1; }
+			if (print2.cardNumber < print1.cardNumber) { return -1; }
+			return 0;
+		}
+	}
+
 	//Alphabetical comparer
 	public class PKMN_PrintComparerAlphabetical : IComparer<PKMN_Printing> {
 		public int Compare(PKMN_Printing print1, PKMN_Printing print2) {

@@ -1015,7 +1015,7 @@ namespace CollectionTracker {
 			if (card.name.Equals("_"))
 				return;
 			List<PKMN_Printing> prints = pkmnCatalog.printings.Where(p => p.card == card).ToList();
-			prints.Sort(new PKMN_PrintComparerNumeric().Compare);
+			prints.Sort(new PKMN_PrintComparerNumericReverse().Compare);
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = new Label();
 				if (prints[i] != curPrint) {
