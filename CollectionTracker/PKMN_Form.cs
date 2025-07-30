@@ -1821,8 +1821,9 @@ namespace CollectionTracker {
 			public DateTimePicker dateBox;
 			public Label pathLabel;
 			public PictureBox iconBox;
-			public PKMN_FormSet() : this(null, null, null, null, null, null, null) { }
-			public PKMN_FormSet(PKMN_Set set, GroupBox box, TextBox nameBox, TextBox codeBox, DateTimePicker dateBox, Label pathLabel, PictureBox iconBox) {
+			public CheckBox leadBonusSheetCheckbox;
+			public PKMN_FormSet() : this(null, null, null, null, null, null, null, null) { }
+			public PKMN_FormSet(PKMN_Set set, GroupBox box, TextBox nameBox, TextBox codeBox, DateTimePicker dateBox, Label pathLabel, PictureBox iconBox, CheckBox leadBonusSheetCheckbox) {
 				this.set = set;
 				this.box = box;
 				this.nameBox = nameBox;
@@ -1830,6 +1831,7 @@ namespace CollectionTracker {
 				this.dateBox = dateBox;
 				this.pathLabel = pathLabel;
 				this.iconBox = iconBox;
+				this.leadBonusSheetCheckbox = leadBonusSheetCheckbox;
 			}
 		}
 
@@ -1874,7 +1876,7 @@ namespace CollectionTracker {
 
 			//Group box
 			GroupBox box = new GroupBox();
-			box.Size = new Size(350, 155);
+			box.Size = new Size(350, 180);
 
 			//Symbol box
 			TextBox name = new TextBox();
@@ -1897,10 +1899,18 @@ namespace CollectionTracker {
 			date.Size = new Size(340, 30);
 			date.Value = useRef ? refSet.date : DateTime.Now;
 
+			//Leading bonus sheet box
+			CheckBox bsBox = new CheckBox();
+			box.Controls.Add(bsBox);
+			bsBox.Location = new Point(5, 115);
+			bsBox.Size = new Size(285, 35);
+			bsBox.Checked = useRef ? refSet.leadBonusSheet : false;
+			bsBox.Text = "Has leading bonus sheet";
+
 			//Path label
 			Label path = new Label();
 			box.Controls.Add(path);
-			path.Location = new Point(5, 120);
+			path.Location = new Point(5, 140);
 			path.Size = new Size(285, 30);
 			path.TextAlign = ContentAlignment.MiddleLeft;
 
@@ -1919,7 +1929,7 @@ namespace CollectionTracker {
 			}
 
 			//Create object and set up search event
-			PKMN_FormSet set = new PKMN_FormSet(useRef ? refSet : null, box, name, code, date, path, icon);
+			PKMN_FormSet set = new PKMN_FormSet(useRef ? refSet : null, box, name, code, date, path, icon, bsBox);
 			icon.Click += new EventHandler((sender, e) => PKMN_OnClickSearchSetIcon(set));
 
 			//Add to list and layout
@@ -1951,7 +1961,8 @@ namespace CollectionTracker {
 					formSet.nameBox.Text,
 					formSet.codeBox.Text,
 					formSet.pathLabel.Text,
-					formSet.dateBox.Value
+					formSet.dateBox.Value,
+					formSet.leadBonusSheetCheckbox.Checked
 				);
 				if (formSet.set == null) { pkmnCatalog.sets.Add(set); }
 				else { formSet.set.Copy(set); }

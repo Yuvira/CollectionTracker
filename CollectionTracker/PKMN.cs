@@ -248,9 +248,9 @@ namespace CollectionTracker {
 		}
 
 		//Return true if collector's number starts with a character
-		public bool HasSpecialCN() {
-			string[] split = printID.Split('/');
-			if (split.Length > 1 && split[1].Length > 0 && !char.IsDigit(split[1][0]))
+		public bool IsBonusSheet() {
+			int idx = printID.IndexOf('/');
+			if (idx >= 0 && idx < printID.Length - 1 && !char.IsDigit(printID[idx + 1]))
 				return true;
 			return false;
 		}
@@ -272,8 +272,8 @@ namespace CollectionTracker {
 		public int Compare(PKMN_Printing print1, PKMN_Printing print2) {
 			int setCompare = new PKMN_SetComparer().Compare(print1.set, print2.set);
 			if (setCompare != 0) { return setCompare; }
-			if (print1.HasSpecialCN() && !print2.HasSpecialCN()) { return -1; }
-			if (print2.HasSpecialCN() && !print1.HasSpecialCN()) { return 1; }
+			if (print1.IsBonusSheet() && !print2.IsBonusSheet()) { return print1.set.leadBonusSheet ? -1 : 1; }
+			if (print2.IsBonusSheet() && !print1.IsBonusSheet()) { return print2.set.leadBonusSheet ? 1 : -1; }
 			if (print1.cardNumber < print2.cardNumber) { return -1; }
 			if (print2.cardNumber < print1.cardNumber) { return 1; }
 			return 0;
@@ -285,8 +285,8 @@ namespace CollectionTracker {
 		public int Compare(PKMN_Printing print1, PKMN_Printing print2) {
 			int setCompare = new PKMN_SetComparer().Compare(print1.set, print2.set);
 			if (setCompare != 0) { return setCompare; }
-			if (print1.HasSpecialCN() && !print2.HasSpecialCN()) { return 1; }
-			if (print2.HasSpecialCN() && !print1.HasSpecialCN()) { return -1; }
+			if (print1.IsBonusSheet() && !print2.IsBonusSheet()) { return print1.set.leadBonusSheet ? 1 : -1; }
+			if (print2.IsBonusSheet() && !print1.IsBonusSheet()) { return print2.set.leadBonusSheet ? -1 : 1; }
 			if (print1.cardNumber < print2.cardNumber) { return 1; }
 			if (print2.cardNumber < print1.cardNumber) { return -1; }
 			return 0;
@@ -312,14 +312,16 @@ namespace CollectionTracker {
 		[ProtoMember(2)] public string code;
 		[ProtoMember(3)] public string imgPath;
 		[ProtoMember(4)] public DateTime date;
+		[ProtoMember(5)] public bool leadBonusSheet;
 
 		//Constructor
-		public PKMN_Set() : this("", "", "", DateTime.Now) { }
-		public PKMN_Set(string name, string code, string imgPath, DateTime date) {
+		public PKMN_Set() : this("", "", "", DateTime.Now, false) { }
+		public PKMN_Set(string name, string code, string imgPath, DateTime date, bool leadBonusSheet) {
 			this.name = name;
 			this.code = code;
 			this.imgPath = imgPath;
 			this.date = date;
+			this.leadBonusSheet = leadBonusSheet;
 		}
 
 		//Copy function
@@ -328,6 +330,7 @@ namespace CollectionTracker {
 			code = set.code;
 			imgPath = set.imgPath;
 			date = set.date;
+			leadBonusSheet = set.leadBonusSheet;
 		}
 
 		//ToString
@@ -340,7 +343,7 @@ namespace CollectionTracker {
 		public int Compare(PKMN_Set set1, PKMN_Set set2) {
 			if (set1.date.Date > set2.date.Date) { return -1; }
 			if (set2.date.Date > set1.date.Date) { return 1; }
-			return 0;
+			return string.Compare(set1.ToString(), set2.ToString());
 		}
 	}
 
