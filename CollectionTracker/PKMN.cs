@@ -1,6 +1,7 @@
 ﻿using ProtoBuf;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -91,7 +92,7 @@ namespace CollectionTracker {
 				s += " | " + energyType + " " + hp.ToString();
 				string[] lines = oracleText.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 				foreach (string line in lines) {
-					if (line.StartsWith("{") || line.StartsWith("Pokémon Power") || line.StartsWith("Poké-POWER") || line.StartsWith("Poké-BODY") || line.StartsWith("Card Effect"))
+					if (line.StartsWith("{") || PKMN_Utils.abilityTerms.Keys.Any(t => line.StartsWith(t)))
 						s += " | " + line;
 				}
 				s += " | " + weakness + " | " + resistance + " | " + retreatCost;
@@ -416,6 +417,15 @@ namespace CollectionTracker {
 			{ "Water"     , "{W}" },
 			{ "Fairy"     , "{Y}" },
 			{ "Typeless"  , "{A}" },
+		};
+
+		//Ability term list
+		public static readonly Dictionary<string, Color> abilityTerms = new Dictionary<string, Color> {
+			{ "Pokémon Power", Color.Red   },
+			{ "Poké-POWER",    Color.Red   },
+			{ "Poké-BODY",     Color.Green },
+			{ "Card Effect",   Color.White },
+			{ "Held Item",     Color.White },
 		};
 
 		//Returns string with tooltip text/markers removed

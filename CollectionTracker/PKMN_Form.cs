@@ -600,16 +600,9 @@ namespace CollectionTracker {
 		//Add markers to abilities so the description generator knows where to bold/colour text
 		private string PKMN_AddAbilityMarkers(string desc) {
 			string[] lines = desc.Split(new string[] { "\r\n" }, StringSplitOptions.None);
-			for (int i = 0; i < lines.Length; ++i) {
+			for (int i = 0; i < lines.Length; ++i)
 				if (lines[i].StartsWith("{"))
 					lines[i] = lines[i].Insert(lines[i].LastIndexOf('}') + 2, "`");
-				else if (lines[i].StartsWith("Pokémon Power") || lines[i].StartsWith("Poké-POWER"))
-					lines[i] = lines[i].Insert(0, "`^");
-				else if (lines[i].StartsWith("Poké-BODY"))
-					lines[i] = lines[i].Insert(0, "`*");
-				else if (lines[i].StartsWith("Card Effect") || lines[i].StartsWith("Held Item"))
-					lines[i] = lines[i].Insert(0, "`~");
-			}
 			return string.Join("\r\n", lines);
 		}
 
@@ -744,17 +737,12 @@ namespace CollectionTracker {
 								label.Font = new Font(Font, FontStyle.Bold);
 								str = str.Substring(1);
 							}
-							if (str.StartsWith("^")) {
-								label.ForeColor = Color.Red;
-								str = str.Substring(1);
-							}
-							if (str.StartsWith("*")) {
-								label.ForeColor = Color.Green;
-								str = str.Substring(1);
-							}
-							if (str.StartsWith("~")) {
-								label.ForeColor = Color.White;
-								str = str.Substring(1);
+							foreach (KeyValuePair<string, Color> kvp in PKMN_Utils.abilityTerms) {
+								if (str.StartsWith(kvp.Key)) {
+									label.Font = new Font(Font, FontStyle.Bold);
+									label.ForeColor = kvp.Value;
+									break;
+								}
 							}
 							label.Size = new Size(TextRenderer.MeasureText(str, label.Font).Width, TEXT_HEIGHT);
 							label.Text = str;
@@ -1360,7 +1348,7 @@ namespace CollectionTracker {
 						o += "\r\n\r\n";
 
 					//Powers
-					if (lines[i].Contains("Pokémon Power") || lines[i].Contains("Poké-POWER") || lines[i].Contains("Poké-BODY") || lines[i].Contains("Card Effect") || lines[i].Contains("Held Item")) {
+					if (PKMN_Utils.abilityTerms.Keys.Any(t => lines[i].Contains(t))) { 
 						o += lines[i] + " — " + lines[i + 1] + "\r\n" + PKMN_Utils.ReplaceSymbolsInText(lines[i + 3]);
 						i += 4;
 					}
