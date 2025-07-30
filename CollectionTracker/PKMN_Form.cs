@@ -430,17 +430,38 @@ namespace CollectionTracker {
 			//Name
 			Label name = new Label();
 			headerBox.Controls.Add(name);
+			name.Font = Utils.FONT_BOLD;
 			name.Location = new Point(5, y2);
 			name.Size = new Size(TextRenderer.MeasureText(card.name, name.Font).Width, TEXT_HEIGHT);
 			name.Text = card.name;
 			name.TextAlign = ContentAlignment.MiddleLeft;
 
-			//Energy type
-			if (card.energyType.Length > 0) {
-				Point location = new Point(5 + TextRenderer.MeasureText(name.Text, name.Font).Width, y2);
-				foreach (string symbol in PKMN_GetSymbols(card.energyType))
+			//Energy type & HP
+			if (card.energyType.Length > 0 || card.hp > 0) {
+
+				//Value and width data
+				List<string> symbols = PKMN_GetSymbols(card.energyType);
+				string hpText = card.hp.ToString() + " HP";
+				int symbolWidth = (symbols.Count * TEXT_HEIGHT) + 10;
+				int hpWidth = TextRenderer.MeasureText(hpText, Utils.FONT_BOLD).Width;
+
+				//Draw HP label
+				Label hp = new Label();
+				headerBox.Controls.Add(hp);
+				hp.Font = Utils.FONT_BOLD;
+				hp.Location = new Point(pkmnDetailBox.Size.Width - (symbolWidth + hpWidth), y2);
+				hp.Size = new Size(hpWidth, TEXT_HEIGHT);
+				hp.Text = hpText;
+				hp.TextAlign = ContentAlignment.MiddleLeft;
+
+				//Draw symbols
+				Point location = new Point(pkmnDetailBox.Size.Width - symbolWidth, y2);
+				foreach (string symbol in symbols)
 					location = PKMN_InsertSymbol(symbol, headerBox, location, TEXT_HEIGHT);
+
 			}
+
+			//Next line
 			y2 += TEXT_HEIGHT + 10;
 
 			//Card Type
@@ -463,17 +484,6 @@ namespace CollectionTracker {
 				type.Text = card.stage;
 				type.TextAlign = ContentAlignment.MiddleLeft;
 				y2 += TEXT_HEIGHT + 10;
-			}
-
-			//Health
-			if (card.hp > 0) {
-				Label hp = new Label();
-				headerBox.Controls.Add(hp);
-				hp.Location = new Point(5, y2);
-				hp.Size = new Size(pkmnDetailBox.Size.Width - 10, 30);
-				hp.Text = card.hp.ToString() + " HP";
-				hp.TextAlign = ContentAlignment.MiddleLeft;
-				y2 += 35;
 			}
 
 			//Size box and set position for next
