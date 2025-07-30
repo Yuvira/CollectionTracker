@@ -513,12 +513,12 @@ namespace CollectionTracker {
 			if (print.flavorText.Length > 0) {
 				Label flavor = new Label();
 				box.Controls.Add(flavor);
+				flavor.Font = Utils.FONT_ITALIC;
 				flavor.Location = new Point(5, y2);
 				flavor.AutoSize = true;
 				flavor.MaximumSize = new Size(ygoDetailBox.Size.Width - 10, 0);
 				flavor.Text = print.flavorText;
 				flavor.TextAlign = ContentAlignment.MiddleLeft;
-				flavor.Font = new Font(flavor.Font, FontStyle.Italic);
 				y2 += 5 + flavor.Size.Height;
 			}
 
@@ -764,7 +764,7 @@ namespace CollectionTracker {
 		//Insert clickable tooltip text at position. Returns position at end of added text
 		private Point YGO_InsertTooltip(string str, string tooltip, Control control, Point location) {
 			Label label = new Label();
-			label.Font = new Font(Font, FontStyle.Underline);
+			label.Font = Utils.FONT_UNDERLINE;
 			label.ForeColor = Color.Blue;
 			int textWidth = TextRenderer.MeasureText(str, label.Font).Width;
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
@@ -782,7 +782,7 @@ namespace CollectionTracker {
 		//Insert clickable cardtip text at position. Returns position at end of added text
 		private Point YGO_InsertCardtip(string str, string cardtip, Control control, Point location) {
 			Label label = new Label();
-			label.Font = new Font(Font, FontStyle.Underline);
+			label.Font = Utils.FONT_UNDERLINE;
 			label.ForeColor = Color.Green;
 			int textWidth = TextRenderer.MeasureText(str, label.Font).Width;
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
@@ -801,7 +801,7 @@ namespace CollectionTracker {
 		//Insert bold text
 		private Point YGO_InsertBold(string str, Control control, Point location) {
 			Label label = new Label();
-			label.Font = new Font(Font, FontStyle.Bold);
+			label.Font = Utils.FONT_BOLD;
 			int textWidth = TextRenderer.MeasureText(str, label.Font).Width;
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
 			control.Controls.Add(label);
@@ -816,7 +816,7 @@ namespace CollectionTracker {
 		//Insert italicized text
 		private Point YGO_InsertItalic(string str, Control control, Point location) {
 			Label label = new Label();
-			label.Font = new Font(Font, FontStyle.Italic);
+			label.Font = Utils.FONT_ITALIC;
 			int textWidth = TextRenderer.MeasureText(str, label.Font).Width;
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
 			control.Controls.Add(label);
@@ -1023,7 +1023,7 @@ namespace CollectionTracker {
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = new Label();
 				if (prints[i] != curPrint) {
-					label.Font = new Font(Font, FontStyle.Underline);
+					label.Font = Utils.FONT_UNDERLINE;
 					label.ForeColor = Color.Blue;
 				}
 				ygoPrintingsBox.Controls.Add(label);

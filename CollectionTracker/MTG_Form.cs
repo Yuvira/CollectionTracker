@@ -565,12 +565,12 @@ namespace CollectionTracker {
 				if (i == names.Length - 1 && print.flavorText.Length > 0) {
 					Label flavor = new Label();
 					box.Controls.Add(flavor);
+					flavor.Font = Utils.FONT_ITALIC;
 					flavor.Location = new Point(5, y2);
 					flavor.AutoSize = true;
 					flavor.MaximumSize = new Size(mtgDetailBox.Size.Width - 10, 0);
 					flavor.Text = print.flavorText;
 					flavor.TextAlign = ContentAlignment.MiddleLeft;
-					flavor.Font = new Font(flavor.Font, FontStyle.Italic);
 					y2 += 5 + flavor.Size.Height;
 				}
 
@@ -798,7 +798,7 @@ namespace CollectionTracker {
 		//Insert clickable tooltip text at position. Returns position at end of added text
 		private Point MTG_InsertTooltip(string str, string tooltip, Control control, Point location) {
 			Label label = new Label();
-			label.Font = new Font(Font, FontStyle.Underline);
+			label.Font = Utils.FONT_UNDERLINE;
 			label.ForeColor = Color.Blue;
 			int textWidth = TextRenderer.MeasureText(str, label.Font).Width;
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
@@ -816,7 +816,7 @@ namespace CollectionTracker {
 		//Insert clickable cardtip text at position. Returns position at end of added text
 		private Point MTG_InsertCardtip(string str, string cardtip, Control control, Point location) {
 			Label label = new Label();
-			label.Font = new Font(Font, FontStyle.Underline);
+			label.Font = Utils.FONT_UNDERLINE;
 			label.ForeColor = Color.Green;
 			int textWidth = TextRenderer.MeasureText(str, label.Font).Width;
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
@@ -1023,7 +1023,7 @@ namespace CollectionTracker {
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = new Label();
 				if (prints[i] != curPrint) {
-					label.Font = new Font(Font, FontStyle.Underline);
+					label.Font = Utils.FONT_UNDERLINE;
 					label.ForeColor = Color.Blue;
 				}
 				mtgPrintingsBox.Controls.Add(label);

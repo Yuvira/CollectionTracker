@@ -4123,7 +4123,6 @@ namespace CollectionTracker {
 			// 
 			// pkmnETypeLabel
 			// 
-			this.pkmnETypeLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.pkmnETypeLabel.Location = new System.Drawing.Point(5, 40);
 			this.pkmnETypeLabel.Name = "pkmnETypeLabel";
 			this.pkmnETypeLabel.Size = new System.Drawing.Size(90, 30);
@@ -4778,7 +4777,7 @@ namespace CollectionTracker {
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ClientSize = new System.Drawing.Size(1284, 698);
 			this.Controls.Add(this.formTabControl);
-			this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Font = Utils.FONT_DEFAULT;
 			this.Name = "Form1";
 			this.ygoTabControl.ResumeLayout(false);
 			this.ygoSetPage.ResumeLayout(false);
