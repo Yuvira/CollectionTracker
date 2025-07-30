@@ -200,7 +200,7 @@ namespace CollectionTracker {
 		}
 
 		//Search for card matching given criteria
-		private void PKMN_Search(object sender, EventArgs e) {
+		private void PKMN_OnClickSearch(object sender, EventArgs e) {
 
 			//Clear print filter
 			pkmnPrintFilter.Clear();
@@ -241,6 +241,12 @@ namespace CollectionTracker {
 			pkmnTabControl.SelectedTab = pkmnCatalogPage;
 
 		}
+
+		//Clipboard buttons
+		private void PKMN_OnClickClipboardexButton(object sender, EventArgs e) => Clipboard.SetText("𝑒𝑥");
+		private void PKMN_OnClickClipboardStarButton(object sender, EventArgs e) => Clipboard.SetText("☆");
+		private void PKMN_OnClickClipboardDeltaButton(object sender, EventArgs e) => Clipboard.SetText("δ");
+		private void PKMN_OnClickClipboardPrismButton(object sender, EventArgs e) => Clipboard.SetText("◇");
 
 		#endregion
 

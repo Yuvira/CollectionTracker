@@ -310,6 +310,10 @@ namespace CollectionTracker {
 			this.pkmnSetlistLabel = new System.Windows.Forms.Label();
 			this.pkmnSetlistLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSearchPage = new System.Windows.Forms.TabPage();
+			this.pkmnClipboardPrismButton = new System.Windows.Forms.Button();
+			this.pkmnClipboardDeltaButton = new System.Windows.Forms.Button();
+			this.pkmnClipboardStarButton = new System.Windows.Forms.Button();
+			this.pkmnClipboardexButton = new System.Windows.Forms.Button();
 			this.pkmnSearchSetField = new System.Windows.Forms.ComboBox();
 			this.pkmnSearchSetLabel = new System.Windows.Forms.Label();
 			this.pkmnSearchLocationField = new System.Windows.Forms.ComboBox();
@@ -3560,6 +3564,10 @@ namespace CollectionTracker {
 			// 
 			this.pkmnSearchPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.pkmnSearchPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnSearchPage.Controls.Add(this.pkmnClipboardPrismButton);
+			this.pkmnSearchPage.Controls.Add(this.pkmnClipboardDeltaButton);
+			this.pkmnSearchPage.Controls.Add(this.pkmnClipboardStarButton);
+			this.pkmnSearchPage.Controls.Add(this.pkmnClipboardexButton);
 			this.pkmnSearchPage.Controls.Add(this.pkmnSearchSetField);
 			this.pkmnSearchPage.Controls.Add(this.pkmnSearchSetLabel);
 			this.pkmnSearchPage.Controls.Add(this.pkmnSearchLocationField);
@@ -3571,12 +3579,52 @@ namespace CollectionTracker {
 			this.pkmnSearchPage.Controls.Add(this.pkmnSearchNameField);
 			this.pkmnSearchPage.Controls.Add(this.pkmnSearchOracleLabel);
 			this.pkmnSearchPage.Controls.Add(this.pkmnSearchTypeLabel);
-			this.pkmnSearchPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnSearchPage.Location = new System.Drawing.Point(4, 33);
 			this.pkmnSearchPage.Name = "pkmnSearchPage";
 			this.pkmnSearchPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnSearchPage.Size = new System.Drawing.Size(1262, 626);
+			this.pkmnSearchPage.Size = new System.Drawing.Size(1262, 618);
 			this.pkmnSearchPage.TabIndex = 7;
 			this.pkmnSearchPage.Text = "Search";
+			// 
+			// pkmnClipboardPrismButton
+			// 
+			this.pkmnClipboardPrismButton.Location = new System.Drawing.Point(595, 5);
+			this.pkmnClipboardPrismButton.Name = "pkmnClipboardPrismButton";
+			this.pkmnClipboardPrismButton.Size = new System.Drawing.Size(35, 30);
+			this.pkmnClipboardPrismButton.TabIndex = 81;
+			this.pkmnClipboardPrismButton.Text = "◇";
+			this.pkmnClipboardPrismButton.UseVisualStyleBackColor = true;
+			this.pkmnClipboardPrismButton.Click += new System.EventHandler(this.PKMN_OnClickClipboardPrismButton);
+			// 
+			// pkmnClipboardDeltaButton
+			// 
+			this.pkmnClipboardDeltaButton.Location = new System.Drawing.Point(555, 5);
+			this.pkmnClipboardDeltaButton.Name = "pkmnClipboardDeltaButton";
+			this.pkmnClipboardDeltaButton.Size = new System.Drawing.Size(35, 30);
+			this.pkmnClipboardDeltaButton.TabIndex = 80;
+			this.pkmnClipboardDeltaButton.Text = "δ";
+			this.pkmnClipboardDeltaButton.UseVisualStyleBackColor = true;
+			this.pkmnClipboardDeltaButton.Click += new System.EventHandler(this.PKMN_OnClickClipboardDeltaButton);
+			// 
+			// pkmnClipboardStarButton
+			// 
+			this.pkmnClipboardStarButton.Location = new System.Drawing.Point(515, 5);
+			this.pkmnClipboardStarButton.Name = "pkmnClipboardStarButton";
+			this.pkmnClipboardStarButton.Size = new System.Drawing.Size(35, 30);
+			this.pkmnClipboardStarButton.TabIndex = 79;
+			this.pkmnClipboardStarButton.Text = "☆";
+			this.pkmnClipboardStarButton.UseVisualStyleBackColor = true;
+			this.pkmnClipboardStarButton.Click += new System.EventHandler(this.PKMN_OnClickClipboardStarButton);
+			// 
+			// pkmnClipboardexButton
+			// 
+			this.pkmnClipboardexButton.Location = new System.Drawing.Point(475, 5);
+			this.pkmnClipboardexButton.Name = "pkmnClipboardexButton";
+			this.pkmnClipboardexButton.Size = new System.Drawing.Size(35, 30);
+			this.pkmnClipboardexButton.TabIndex = 78;
+			this.pkmnClipboardexButton.Text = "𝑒𝑥";
+			this.pkmnClipboardexButton.UseVisualStyleBackColor = true;
+			this.pkmnClipboardexButton.Click += new System.EventHandler(this.PKMN_OnClickClipboardexButton);
 			// 
 			// pkmnSearchSetField
 			// 
@@ -3627,7 +3675,7 @@ namespace CollectionTracker {
 			this.pkmnSearchButton.TabIndex = 73;
 			this.pkmnSearchButton.Text = "Search";
 			this.pkmnSearchButton.UseVisualStyleBackColor = true;
-			this.pkmnSearchButton.Click += new System.EventHandler(this.PKMN_Search);
+			this.pkmnSearchButton.Click += new System.EventHandler(this.PKMN_OnClickSearch);
 			// 
 			// pkmnSearchOracleField
 			// 
@@ -4257,10 +4305,10 @@ namespace CollectionTracker {
 			this.pkmnPrintPage.Controls.Add(this.pkmnNumberLabel);
 			this.pkmnPrintPage.Controls.Add(this.pkmnSetField);
 			this.pkmnPrintPage.Controls.Add(this.pkmnSetLabel);
-			this.pkmnPrintPage.Location = new System.Drawing.Point(4, 33);
+			this.pkmnPrintPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnPrintPage.Name = "pkmnPrintPage";
 			this.pkmnPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnPrintPage.Size = new System.Drawing.Size(1262, 618);
+			this.pkmnPrintPage.Size = new System.Drawing.Size(1262, 626);
 			this.pkmnPrintPage.TabIndex = 1;
 			this.pkmnPrintPage.Text = "Printing Entry";
 			// 
@@ -4320,7 +4368,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnCardrefDescriptor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.pkmnCardrefDescriptor.AutoSize = true;
-			this.pkmnCardrefDescriptor.Location = new System.Drawing.Point(5, 555);
+			this.pkmnCardrefDescriptor.Location = new System.Drawing.Point(5, 563);
 			this.pkmnCardrefDescriptor.MaximumSize = new System.Drawing.Size(0, 21);
 			this.pkmnCardrefDescriptor.Name = "pkmnCardrefDescriptor";
 			this.pkmnCardrefDescriptor.Size = new System.Drawing.Size(16, 21);
@@ -4406,7 +4454,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.pkmnIODialog.AutoSize = true;
-			this.pkmnIODialog.Location = new System.Drawing.Point(260, 582);
+			this.pkmnIODialog.Location = new System.Drawing.Point(260, 590);
 			this.pkmnIODialog.Name = "pkmnIODialog";
 			this.pkmnIODialog.Size = new System.Drawing.Size(16, 21);
 			this.pkmnIODialog.TabIndex = 25;
@@ -4416,7 +4464,7 @@ namespace CollectionTracker {
 			// pkmnSaveButton
 			// 
 			this.pkmnSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.pkmnSaveButton.Location = new System.Drawing.Point(5, 579);
+			this.pkmnSaveButton.Location = new System.Drawing.Point(5, 587);
 			this.pkmnSaveButton.Name = "pkmnSaveButton";
 			this.pkmnSaveButton.Size = new System.Drawing.Size(250, 29);
 			this.pkmnSaveButton.TabIndex = 24;
@@ -4777,7 +4825,7 @@ namespace CollectionTracker {
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ClientSize = new System.Drawing.Size(1284, 698);
 			this.Controls.Add(this.formTabControl);
-			this.Font = Utils.FONT_DEFAULT;
+			this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "Form1";
 			this.ygoTabControl.ResumeLayout(false);
 			this.ygoSetPage.ResumeLayout(false);
@@ -5289,6 +5337,10 @@ namespace CollectionTracker {
 		private System.Windows.Forms.GroupBox mtgPrintingsBox;
 		private System.Windows.Forms.GroupBox pkmnPrintingsBox;
 		private System.Windows.Forms.Button pkmnTrainerButton;
+		private System.Windows.Forms.Button pkmnClipboardexButton;
+		private System.Windows.Forms.Button pkmnClipboardPrismButton;
+		private System.Windows.Forms.Button pkmnClipboardDeltaButton;
+		private System.Windows.Forms.Button pkmnClipboardStarButton;
 	}
 }
 
