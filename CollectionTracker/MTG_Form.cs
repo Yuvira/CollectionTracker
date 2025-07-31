@@ -1022,21 +1022,19 @@ namespace CollectionTracker {
 			prints.Sort(new PrintComparerNumeric().Compare);
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = new Label();
-				if (prints[i] != curPrint) {
-					label.Font = Utils.FONT_UNDERLINE;
+				label.Font = Utils.FONT_UNDERLINE;
+				if (prints[i] != curPrint)
 					label.ForeColor = Color.Blue;
-				}
 				mtgPrintingsBox.Controls.Add(label);
 				label.Location = new Point(5, 20 + (i * 30));
 				label.Size = new Size(mtgPrintingsBox.Width - 10, TEXT_HEIGHT);
 				label.Text = prints[i].scryfallID.ToUpper() + " - " + prints[i].set.name;
 				label.TextAlign = ContentAlignment.MiddleLeft;
-				if (prints[i] != curPrint) {
-					string id = prints[i].scryfallID;
+				string id = prints[i].scryfallID;
+				if (prints[i] != curPrint)
 					label.Click += new EventHandler((sender, e) => MTG_LoadCardtip(id));
-					label.MouseEnter += new EventHandler((sender, e) => MTG_ShowCardtip(label, id));
-					label.MouseLeave += new EventHandler((sender, e) => mtgCardtipBox.Hide());
-				}
+				label.MouseEnter += new EventHandler((sender, e) => MTG_ShowCardtip(label, id));
+				label.MouseLeave += new EventHandler((sender, e) => mtgCardtipBox.Hide());
 			}
 			mtgPrintingsBox.Height = 20 + (prints.Count * 30);
 		}

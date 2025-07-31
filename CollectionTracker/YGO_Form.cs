@@ -1022,21 +1022,19 @@ namespace CollectionTracker {
 			prints.Sort(new YGO_PrintComparerNumeric().Compare);
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = new Label();
-				if (prints[i] != curPrint) {
-					label.Font = Utils.FONT_UNDERLINE;
+				label.Font = Utils.FONT_UNDERLINE;
+				if (prints[i] != curPrint)
 					label.ForeColor = Color.Blue;
-				}
 				ygoPrintingsBox.Controls.Add(label);
 				label.Location = new Point(5, 20 + (i * 30));
 				label.Size = new Size(ygoPrintingsBox.Width - 10, TEXT_HEIGHT);
 				label.Text = prints[i].printID.ToUpper() + " - " + prints[i].set.name;
 				label.TextAlign = ContentAlignment.MiddleLeft;
-				if (prints[i] != curPrint) {
-					string id = prints[i].printID;
+				string id = prints[i].printID;
+				if (prints[i] != curPrint)
 					label.Click += new EventHandler((sender, e) => YGO_LoadCardtip(id));
-					label.MouseEnter += new EventHandler((sender, e) => YGO_ShowCardtip(label, id));
-					label.MouseLeave += new EventHandler((sender, e) => ygoCardtipBox.Hide());
-				}
+				label.MouseEnter += new EventHandler((sender, e) => YGO_ShowCardtip(label, id));
+				label.MouseLeave += new EventHandler((sender, e) => ygoCardtipBox.Hide());
 			}
 			ygoPrintingsBox.Height = 20 + (prints.Count * 30);
 		}
