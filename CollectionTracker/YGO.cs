@@ -249,7 +249,18 @@ namespace CollectionTracker {
 			if (setCompare != 0) { return setCompare; }
 			if (print1.cardNumber < print2.cardNumber) { return -1; }
 			if (print2.cardNumber < print1.cardNumber) { return 1; }
-			return 0;
+			return string.Compare(print1.printID, print2.printID);
+		}
+	}
+
+	//Reverse umeric comparer
+	public class YGO_PrintComparerNumericReverse : IComparer<YGO_Printing> {
+		public int Compare(YGO_Printing print1, YGO_Printing print2) {
+			int setCompare = new YGO_SetComparer().Compare(print1.set, print2.set);
+			if (setCompare != 0) { return setCompare; }
+			if (print1.cardNumber < print2.cardNumber) { return 1; }
+			if (print2.cardNumber < print1.cardNumber) { return -1; }
+			return string.Compare(print1.printID, print2.printID) * -1;
 		}
 	}
 

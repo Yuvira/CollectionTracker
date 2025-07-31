@@ -276,7 +276,7 @@ namespace CollectionTracker {
 			if (print2.IsBonusSheet() && !print1.IsBonusSheet()) { return print2.set.leadBonusSheet ? 1 : -1; }
 			if (print1.cardNumber < print2.cardNumber) { return -1; }
 			if (print2.cardNumber < print1.cardNumber) { return 1; }
-			return 0;
+			return string.Compare(print1.printID, print2.printID);
 		}
 	}
 
@@ -289,7 +289,7 @@ namespace CollectionTracker {
 			if (print2.IsBonusSheet() && !print1.IsBonusSheet()) { return print2.set.leadBonusSheet ? -1 : 1; }
 			if (print1.cardNumber < print2.cardNumber) { return 1; }
 			if (print2.cardNumber < print1.cardNumber) { return -1; }
-			return 0;
+			return string.Compare(print1.printID, print2.printID) * -1;
 		}
 	}
 

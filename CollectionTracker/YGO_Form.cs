@@ -1019,7 +1019,7 @@ namespace CollectionTracker {
 			if (card.name.Equals("_"))
 				return;
 			List<YGO_Printing> prints = ygoCatalog.printings.Where(p => p.card == card).ToList();
-			prints.Sort(new YGO_PrintComparerNumeric().Compare);
+			prints.Sort(new YGO_PrintComparerNumericReverse().Compare);
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = new Label();
 				label.Font = Utils.FONT_UNDERLINE;

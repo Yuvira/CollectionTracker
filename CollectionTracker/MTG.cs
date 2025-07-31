@@ -273,7 +273,18 @@ namespace CollectionTracker {
 			if (setCompare != 0) { return setCompare; }
 			if (print1.cardNumber < print2.cardNumber) { return -1; }
 			if (print2.cardNumber < print1.cardNumber) { return 1; }
-			return 0;
+			return string.Compare(print1.scryfallID, print2.scryfallID);
+		}
+	}
+
+	//Reverse numeric comparer
+	public class PrintComparerNumericReverse : IComparer<MTG_Printing> {
+		public int Compare(MTG_Printing print1, MTG_Printing print2) {
+			int setCompare = new SetComparer().Compare(print1.set, print2.set);
+			if (setCompare != 0) { return setCompare; }
+			if (print1.cardNumber < print2.cardNumber) { return 1; }
+			if (print2.cardNumber < print1.cardNumber) { return -1; }
+			return string.Compare(print1.scryfallID, print2.scryfallID) * -1;
 		}
 	}
 

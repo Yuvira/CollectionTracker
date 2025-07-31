@@ -1019,7 +1019,7 @@ namespace CollectionTracker {
 			if (card.name.Equals("_"))
 				return;
 			List<MTG_Printing> prints = mtgCatalog.printings.Where(p => p.card == card).ToList();
-			prints.Sort(new PrintComparerNumeric().Compare);
+			prints.Sort(new PrintComparerNumericReverse().Compare);
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = new Label();
 				label.Font = Utils.FONT_UNDERLINE;
