@@ -413,6 +413,9 @@ namespace CollectionTracker {
 			YGO_Utils.TryLoadCardImage(ygoDetailImgbox, print.imgPath);
 			ygoDetailFlipped = false;
 
+			//Set number in filter
+			ygoDetailFilterCountLabel.Text = (ygoPrintFilter.IndexOf(ygoDetailPrint) + 1).ToString() + " / " + ygoPrintFilter.Count.ToString();
+
 			//Get card reference
 			YGO_Card card = print.card;
 

@@ -433,6 +433,8 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSetGeneratorLabel = new System.Windows.Forms.Label();
 			this.pkmnDetailFilterCountLabel = new System.Windows.Forms.Label();
+			this.ygoDetailFilterCountLabel = new System.Windows.Forms.Label();
+			this.mtgDetailFilterCountLabel = new System.Windows.Forms.Label();
 			this.ygoTabControl.SuspendLayout();
 			this.ygoSetPage.SuspendLayout();
 			this.ygoSearchPage.SuspendLayout();
@@ -545,7 +547,7 @@ namespace CollectionTracker {
 			this.ygoTabControl.Location = new System.Drawing.Point(3, 3);
 			this.ygoTabControl.Name = "ygoTabControl";
 			this.ygoTabControl.SelectedIndex = 0;
-			this.ygoTabControl.Size = new System.Drawing.Size(1270, 663);
+			this.ygoTabControl.Size = new System.Drawing.Size(1270, 695);
 			this.ygoTabControl.TabIndex = 0;
 			// 
 			// ygoSetPage
@@ -560,7 +562,7 @@ namespace CollectionTracker {
 			this.ygoSetPage.Location = new System.Drawing.Point(4, 33);
 			this.ygoSetPage.Name = "ygoSetPage";
 			this.ygoSetPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoSetPage.Size = new System.Drawing.Size(1262, 626);
+			this.ygoSetPage.Size = new System.Drawing.Size(1262, 658);
 			this.ygoSetPage.TabIndex = 3;
 			this.ygoSetPage.Text = "Set List";
 			// 
@@ -617,7 +619,7 @@ namespace CollectionTracker {
 			this.ygoSetlistLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.ygoSetlistLayout.Location = new System.Drawing.Point(3, 38);
 			this.ygoSetlistLayout.Name = "ygoSetlistLayout";
-			this.ygoSetlistLayout.Size = new System.Drawing.Size(1252, 580);
+			this.ygoSetlistLayout.Size = new System.Drawing.Size(1252, 612);
 			this.ygoSetlistLayout.TabIndex = 1;
 			this.ygoSetlistLayout.WrapContents = false;
 			// 
@@ -885,6 +887,7 @@ namespace CollectionTracker {
 			// 
 			this.ygoDetailPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ygoDetailPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoDetailPage.Controls.Add(this.ygoDetailFilterCountLabel);
 			this.ygoDetailPage.Controls.Add(this.ygoPrintingsBox);
 			this.ygoDetailPage.Controls.Add(this.ygoDeletePrintingButton);
 			this.ygoDetailPage.Controls.Add(this.ygoDetailDialog);
@@ -895,9 +898,9 @@ namespace CollectionTracker {
 			this.ygoDetailPage.Controls.Add(this.ygoDetailPrevButton);
 			this.ygoDetailPage.Controls.Add(this.ygoDetailBox);
 			this.ygoDetailPage.Controls.Add(this.ygoDetailImgbox);
-			this.ygoDetailPage.Location = new System.Drawing.Point(4, 25);
+			this.ygoDetailPage.Location = new System.Drawing.Point(4, 33);
 			this.ygoDetailPage.Name = "ygoDetailPage";
-			this.ygoDetailPage.Size = new System.Drawing.Size(1262, 634);
+			this.ygoDetailPage.Size = new System.Drawing.Size(1262, 658);
 			this.ygoDetailPage.TabIndex = 4;
 			this.ygoDetailPage.Text = "Card Details";
 			// 
@@ -912,7 +915,7 @@ namespace CollectionTracker {
 			// ygoDeletePrintingButton
 			// 
 			this.ygoDeletePrintingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.ygoDeletePrintingButton.Location = new System.Drawing.Point(5, 598);
+			this.ygoDeletePrintingButton.Location = new System.Drawing.Point(5, 622);
 			this.ygoDeletePrintingButton.Name = "ygoDeletePrintingButton";
 			this.ygoDeletePrintingButton.Size = new System.Drawing.Size(250, 29);
 			this.ygoDeletePrintingButton.TabIndex = 32;
@@ -924,7 +927,7 @@ namespace CollectionTracker {
 			// 
 			this.ygoDetailDialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.ygoDetailDialog.AutoSize = true;
-			this.ygoDetailDialog.Location = new System.Drawing.Point(261, 598);
+			this.ygoDetailDialog.Location = new System.Drawing.Point(261, 622);
 			this.ygoDetailDialog.MinimumSize = new System.Drawing.Size(0, 29);
 			this.ygoDetailDialog.Name = "ygoDetailDialog";
 			this.ygoDetailDialog.Size = new System.Drawing.Size(16, 29);
@@ -1815,7 +1818,7 @@ namespace CollectionTracker {
 			this.mtgPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgPage.Name = "mtgPage";
 			this.mtgPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgPage.Size = new System.Drawing.Size(1276, 661);
+			this.mtgPage.Size = new System.Drawing.Size(1276, 701);
 			this.mtgPage.TabIndex = 1;
 			this.mtgPage.Text = "MTG";
 			// 
@@ -1834,7 +1837,7 @@ namespace CollectionTracker {
 			this.mtgTabControl.Location = new System.Drawing.Point(3, 3);
 			this.mtgTabControl.Name = "mtgTabControl";
 			this.mtgTabControl.SelectedIndex = 0;
-			this.mtgTabControl.Size = new System.Drawing.Size(1270, 655);
+			this.mtgTabControl.Size = new System.Drawing.Size(1270, 695);
 			this.mtgTabControl.TabIndex = 0;
 			// 
 			// mtgSetPage
@@ -1849,7 +1852,7 @@ namespace CollectionTracker {
 			this.mtgSetPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgSetPage.Name = "mtgSetPage";
 			this.mtgSetPage.Padding = new System.Windows.Forms.Padding(3);
-			this.mtgSetPage.Size = new System.Drawing.Size(1262, 618);
+			this.mtgSetPage.Size = new System.Drawing.Size(1262, 658);
 			this.mtgSetPage.TabIndex = 3;
 			this.mtgSetPage.Text = "Set List";
 			// 
@@ -1906,7 +1909,7 @@ namespace CollectionTracker {
 			this.mtgSetLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.mtgSetLayout.Location = new System.Drawing.Point(3, 38);
 			this.mtgSetLayout.Name = "mtgSetLayout";
-			this.mtgSetLayout.Size = new System.Drawing.Size(1252, 572);
+			this.mtgSetLayout.Size = new System.Drawing.Size(1252, 612);
 			this.mtgSetLayout.TabIndex = 0;
 			this.mtgSetLayout.WrapContents = false;
 			// 
@@ -2331,6 +2334,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgDetailPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.mtgDetailPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mtgDetailPage.Controls.Add(this.mtgDetailFilterCountLabel);
 			this.mtgDetailPage.Controls.Add(this.mtgPrintingsBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailDialog);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailAutogenButton);
@@ -2341,9 +2345,9 @@ namespace CollectionTracker {
 			this.mtgDetailPage.Controls.Add(this.mtgTooltipBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailBox);
 			this.mtgDetailPage.Controls.Add(this.mtgDetailImgbox);
-			this.mtgDetailPage.Location = new System.Drawing.Point(4, 25);
+			this.mtgDetailPage.Location = new System.Drawing.Point(4, 33);
 			this.mtgDetailPage.Name = "mtgDetailPage";
-			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 626);
+			this.mtgDetailPage.Size = new System.Drawing.Size(1262, 658);
 			this.mtgDetailPage.TabIndex = 4;
 			this.mtgDetailPage.Text = "Card Details";
 			// 
@@ -2359,7 +2363,7 @@ namespace CollectionTracker {
 			// 
 			this.mtgDetailDialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.mtgDetailDialog.AutoSize = true;
-			this.mtgDetailDialog.Location = new System.Drawing.Point(261, 590);
+			this.mtgDetailDialog.Location = new System.Drawing.Point(261, 622);
 			this.mtgDetailDialog.MinimumSize = new System.Drawing.Size(0, 29);
 			this.mtgDetailDialog.Name = "mtgDetailDialog";
 			this.mtgDetailDialog.Size = new System.Drawing.Size(16, 29);
@@ -2380,7 +2384,7 @@ namespace CollectionTracker {
 			// mtgDeletePrintingButton
 			// 
 			this.mtgDeletePrintingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mtgDeletePrintingButton.Location = new System.Drawing.Point(5, 590);
+			this.mtgDeletePrintingButton.Location = new System.Drawing.Point(5, 622);
 			this.mtgDeletePrintingButton.Name = "mtgDeletePrintingButton";
 			this.mtgDeletePrintingButton.Size = new System.Drawing.Size(250, 29);
 			this.mtgDeletePrintingButton.TabIndex = 25;
@@ -3458,10 +3462,10 @@ namespace CollectionTracker {
 			// 
 			this.ygoPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ygoPage.Controls.Add(this.ygoTabControl);
-			this.ygoPage.Location = new System.Drawing.Point(4, 25);
+			this.ygoPage.Location = new System.Drawing.Point(4, 33);
 			this.ygoPage.Name = "ygoPage";
 			this.ygoPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoPage.Size = new System.Drawing.Size(1276, 669);
+			this.ygoPage.Size = new System.Drawing.Size(1276, 701);
 			this.ygoPage.TabIndex = 0;
 			this.ygoPage.Text = "YGO";
 			// 
@@ -4902,6 +4906,26 @@ namespace CollectionTracker {
 			this.pkmnDetailFilterCountLabel.Text = "X / X";
 			this.pkmnDetailFilterCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
+			// ygoDetailFilterCountLabel
+			// 
+			this.ygoDetailFilterCountLabel.Location = new System.Drawing.Point(10, 585);
+			this.ygoDetailFilterCountLabel.MinimumSize = new System.Drawing.Size(0, 29);
+			this.ygoDetailFilterCountLabel.Name = "ygoDetailFilterCountLabel";
+			this.ygoDetailFilterCountLabel.Size = new System.Drawing.Size(390, 29);
+			this.ygoDetailFilterCountLabel.TabIndex = 33;
+			this.ygoDetailFilterCountLabel.Text = "X / X";
+			this.ygoDetailFilterCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// mtgDetailFilterCountLabel
+			// 
+			this.mtgDetailFilterCountLabel.Location = new System.Drawing.Point(10, 585);
+			this.mtgDetailFilterCountLabel.MinimumSize = new System.Drawing.Size(0, 29);
+			this.mtgDetailFilterCountLabel.Name = "mtgDetailFilterCountLabel";
+			this.mtgDetailFilterCountLabel.Size = new System.Drawing.Size(390, 29);
+			this.mtgDetailFilterCountLabel.TabIndex = 29;
+			this.mtgDetailFilterCountLabel.Text = "X / X";
+			this.mtgDetailFilterCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -5430,6 +5454,8 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Button pkmnApplySearchTermsButton;
 		private System.Windows.Forms.Label pkmnSearchDialog;
 		private System.Windows.Forms.Label pkmnDetailFilterCountLabel;
+		private System.Windows.Forms.Label ygoDetailFilterCountLabel;
+		private System.Windows.Forms.Label mtgDetailFilterCountLabel;
 	}
 }
 

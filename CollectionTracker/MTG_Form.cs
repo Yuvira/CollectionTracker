@@ -485,6 +485,9 @@ namespace CollectionTracker {
 			MTG_Utils.TryLoadCardImage(mtgDetailImgbox, print.imgPath);
 			mtgDetailFlipped = false;
 
+			//Set number in filter
+			mtgDetailFilterCountLabel.Text = (mtgPrintFilter.IndexOf(mtgDetailPrint) + 1).ToString() + " / " + mtgPrintFilter.Count.ToString();
+
 			//Get card reference
 			MTG_Card card = print.card;
 
