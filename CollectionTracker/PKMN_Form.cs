@@ -507,6 +507,9 @@ namespace CollectionTracker {
 			PKMN_Utils.TryLoadCardImage(pkmnDetailImgbox, print.imgPath);
 			pkmnDetailFlipped = false;
 
+			//Set number in filter
+			pkmnDetailFilterCountLabel.Text = (pkmnPrintFilter.IndexOf(pkmnDetailPrint) + 1).ToString() + " / " + pkmnPrintFilter.Count.ToString();
+
 			//Get card reference
 			PKMN_Card card = print.card;
 

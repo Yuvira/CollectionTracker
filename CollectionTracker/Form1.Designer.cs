@@ -310,6 +310,7 @@ namespace CollectionTracker {
 			this.pkmnSetlistLabel = new System.Windows.Forms.Label();
 			this.pkmnSetlistLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSearchPage = new System.Windows.Forms.TabPage();
+			this.pkmnSearchDialog = new System.Windows.Forms.Label();
 			this.pkmnApplySearchTermsButton = new System.Windows.Forms.Button();
 			this.pkmnReloadSearchListsButton = new System.Windows.Forms.Button();
 			this.pkmnSearchTypeList = new System.Windows.Forms.ComboBox();
@@ -431,7 +432,7 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorPageLabel = new System.Windows.Forms.Label();
 			this.pkmnSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSetGeneratorLabel = new System.Windows.Forms.Label();
-			this.pkmnSearchDialog = new System.Windows.Forms.Label();
+			this.pkmnDetailFilterCountLabel = new System.Windows.Forms.Label();
 			this.ygoTabControl.SuspendLayout();
 			this.ygoSetPage.SuspendLayout();
 			this.ygoSearchPage.SuspendLayout();
@@ -1804,7 +1805,7 @@ namespace CollectionTracker {
 			this.formTabControl.Location = new System.Drawing.Point(0, 0);
 			this.formTabControl.Name = "formTabControl";
 			this.formTabControl.SelectedIndex = 0;
-			this.formTabControl.Size = new System.Drawing.Size(1284, 698);
+			this.formTabControl.Size = new System.Drawing.Size(1284, 738);
 			this.formTabControl.TabIndex = 0;
 			// 
 			// mtgPage
@@ -3471,7 +3472,7 @@ namespace CollectionTracker {
 			this.pkmnPage.Location = new System.Drawing.Point(4, 33);
 			this.pkmnPage.Name = "pkmnPage";
 			this.pkmnPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnPage.Size = new System.Drawing.Size(1276, 661);
+			this.pkmnPage.Size = new System.Drawing.Size(1276, 701);
 			this.pkmnPage.TabIndex = 2;
 			this.pkmnPage.Text = "PKMN";
 			// 
@@ -3490,7 +3491,7 @@ namespace CollectionTracker {
 			this.pkmnTabControl.Location = new System.Drawing.Point(3, 3);
 			this.pkmnTabControl.Name = "pkmnTabControl";
 			this.pkmnTabControl.SelectedIndex = 0;
-			this.pkmnTabControl.Size = new System.Drawing.Size(1270, 655);
+			this.pkmnTabControl.Size = new System.Drawing.Size(1270, 695);
 			this.pkmnTabControl.TabIndex = 1;
 			// 
 			// pkmnSetlistPage
@@ -3591,12 +3592,21 @@ namespace CollectionTracker {
 			this.pkmnSearchPage.Controls.Add(this.pkmnSearchNameField);
 			this.pkmnSearchPage.Controls.Add(this.pkmnSearchOracleLabel);
 			this.pkmnSearchPage.Controls.Add(this.pkmnSearchTypeLabel);
-			this.pkmnSearchPage.Location = new System.Drawing.Point(4, 33);
+			this.pkmnSearchPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnSearchPage.Name = "pkmnSearchPage";
 			this.pkmnSearchPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnSearchPage.Size = new System.Drawing.Size(1262, 618);
+			this.pkmnSearchPage.Size = new System.Drawing.Size(1262, 626);
 			this.pkmnSearchPage.TabIndex = 7;
 			this.pkmnSearchPage.Text = "Search";
+			// 
+			// pkmnSearchDialog
+			// 
+			this.pkmnSearchDialog.Location = new System.Drawing.Point(475, 5);
+			this.pkmnSearchDialog.Name = "pkmnSearchDialog";
+			this.pkmnSearchDialog.Size = new System.Drawing.Size(90, 30);
+			this.pkmnSearchDialog.TabIndex = 87;
+			this.pkmnSearchDialog.Text = "-";
+			this.pkmnSearchDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// pkmnApplySearchTermsButton
 			// 
@@ -3876,6 +3886,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnDetailPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.pkmnDetailPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnDetailPage.Controls.Add(this.pkmnDetailFilterCountLabel);
 			this.pkmnDetailPage.Controls.Add(this.pkmnPrintingsBox);
 			this.pkmnDetailPage.Controls.Add(this.pkmnDetailDialog);
 			this.pkmnDetailPage.Controls.Add(this.pkmnDetailAutogenButton);
@@ -3886,9 +3897,9 @@ namespace CollectionTracker {
 			this.pkmnDetailPage.Controls.Add(this.pkmnTooltipBox);
 			this.pkmnDetailPage.Controls.Add(this.pkmnDetailBox);
 			this.pkmnDetailPage.Controls.Add(this.pkmnDetailImgbox);
-			this.pkmnDetailPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnDetailPage.Location = new System.Drawing.Point(4, 33);
 			this.pkmnDetailPage.Name = "pkmnDetailPage";
-			this.pkmnDetailPage.Size = new System.Drawing.Size(1262, 626);
+			this.pkmnDetailPage.Size = new System.Drawing.Size(1262, 658);
 			this.pkmnDetailPage.TabIndex = 4;
 			this.pkmnDetailPage.Text = "Card Details";
 			// 
@@ -3904,7 +3915,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnDetailDialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.pkmnDetailDialog.AutoSize = true;
-			this.pkmnDetailDialog.Location = new System.Drawing.Point(261, 590);
+			this.pkmnDetailDialog.Location = new System.Drawing.Point(261, 622);
 			this.pkmnDetailDialog.MinimumSize = new System.Drawing.Size(0, 29);
 			this.pkmnDetailDialog.Name = "pkmnDetailDialog";
 			this.pkmnDetailDialog.Size = new System.Drawing.Size(16, 29);
@@ -3925,7 +3936,7 @@ namespace CollectionTracker {
 			// pkmnDeletePrintingButton
 			// 
 			this.pkmnDeletePrintingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.pkmnDeletePrintingButton.Location = new System.Drawing.Point(5, 590);
+			this.pkmnDeletePrintingButton.Location = new System.Drawing.Point(5, 622);
 			this.pkmnDeletePrintingButton.Name = "pkmnDeletePrintingButton";
 			this.pkmnDeletePrintingButton.Size = new System.Drawing.Size(250, 29);
 			this.pkmnDeletePrintingButton.TabIndex = 25;
@@ -4881,19 +4892,20 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorLabel.Text = "Edit Sets";
 			this.pkmnSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// pkmnSearchDialog
+			// pkmnDetailFilterCountLabel
 			// 
-			this.pkmnSearchDialog.Location = new System.Drawing.Point(475, 5);
-			this.pkmnSearchDialog.Name = "pkmnSearchDialog";
-			this.pkmnSearchDialog.Size = new System.Drawing.Size(90, 30);
-			this.pkmnSearchDialog.TabIndex = 87;
-			this.pkmnSearchDialog.Text = "-";
-			this.pkmnSearchDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.pkmnDetailFilterCountLabel.Location = new System.Drawing.Point(10, 585);
+			this.pkmnDetailFilterCountLabel.MinimumSize = new System.Drawing.Size(0, 29);
+			this.pkmnDetailFilterCountLabel.Name = "pkmnDetailFilterCountLabel";
+			this.pkmnDetailFilterCountLabel.Size = new System.Drawing.Size(390, 29);
+			this.pkmnDetailFilterCountLabel.TabIndex = 28;
+			this.pkmnDetailFilterCountLabel.Text = "X / X";
+			this.pkmnDetailFilterCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.ClientSize = new System.Drawing.Size(1284, 698);
+			this.ClientSize = new System.Drawing.Size(1284, 738);
 			this.Controls.Add(this.formTabControl);
 			this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "Form1";
@@ -5417,6 +5429,7 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Button pkmnReloadSearchListsButton;
 		private System.Windows.Forms.Button pkmnApplySearchTermsButton;
 		private System.Windows.Forms.Label pkmnSearchDialog;
+		private System.Windows.Forms.Label pkmnDetailFilterCountLabel;
 	}
 }
 
