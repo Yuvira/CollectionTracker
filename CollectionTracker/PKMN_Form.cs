@@ -338,6 +338,7 @@ namespace CollectionTracker {
 		private void PKMN_OnClickClipboardexButton(object sender, EventArgs e) => Clipboard.SetText("𝑒𝑥");
 		private void PKMN_OnClickClipboardStarButton(object sender, EventArgs e) => Clipboard.SetText("☆");
 		private void PKMN_OnClickClipboardDeltaButton(object sender, EventArgs e) => Clipboard.SetText("δ");
+		private void PKMN_OnClickClipboardSPButton(object sender, EventArgs e) => Clipboard.SetText("𝘚𝘗");
 		private void PKMN_OnClickClipboardPrismButton(object sender, EventArgs e) => Clipboard.SetText("◇");
 
 		#endregion
