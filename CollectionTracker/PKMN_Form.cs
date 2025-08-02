@@ -40,18 +40,15 @@ namespace CollectionTracker {
 			pkmnRarityField.Items.Clear();
 			pkmnTreatmentField.Items.Clear();
 			pkmnMoveField.Items.Clear();
-			pkmnSearchSetField.Items.Clear();
-			pkmnSearchSetField.Items.Add("--");
-			pkmnSearchLocationField.Items.Clear();
-			pkmnSearchLocationField.Items.Add("--");
-			foreach (PKMN_Set set in pkmnCatalog.sets) {
+			foreach (PKMN_Set set in pkmnCatalog.sets)
 				pkmnSetField.Items.Add(set);
-				pkmnSearchSetField.Items.Add(set);
-			}
-			foreach (string name in pkmnCatalog.printings.Select(p => p.rarity).Distinct()) { pkmnRarityField.Items.Add(name); }
-			foreach (string name in pkmnCatalog.printings.SelectMany(p => p.treatments).Select(t => t.name).Distinct()) { pkmnTreatmentField.Items.Add(name); }
-			foreach (string name in pkmnCatalog.printings.SelectMany(p => p.treatments).SelectMany(t => t.locations).Distinct()) { pkmnMoveField.Items.Add(name); }
-			foreach (string name in pkmnCatalog.printings.SelectMany(p => p.treatments).SelectMany(t => t.locations).Distinct()) { pkmnSearchLocationField.Items.Add(name); }
+			foreach (string name in pkmnCatalog.printings.Select(p => p.rarity).Distinct())
+				pkmnRarityField.Items.Add(name);
+			foreach (string name in pkmnCatalog.printings.SelectMany(p => p.treatments).Select(t => t.name).Distinct())
+				pkmnTreatmentField.Items.Add(name);
+			foreach (string name in pkmnCatalog.printings.SelectMany(p => p.treatments).SelectMany(t => t.locations).Distinct())
+				pkmnMoveField.Items.Add(name);
+			PKMN_ReloadSearchLists();
 		}
 
 		#endregion
@@ -189,6 +186,23 @@ namespace CollectionTracker {
 
 		#region Search
 
+		//Refresh search lists
+		private void PKMN_OnClickReloadSearchLists(object sender, EventArgs e) => PKMN_ReloadSearchLists();
+		private void PKMN_ReloadSearchLists() {
+			pkmnSearchTypeList.Items.Clear();
+			pkmnSearchTypeList.Items.Add("--");
+			pkmnSearchSetField.Items.Clear();
+			pkmnSearchSetField.Items.Add("--");
+			pkmnSearchLocationField.Items.Clear();
+			pkmnSearchLocationField.Items.Add("--");
+			foreach (string name in pkmnCatalog.cards.SelectMany(c => c.cardTypes.Split(new string[] { " / " }, StringSplitOptions.None)).Distinct())
+				pkmnSearchTypeList.Items.Add(name);
+			foreach (PKMN_Set set in pkmnCatalog.sets)
+				pkmnSearchSetField.Items.Add(set);
+			foreach (string name in pkmnCatalog.printings.SelectMany(p => p.treatments).SelectMany(t => t.locations).Distinct())
+				pkmnSearchLocationField.Items.Add(name);
+		}
+
 		//Check if string contains all in a given array of substrings
 		private bool PKMN_CheckSubstring(string s, string[] arr) {
 			foreach (string ss in arr) {
@@ -199,38 +213,116 @@ namespace CollectionTracker {
 			return true;
 		}
 
+		//Add selected type to type field
+		private void PKMN_OnSearchTypeChanged(object sender, EventArgs e) {
+			string s = pkmnSearchTypeList.SelectedItem?.ToString() ?? "";
+			if (s.Equals("") || s.Equals("--"))
+				return;
+			if (!pkmnSearchTypeField.Text.Equals(""))
+				pkmnSearchTypeField.Text += '|';
+			pkmnSearchTypeField.Text += s;
+		}
+
+		//Apply advanced search terms to search bar
+		private void PKMN_OnClickApplySearchTerms(object sender, EventArgs e) {
+
+			//Clear search
+			pkmnSearchField.Text = "";
+
+			//Apply terms
+			if (pkmnSearchNameField.Text.Length > 0)
+				PKMN_AddSearchTerm("n:" + pkmnSearchNameField.Text);
+			if (pkmnSearchTypeField.Text.Length > 0)
+				foreach (string term in pkmnSearchTypeField.Text.Split('|'))
+					PKMN_AddSearchTerm("t=" + pkmnSearchTypeField.Text);
+			if (pkmnSearchOracleField.Text.Length > 0)
+				PKMN_AddSearchTerm("o:" + pkmnSearchOracleField.Text);
+			if (pkmnSearchSetField.SelectedItem is PKMN_Set set)
+				PKMN_AddSearchTerm("s=" + set.code);
+			string loc = pkmnSearchLocationField.SelectedItem?.ToString() ?? "";
+			if (!loc.Equals("") && !loc.Equals("--"))
+				PKMN_AddSearchTerm("l=" + loc);
+
+		}
+
+		//Add term to search field
+		private void PKMN_AddSearchTerm(string term) {
+			if (pkmnSearchField.Text.Length > 0)
+				pkmnSearchField.Text += '&';
+			pkmnSearchField.Text += term;
+		}
+
 		//Search for card matching given criteria
 		private void PKMN_OnClickSearch(object sender, EventArgs e) {
+
+			//Check for any input
+			if (pkmnSearchField.Text.Length <= 0) {
+				pkmnSearchDialog.Text = "No search terms provided!";
+				return;
+			}
+
+			//Get logical operation type
+			char logicalOp = '|';
+			if (pkmnSearchField.Text.Contains('&'))
+				logicalOp = '&';
+			if (pkmnSearchField.Text.Contains('|')) {
+				if (logicalOp == '&') {
+					pkmnSearchDialog.Text = "Mixed and/or operators provided!";
+					return;
+				}
+			}
 
 			//Clear print filter
 			pkmnPrintFilter.Clear();
 			pkmnPrintFilter = new List<PKMN_Printing>();
 
-			//Parameters
-			bool searchName = pkmnSearchNameField.Text.Length > 0;
-			bool searchTypes = pkmnSearchTypeField.Text.Length > 0;
-			bool searchOracle = pkmnSearchOracleField.Text.Length > 0;
-			string set = pkmnSearchSetField.SelectedItem?.ToString() ?? "";
-			string loc = pkmnSearchLocationField.SelectedItem?.ToString() ?? "";
-			bool searchSet = !set.Equals("") && !set.Equals("--");
-			bool searchLoc = !loc.Equals("") && !loc.Equals("--");
+			//Split terms into array
+			string[] termArray;
+			if (logicalOp == '&')
+				termArray = pkmnSearchField.Text.Split('&');
+			else
+				termArray = pkmnSearchField.Text.Split('|');
 
-			//Search
-			foreach (PKMN_Printing print in pkmnCatalog.printings) {
-				if (searchName && !PKMN_CheckSubstring(print.card.name, pkmnSearchNameField.Text.Split('|'))) { continue; }
-				if (searchTypes && !PKMN_CheckSubstring(print.card.cardTypes, pkmnSearchTypeField.Text.Split('|'))) { continue; }
-				if (searchOracle && !PKMN_CheckSubstring(print.card.oracleText, pkmnSearchOracleField.Text.Split('|'))) { continue; }
-				if (searchSet && print.set != pkmnSearchSetField.SelectedItem) { continue; }
-				if (searchLoc) {
-					bool add = false;
-					foreach (PKMN_Treatment treatment in print.treatments) {
-						if (treatment.locations.Contains(loc)) {
-							add = true;
-						}
-					}
-					if (!add) { continue; }
+			//Convert array of terms into list of (field, operator, value)
+			List<(string field, string op, string value)> terms = new List<(string, string, string)>();
+			List<string> ops = new List<string> { "!:", "!=", "==", ":", "=" };
+			foreach (string term in termArray) {
+				string[] splitTerm;
+				foreach (string op in ops) {
+					splitTerm = term.Split(new string[] { op }, StringSplitOptions.None);
+					if (splitTerm.Length != 2)
+						continue;
+					terms.Add((splitTerm[0], op, splitTerm[1]));
+					break;
 				}
-				pkmnPrintFilter.Add(print);
+			}
+
+			//Search printings
+			bool[] matches = new bool[terms.Count];
+			string searchField;
+			foreach (PKMN_Printing print in pkmnCatalog.printings) {
+				for (int i = 0; i < terms.Count; ++i) {
+					if (terms[i].field.ToLower().Equals("n"))
+						searchField = print.card.name;
+					else if (terms[i].field.ToLower().Equals("t"))
+						searchField = print.card.cardTypes;
+					else if (terms[i].field.ToLower().Equals("o"))
+						searchField = print.card.oracleText;
+					else if (terms[i].field.ToLower().Equals("s"))
+						searchField = print.set.code;
+					else if (terms[i].field.ToLower().Equals("l"))
+						searchField = string.Join(" / ", print.treatments.SelectMany(t => t.locations).Distinct());
+					else
+						continue;
+					bool fieldIsList = false;
+					if (terms[i].field.ToLower().Equals("t") || terms[i].field.ToLower().Equals("l"))
+						fieldIsList = true;
+					matches[i] = Utils.EvaluateSearchOperation(searchField, terms[i].op, terms[i].value, fieldIsList);
+				}
+				if (logicalOp == '&' && !matches.Contains(false))
+					pkmnPrintFilter.Add(print);
+				else if (logicalOp == '|' && matches.Contains(true))
+					pkmnPrintFilter.Add(print);
 			}
 
 			//Show catalog

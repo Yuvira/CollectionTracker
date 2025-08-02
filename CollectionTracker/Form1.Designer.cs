@@ -310,6 +310,11 @@ namespace CollectionTracker {
 			this.pkmnSetlistLabel = new System.Windows.Forms.Label();
 			this.pkmnSetlistLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSearchPage = new System.Windows.Forms.TabPage();
+			this.pkmnApplySearchTermsButton = new System.Windows.Forms.Button();
+			this.pkmnReloadSearchListsButton = new System.Windows.Forms.Button();
+			this.pkmnSearchTypeList = new System.Windows.Forms.ComboBox();
+			this.pkmnSearchField = new System.Windows.Forms.TextBox();
+			this.pkmnSearchLabel = new System.Windows.Forms.Label();
 			this.pkmnClipboardPrismButton = new System.Windows.Forms.Button();
 			this.pkmnClipboardDeltaButton = new System.Windows.Forms.Button();
 			this.pkmnClipboardStarButton = new System.Windows.Forms.Button();
@@ -426,6 +431,7 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorPageLabel = new System.Windows.Forms.Label();
 			this.pkmnSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSetGeneratorLabel = new System.Windows.Forms.Label();
+			this.pkmnSearchDialog = new System.Windows.Forms.Label();
 			this.ygoTabControl.SuspendLayout();
 			this.ygoSetPage.SuspendLayout();
 			this.ygoSearchPage.SuspendLayout();
@@ -3564,6 +3570,12 @@ namespace CollectionTracker {
 			// 
 			this.pkmnSearchPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.pkmnSearchPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchDialog);
+			this.pkmnSearchPage.Controls.Add(this.pkmnApplySearchTermsButton);
+			this.pkmnSearchPage.Controls.Add(this.pkmnReloadSearchListsButton);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchTypeList);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchField);
+			this.pkmnSearchPage.Controls.Add(this.pkmnSearchLabel);
 			this.pkmnSearchPage.Controls.Add(this.pkmnClipboardPrismButton);
 			this.pkmnSearchPage.Controls.Add(this.pkmnClipboardDeltaButton);
 			this.pkmnSearchPage.Controls.Add(this.pkmnClipboardStarButton);
@@ -3586,9 +3598,58 @@ namespace CollectionTracker {
 			this.pkmnSearchPage.TabIndex = 7;
 			this.pkmnSearchPage.Text = "Search";
 			// 
+			// pkmnApplySearchTermsButton
+			// 
+			this.pkmnApplySearchTermsButton.Location = new System.Drawing.Point(100, 285);
+			this.pkmnApplySearchTermsButton.Name = "pkmnApplySearchTermsButton";
+			this.pkmnApplySearchTermsButton.Size = new System.Drawing.Size(120, 30);
+			this.pkmnApplySearchTermsButton.TabIndex = 86;
+			this.pkmnApplySearchTermsButton.Text = "Apply";
+			this.pkmnApplySearchTermsButton.UseVisualStyleBackColor = true;
+			this.pkmnApplySearchTermsButton.Click += new System.EventHandler(this.PKMN_OnClickApplySearchTerms);
+			// 
+			// pkmnReloadSearchListsButton
+			// 
+			this.pkmnReloadSearchListsButton.Location = new System.Drawing.Point(350, 285);
+			this.pkmnReloadSearchListsButton.Name = "pkmnReloadSearchListsButton";
+			this.pkmnReloadSearchListsButton.Size = new System.Drawing.Size(120, 30);
+			this.pkmnReloadSearchListsButton.TabIndex = 85;
+			this.pkmnReloadSearchListsButton.Text = "Reload Lists";
+			this.pkmnReloadSearchListsButton.UseVisualStyleBackColor = true;
+			this.pkmnReloadSearchListsButton.Click += new System.EventHandler(this.PKMN_OnClickReloadSearchLists);
+			// 
+			// pkmnSearchTypeList
+			// 
+			this.pkmnSearchTypeList.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+			this.pkmnSearchTypeList.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+			this.pkmnSearchTypeList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.pkmnSearchTypeList.FormattingEnabled = true;
+			this.pkmnSearchTypeList.Location = new System.Drawing.Point(100, 110);
+			this.pkmnSearchTypeList.Name = "pkmnSearchTypeList";
+			this.pkmnSearchTypeList.Size = new System.Drawing.Size(370, 29);
+			this.pkmnSearchTypeList.Sorted = true;
+			this.pkmnSearchTypeList.TabIndex = 84;
+			this.pkmnSearchTypeList.SelectedValueChanged += new System.EventHandler(this.PKMN_OnSearchTypeChanged);
+			// 
+			// pkmnSearchField
+			// 
+			this.pkmnSearchField.Location = new System.Drawing.Point(100, 5);
+			this.pkmnSearchField.Name = "pkmnSearchField";
+			this.pkmnSearchField.Size = new System.Drawing.Size(370, 29);
+			this.pkmnSearchField.TabIndex = 83;
+			// 
+			// pkmnSearchLabel
+			// 
+			this.pkmnSearchLabel.Location = new System.Drawing.Point(5, 5);
+			this.pkmnSearchLabel.Name = "pkmnSearchLabel";
+			this.pkmnSearchLabel.Size = new System.Drawing.Size(90, 30);
+			this.pkmnSearchLabel.TabIndex = 82;
+			this.pkmnSearchLabel.Text = "Search:";
+			this.pkmnSearchLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// pkmnClipboardPrismButton
 			// 
-			this.pkmnClipboardPrismButton.Location = new System.Drawing.Point(595, 5);
+			this.pkmnClipboardPrismButton.Location = new System.Drawing.Point(435, 40);
 			this.pkmnClipboardPrismButton.Name = "pkmnClipboardPrismButton";
 			this.pkmnClipboardPrismButton.Size = new System.Drawing.Size(35, 30);
 			this.pkmnClipboardPrismButton.TabIndex = 81;
@@ -3598,7 +3659,7 @@ namespace CollectionTracker {
 			// 
 			// pkmnClipboardDeltaButton
 			// 
-			this.pkmnClipboardDeltaButton.Location = new System.Drawing.Point(555, 5);
+			this.pkmnClipboardDeltaButton.Location = new System.Drawing.Point(395, 40);
 			this.pkmnClipboardDeltaButton.Name = "pkmnClipboardDeltaButton";
 			this.pkmnClipboardDeltaButton.Size = new System.Drawing.Size(35, 30);
 			this.pkmnClipboardDeltaButton.TabIndex = 80;
@@ -3608,7 +3669,7 @@ namespace CollectionTracker {
 			// 
 			// pkmnClipboardStarButton
 			// 
-			this.pkmnClipboardStarButton.Location = new System.Drawing.Point(515, 5);
+			this.pkmnClipboardStarButton.Location = new System.Drawing.Point(355, 40);
 			this.pkmnClipboardStarButton.Name = "pkmnClipboardStarButton";
 			this.pkmnClipboardStarButton.Size = new System.Drawing.Size(35, 30);
 			this.pkmnClipboardStarButton.TabIndex = 79;
@@ -3618,7 +3679,7 @@ namespace CollectionTracker {
 			// 
 			// pkmnClipboardexButton
 			// 
-			this.pkmnClipboardexButton.Location = new System.Drawing.Point(475, 5);
+			this.pkmnClipboardexButton.Location = new System.Drawing.Point(315, 40);
 			this.pkmnClipboardexButton.Name = "pkmnClipboardexButton";
 			this.pkmnClipboardexButton.Size = new System.Drawing.Size(35, 30);
 			this.pkmnClipboardexButton.TabIndex = 78;
@@ -3632,7 +3693,7 @@ namespace CollectionTracker {
 			this.pkmnSearchSetField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
 			this.pkmnSearchSetField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.pkmnSearchSetField.FormattingEnabled = true;
-			this.pkmnSearchSetField.Location = new System.Drawing.Point(100, 110);
+			this.pkmnSearchSetField.Location = new System.Drawing.Point(100, 215);
 			this.pkmnSearchSetField.Name = "pkmnSearchSetField";
 			this.pkmnSearchSetField.Size = new System.Drawing.Size(370, 29);
 			this.pkmnSearchSetField.Sorted = true;
@@ -3640,7 +3701,7 @@ namespace CollectionTracker {
 			// 
 			// pkmnSearchSetLabel
 			// 
-			this.pkmnSearchSetLabel.Location = new System.Drawing.Point(5, 110);
+			this.pkmnSearchSetLabel.Location = new System.Drawing.Point(5, 215);
 			this.pkmnSearchSetLabel.Name = "pkmnSearchSetLabel";
 			this.pkmnSearchSetLabel.Size = new System.Drawing.Size(90, 30);
 			this.pkmnSearchSetLabel.TabIndex = 76;
@@ -3653,14 +3714,14 @@ namespace CollectionTracker {
 			this.pkmnSearchLocationField.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
 			this.pkmnSearchLocationField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.pkmnSearchLocationField.FormattingEnabled = true;
-			this.pkmnSearchLocationField.Location = new System.Drawing.Point(100, 145);
+			this.pkmnSearchLocationField.Location = new System.Drawing.Point(100, 250);
 			this.pkmnSearchLocationField.Name = "pkmnSearchLocationField";
 			this.pkmnSearchLocationField.Size = new System.Drawing.Size(370, 29);
 			this.pkmnSearchLocationField.TabIndex = 75;
 			// 
 			// pkmnSearchLocationLabel
 			// 
-			this.pkmnSearchLocationLabel.Location = new System.Drawing.Point(5, 145);
+			this.pkmnSearchLocationLabel.Location = new System.Drawing.Point(5, 250);
 			this.pkmnSearchLocationLabel.Name = "pkmnSearchLocationLabel";
 			this.pkmnSearchLocationLabel.Size = new System.Drawing.Size(90, 30);
 			this.pkmnSearchLocationLabel.TabIndex = 74;
@@ -3669,7 +3730,7 @@ namespace CollectionTracker {
 			// 
 			// pkmnSearchButton
 			// 
-			this.pkmnSearchButton.Location = new System.Drawing.Point(100, 180);
+			this.pkmnSearchButton.Location = new System.Drawing.Point(100, 40);
 			this.pkmnSearchButton.Name = "pkmnSearchButton";
 			this.pkmnSearchButton.Size = new System.Drawing.Size(120, 30);
 			this.pkmnSearchButton.TabIndex = 73;
@@ -3679,21 +3740,21 @@ namespace CollectionTracker {
 			// 
 			// pkmnSearchOracleField
 			// 
-			this.pkmnSearchOracleField.Location = new System.Drawing.Point(100, 75);
+			this.pkmnSearchOracleField.Location = new System.Drawing.Point(100, 180);
 			this.pkmnSearchOracleField.Name = "pkmnSearchOracleField";
 			this.pkmnSearchOracleField.Size = new System.Drawing.Size(370, 29);
 			this.pkmnSearchOracleField.TabIndex = 72;
 			// 
 			// pkmnSearchTypeField
 			// 
-			this.pkmnSearchTypeField.Location = new System.Drawing.Point(100, 40);
+			this.pkmnSearchTypeField.Location = new System.Drawing.Point(100, 145);
 			this.pkmnSearchTypeField.Name = "pkmnSearchTypeField";
 			this.pkmnSearchTypeField.Size = new System.Drawing.Size(370, 29);
 			this.pkmnSearchTypeField.TabIndex = 59;
 			// 
 			// pkmnSearchNameLabel
 			// 
-			this.pkmnSearchNameLabel.Location = new System.Drawing.Point(5, 5);
+			this.pkmnSearchNameLabel.Location = new System.Drawing.Point(5, 75);
 			this.pkmnSearchNameLabel.Name = "pkmnSearchNameLabel";
 			this.pkmnSearchNameLabel.Size = new System.Drawing.Size(90, 30);
 			this.pkmnSearchNameLabel.TabIndex = 44;
@@ -3702,14 +3763,14 @@ namespace CollectionTracker {
 			// 
 			// pkmnSearchNameField
 			// 
-			this.pkmnSearchNameField.Location = new System.Drawing.Point(100, 5);
+			this.pkmnSearchNameField.Location = new System.Drawing.Point(100, 75);
 			this.pkmnSearchNameField.Name = "pkmnSearchNameField";
 			this.pkmnSearchNameField.Size = new System.Drawing.Size(370, 29);
 			this.pkmnSearchNameField.TabIndex = 45;
 			// 
 			// pkmnSearchOracleLabel
 			// 
-			this.pkmnSearchOracleLabel.Location = new System.Drawing.Point(5, 75);
+			this.pkmnSearchOracleLabel.Location = new System.Drawing.Point(5, 180);
 			this.pkmnSearchOracleLabel.Name = "pkmnSearchOracleLabel";
 			this.pkmnSearchOracleLabel.Size = new System.Drawing.Size(90, 30);
 			this.pkmnSearchOracleLabel.TabIndex = 60;
@@ -3718,7 +3779,7 @@ namespace CollectionTracker {
 			// 
 			// pkmnSearchTypeLabel
 			// 
-			this.pkmnSearchTypeLabel.Location = new System.Drawing.Point(5, 40);
+			this.pkmnSearchTypeLabel.Location = new System.Drawing.Point(5, 110);
 			this.pkmnSearchTypeLabel.Name = "pkmnSearchTypeLabel";
 			this.pkmnSearchTypeLabel.Size = new System.Drawing.Size(90, 30);
 			this.pkmnSearchTypeLabel.TabIndex = 58;
@@ -4820,6 +4881,15 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorLabel.Text = "Edit Sets";
 			this.pkmnSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// pkmnSearchDialog
+			// 
+			this.pkmnSearchDialog.Location = new System.Drawing.Point(475, 5);
+			this.pkmnSearchDialog.Name = "pkmnSearchDialog";
+			this.pkmnSearchDialog.Size = new System.Drawing.Size(90, 30);
+			this.pkmnSearchDialog.TabIndex = 87;
+			this.pkmnSearchDialog.Text = "-";
+			this.pkmnSearchDialog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -5341,6 +5411,12 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Button pkmnClipboardPrismButton;
 		private System.Windows.Forms.Button pkmnClipboardDeltaButton;
 		private System.Windows.Forms.Button pkmnClipboardStarButton;
+		private System.Windows.Forms.TextBox pkmnSearchField;
+		private System.Windows.Forms.Label pkmnSearchLabel;
+		private System.Windows.Forms.ComboBox pkmnSearchTypeList;
+		private System.Windows.Forms.Button pkmnReloadSearchListsButton;
+		private System.Windows.Forms.Button pkmnApplySearchTermsButton;
+		private System.Windows.Forms.Label pkmnSearchDialog;
 	}
 }
 
