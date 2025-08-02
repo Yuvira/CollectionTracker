@@ -99,6 +99,9 @@ namespace CollectionTracker {
 			}
 			else if (hp != 0)
 				s += " | " + hp.ToString();
+			if (PKMN_Utils.catalog != null)
+				foreach (PKMN_Symbol symbol in PKMN_Utils.catalog.symbols)
+					s = s.Replace(symbol.symbol, symbol.name);
 			return s;
 		}
 
@@ -419,6 +422,9 @@ namespace CollectionTracker {
 		//Card back image path
 		public static readonly string CARD_BACK_PATH = "resources/pkmn/back.png";
 
+		//Catalog reference
+		public static PKMN_Catalog catalog;
+
 		//Colour identity to string dictionary
 		public static readonly Dictionary<string, string> typeSymbols = new Dictionary<string, string> {
 			{ "Colorless" , "{C}" },
@@ -466,17 +472,11 @@ namespace CollectionTracker {
 		}
 
 		//Replace all instances of energy types in a string with symbol indicators
-		public static string ReplaceAllSymbols(string str) {
-			foreach(KeyValuePair<string, string> kvp in typeSymbols)
-				str = str.Replace(kvp.Key, kvp.Value);
-			str = str.Replace(" ", "");
-			return str;
-		}
-
-		//Replace all instances of energy types in a string with symbol indicators (without clearing spaces)
-		public static string ReplaceSymbolsInText(string str) {
+		public static string ReplaceTypeSymbols(string str, bool clearSpaces) {
 			foreach (KeyValuePair<string, string> kvp in typeSymbols)
 				str = str.Replace(kvp.Key, kvp.Value);
+			if (clearSpaces)
+				str = str.Replace(" ", "");
 			return str;
 		}
 

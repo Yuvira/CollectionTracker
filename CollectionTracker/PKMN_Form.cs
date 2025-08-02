@@ -529,13 +529,7 @@ namespace CollectionTracker {
 			headerBox.Size = new Size(pkmnDetailBox.Size.Width, 100);
 
 			//Name
-			Label name = new Label();
-			headerBox.Controls.Add(name);
-			name.Font = Utils.FONT_BOLD;
-			name.Location = new Point(5, y2);
-			name.Size = new Size(TextRenderer.MeasureText(card.name, name.Font).Width, TEXT_HEIGHT);
-			name.Text = card.name;
-			name.TextAlign = ContentAlignment.MiddleLeft;
+			PKMN_WriteLineWithSymbols(card.name, headerBox, new Point(5, y2), Utils.FONT_BOLD);
 
 			//Energy type & HP
 			if (card.energyType.Length > 0 || card.hp > 0) {
@@ -566,15 +560,8 @@ namespace CollectionTracker {
 			y2 += TEXT_HEIGHT + 10;
 
 			//Card Type
-			if (card.cardTypes.Length > 0) {
-				Label type = new Label();
-				headerBox.Controls.Add(type);
-				type.Location = new Point(5, y2);
-				type.Size = new Size(pkmnDetailBox.Size.Width - 10, TEXT_HEIGHT);
-				type.Text = card.cardTypes;
-				type.TextAlign = ContentAlignment.MiddleLeft;
-				y2 += TEXT_HEIGHT + 10;
-			}
+			if (card.cardTypes.Length > 0)
+				PKMN_WriteLineWithSymbols(card.cardTypes, headerBox, new Point(5, y2), Utils.FONT_DEFAULT);
 
 			//Pokemon stage
 			if (card.stage.Length > 0) {
@@ -707,6 +694,58 @@ namespace CollectionTracker {
 		}
 
 		#region Description Generators
+
+		//Write string and replace symbols
+		private void PKMN_WriteLineWithSymbols(string str, GroupBox box, Point location, Font font) {
+
+			//Loop fields
+			while (true) {
+
+				//Clear leading spaces
+				if (str.StartsWith(" ")) { str = str.Substring(1); }
+
+				//Get index of next symbol
+				int i = str.IndexOf('{');
+
+				//Generate object
+				if (i == 0) {
+					int i2 = str.IndexOf('}');
+					if (i2 > 0) {
+						location = PKMN_InsertSymbol(str.Substring(0, i2 + 1), box, location, TEXT_HEIGHT);
+						str = str.Substring(i2 + 1);
+					}
+					else { str = str.Substring(1); }
+				}
+
+				//Write text
+				else {
+					if (i == -1) {
+						PKMN_WriteLine(str, box, location, font);
+						break;
+					}
+					else {
+						string substr = str.Substring(0, i);
+						if (substr.EndsWith(" ")) { substr = substr.Substring(0, substr.Length - 1); }
+						location = PKMN_WriteLine(substr, box, location, font);
+						str = str.Substring(i);
+					}
+				}
+
+			}
+
+		}
+
+		//Write simple text
+		private Point PKMN_WriteLine(string str, GroupBox box, Point location, Font font) {
+			Label label = new Label();
+			box.Controls.Add(label);
+			label.Font = font;
+			label.Location = location;
+			label.Size = new Size(TextRenderer.MeasureText(str, label.Font).Width, TEXT_HEIGHT);
+			label.Text = str;
+			label.TextAlign = ContentAlignment.MiddleLeft;
+			return new Point(location.X + TextRenderer.MeasureText(str, label.Font).Width, location.Y);
+		}
 
 		//Add markers to abilities so the description generator knows where to bold/colour text
 		private string PKMN_AddAbilityMarkers(string desc) {
@@ -1408,7 +1447,7 @@ namespace CollectionTracker {
 
 				//Header data
 				pkmnHPField.Value = decimal.Parse(lines[2].Substring(3));
-				pkmnETypeField.Text = PKMN_Utils.ReplaceAllSymbols(lines[3]);
+				pkmnETypeField.Text = PKMN_Utils.ReplaceTypeSymbols(lines[3], true);
 				pkmnTypeField.Text = lines[4];
 				pkmnStageField.Text = lines[5];
 
@@ -1435,7 +1474,7 @@ namespace CollectionTracker {
 								break;
 							if (pkmnWeakField.Text.Length > 0)
 								pkmnWeakField.Text += " ";
-							pkmnWeakField.Text += PKMN_Utils.ReplaceAllSymbols(lines[i]);
+							pkmnWeakField.Text += PKMN_Utils.ReplaceTypeSymbols(lines[i], true);
 						}
 						while (true) {
 							++i;
@@ -1443,12 +1482,12 @@ namespace CollectionTracker {
 								break;
 							if (pkmnResistField.Text.Length > 0)
 								pkmnResistField.Text += " ";
-							pkmnResistField.Text += PKMN_Utils.ReplaceAllSymbols(lines[i]);
+							pkmnResistField.Text += PKMN_Utils.ReplaceTypeSymbols(lines[i], true);
 						}
 						if (lines[i + 1].Equals("None"))
 							pkmnRetreatField.Text = "—";
 						else
-							pkmnRetreatField.Text = PKMN_Utils.ReplaceAllSymbols(lines[i + 1]);
+							pkmnRetreatField.Text = PKMN_Utils.ReplaceTypeSymbols(lines[i + 1], true);
 						break;
 					}
 
@@ -1458,7 +1497,7 @@ namespace CollectionTracker {
 
 					//Powers
 					if (PKMN_Utils.abilityTerms.Keys.Any(t => lines[i].Contains(t))) { 
-						o += lines[i] + " — " + lines[i + 1] + "\r\n" + PKMN_Utils.ReplaceSymbolsInText(lines[i + 3]);
+						o += lines[i] + " — " + lines[i + 1] + "\r\n" + PKMN_Utils.ReplaceTypeSymbols(lines[i + 3], false);
 						i += 4;
 					}
 
@@ -1466,7 +1505,7 @@ namespace CollectionTracker {
 					else {
 
 						//Check line starts with cost
-						string s = PKMN_Utils.ReplaceAllSymbols(lines[i]);
+						string s = PKMN_Utils.ReplaceTypeSymbols(lines[i], true);
 						if (!s.Contains("{"))
 							break;
 
@@ -1475,13 +1514,13 @@ namespace CollectionTracker {
 
 							//All fields
 							if (lines[i + 3].Length == 0) {
-								o += s + " " + lines[i + 1] + " — " + lines[i + 2] + "\r\n" + PKMN_Utils.ReplaceSymbolsInText(lines[i + 4]);
+								o += s + " " + lines[i + 1] + " — " + lines[i + 2] + "\r\n" + PKMN_Utils.ReplaceTypeSymbols(lines[i + 4], false);
 								i += 5;
 							}
 
 							//No damage
 							else if (lines[i + 2].Length == 0) {
-								o += s + " " + lines[i + 1] + "\r\n" + PKMN_Utils.ReplaceSymbolsInText(lines[i + 3]);
+								o += s + " " + lines[i + 1] + "\r\n" + PKMN_Utils.ReplaceTypeSymbols(lines[i + 3], false);
 								i += 4;
 							}
 
@@ -1506,26 +1545,21 @@ namespace CollectionTracker {
 			else if (lines[2].StartsWith("HP ") && lines[3].Equals("Trainer")) {
 				pkmnHPField.Value = decimal.Parse(lines[2].Substring(3));
 				pkmnTypeField.Text = lines[3];
-				pkmnOracleField.Text = PKMN_Utils.ReplaceSymbolsInText(lines[5]);
+				pkmnOracleField.Text = PKMN_Utils.ReplaceTypeSymbols(lines[5], false);
 			}
 
 			//Energy
 			else if (lines[2].Contains("Energy")) {
 				pkmnTypeField.Text = lines[2];
 				if (!lines[2].Contains("Basic"))
-					pkmnOracleField.Text = PKMN_Utils.ReplaceSymbolsInText(lines[4]);
+					pkmnOracleField.Text = PKMN_Utils.ReplaceTypeSymbols(lines[4], false);
 			}
 
 			//Trainers
 			else {
 				pkmnTypeField.Text = lines[2];
-				pkmnOracleField.Text = PKMN_Utils.ReplaceSymbolsInText(lines[4]);
+				pkmnOracleField.Text = PKMN_Utils.ReplaceTypeSymbols(lines[4], false);
 			}
-
-			//Modify types
-			pkmnTypeField.Text = pkmnTypeField.Text.Replace("Trainer's", "Trained");
-			if (pkmnTypeField.Text.Equals("Pokémon Tool"))
-				pkmnTypeField.Text = "Tool";
 
 		}
 
@@ -2116,6 +2150,9 @@ namespace CollectionTracker {
 				pkmnIODialog.Text = "Error: " + ex.Message;
 				return;
 			}
+
+			//Set static utils ref
+			PKMN_Utils.catalog = pkmnCatalog;
 
 			//Generate symbol controls
 			PKMN_RegenerateSymbols();
