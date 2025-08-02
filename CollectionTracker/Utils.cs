@@ -80,6 +80,11 @@ namespace CollectionTracker {
 					return true;
 				return false;
 			}
+			else if (op.Equals("~:")) {
+				if (field.Contains(value))
+					return true;
+				return false;
+			}
 			else if (op.Equals(":")) {
 				if (SearchableString(field).Contains(SearchableString(value)))
 					return true;
@@ -99,6 +104,17 @@ namespace CollectionTracker {
 					if (SearchableString(subfield).Equals(SearchableString(value)))
 						return false;
 				return true;
+			}
+			else if (op.Equals("~=")) {
+				if (!fieldIsList) {
+					if (field.Equals(value))
+						return true;
+					return false;
+				}
+				foreach (string subfield in field.Split(new string[] { " / " }, StringSplitOptions.None))
+					if (subfield.Equals(value))
+						return true;
+				return false;
 			}
 			else if (op.Equals("=")) {
 				if (!fieldIsList) {

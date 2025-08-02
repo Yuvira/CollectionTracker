@@ -285,7 +285,7 @@ namespace CollectionTracker {
 
 			//Convert array of terms into list of (field, operator, value)
 			List<(string field, string op, string value)> terms = new List<(string, string, string)>();
-			List<string> ops = new List<string> { "!:", "!=", "==", ":", "=" };
+			List<string> ops = new List<string> { "!:", "!=", "~:", "~=", "==", ":", "=" };
 			foreach (string term in termArray) {
 				string[] splitTerm;
 				foreach (string op in ops) {
