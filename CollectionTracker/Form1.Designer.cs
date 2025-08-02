@@ -435,6 +435,7 @@ namespace CollectionTracker {
 			this.pkmnDetailFilterCountLabel = new System.Windows.Forms.Label();
 			this.ygoDetailFilterCountLabel = new System.Windows.Forms.Label();
 			this.mtgDetailFilterCountLabel = new System.Windows.Forms.Label();
+			this.pkmnPokemonButton = new System.Windows.Forms.Button();
 			this.ygoTabControl.SuspendLayout();
 			this.ygoSetPage.SuspendLayout();
 			this.ygoSearchPage.SuspendLayout();
@@ -4089,6 +4090,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnCardPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.pkmnCardPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnCardPage.Controls.Add(this.pkmnPokemonButton);
 			this.pkmnCardPage.Controls.Add(this.pkmnTrainerButton);
 			this.pkmnCardPage.Controls.Add(this.pkmnImportButton);
 			this.pkmnCardPage.Controls.Add(this.pkmnImportField);
@@ -4114,10 +4116,10 @@ namespace CollectionTracker {
 			this.pkmnCardPage.Controls.Add(this.pkmnOracleLabel);
 			this.pkmnCardPage.Controls.Add(this.pkmnOracleField);
 			this.pkmnCardPage.Controls.Add(this.pkmnTypeLabel);
-			this.pkmnCardPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnCardPage.Location = new System.Drawing.Point(4, 33);
 			this.pkmnCardPage.Name = "pkmnCardPage";
 			this.pkmnCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnCardPage.Size = new System.Drawing.Size(1262, 626);
+			this.pkmnCardPage.Size = new System.Drawing.Size(1262, 658);
 			this.pkmnCardPage.TabIndex = 0;
 			this.pkmnCardPage.Text = "Card Entry";
 			// 
@@ -4926,6 +4928,16 @@ namespace CollectionTracker {
 			this.mtgDetailFilterCountLabel.Text = "X / X";
 			this.mtgDetailFilterCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
+			// pkmnPokemonButton
+			// 
+			this.pkmnPokemonButton.Location = new System.Drawing.Point(600, 75);
+			this.pkmnPokemonButton.Name = "pkmnPokemonButton";
+			this.pkmnPokemonButton.Size = new System.Drawing.Size(120, 29);
+			this.pkmnPokemonButton.TabIndex = 56;
+			this.pkmnPokemonButton.Text = "Pokémon";
+			this.pkmnPokemonButton.UseVisualStyleBackColor = true;
+			this.pkmnPokemonButton.Click += new System.EventHandler(this.PKMN_OnClickPokemon);
+			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -5456,6 +5468,7 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Label pkmnDetailFilterCountLabel;
 		private System.Windows.Forms.Label ygoDetailFilterCountLabel;
 		private System.Windows.Forms.Label mtgDetailFilterCountLabel;
+		private System.Windows.Forms.Button pkmnPokemonButton;
 	}
 }
 

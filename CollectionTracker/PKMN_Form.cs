@@ -1529,10 +1529,9 @@ namespace CollectionTracker {
 
 		}
 
-		//Add trainer tag to card type
-		private void PKMN_OnClickTrainer(object sender, EventArgs e) {
-			pkmnTypeField.Text = "Trainer - " + pkmnTypeField.Text;
-		}
+		//Quick add card types to type line
+		private void PKMN_OnClickTrainer(object sender, EventArgs e) => pkmnTypeField.Text = "Trainer / " + pkmnTypeField.Text;
+		private void PKMN_OnClickPokemon(object sender, EventArgs e) => pkmnTypeField.Text = "Pokémon / " + pkmnTypeField.Text;
 
 		//Add card to catalog
 		private void PKMN_OnClickAddCard(object sender, EventArgs e) => PKMN_AddCard();
