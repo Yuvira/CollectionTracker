@@ -13,6 +13,8 @@ namespace CollectionTracker {
 		public static readonly Font FONT_ITALIC = new Font(FONT_DEFAULT, FontStyle.Italic);
 		public static readonly Font FONT_UNDERLINE = new Font(FONT_DEFAULT, FontStyle.Underline);
 
+		#region Search Tools
+
 		//Character and string search replacements
 		public static readonly Dictionary<char, char> searchChars = new Dictionary<char, char> {
 			{ 'é', 'e' },
@@ -65,16 +67,21 @@ namespace CollectionTracker {
 		};
 
 		//Convert input to searchable string by replacing non-standard characters and switching to lowercase
+		public static Dictionary<string, string> searchSymbols;
 		public static string SearchableString(string input) {
 			foreach (KeyValuePair<char, char> kvp in searchChars)
 				input = input.Replace(kvp.Key, kvp.Value);
 			foreach (KeyValuePair<string, string> kvp in searchStrings)
 				input = input.Replace(kvp.Key, kvp.Value);
+			if (searchSymbols != null)
+				foreach (KeyValuePair<string, string> kvp in searchSymbols)
+					input = input.Replace(kvp.Key, kvp.Value);
 			return input.ToLower();
 		}
 
 		//Evaluate if a search operation is true or not
-		public static bool EvaluateSearchOperation(string field, string op, string value, bool fieldIsList = false) {
+		public static bool EvaluateSearchOperation(string field, string op, string value, Dictionary<string, string> symbols, bool fieldIsList = false) {
+			searchSymbols = symbols;
 			if (op.Equals("!:")) {
 				if (!SearchableString(field).Contains(SearchableString(value)))
 					return true;
@@ -138,6 +145,8 @@ namespace CollectionTracker {
 					return true;
 			return false;
 		}
+
+		#endregion
 
 	}
 

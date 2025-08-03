@@ -100,8 +100,7 @@ namespace CollectionTracker {
 			else if (hp != 0)
 				s += " | " + hp.ToString();
 			if (PKMN_Utils.catalog != null)
-				foreach (PKMN_Symbol symbol in PKMN_Utils.catalog.symbols)
-					s = s.Replace(symbol.symbol, symbol.name);
+				s = PKMN_Utils.ReplaceSymbols(s, PKMN_Utils.catalog.symbols);
 			return s;
 		}
 
@@ -359,8 +358,8 @@ namespace CollectionTracker {
 	public class PKMN_Symbol {
 
 		//Properties
-		[ProtoMember(1)] public string name;
 		[ProtoMember(2)] public string symbol;
+		[ProtoMember(1)] public string name;
 		[ProtoMember(3)] public string imgPath;
 		[ProtoMember(4)] public decimal aspect;
 
@@ -471,6 +470,13 @@ namespace CollectionTracker {
 			}
 		}
 
+		//Replace all symbols from a given list with text
+		public static string ReplaceSymbols(string str, List<PKMN_Symbol> symbols) {
+			foreach (PKMN_Symbol symbol in symbols)
+				str = str.Replace(symbol.symbol, symbol.name);
+			return str;
+		}
+
 		//Replace all instances of energy types in a string with symbol indicators
 		public static string ReplaceTypeSymbols(string str, bool clearSpaces) {
 			foreach (KeyValuePair<string, string> kvp in typeSymbols)
@@ -490,6 +496,14 @@ namespace CollectionTracker {
 						index = i;
 			}
 			return index;
+		}
+
+		//Convert symbol list to dictionary
+		public static Dictionary<string, string> SymbolsToDict(List<PKMN_Symbol> symbols) {
+			Dictionary<string, string> dict = new Dictionary<string, string>();
+			foreach (PKMN_Symbol symbol in symbols)
+				dict.Add(symbol.symbol, symbol.name);
+			return dict;
 		}
 
 		//Load image. Load nothing if it doesn't exist

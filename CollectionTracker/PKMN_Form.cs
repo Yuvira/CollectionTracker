@@ -195,7 +195,7 @@ namespace CollectionTracker {
 			pkmnSearchSetField.Items.Add("--");
 			pkmnSearchLocationField.Items.Clear();
 			pkmnSearchLocationField.Items.Add("--");
-			foreach (string name in pkmnCatalog.cards.SelectMany(c => c.cardTypes.Split(new string[] { " / " }, StringSplitOptions.None)).Distinct())
+			foreach (string name in pkmnCatalog.cards.SelectMany(c => c.cardTypes.Split(new string[] { " / " }, StringSplitOptions.None)).Select(c => PKMN_Utils.ReplaceSymbols(c, pkmnCatalog.symbols)).Distinct())
 				pkmnSearchTypeList.Items.Add(name);
 			foreach (PKMN_Set set in pkmnCatalog.sets)
 				pkmnSearchSetField.Items.Add(set);
@@ -300,6 +300,7 @@ namespace CollectionTracker {
 			//Search printings
 			bool[] matches = new bool[terms.Count];
 			string searchField;
+			Dictionary<string, string> symbolDict = PKMN_Utils.SymbolsToDict(pkmnCatalog.symbols);
 			foreach (PKMN_Printing print in pkmnCatalog.printings) {
 				for (int i = 0; i < terms.Count; ++i) {
 					if (terms[i].field.ToLower().Equals("n"))
@@ -317,7 +318,7 @@ namespace CollectionTracker {
 					bool fieldIsList = false;
 					if (terms[i].field.ToLower().Equals("t") || terms[i].field.ToLower().Equals("l"))
 						fieldIsList = true;
-					matches[i] = Utils.EvaluateSearchOperation(searchField, terms[i].op, terms[i].value, fieldIsList);
+					matches[i] = Utils.EvaluateSearchOperation(searchField, terms[i].op, terms[i].value, symbolDict, fieldIsList);
 				}
 				if (logicalOp == '&' && !matches.Contains(false))
 					pkmnPrintFilter.Add(print);
