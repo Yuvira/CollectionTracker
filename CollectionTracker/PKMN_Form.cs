@@ -680,9 +680,9 @@ namespace CollectionTracker {
 			else
 				pkmnDetailNext = pkmnPrintFilter[0];
 			pkmnDetailPrevButton.Show();
-			pkmnDetailPrevButton.Text = pkmnDetailPrev.card.name;
+			pkmnDetailPrevButton.Text = PKMN_Utils.ReplaceSymbols(pkmnDetailPrev.card.name, pkmnCatalog.symbols);
 			pkmnDetailNextButton.Show();
-			pkmnDetailNextButton.Text = pkmnDetailNext.card.name;
+			pkmnDetailNextButton.Text = PKMN_Utils.ReplaceSymbols(pkmnDetailNext.card.name, pkmnCatalog.symbols);
 
 			//Hide tooltip
 			pkmnTooltipBox.Hide();
