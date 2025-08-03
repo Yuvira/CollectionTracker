@@ -64,6 +64,7 @@ namespace CollectionTracker {
 			{ "𝑥", "x" },
 			{ "𝘚", "S" },
 			{ "𝘗", "P" },
+			{ "𝘟", "X" },
 		};
 
 		//Convert input to searchable string by replacing non-standard characters and switching to lowercase

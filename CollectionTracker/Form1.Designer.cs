@@ -312,6 +312,7 @@ namespace CollectionTracker {
 			this.pkmnSetlistLabel = new System.Windows.Forms.Label();
 			this.pkmnSetlistLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSearchPage = new System.Windows.Forms.TabPage();
+			this.pkmnClipboardLVXButton = new System.Windows.Forms.Button();
 			this.pkmnClipboardSPButton = new System.Windows.Forms.Button();
 			this.pkmnSearchDialog = new System.Windows.Forms.Label();
 			this.pkmnApplySearchTermsButton = new System.Windows.Forms.Button();
@@ -3597,6 +3598,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnSearchPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.pkmnSearchPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnSearchPage.Controls.Add(this.pkmnClipboardLVXButton);
 			this.pkmnSearchPage.Controls.Add(this.pkmnClipboardSPButton);
 			this.pkmnSearchPage.Controls.Add(this.pkmnSearchDialog);
 			this.pkmnSearchPage.Controls.Add(this.pkmnApplySearchTermsButton);
@@ -3626,9 +3628,19 @@ namespace CollectionTracker {
 			this.pkmnSearchPage.TabIndex = 7;
 			this.pkmnSearchPage.Text = "Search";
 			// 
+			// pkmnClipboardLVXButton
+			// 
+			this.pkmnClipboardLVXButton.Location = new System.Drawing.Point(385, 40);
+			this.pkmnClipboardLVXButton.Name = "pkmnClipboardLVXButton";
+			this.pkmnClipboardLVXButton.Size = new System.Drawing.Size(45, 30);
+			this.pkmnClipboardLVXButton.TabIndex = 89;
+			this.pkmnClipboardLVXButton.Text = "ʟᴠ.𝘟";
+			this.pkmnClipboardLVXButton.UseVisualStyleBackColor = true;
+			this.pkmnClipboardLVXButton.Click += new System.EventHandler(this.PKMN_OnClickClipboardLVXButton);
+			// 
 			// pkmnClipboardSPButton
 			// 
-			this.pkmnClipboardSPButton.Location = new System.Drawing.Point(395, 40);
+			this.pkmnClipboardSPButton.Location = new System.Drawing.Point(345, 40);
 			this.pkmnClipboardSPButton.Name = "pkmnClipboardSPButton";
 			this.pkmnClipboardSPButton.Size = new System.Drawing.Size(35, 30);
 			this.pkmnClipboardSPButton.TabIndex = 88;
@@ -3706,7 +3718,7 @@ namespace CollectionTracker {
 			// 
 			// pkmnClipboardDeltaButton
 			// 
-			this.pkmnClipboardDeltaButton.Location = new System.Drawing.Point(355, 40);
+			this.pkmnClipboardDeltaButton.Location = new System.Drawing.Point(305, 40);
 			this.pkmnClipboardDeltaButton.Name = "pkmnClipboardDeltaButton";
 			this.pkmnClipboardDeltaButton.Size = new System.Drawing.Size(35, 30);
 			this.pkmnClipboardDeltaButton.TabIndex = 80;
@@ -3716,7 +3728,7 @@ namespace CollectionTracker {
 			// 
 			// pkmnClipboardStarButton
 			// 
-			this.pkmnClipboardStarButton.Location = new System.Drawing.Point(315, 40);
+			this.pkmnClipboardStarButton.Location = new System.Drawing.Point(265, 40);
 			this.pkmnClipboardStarButton.Name = "pkmnClipboardStarButton";
 			this.pkmnClipboardStarButton.Size = new System.Drawing.Size(35, 30);
 			this.pkmnClipboardStarButton.TabIndex = 79;
@@ -3726,7 +3738,7 @@ namespace CollectionTracker {
 			// 
 			// pkmnClipboardexButton
 			// 
-			this.pkmnClipboardexButton.Location = new System.Drawing.Point(275, 40);
+			this.pkmnClipboardexButton.Location = new System.Drawing.Point(225, 40);
 			this.pkmnClipboardexButton.Name = "pkmnClipboardexButton";
 			this.pkmnClipboardexButton.Size = new System.Drawing.Size(35, 30);
 			this.pkmnClipboardexButton.TabIndex = 78;
@@ -5482,6 +5494,7 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Label mtgDetailFilterCountLabel;
 		private System.Windows.Forms.Button pkmnPokemonButton;
 		private System.Windows.Forms.Button pkmnClipboardSPButton;
+		private System.Windows.Forms.Button pkmnClipboardLVXButton;
 	}
 }
 
