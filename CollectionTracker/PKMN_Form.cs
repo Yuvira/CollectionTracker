@@ -561,17 +561,14 @@ namespace CollectionTracker {
 			y2 += TEXT_HEIGHT + 10;
 
 			//Card Type
-			if (card.cardTypes.Length > 0)
+			if (card.cardTypes.Length > 0) {
 				PKMN_WriteLineWithSymbols(card.cardTypes, headerBox, new Point(5, y2), Utils.FONT_DEFAULT);
+				y2 += TEXT_HEIGHT + 10;
+			}
 
 			//Pokemon stage
 			if (card.stage.Length > 0) {
-				Label type = new Label();
-				headerBox.Controls.Add(type);
-				type.Location = new Point(5, y2);
-				type.Size = new Size(pkmnDetailBox.Size.Width - 10, TEXT_HEIGHT);
-				type.Text = card.stage;
-				type.TextAlign = ContentAlignment.MiddleLeft;
+				PKMN_WriteLineWithSymbols(card.stage, headerBox, new Point(5, y2), Utils.FONT_DEFAULT);
 				y2 += TEXT_HEIGHT + 10;
 			}
 
