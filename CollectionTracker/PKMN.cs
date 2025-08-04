@@ -453,7 +453,7 @@ namespace CollectionTracker {
 		};
 
 		//Ability symbol list
-		public static readonly Dictionary<string, string> abilitySymbols = new Dictionary<string, string> {
+		public static readonly Dictionary<string, string> abilityMarkers = new Dictionary<string, string> {
 			{ "{PK-POW}",  "*" },
 			{ "{PK-BDY}",  "~" },
 			{ "{ABILITY}", "*" },

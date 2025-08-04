@@ -739,9 +739,9 @@ namespace CollectionTracker {
 			for (int i = 0; i < lines.Length; ++i) {
 				if (lines[i].StartsWith("{")) {
 					lines[i] = lines[i].Insert(lines[i].LastIndexOf('}') + 2, "`");
-					foreach (string symbol in PKMN_Utils.abilitySymbols.Keys)
+					foreach (string symbol in PKMN_Utils.abilityMarkers.Keys)
 						if (lines[i].StartsWith(symbol))
-							lines[i] = lines[i].Insert(lines[i].LastIndexOf('}') + 3, PKMN_Utils.abilitySymbols[symbol]);
+							lines[i] = lines[i].Insert(lines[i].LastIndexOf('}') + 3, PKMN_Utils.abilityMarkers[symbol]);
 				}
 				foreach (string term in PKMN_Utils.abilityTerms.Keys)
 					if (lines[i].StartsWith(term))
