@@ -444,12 +444,26 @@ namespace CollectionTracker {
 		};
 
 		//Ability term list
-		public static readonly Dictionary<string, Color> abilityTerms = new Dictionary<string, Color> {
-			{ "Pokémon Power", Color.Red   },
-			{ "Poké-POWER",    Color.Red   },
-			{ "Poké-BODY",     Color.Green },
-			{ "Card Effect",   Color.White },
-			{ "Held Item",     Color.White },
+		public static readonly Dictionary<string, string> abilityTerms = new Dictionary<string, string> {
+			{ "Pokémon Power", "`*" },
+			{ "Poké-POWER",    "`*" },
+			{ "Poké-BODY",     "`~" },
+			{ "Card Effect",   "`%" },
+			{ "Held Item",     "`%" },
+		};
+
+		//Ability symbol list
+		public static readonly Dictionary<string, string> abilitySymbols = new Dictionary<string, string> {
+			{ "{PK-POW}",  "*" },
+			{ "{PK-BDY}",  "~" },
+			{ "{ABILITY}", "*" },
+		};
+
+		//Marker colour list
+		public static readonly Dictionary<string, Color> markerColours = new Dictionary<string, Color> {
+			{ "*", Color.Red   },
+			{ "~", Color.Green },
+			{ "%", Color.White },
 		};
 
 		//Returns string with tooltip text/markers removed

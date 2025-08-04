@@ -736,9 +736,17 @@ namespace CollectionTracker {
 		//Add markers to abilities so the description generator knows where to bold/colour text
 		private string PKMN_AddAbilityMarkers(string desc) {
 			string[] lines = desc.Split(new string[] { "\r\n" }, StringSplitOptions.None);
-			for (int i = 0; i < lines.Length; ++i)
-				if (lines[i].StartsWith("{"))
+			for (int i = 0; i < lines.Length; ++i) {
+				if (lines[i].StartsWith("{")) {
 					lines[i] = lines[i].Insert(lines[i].LastIndexOf('}') + 2, "`");
+					foreach (string symbol in PKMN_Utils.abilitySymbols.Keys)
+						if (lines[i].StartsWith(symbol))
+							lines[i] = lines[i].Insert(lines[i].LastIndexOf('}') + 3, PKMN_Utils.abilitySymbols[symbol]);
+				}
+				foreach (string term in PKMN_Utils.abilityTerms.Keys)
+					if (lines[i].StartsWith(term))
+						lines[i] = lines[i].Insert(0, PKMN_Utils.abilityTerms[term]);
+			}
 			return string.Join("\r\n", lines);
 		}
 
@@ -873,11 +881,10 @@ namespace CollectionTracker {
 								label.Font = Utils.FONT_BOLD;
 								str = str.Substring(1);
 							}
-							foreach (KeyValuePair<string, Color> kvp in PKMN_Utils.abilityTerms) {
-								if (str.StartsWith(kvp.Key)) {
-									label.Font = Utils.FONT_BOLD;
-									label.ForeColor = kvp.Value;
-									break;
+							foreach (string marker in PKMN_Utils.markerColours.Keys) {
+								if (str.StartsWith(marker)) {
+									label.ForeColor = PKMN_Utils.markerColours[marker];
+									str = str.Substring(1);
 								}
 							}
 							label.Size = new Size(TextRenderer.MeasureText(str, label.Font).Width, TEXT_HEIGHT);
