@@ -173,13 +173,13 @@ namespace CollectionTracker {
 		//Convert input to searchable string by replacing non-standard characters and switching to lowercase
 		public static Dictionary<string, string> searchSymbols;
 		public static string SearchableString(string input) {
+			if (searchSymbols != null)
+				foreach (KeyValuePair<string, string> kvp in searchSymbols)
+					input = input.Replace(kvp.Key, kvp.Value);
 			foreach (KeyValuePair<char, char> kvp in searchChars)
 				input = input.Replace(kvp.Key, kvp.Value);
 			foreach (KeyValuePair<string, string> kvp in searchStrings)
 				input = input.Replace(kvp.Key, kvp.Value);
-			if (searchSymbols != null)
-				foreach (KeyValuePair<string, string> kvp in searchSymbols)
-					input = input.Replace(kvp.Key, kvp.Value);
 			return input.ToLower();
 		}
 
