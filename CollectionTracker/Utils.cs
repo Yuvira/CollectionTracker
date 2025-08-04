@@ -101,6 +101,7 @@ namespace CollectionTracker {
 			box.Size = size;
 			box.Checked = check;
 			box.Text = text;
+			box.TextAlign = ContentAlignment.MiddleLeft;
 			return box;
 		}
 

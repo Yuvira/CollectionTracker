@@ -61,8 +61,10 @@ namespace CollectionTracker {
 
 		//Properties
 		private List<(PKMN_Set set, Panel panel, bool expanded)> pkmnSetlist = new List<(PKMN_Set, Panel, bool)>();
+		private List<PKMN_Set> pkmnSetFilter = new List<PKMN_Set>();
+		private List<CheckBox> pkmnSetToggles = new List<CheckBox>();
 		public int pkmnSetPagenum = 0;
-		public int pkmnSetsPerPage = 15;
+		public int pkmnSetsPerPage = 25;
 
 		//Paging
 		private void PKMN_OnClickPrevSet(object sender, EventArgs e) {
@@ -77,23 +79,42 @@ namespace CollectionTracker {
 		//Clear set list and update data
 		private void PKMN_UpdateSets() {
 
-			//Clear controls and sort sets
+			//Clear controls
 			pkmnSetlist.Clear();
+			pkmnSetlistPage.Controls.Remove(pkmnSetlistLayout);
 			pkmnSetlistLayout.Controls.Clear();
-			pkmnCatalog.sets.Sort(new PKMN_SetComparer().Compare);
+
+			//Set up filters and sort
+			PKMN_GenerateSetFilters();
+			pkmnSetFilter.Sort(new PKMN_SetComparer().Compare);
 
 			//Pagination
-			int maxPage = pkmnCatalog.sets.Count / pkmnSetsPerPage;
+			int maxPage = pkmnSetFilter.Count / pkmnSetsPerPage;
 			if (pkmnSetPagenum > maxPage) { pkmnSetPagenum = 0; }
 			if (pkmnSetPagenum < 0) { pkmnSetPagenum = maxPage; }
 			int startIndex = pkmnSetPagenum * pkmnSetsPerPage;
 			int maxIndex = pkmnSetsPerPage;
-			if (pkmnSetPagenum == maxPage) { maxIndex = pkmnCatalog.sets.Count % pkmnSetsPerPage; }
+			if (pkmnSetPagenum == maxPage) { maxIndex = pkmnSetFilter.Count % pkmnSetsPerPage; }
 			maxIndex += startIndex;
 			pkmnSetPageLabel.Text = (pkmnSetPagenum + 1) + " / " + (maxPage + 1);
 
+			//Hide nav buttons when not relevant
+			if (maxPage > 0) {
+				pkmnSetPageLabel.Show();
+				pkmnPrevSetButton.Show();
+				pkmnNextSetButton.Show();
+			}
+			else {
+				pkmnSetPageLabel.Hide();
+				pkmnPrevSetButton.Hide();
+				pkmnNextSetButton.Hide();
+			}
+
 			//Create set rows
-			for (int i = startIndex; i < maxIndex; ++i) { PKMN_CreateSetRow(pkmnCatalog.sets[i]); }
+			pkmnSetlistLayout.SuspendLayout();
+			for (int i = startIndex; i < maxIndex; ++i) { PKMN_CreateSetRow(pkmnSetFilter[i]); }
+			pkmnSetlistLayout.ResumeLayout();
+			pkmnSetlistPage.Controls.Add(pkmnSetlistLayout);
 
 		}
 
@@ -134,6 +155,32 @@ namespace CollectionTracker {
 			pkmnSetlist.Add((set, setRow, false));
 
 		}
+
+		//Generate set type toggles
+		private void PKMN_GenerateSetFilters() {
+			pkmnSetFilter.Clear();
+			string[] setTypes = pkmnCatalog.sets.Select(s => s.setType).Distinct().ToArray();
+			string[] toggleTypes = pkmnSetToggles.Select(t => t.Text).Distinct().ToArray();
+			foreach (string type in setTypes) {
+				if (!toggleTypes.Contains(type)) {
+					pkmnSetToggles.Add(Utils.GenerateCheckbox(Point.Empty, new Size(200, 30), true, type));
+					pkmnSetlistPage.Controls.Add(pkmnSetToggles.Last());
+					pkmnSetToggles.Last().CheckedChanged += new EventHandler(PKMN_OnSetFilterToggled);
+				}
+			}
+			foreach (string type in toggleTypes)
+				if (!setTypes.Contains(type))
+					pkmnSetToggles.Remove(pkmnSetToggles.First(t => t.Text.Equals(type)));
+			foreach (PKMN_Set set in pkmnCatalog.sets)
+				foreach (CheckBox toggle in pkmnSetToggles)
+					if (toggle.Text.Equals(set.setType) && toggle.Checked)
+						pkmnSetFilter.Add(set);
+			for (int i = 0; i < pkmnSetToggles.Count; ++i)
+				pkmnSetToggles[i].Location = new Point(pkmnSetlistLayout.Location.X + pkmnSetlistLayout.Width + 5, pkmnSetlistLayout.Location.Y + 5 + (i * 30));
+		}
+
+		//On filter changed
+		private void PKMN_OnSetFilterToggled(object sender, EventArgs e) => PKMN_UpdateSets();
 
 		//Expand or collapse set box
 		private void PKMN_ExpandCollapseSet(PKMN_Set set) {
@@ -1863,16 +1910,18 @@ namespace CollectionTracker {
 			public Panel panel;
 			public TextBox nameBox;
 			public TextBox codeBox;
+			public TextBox typeBox;
 			public DateTimePicker dateBox;
 			public Label pathLabel;
 			public PictureBox iconBox;
 			public CheckBox leadBonusSheetCheckbox;
-			public PKMN_FormSet() : this(null, null, null, null, null, null, null, null) { }
-			public PKMN_FormSet(PKMN_Set set, Panel panel, TextBox nameBox, TextBox codeBox, DateTimePicker dateBox, Label pathLabel, PictureBox iconBox, CheckBox leadBonusSheetCheckbox) {
+			public PKMN_FormSet() : this(null, null, null, null, null, null, null, null, null) { }
+			public PKMN_FormSet(PKMN_Set set, Panel panel, TextBox nameBox, TextBox codeBox, TextBox typeBox, DateTimePicker dateBox, Label pathLabel, PictureBox iconBox, CheckBox leadBonusSheetCheckbox) {
 				this.set = set;
 				this.panel = panel;
 				this.nameBox = nameBox;
 				this.codeBox = codeBox;
+				this.typeBox = typeBox;
 				this.dateBox = dateBox;
 				this.pathLabel = pathLabel;
 				this.iconBox = iconBox;
@@ -1920,30 +1969,34 @@ namespace CollectionTracker {
 			int i = pkmnFormSets.Count;
 
 			//Group box
-			Panel setEntry = Utils.GeneratePanel(Point.Empty, new Size(350, 165));
+			Panel setEntry = Utils.GeneratePanel(Point.Empty, new Size(350, 200));
 
 			//Name box
-			TextBox name = Utils.GenerateTextBox(new Point(5, 5), new Size(270, 30), useRef ? refSet.name : "Name");
+			TextBox name = Utils.GenerateTextBox(new Point(5, 5), new Size(340, 30), useRef ? refSet.name : "Name");
 			setEntry.Controls.Add(name);
 
 			//Code box
 			TextBox code = Utils.GenerateTextBox(new Point(5, 40), new Size(270, 30), useRef ? refSet.code : "Code");
 			setEntry.Controls.Add(code);
 
+			//Type box
+			TextBox type = Utils.GenerateTextBox(new Point(5, 75), new Size(270, 30), useRef ? refSet.setType : "Type");
+			setEntry.Controls.Add(type);
+
 			//Date box
-			DateTimePicker date = Utils.GenerateDateTimePicker(new Point(5, 75), new Size(340, 30), useRef ? refSet.date : DateTime.Now);
+			DateTimePicker date = Utils.GenerateDateTimePicker(new Point(5, 110), new Size(340, 30), useRef ? refSet.date : DateTime.Now);
 			setEntry.Controls.Add(date);
 
 			//Leading bonus sheet box
-			CheckBox bsBox = Utils.GenerateCheckbox(new Point(5, 105), new Size(285, 35), useRef ? refSet.leadBonusSheet : false, "Has leading bonus sheet");
+			CheckBox bsBox = Utils.GenerateCheckbox(new Point(5, 140), new Size(285, 35), useRef ? refSet.leadBonusSheet : false, "Has leading bonus sheet");
 			setEntry.Controls.Add(bsBox);
 
 			//Path label
-			Label path = Utils.GenerateLabel(new Point(5, 130), new Size(340, 30), "");
+			Label path = Utils.GenerateLabel(new Point(5, 165), new Size(340, 30), "");
 			setEntry.Controls.Add(path);
 
 			//Icon box
-			PictureBox icon = Utils.GeneratePictureBox(new Point(280, 5), new Size(65, 65));
+			PictureBox icon = Utils.GeneratePictureBox(new Point(280, 40), new Size(65, 65));
 			icon.Cursor = Cursors.Hand;
 			setEntry.Controls.Add(icon);
 
@@ -1954,7 +2007,7 @@ namespace CollectionTracker {
 			}
 
 			//Create object and set up search event
-			PKMN_FormSet set = new PKMN_FormSet(useRef ? refSet : null, setEntry, name, code, date, path, icon, bsBox);
+			PKMN_FormSet set = new PKMN_FormSet(useRef ? refSet : null, setEntry, name, code, type, date, path, icon, bsBox);
 			icon.Click += new EventHandler((sender, e) => PKMN_OnClickSearchSetIcon(set));
 
 			//Add to list and layout
@@ -1985,6 +2038,7 @@ namespace CollectionTracker {
 				PKMN_Set set = new PKMN_Set(
 					formSet.nameBox.Text,
 					formSet.codeBox.Text,
+					formSet.typeBox.Text,
 					formSet.pathLabel.Text,
 					formSet.dateBox.Value,
 					formSet.leadBonusSheetCheckbox.Checked

@@ -312,15 +312,17 @@ namespace CollectionTracker {
 		//Properties
 		[ProtoMember(1)] public string name;
 		[ProtoMember(2)] public string code;
+		[ProtoMember(6)] public string setType;
 		[ProtoMember(3)] public string imgPath;
 		[ProtoMember(4)] public DateTime date;
 		[ProtoMember(5)] public bool leadBonusSheet;
 
 		//Constructor
-		public PKMN_Set() : this("", "", "", DateTime.Now, false) { }
-		public PKMN_Set(string name, string code, string imgPath, DateTime date, bool leadBonusSheet) {
+		public PKMN_Set() : this("", "", "", "", DateTime.Now, false) { }
+		public PKMN_Set(string name, string code, string setType, string imgPath, DateTime date, bool leadBonusSheet) {
 			this.name = name;
 			this.code = code;
+			this.setType = setType;
 			this.imgPath = imgPath;
 			this.date = date;
 			this.leadBonusSheet = leadBonusSheet;
@@ -330,6 +332,7 @@ namespace CollectionTracker {
 		public void Copy(PKMN_Set set) {
 			name = set.name;
 			code = set.code;
+			setType = set.setType;
 			imgPath = set.imgPath;
 			date = set.date;
 			leadBonusSheet = set.leadBonusSheet;
