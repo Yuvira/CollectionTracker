@@ -443,6 +443,13 @@ namespace CollectionTracker {
 			{ "Typeless"  , "{A}" },
 		};
 
+		//Ability term to string dictionary
+		public static readonly Dictionary<string, string> abilitySymbols = new Dictionary<string, string> {
+			{ "Poké-POWER —" , "{PK-POW}"  },
+			{ "Poké-BODY —"  , "{PK-BDY}"  },
+			{ "Ability —"    , "{ABILITY}" },
+		};
+
 		//Ability term list
 		public static readonly Dictionary<string, string> abilityTerms = new Dictionary<string, string> {
 			{ "Pokémon Power", "`*" },
@@ -500,6 +507,13 @@ namespace CollectionTracker {
 				str = str.Replace(kvp.Key, kvp.Value);
 			if (clearSpaces)
 				str = str.Replace(" ", "");
+			return str;
+		}
+
+		//Replace all instances of ability terms in a string with symbol indicators
+		public static string ReplaceAbilitySymbols(string str) {
+			foreach (KeyValuePair<string, string> kvp in abilitySymbols)
+				str = str.Replace(kvp.Key, kvp.Value);
 			return str;
 		}
 
