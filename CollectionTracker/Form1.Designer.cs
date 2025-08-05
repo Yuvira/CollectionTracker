@@ -4871,10 +4871,10 @@ namespace CollectionTracker {
 			this.pkmnSetPage.Controls.Add(this.pkmnSetGeneratorPageLabel);
 			this.pkmnSetPage.Controls.Add(this.pkmnSetGeneratorLayout);
 			this.pkmnSetPage.Controls.Add(this.pkmnSetGeneratorLabel);
-			this.pkmnSetPage.Location = new System.Drawing.Point(4, 33);
+			this.pkmnSetPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnSetPage.Name = "pkmnSetPage";
 			this.pkmnSetPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnSetPage.Size = new System.Drawing.Size(1262, 658);
+			this.pkmnSetPage.Size = new System.Drawing.Size(1262, 666);
 			this.pkmnSetPage.TabIndex = 6;
 			this.pkmnSetPage.Text = "Sets";
 			// 
@@ -4953,7 +4953,7 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.pkmnSetGeneratorLayout.Location = new System.Drawing.Point(3, 38);
 			this.pkmnSetGeneratorLayout.Name = "pkmnSetGeneratorLayout";
-			this.pkmnSetGeneratorLayout.Size = new System.Drawing.Size(1252, 612);
+			this.pkmnSetGeneratorLayout.Size = new System.Drawing.Size(1252, 620);
 			this.pkmnSetGeneratorLayout.TabIndex = 1;
 			// 
 			// pkmnSetGeneratorLabel
