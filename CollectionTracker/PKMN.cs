@@ -447,7 +447,7 @@ namespace CollectionTracker {
 		public static readonly Dictionary<string, string> abilitySymbols = new Dictionary<string, string> {
 			{ "Poké-POWER —" , "{PK-POW}"  },
 			{ "Poké-BODY —"  , "{PK-BDY}"  },
-			{ "Ability —"    , "{ABILITY}" },
+			{ "Ability —"    , "{ABILITY1}" },
 		};
 
 		//Ability term list
@@ -455,15 +455,17 @@ namespace CollectionTracker {
 			{ "Pokémon Power", "`*" },
 			{ "Poké-POWER",    "`*" },
 			{ "Poké-BODY",     "`~" },
+			{ "Ability",       "`*" },
 			{ "Card Effect",   "`%" },
 			{ "Held Item",     "`%" },
 		};
 
 		//Ability symbol list
 		public static readonly Dictionary<string, string> abilityMarkers = new Dictionary<string, string> {
-			{ "{PK-POW}",  "*" },
-			{ "{PK-BDY}",  "~" },
-			{ "{ABILITY}", "*" },
+			{ "{PK-POW}",   "*" },
+			{ "{PK-BDY}",   "~" },
+			{ "{ABILITY1}", "*" },
+			{ "{ABILITY2}", "*" },
 		};
 
 		//Marker colour list
@@ -511,9 +513,11 @@ namespace CollectionTracker {
 		}
 
 		//Replace all instances of ability terms in a string with symbol indicators
-		public static string ReplaceAbilitySymbols(string str) {
+		public static string ReplaceAbilitySymbols(string str, bool useAbility2) {
 			foreach (KeyValuePair<string, string> kvp in abilitySymbols)
 				str = str.Replace(kvp.Key, kvp.Value);
+			if (useAbility2)
+				str = str.Replace("{ABILITY1}", "{ABILITY2}");
 			return str;
 		}
 

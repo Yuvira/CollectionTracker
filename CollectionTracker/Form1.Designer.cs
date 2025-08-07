@@ -441,6 +441,7 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorPageLabel = new System.Windows.Forms.Label();
 			this.pkmnSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSetGeneratorLabel = new System.Windows.Forms.Label();
+			this.pkmnAbility2Checkbox = new System.Windows.Forms.CheckBox();
 			this.ygoTabControl.SuspendLayout();
 			this.ygoSetPage.SuspendLayout();
 			this.ygoSearchPage.SuspendLayout();
@@ -4149,6 +4150,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnCardPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.pkmnCardPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnCardPage.Controls.Add(this.pkmnAbility2Checkbox);
 			this.pkmnCardPage.Controls.Add(this.pkmnPokemonButton);
 			this.pkmnCardPage.Controls.Add(this.pkmnTrainerButton);
 			this.pkmnCardPage.Controls.Add(this.pkmnImportButton);
@@ -4175,10 +4177,10 @@ namespace CollectionTracker {
 			this.pkmnCardPage.Controls.Add(this.pkmnOracleLabel);
 			this.pkmnCardPage.Controls.Add(this.pkmnOracleField);
 			this.pkmnCardPage.Controls.Add(this.pkmnTypeLabel);
-			this.pkmnCardPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnCardPage.Location = new System.Drawing.Point(4, 33);
 			this.pkmnCardPage.Name = "pkmnCardPage";
 			this.pkmnCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnCardPage.Size = new System.Drawing.Size(1262, 666);
+			this.pkmnCardPage.Size = new System.Drawing.Size(1262, 658);
 			this.pkmnCardPage.TabIndex = 0;
 			this.pkmnCardPage.Text = "Card Entry";
 			// 
@@ -4966,6 +4968,15 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorLabel.Text = "Edit Sets";
 			this.pkmnSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// pkmnAbility2Checkbox
+			// 
+			this.pkmnAbility2Checkbox.Location = new System.Drawing.Point(555, 145);
+			this.pkmnAbility2Checkbox.Name = "pkmnAbility2Checkbox";
+			this.pkmnAbility2Checkbox.Size = new System.Drawing.Size(170, 29);
+			this.pkmnAbility2Checkbox.TabIndex = 57;
+			this.pkmnAbility2Checkbox.Text = "Use Ability2 Symbol";
+			this.pkmnAbility2Checkbox.UseVisualStyleBackColor = true;
+			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -5500,6 +5511,7 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Button pkmnClipboardSPButton;
 		private System.Windows.Forms.Button pkmnClipboardLVXButton;
 		private System.Windows.Forms.Label pkmnOwnedPrintingsLabel;
+		private CheckBox pkmnAbility2Checkbox;
 	}
 }
 

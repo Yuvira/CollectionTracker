@@ -1470,7 +1470,7 @@ namespace CollectionTracker {
 
 					//Powers
 					if (PKMN_Utils.abilityTerms.Keys.Any(t => lines[i].Contains(t))) { 
-						o += PKMN_Utils.ReplaceAbilitySymbols(lines[i] + " — " + lines[i + 1] + "\r\n" + PKMN_Utils.ReplaceTypeSymbols(lines[i + 3], false));
+						o += PKMN_Utils.ReplaceAbilitySymbols(lines[i] + " — " + lines[i + 1] + "\r\n" + PKMN_Utils.ReplaceTypeSymbols(lines[i + 3], false), pkmnAbility2Checkbox.Checked);
 						i += 4;
 					}
 
