@@ -64,7 +64,7 @@ namespace CollectionTracker {
 		private List<PKMN_Set> pkmnSetFilter = new List<PKMN_Set>();
 		private List<CheckBox> pkmnSetToggles = new List<CheckBox>();
 		public int pkmnSetPagenum = 0;
-		public int pkmnSetsPerPage = 25;
+		public int pkmnSetsPerPage = 15;
 
 		//Paging
 		private void PKMN_OnClickPrevSet(object sender, EventArgs e) {
@@ -1421,7 +1421,7 @@ namespace CollectionTracker {
 				//Header data
 				pkmnHPField.Value = decimal.Parse(lines[2].Substring(3));
 				pkmnETypeField.Text = PKMN_Utils.ReplaceTypeSymbols(lines[3], true);
-				pkmnTypeField.Text = lines[4];
+				pkmnTypeField.Text = lines[4].Replace(", ", " / ");
 				pkmnStageField.Text = lines[5];
 
 				//Oracle text
