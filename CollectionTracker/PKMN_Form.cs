@@ -1517,20 +1517,20 @@ namespace CollectionTracker {
 			//Fossils
 			else if (lines[2].StartsWith("HP ") && lines[3].Equals("Trainer")) {
 				pkmnHPField.Value = decimal.Parse(lines[2].Substring(3));
-				pkmnTypeField.Text = lines[3];
+				pkmnTypeField.Text = lines[3].Replace(", ", " / ");
 				pkmnOracleField.Text = PKMN_Utils.ReplaceTypeSymbols(lines[5], false);
 			}
 
 			//Energy
 			else if (lines[2].Contains("Energy")) {
-				pkmnTypeField.Text = lines[2];
+				pkmnTypeField.Text = lines[2].Replace(", ", " / ");
 				if (!lines[2].Contains("Basic"))
 					pkmnOracleField.Text = PKMN_Utils.ReplaceTypeSymbols(lines[4], false);
 			}
 
 			//Trainers
 			else {
-				pkmnTypeField.Text = lines[2];
+				pkmnTypeField.Text = lines[2].Replace(", ", " / ");
 				pkmnOracleField.Text = PKMN_Utils.ReplaceTypeSymbols(lines[4], false);
 			}
 
