@@ -169,6 +169,7 @@ namespace CollectionTracker {
 			{ "𝑥", "x" },
 			{ "𝘚", "S" },
 			{ "𝘗", "P" },
+			{ "𝘌", "E" },
 			{ "𝘟", "X" },
 		};
 
