@@ -70,6 +70,7 @@ namespace CollectionTracker {
 			this.resistance = resistance;
 			this.retreatCost = retreatCost;
 			this.hp = hp;
+			CachedString = "";
 		}
 
 		//Copy function
@@ -83,10 +84,14 @@ namespace CollectionTracker {
 			resistance = card.resistance;
 			retreatCost = card.retreatCost;
 			hp = card.hp;
+			CachedString = "";
 		}
 
 		//ToString
+		private string CachedString = "";
 		public override string ToString() {
+			if (CachedString.Length > 0)
+				return CachedString;
 			string s = name + " | " + cardTypes;
 			if (cardTypes.Split(new string[] { " / " }, StringSplitOptions.None).Contains("Pokémon")) {
 				s += " | " + energyType + " " + hp.ToString();

@@ -1559,9 +1559,8 @@ namespace CollectionTracker {
 
 			//Create or update card in catalog
 			if (pkmnUpdateCard == null) {
-				PKMN_Card duplicate = pkmnCatalog.cards.FirstOrDefault(c => c.ToString().Equals(card.ToString()));
-				if (duplicate != default && !pkmnIgnorDuplicateEntryBox.Checked) {
-					pkmnCardDialog.Text = duplicate.ToString() + " already exists";
+				if (pkmnCatalog.cards.Select(c => c.ToString()).Contains(card.ToString())) {
+					pkmnCardDialog.Text = card.ToString() + " already exists";
 					return;
 				}
 				pkmnCatalog.cards.Add(card);
