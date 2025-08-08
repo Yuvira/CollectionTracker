@@ -88,7 +88,7 @@ namespace CollectionTracker {
 		//ToString
 		public override string ToString() {
 			string s = name + " | " + cardTypes;
-			if (cardTypes.Contains("Pokémon")) {
+			if (cardTypes.Split(new string[] { " / " }, StringSplitOptions.None).Contains("Pokémon")) {
 				s += " | " + energyType + " " + hp.ToString();
 				string[] lines = oracleText.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 				foreach (string line in lines) {
