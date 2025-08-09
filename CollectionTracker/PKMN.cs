@@ -106,7 +106,8 @@ namespace CollectionTracker {
 				s += " | " + hp.ToString();
 			if (PKMN_Utils.catalog != null)
 				s = PKMN_Utils.ReplaceSymbols(s, PKMN_Utils.catalog.symbols);
-			return s;
+			CachedString = s;
+			return CachedString;
 		}
 
 	}
