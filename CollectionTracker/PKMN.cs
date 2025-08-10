@@ -464,6 +464,7 @@ namespace CollectionTracker {
 			{ "Ability",       "`*" },
 			{ "Card Effect",   "`%" },
 			{ "Held Item",     "`%" },
+			{ "Ancient Trait", "`*" },
 		};
 
 		//Ability symbol list
