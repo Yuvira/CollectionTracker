@@ -482,6 +482,21 @@ namespace CollectionTracker {
 			{ "%", Color.White },
 		};
 
+		//Type colour list
+		public static readonly Dictionary<string, Color> typeColours = new Dictionary<string, Color> {
+			{ "{C}", Color.White  },
+			{ "{D}", Color.Black  },
+			{ "{F}", Color.Brown  },
+			{ "{G}", Color.Green  },
+			{ "{L}", Color.Yellow },
+			{ "{M}", Color.Gray   },
+			{ "{N}", Color.Orange },
+			{ "{P}", Color.Purple },
+			{ "{R}", Color.Red    },
+			{ "{W}", Color.Blue   },
+			{ "{Y}", Color.Pink   },
+		};
+
 		//Returns string with tooltip text/markers removed
 		public static string CleanOracleText(string str) {
 
@@ -546,6 +561,27 @@ namespace CollectionTracker {
 			foreach (PKMN_Symbol symbol in symbols)
 				dict.Add(symbol.symbol, symbol.name);
 			return dict;
+		}
+
+		//Get colour from type
+		public static Color GetColourFromType(string type) {
+			List<Color> colours = new List<Color>();
+			foreach (string key in typeColours.Keys) {
+				if (type.Contains(key))
+					colours.Add(typeColours[key]);
+			}
+			if (colours.Count == 0)
+				return SystemColors.ControlLight;
+			if (colours.Count == 1)
+				return colours[0];
+			int A = 0, R = 0, G = 0, B = 0;
+			foreach (Color c in colours) {
+				A += c.A;
+				R += c.R;
+				G += c.G;
+				B += c.B;
+			}
+			return Color.FromArgb(A / colours.Count, R / colours.Count, G / colours.Count, B / colours.Count);
 		}
 
 		//Load image. Load nothing if it doesn't exist

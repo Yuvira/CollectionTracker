@@ -16,6 +16,21 @@ namespace CollectionTracker {
 
 		#region Control Generators
 
+		//Panel paint event managers
+		public static List<(Panel, Color, int)> paintPanels = new List<(Panel, Color, int)>();
+		public static void AddPanelPaintEvent(Panel panel, Color colour, int width) {
+			RemovePanelPaintEvent(panel);
+			paintPanels.Add((panel, colour, width));
+		}
+		public static void RemovePanelPaintEvent(Panel panel) {
+			foreach ((Panel panel, Color colour, int width) pp in paintPanels) {
+				if (panel == pp.panel) {
+					paintPanels.Remove(pp);
+					break;
+				}
+			}
+		}
+
 		//Panel generator
 		public static Panel GeneratePanel(Point position, Size size) {
 			Panel panel = new Panel();
@@ -24,8 +39,16 @@ namespace CollectionTracker {
 			panel.Paint += PanelPaintDefault;
 			return panel;
 		}
-		public static void PanelPaintDefault(object sender, PaintEventArgs e) =>
-			PanelPaint(e.Graphics, sender as Panel, 1, SystemColors.ControlLight, ButtonBorderStyle.Solid);
+		public static void PanelPaintDefault(object sender, PaintEventArgs e) {
+			Panel panel = sender as Panel;
+			foreach ((Panel panel, Color colour, int width) pp in paintPanels) {
+				if (panel == pp.panel) {
+					PanelPaint(e.Graphics, panel, pp.width, pp.colour, ButtonBorderStyle.Solid);
+					return;
+				}
+			}
+			PanelPaint(e.Graphics, panel, 1, SystemColors.ControlLight, ButtonBorderStyle.Solid);
+		}
 		public static void PanelPaint(Graphics graphics, Panel panel, int width, Color color, ButtonBorderStyle style) =>
 			ControlPaint.DrawBorder(graphics, panel.DisplayRectangle, color, width, style, color, width, style, color, width, style, color, width, style);
 

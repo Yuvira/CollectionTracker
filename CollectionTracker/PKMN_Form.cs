@@ -529,7 +529,10 @@ namespace CollectionTracker {
 			PKMN_Card card = print.card;
 
 			//Clear old boxes
-			foreach (Panel panel in pkmnDetailPanels) { pkmnDetailPage.Controls.Remove(panel); }
+			foreach (Panel panel in pkmnDetailPanels) {
+				Utils.RemovePanelPaintEvent(panel);
+				pkmnDetailPage.Controls.Remove(panel);
+			}
 			pkmnDetailPanels.Clear();
 
 			//Y position to create elements at
@@ -538,8 +541,12 @@ namespace CollectionTracker {
 			//Box-relative Y position
 			int y2 = 5;
 
+			//Border colour
+			Color borderColour = PKMN_Utils.GetColourFromType(card.energyType);
+
 			//Header box
 			Panel headerPanel = Utils.GeneratePanel(new Point(pkmnDetailPanel.Location.X, y), new Size(pkmnDetailPanel.Size.Width, 100));
+			Utils.AddPanelPaintEvent(headerPanel, borderColour, 2);
 			pkmnDetailPage.Controls.Add(headerPanel);
 
 			//Name
@@ -588,6 +595,7 @@ namespace CollectionTracker {
 			//Oracle box
 			y2 = 5;
 			Panel oraclePanel = Utils.GeneratePanel(new Point(pkmnDetailPanel.Location.X, y), new Size(pkmnDetailPanel.Size.Width, 100));
+			Utils.AddPanelPaintEvent(oraclePanel, borderColour, 2);
 			pkmnDetailPage.Controls.Add(oraclePanel);
 
 			//Oracle Text
@@ -605,6 +613,7 @@ namespace CollectionTracker {
 				//Footer box
 				y2 = 5;
 				Panel footerPanel = Utils.GeneratePanel(new Point(pkmnDetailPanel.Location.X, y), new Size(pkmnDetailPanel.Size.Width, 100));
+				Utils.AddPanelPaintEvent(footerPanel, borderColour, 2);
 				pkmnDetailPage.Controls.Add(footerPanel);
 
 				//Weakness
@@ -632,6 +641,7 @@ namespace CollectionTracker {
 				//Flavor box
 				y2 = 5;
 				Panel flavorPanel = Utils.GeneratePanel(new Point(pkmnDetailPanel.Location.X, y), new Size(pkmnDetailPanel.Size.Width, 100));
+				Utils.AddPanelPaintEvent(flavorPanel, borderColour, 2);
 				pkmnDetailPage.Controls.Add(flavorPanel);
 
 				//Text
@@ -654,6 +664,12 @@ namespace CollectionTracker {
 
 			//Load printing list
 			PKMN_LoadPrintingsList(print.card, print);
+
+			//Location and printing borders
+			Utils.AddPanelPaintEvent(pkmnDetailPanel, borderColour, 2);
+			Utils.AddPanelPaintEvent(pkmnPrintingsPanel, borderColour, 2);
+
+			pkmnDetailDialog.Text = Utils.paintPanels.Count.ToString();
 
 			//Nav buttons
 			int idx = pkmnPrintFilter.IndexOf(print);
