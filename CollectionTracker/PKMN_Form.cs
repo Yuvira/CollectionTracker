@@ -669,8 +669,6 @@ namespace CollectionTracker {
 			Utils.AddPanelPaintEvent(pkmnDetailPanel, borderColour, 2);
 			Utils.AddPanelPaintEvent(pkmnPrintingsPanel, borderColour, 2);
 
-			pkmnDetailDialog.Text = Utils.paintPanels.Count.ToString();
-
 			//Nav buttons
 			int idx = pkmnPrintFilter.IndexOf(print);
 			if (idx == -1) {
