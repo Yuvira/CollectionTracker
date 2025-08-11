@@ -17,7 +17,7 @@ namespace CollectionTracker {
 		#region Control Generators
 
 		//Panel paint event managers
-		public static List<(Panel, Color, int)> paintPanels = new List<(Panel, Color, int)>();
+		private static List<(Panel, Color, int)> paintPanels = new List<(Panel, Color, int)>();
 		public static void AddPanelPaintEvent(Panel panel, Color colour, int width) {
 			RemovePanelPaintEvent(panel);
 			paintPanels.Add((panel, colour, width));
