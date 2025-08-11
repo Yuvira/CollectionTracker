@@ -137,7 +137,7 @@ namespace CollectionTracker {
 			setRow.Controls.Add(filter);
 
 			//Progress label
-			Label label = Utils.GenerateLabel(new Point(360, 5), new Size(100, 50), setOwned.ToString() + '/' + setCount.ToString());
+			Label label = Utils.GenerateLabel(new Point(360, 20), new Size(100, TEXT_HEIGHT), setOwned.ToString() + '/' + setCount.ToString());
 			label.TextAlign = ContentAlignment.MiddleCenter;
 			setRow.Controls.Add(label);
 
@@ -147,7 +147,7 @@ namespace CollectionTracker {
 
 			//Missing cardref label
 			if (missingCardref) {
-				Label cardrefLabel = Utils.GenerateLabel(new Point(780, 5), new Size(35, 50), "*");
+				Label cardrefLabel = Utils.GenerateLabel(new Point(780, 20), new Size(35, TEXT_HEIGHT), "*");
 				setRow.Controls.Add(cardrefLabel);
 			}
 
@@ -452,12 +452,12 @@ namespace CollectionTracker {
 					PKMN_Treatment treatment = print.treatments[j];
 
 					//Treatment label
-					Label treatmentLabel = Utils.GenerateLabel(new Point(60, 425 + (j * 30)), new Size(120, 30), treatment.name);
+					Label treatmentLabel = Utils.GenerateLabel(new Point(60, 430 + (j * 30)), new Size(115, TEXT_HEIGHT), treatment.name);
 					treatmentLabel.TextAlign = ContentAlignment.MiddleRight;
 					cardPanel.Controls.Add(treatmentLabel);
 
 					//Count label
-					Label label = Utils.GenerateLabel(new Point(180, 425 + (j * 30)), new Size(60, 30), print.OwnedCountOfTreatment(treatment.name).ToString());
+					Label label = Utils.GenerateLabel(new Point(185, 430 + (j * 30)), new Size(55, TEXT_HEIGHT), print.OwnedCountOfTreatment(treatment.name).ToString());
 					cardPanel.Controls.Add(label);
 
 					//Decrement
@@ -706,9 +706,6 @@ namespace CollectionTracker {
 			//Loop fields
 			while (true) {
 
-				//Clear leading spaces
-				if (str.StartsWith(" ")) { str = str.Substring(1); }
-
 				//Get index of next symbol
 				int i = str.IndexOf('{');
 
@@ -730,7 +727,6 @@ namespace CollectionTracker {
 					}
 					else {
 						string substr = str.Substring(0, i);
-						if (substr.EndsWith(" ")) { substr = substr.Substring(0, substr.Length - 1); }
 						location = PKMN_WriteLine(substr, panel, location, font);
 						str = str.Substring(i);
 					}
@@ -742,9 +738,10 @@ namespace CollectionTracker {
 
 		//Write simple text
 		private Point PKMN_WriteLine(string str, Panel panel, Point location, Font font) {
-			Label label = Utils.GenerateLabel(location, new Size(TextRenderer.MeasureText(str, font).Width, TEXT_HEIGHT), str, font);
+			int width = TextRenderer.MeasureText(str, font).Width - TEXT_MARGIN;
+			Label label = Utils.GenerateLabel(location, new Size(width, TEXT_HEIGHT), str, font);
 			panel.Controls.Add(label);
-			return new Point(location.X + TextRenderer.MeasureText(str, label.Font).Width, location.Y);
+			return new Point(location.X + width, location.Y);
 		}
 
 		//Add markers to abilities so the description generator knows where to bold/colour text
@@ -1857,7 +1854,7 @@ namespace CollectionTracker {
 			symbolEntry.Controls.Add(aspect);
 
 			//Path label
-			Label path = Utils.GenerateLabel(new Point(65, 75), new Size(255, 30), "");
+			Label path = Utils.GenerateLabel(new Point(65, 80), new Size(255, TEXT_HEIGHT), "");
 			symbolEntry.Controls.Add(path);
 
 			//Icon box
@@ -2012,7 +2009,7 @@ namespace CollectionTracker {
 			setEntry.Controls.Add(bsBox);
 
 			//Path label
-			Label path = Utils.GenerateLabel(new Point(5, 165), new Size(340, 30), "");
+			Label path = Utils.GenerateLabel(new Point(5, 170), new Size(340, TEXT_HEIGHT), "");
 			setEntry.Controls.Add(path);
 
 			//Icon box

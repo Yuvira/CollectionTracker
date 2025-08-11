@@ -3946,9 +3946,9 @@ namespace CollectionTracker {
 			this.pkmnDetailPage.Controls.Add(this.pkmnTooltipPanel);
 			this.pkmnDetailPage.Controls.Add(this.pkmnDetailPanel);
 			this.pkmnDetailPage.Controls.Add(this.pkmnDetailImgbox);
-			this.pkmnDetailPage.Location = new System.Drawing.Point(4, 33);
+			this.pkmnDetailPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnDetailPage.Name = "pkmnDetailPage";
-			this.pkmnDetailPage.Size = new System.Drawing.Size(1262, 658);
+			this.pkmnDetailPage.Size = new System.Drawing.Size(1262, 666);
 			this.pkmnDetailPage.TabIndex = 4;
 			this.pkmnDetailPage.Text = "Card Details";
 			// 
@@ -3973,7 +3973,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnDetailDialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.pkmnDetailDialog.AutoSize = true;
-			this.pkmnDetailDialog.Location = new System.Drawing.Point(261, 622);
+			this.pkmnDetailDialog.Location = new System.Drawing.Point(261, 630);
 			this.pkmnDetailDialog.MinimumSize = new System.Drawing.Size(0, 29);
 			this.pkmnDetailDialog.Name = "pkmnDetailDialog";
 			this.pkmnDetailDialog.Size = new System.Drawing.Size(16, 29);
@@ -3994,7 +3994,7 @@ namespace CollectionTracker {
 			// pkmnDeletePrintingButton
 			// 
 			this.pkmnDeletePrintingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.pkmnDeletePrintingButton.Location = new System.Drawing.Point(5, 622);
+			this.pkmnDeletePrintingButton.Location = new System.Drawing.Point(5, 630);
 			this.pkmnDeletePrintingButton.Name = "pkmnDeletePrintingButton";
 			this.pkmnDeletePrintingButton.Size = new System.Drawing.Size(250, 29);
 			this.pkmnDeletePrintingButton.TabIndex = 25;

@@ -77,6 +77,7 @@ namespace CollectionTracker {
 			label.Font = font != null ? font : FONT_DEFAULT;
 			label.ForeColor = color ?? SystemColors.ControlText;
 			label.TextAlign = ContentAlignment.MiddleLeft;
+			label.FlatStyle = FlatStyle.System;
 			return label;
 		}
 
