@@ -5,6 +5,11 @@ using System.Windows.Forms;
 namespace CollectionTracker {
 	public partial class Form1 : Form {
 
+		//Constants
+		public const int TEXT_HEIGHT = 21;
+		public const int TEXT_MARGIN = 8;
+		public const int LEFT_PAD = 8;
+
 		//Initialize
 		public Form1() {
 			InitializeComponent();

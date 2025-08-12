@@ -468,8 +468,6 @@ namespace CollectionTracker {
 		#region Card Details
 
 		//Properties
-		public const int TEXT_HEIGHT = 21;
-		public const int TEXT_MARGIN = 8;
 		public bool mtgDetailFlipped = false;
 		public List<GroupBox> mtgDetailBoxes;
 		public MTG_Printing mtgDetailPrint = null;

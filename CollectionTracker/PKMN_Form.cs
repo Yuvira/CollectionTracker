@@ -551,7 +551,7 @@ namespace CollectionTracker {
 			pkmnDetailPage.Controls.Add(headerPanel);
 
 			//Name
-			PKMN_WriteLineWithSymbols(card.name, headerPanel, new Point(5, y2), Utils.FONT_BOLD);
+			PKMN_WriteLineWithSymbols(card.name, headerPanel, new Point(LEFT_PAD, y2), Utils.FONT_BOLD);
 
 			//Energy type & HP
 			if (card.energyType.Length > 0 || card.hp > 0) {
@@ -560,7 +560,7 @@ namespace CollectionTracker {
 				List<string> symbols = PKMN_GetSymbols(card.energyType);
 				string hpText = card.hp.ToString() + " HP";
 				int symbolWidth = (symbols.Count * TEXT_HEIGHT) + 10;
-				int hpWidth = TextRenderer.MeasureText(hpText, Utils.FONT_BOLD).Width;
+				int hpWidth = TextRenderer.MeasureText(hpText, Utils.FONT_BOLD).Width - TEXT_MARGIN;
 
 				//Draw HP label
 				Label hp = Utils.GenerateLabel(new Point(pkmnDetailPanel.Size.Width - (symbolWidth + hpWidth), y2), new Size(hpWidth, TEXT_HEIGHT), hpText, Utils.FONT_BOLD);
@@ -578,13 +578,13 @@ namespace CollectionTracker {
 
 			//Card Type
 			if (card.cardTypes.Length > 0) {
-				PKMN_WriteLineWithSymbols(card.cardTypes, headerPanel, new Point(5, y2), Utils.FONT_DEFAULT);
+				PKMN_WriteLineWithSymbols(card.cardTypes, headerPanel, new Point(LEFT_PAD, y2), Utils.FONT_DEFAULT);
 				y2 += TEXT_HEIGHT + 10;
 			}
 
 			//Pokemon stage
 			if (card.stage.Length > 0) {
-				PKMN_WriteLineWithSymbols(card.stage, headerPanel, new Point(5, y2), Utils.FONT_DEFAULT);
+				PKMN_WriteLineWithSymbols(card.stage, headerPanel, new Point(LEFT_PAD, y2), Utils.FONT_DEFAULT);
 				y2 += TEXT_HEIGHT + 10;
 			}
 
@@ -601,7 +601,7 @@ namespace CollectionTracker {
 
 			//Oracle Text
 			if (card.oracleText.Length > 0)
-				y2 += 10 + PKMN_GenerateDescription(PKMN_AddAbilityMarkers(card.oracleText), oraclePanel, new Point(5, y2));
+				y2 += 10 + PKMN_GenerateDescription(PKMN_AddAbilityMarkers(card.oracleText), oraclePanel, new Point(LEFT_PAD, y2));
 
 			//Size box and set position for next
 			oraclePanel.Height = y2;
@@ -619,15 +619,15 @@ namespace CollectionTracker {
 
 				//Weakness
 				if (card.weakness.Length > 0)
-					y2 += 10 + PKMN_GenerateDescription("Weakness: " + card.weakness, footerPanel, new Point(5, y2));
+					y2 += 10 + PKMN_GenerateDescription("Weakness: " + card.weakness, footerPanel, new Point(LEFT_PAD, y2));
 
 				//Resistance
 				if (card.resistance.Length > 0)
-					y2 += 10 + PKMN_GenerateDescription("Resistance: " + card.resistance, footerPanel, new Point(5, y2));
+					y2 += 10 + PKMN_GenerateDescription("Resistance: " + card.resistance, footerPanel, new Point(LEFT_PAD, y2));
 
 				//Retreat
 				if (card.retreatCost.Length > 0)
-					y2 += 10 + PKMN_GenerateDescription("Retreat: " + card.retreatCost, footerPanel, new Point(5, y2));
+					y2 += 10 + PKMN_GenerateDescription("Retreat: " + card.retreatCost, footerPanel, new Point(LEFT_PAD, y2));
 
 				//Size box and set position for next
 				footerPanel.Height = y2;
@@ -646,7 +646,7 @@ namespace CollectionTracker {
 				pkmnDetailPage.Controls.Add(flavorPanel);
 
 				//Text
-				Label flavor = Utils.GenerateLabel(new Point(5, y2), new Size(0, 0), print.flavorText, Utils.FONT_ITALIC);
+				Label flavor = Utils.GenerateLabel(new Point(LEFT_PAD, y2), new Size(0, 0), print.flavorText, Utils.FONT_ITALIC);
 				flavor.MaximumSize = new Size(pkmnDetailPanel.Size.Width - 10, 0);
 				flavor.AutoSize = true;
 				flavorPanel.Controls.Add(flavor);
@@ -846,7 +846,7 @@ namespace CollectionTracker {
 
 				//Jump location
 				if (i > 0)
-					location = new Point(5, location.Y + TEXT_HEIGHT + 5);
+					location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT + 5);
 
 				//Get space indices
 				lines[i] = new Regex("[ ]{2,}", RegexOptions.None).Replace(lines[i], " ");
@@ -912,7 +912,7 @@ namespace CollectionTracker {
 							if (idx == words.Count)
 								location = new Point(location.X + textWidth, location.Y);
 							else {
-								location = new Point(5, location.Y + TEXT_HEIGHT);
+								location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
 								if (words[idx].StartsWith(" "))
 									words[idx] = words[idx].Substring(1);
 							}
@@ -958,7 +958,7 @@ namespace CollectionTracker {
 		//Insert clickable tooltip text at position. Returns position at end of added text
 		private Point PKMN_InsertTooltip(string str, string tooltip, Control control, Point location) {
 			int textWidth = TextRenderer.MeasureText(str, Utils.FONT_UNDERLINE).Width;
-			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
+			if (textWidth > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
 			Label label = Utils.GenerateLabel(location, new Size(textWidth, TEXT_HEIGHT), str, Utils.FONT_UNDERLINE, Color.Blue);
 			label.MouseEnter += new EventHandler((sender, e) => PKMN_ShowTooltip(label, tooltip));
 			label.MouseLeave += new EventHandler((sender, e) => pkmnTooltipPanel.Hide());
@@ -970,7 +970,7 @@ namespace CollectionTracker {
 		//Insert clickable cardtip text at position. Returns position at end of added text
 		private Point PKMN_InsertCardtip(string str, string cardtip, Control control, Point location) {
 			int textWidth = TextRenderer.MeasureText(str, Utils.FONT_UNDERLINE).Width;
-			if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
+			if (textWidth > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
 			Label label = Utils.GenerateLabel(location, new Size(textWidth, TEXT_HEIGHT), str, Utils.FONT_UNDERLINE, Color.Green);
 			label.MouseEnter += new EventHandler((sender, e) => PKMN_ShowCardtip(label, cardtip));
 			label.MouseLeave += new EventHandler((sender, e) => pkmnCardtipPanel.Hide());
@@ -989,7 +989,7 @@ namespace CollectionTracker {
 			//No symbol found, insert text box
 			if (symbol == null) {
 				int textWidth = TextRenderer.MeasureText(str, Utils.FONT_DEFAULT).Width;
-				if (textWidth > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
+				if (textWidth > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
 				Label label = Utils.GenerateLabel(location, new Size(textWidth, height), str);
 				label.BackColor = Color.White;
 				control.Controls.Add(label);
@@ -999,7 +999,7 @@ namespace CollectionTracker {
 
 			//Insert image
 			int width = (int)(height * symbol.aspect);
-			if (width > control.Width - (location.X + 5)) { location = new Point(5, location.Y + TEXT_HEIGHT); }
+			if (width > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
 			PictureBox icon = Utils.GeneratePictureBox(location, new Size(width, height));
 			PKMN_Utils.TryLoadImage(icon, symbol.imgPath);
 			control.Controls.Add(icon);
@@ -1020,7 +1020,7 @@ namespace CollectionTracker {
 			pkmnTooltipPanel.BringToFront();
 			pkmnTooltipPanel.Location = new Point(posX, posY);
 			pkmnTooltipPanel.Controls.Clear();
-			int height = PKMN_GenerateDescription(str, pkmnTooltipPanel, new Point(5, 15));
+			int height = PKMN_GenerateDescription(str, pkmnTooltipPanel, new Point(LEFT_PAD, 15));
 			pkmnTooltipPanel.Size = new Size(pkmnTooltipPanel.Width, height + 20);
 		}
 
@@ -1163,7 +1163,7 @@ namespace CollectionTracker {
 			prints.Sort(new PKMN_PrintComparerNumericReverse().Compare);
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = Utils.GenerateLabel(
-					new Point(5, 5 + (i * TEXT_HEIGHT)),
+					new Point(LEFT_PAD, 5 + (i * TEXT_HEIGHT)),
 					new Size(pkmnPrintingsPanel.Width - 10, TEXT_HEIGHT),
 					prints[i].printID.ToUpper() + " - " + prints[i].set.name,
 					Utils.FONT_UNDERLINE,
