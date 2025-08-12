@@ -15,6 +15,9 @@ namespace CollectionTracker {
 		public static readonly Font FONT_ITALIC = new Font(FONT_DEFAULT, FontStyle.Italic);
 		public static readonly Font FONT_UNDERLINE = new Font(FONT_DEFAULT, FontStyle.Underline);
 
+		//Custom colours
+		public static readonly Color COLOR_DARK_ORANGE = BlendColours(new List<Color> { Color.Orange, Color.Black });
+
 		#region Control Generators
 
 		//Panel paint event managers
