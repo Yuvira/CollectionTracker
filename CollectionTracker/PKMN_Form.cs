@@ -851,95 +851,105 @@ namespace CollectionTracker {
 		//Write description text. Returns new text position
 		private Point PKMN_WriteDescription(string desc, Panel panel, Point location) {
 
-			//Loop line breaks
-			string[] lines = desc.Split(new string[] { "\r\n" }, StringSplitOptions.None);
-			for (int i = 0; i < lines.Length; ++i) {
+			//Loop blocks
+			string[] blocks = desc.Split(new string[] { "\r\n\r\n" }, StringSplitOptions.None);
+			for (int blockIdx = 0; blockIdx < blocks.Length; ++blockIdx) {
 
-				//Jump location
-				if (i > 0)
-					location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT + 5);
+				//Line spacing
+				if (blockIdx > 0)
+					location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT + LINE_SPACING + 8);
 
-				//Get space indices
-				lines[i] = new Regex("[ ]{2,}", RegexOptions.None).Replace(lines[i], " ");
-				if (lines[i].Length == 0)
-					continue;
-				List<int> spaces = new List<int> { 0 };
-				for (int j = lines[i].IndexOf(' '); j > -1; j = lines[i].IndexOf(' ', j + 1))
-					spaces.Add(j);
+				//Loop line breaks
+				string[] lines = blocks[blockIdx].Split(new string[] { "\r\n" }, StringSplitOptions.None);
+				for (int i = 0; i < lines.Length; ++i) {
 
-				//Split into words
-				List<string> words = new List<string>();
-				for (int j = 1; j <= spaces.Count; ++j) {
-					if (j == spaces.Count)
-						words.Add(lines[i].Substring(spaces[j - 1]));
-					else
-						words.Add(lines[i].Substring(spaces[j - 1], spaces[j] - spaces[j - 1]));
-				}
+					//Jump location
+					if (i > 0)
+						location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT + 5);
 
-				//Loop labels
-				int idx = 0;
-				while (true) {
+					//Get space indices
+					lines[i] = new Regex("[ ]{2,}", RegexOptions.None).Replace(lines[i], " ");
+					if (lines[i].Length == 0)
+						continue;
+					List<int> spaces = new List<int> { 0 };
+					for (int j = lines[i].IndexOf(' '); j > -1; j = lines[i].IndexOf(' ', j + 1))
+						spaces.Add(j);
 
-					//Get available width
-					int maxWidth = panel.Width - (location.X + 5);
+					//Split into words
+					List<string> words = new List<string>();
+					for (int j = 1; j <= spaces.Count; ++j) {
+						if (j == spaces.Count)
+							words.Add(lines[i].Substring(spaces[j - 1]));
+						else
+							words.Add(lines[i].Substring(spaces[j - 1], spaces[j] - spaces[j - 1]));
+					}
 
-					//Loop words in line
-					string str = "";
+					//Loop labels
+					int idx = 0;
 					while (true) {
 
-						//If we're done with our text or the next word would exceed available width, generate the label and break
-						if (idx == words.Count || TextRenderer.MeasureText(str + words[idx], Utils.FONT_DEFAULT).Width > maxWidth) {
+						//Get available width
+						int maxWidth = panel.Width - (location.X + 5);
 
-							//First word is exceeding max width, add it if it fills the entire line or skip to next
-							if (idx < words.Count && str.Length == 0 && location.X == 5) {
+						//Loop words in line
+						string str = "";
+						while (true) {
+
+							//If we're done with our text or the next word would exceed available width, generate the label and break
+							if (idx == words.Count || TextRenderer.MeasureText(str + words[idx], Utils.FONT_DEFAULT).Width > maxWidth) {
+
+								//First word is exceeding max width, add it if it fills the entire line or skip to next
+								if (idx < words.Count && str.Length == 0 && location.X == 5) {
 									str += words[idx];
 									++idx;
-							}
+								}
 
-							//Process bold/colour markers
-							Font font = Utils.FONT_DEFAULT;
-							Color? colour = null;
-							if (str.StartsWith("`") || str.StartsWith(" `")) {
-								font = Utils.FONT_BOLD;
-								if (str.StartsWith("`"))
-									str = str.Substring(1);
-								else
-									str = str.Remove(1, 1);
-							}
-							foreach (string marker in PKMN_Utils.markerColours.Keys) {
-								if (str.StartsWith(marker) || str.StartsWith(" " + marker)) {
-									colour = PKMN_Utils.markerColours[marker];
-									if (str.StartsWith(marker))
+								//Process bold/colour markers
+								Font font = Utils.FONT_DEFAULT;
+								Color? colour = null;
+								if (str.StartsWith("`") || str.StartsWith(" `")) {
+									font = Utils.FONT_BOLD;
+									if (str.StartsWith("`"))
 										str = str.Substring(1);
 									else
 										str = str.Remove(1, 1);
 								}
+								foreach (string marker in PKMN_Utils.markerColours.Keys) {
+									if (str.StartsWith(marker) || str.StartsWith(" " + marker)) {
+										colour = PKMN_Utils.markerColours[marker];
+										if (str.StartsWith(marker))
+											str = str.Substring(1);
+										else
+											str = str.Remove(1, 1);
+									}
+								}
+
+								//Generate label and break
+								int textWidth = TextRenderer.MeasureText(str, font).Width - TEXT_MARGIN;
+								Label label = Utils.GenerateLabel(location, new Size(textWidth, TEXT_HEIGHT), str, font, colour);
+								panel.Controls.Add(label);
+								if (idx == words.Count)
+									location = new Point(location.X + textWidth, location.Y);
+								else {
+									location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
+									if (words[idx].StartsWith(" "))
+										words[idx] = words[idx].Substring(1);
+								}
+								break;
+
 							}
 
-							//Generate label and break
-							int textWidth = TextRenderer.MeasureText(str, font).Width - TEXT_MARGIN;
-							Label label = Utils.GenerateLabel(location, new Size(textWidth, TEXT_HEIGHT), str, font, colour);
-							panel.Controls.Add(label);
-							if (idx == words.Count)
-								location = new Point(location.X + textWidth, location.Y);
-							else {
-								location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
-								if (words[idx].StartsWith(" "))
-									words[idx] = words[idx].Substring(1);
-							}
-							break;
+							//We can keep going, add word to string and continues
+							str += words[idx];
+							++idx;
 
 						}
 
-						//We can keep going, add word to string and continues
-						str += words[idx];
-						++idx;
+						//Break if we're done with this line
+						if (idx >= words.Count)
+							break;
 
 					}
-
-					//Break if we're done with this line
-					if (idx >= words.Count)
-						break;
 
 				}
 
