@@ -482,19 +482,24 @@ namespace CollectionTracker {
 			{ "%", Color.White },
 		};
 
-		//Type colour list
+		//Energy type colour list
+		public static readonly Dictionary<string, Color> energyColours = new Dictionary<string, Color> {
+			{ "{C}", Color.White       },
+			{ "{D}", Color.Black       },
+			{ "{F}", Color.Brown       },
+			{ "{G}", Color.Green       },
+			{ "{L}", Color.Yellow      },
+			{ "{M}", Color.Gray        },
+			{ "{N}", Color.DarkOrange  },
+			{ "{P}", Color.DarkMagenta },
+			{ "{R}", Color.Red         },
+			{ "{W}", Color.SlateBlue   },
+			{ "{Y}", Color.Pink        },
+		};
+
+		//Card type colour list
 		public static readonly Dictionary<string, Color> typeColours = new Dictionary<string, Color> {
-			{ "{C}", Color.White  },
-			{ "{D}", Color.Black  },
-			{ "{F}", Color.Brown  },
-			{ "{G}", Color.Green  },
-			{ "{L}", Color.Yellow },
-			{ "{M}", Color.Gray   },
-			{ "{N}", Color.Orange },
-			{ "{P}", Color.Purple },
-			{ "{R}", Color.Red    },
-			{ "{W}", Color.Blue   },
-			{ "{Y}", Color.Pink   },
+			{ "Team Plasma", Color.MidnightBlue },
 		};
 
 		//Returns string with tooltip text/markers removed
@@ -563,15 +568,36 @@ namespace CollectionTracker {
 			return dict;
 		}
 
-		//Get colour from type
-		public static Color GetColourFromType(string type) {
+		//Get colour from energy type
+		public static Color GetColourFromEnergyType(string energyType) {
 			List<Color> colours = new List<Color>();
-			foreach (string key in typeColours.Keys) {
-				if (type.Contains(key))
-					colours.Add(typeColours[key]);
+			foreach (string key in energyColours.Keys) {
+				if (energyType.Contains(key))
+					colours.Add(energyColours[key]);
 			}
 			if (colours.Count == 0)
 				return SystemColors.ControlLight;
+			if (colours.Count == 1)
+				return colours[0];
+			int A = 0, R = 0, G = 0, B = 0;
+			foreach (Color c in colours) {
+				A += c.A;
+				R += c.R;
+				G += c.G;
+				B += c.B;
+			}
+			return Color.FromArgb(A / colours.Count, R / colours.Count, G / colours.Count, B / colours.Count);
+		}
+
+		//Get colour from card type
+		public static Color GetColourFromCardType(string cardType) {
+			List<Color> colours = new List<Color>();
+			foreach (string key in typeColours.Keys) {
+				if (cardType.Contains(key))
+					colours.Add(typeColours[key]);
+			}
+			if (colours.Count == 0)
+				return Color.Empty;
 			if (colours.Count == 1)
 				return colours[0];
 			int A = 0, R = 0, G = 0, B = 0;

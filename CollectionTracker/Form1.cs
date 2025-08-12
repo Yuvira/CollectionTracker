@@ -8,7 +8,10 @@ namespace CollectionTracker {
 		//Constants
 		public const int TEXT_HEIGHT = 21;
 		public const int TEXT_MARGIN = 8;
+		public const int LINE_SPACING = 9;
 		public const int LEFT_PAD = 8;
+		public const int TOP_PAD = 8;
+		public const int BOTTOM_PAD = 8;
 
 		//Initialize
 		public Form1() {

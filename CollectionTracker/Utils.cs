@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -18,18 +19,12 @@ namespace CollectionTracker {
 
 		//Panel paint event managers
 		private static List<(Panel, Color, int)> paintPanels = new List<(Panel, Color, int)>();
-		public static void AddPanelPaintEvent(Panel panel, Color colour, int width) {
-			RemovePanelPaintEvent(panel);
+		public static void AddPanelPaintEvent(Panel panel, Color colour, int width, bool removeExisting = true) {
+			if (removeExisting)
+				RemovePanelPaintEvent(panel);
 			paintPanels.Add((panel, colour, width));
 		}
-		public static void RemovePanelPaintEvent(Panel panel) {
-			foreach ((Panel panel, Color colour, int width) pp in paintPanels) {
-				if (panel == pp.panel) {
-					paintPanels.Remove(pp);
-					break;
-				}
-			}
-		}
+		public static void RemovePanelPaintEvent(Panel panel) => paintPanels.RemoveAll(pp => pp.Item1 == panel);
 
 		//Panel generator
 		public static Panel GeneratePanel(Point position, Size size) {
@@ -41,13 +36,13 @@ namespace CollectionTracker {
 		}
 		public static void PanelPaintDefault(object sender, PaintEventArgs e) {
 			Panel panel = sender as Panel;
-			foreach ((Panel panel, Color colour, int width) pp in paintPanels) {
-				if (panel == pp.panel) {
-					PanelPaint(e.Graphics, panel, pp.width, pp.colour, ButtonBorderStyle.Solid);
-					return;
-				}
+			if (!paintPanels.Select(pp => pp.Item1).Contains(panel)) {
+				PanelPaint(e.Graphics, panel, 1, SystemColors.ControlLight, ButtonBorderStyle.Solid);
+				return;
 			}
-			PanelPaint(e.Graphics, panel, 1, SystemColors.ControlLight, ButtonBorderStyle.Solid);
+			foreach ((Panel panel, Color colour, int width) pp in paintPanels)
+				if (panel == pp.panel)
+					PanelPaint(e.Graphics, panel, pp.width, pp.colour, ButtonBorderStyle.Solid);
 		}
 		public static void PanelPaint(Graphics graphics, Panel panel, int width, Color color, ButtonBorderStyle style) =>
 			ControlPaint.DrawBorder(graphics, panel.DisplayRectangle, color, width, style, color, width, style, color, width, style, color, width, style);
