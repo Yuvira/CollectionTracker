@@ -274,6 +274,22 @@ namespace CollectionTracker {
 
 		#endregion
 
+		#region Misc. Utilities
+
+		//Blend list of colours
+		public static Color BlendColours(List<Color> cols) {
+			int A = 0, R = 0, G = 0, B = 0;
+			foreach (Color c in cols) {
+				A += c.A;
+				R += c.R;
+				G += c.G;
+				B += c.B;
+			}
+			return Color.FromArgb(A / cols.Count, R / cols.Count, G / cols.Count, B / cols.Count);
+		}
+
+		#endregion
+
 	}
 
 }

@@ -484,17 +484,17 @@ namespace CollectionTracker {
 
 		//Energy type colour list
 		public static readonly Dictionary<string, Color> energyColours = new Dictionary<string, Color> {
-			{ "{C}", Color.White       },
-			{ "{D}", Color.Black       },
-			{ "{F}", Color.Brown       },
-			{ "{G}", Color.Green       },
-			{ "{L}", Color.Yellow      },
-			{ "{M}", Color.Gray        },
-			{ "{N}", Color.DarkOrange  },
-			{ "{P}", Color.DarkMagenta },
-			{ "{R}", Color.Red         },
-			{ "{W}", Color.SlateBlue   },
-			{ "{Y}", Color.Pink        },
+			{ "{C}", Color.White             },
+			{ "{D}", Color.Black             },
+			{ "{F}", Color.Brown             },
+			{ "{G}", Color.Green             },
+			{ "{L}", Color.Yellow            },
+			{ "{M}", Color.Gray              },
+			{ "{N}", Utils.COLOR_DARK_ORANGE },
+			{ "{P}", Color.DarkMagenta       },
+			{ "{R}", Color.Red               },
+			{ "{W}", Color.SlateBlue         },
+			{ "{Y}", Color.Pink              },
 		};
 
 		//Card type colour list
@@ -579,14 +579,7 @@ namespace CollectionTracker {
 				return SystemColors.ControlLight;
 			if (colours.Count == 1)
 				return colours[0];
-			int A = 0, R = 0, G = 0, B = 0;
-			foreach (Color c in colours) {
-				A += c.A;
-				R += c.R;
-				G += c.G;
-				B += c.B;
-			}
-			return Color.FromArgb(A / colours.Count, R / colours.Count, G / colours.Count, B / colours.Count);
+			return Utils.BlendColours(colours);
 		}
 
 		//Get colour from card type
@@ -600,14 +593,7 @@ namespace CollectionTracker {
 				return Color.Empty;
 			if (colours.Count == 1)
 				return colours[0];
-			int A = 0, R = 0, G = 0, B = 0;
-			foreach (Color c in colours) {
-				A += c.A;
-				R += c.R;
-				G += c.G;
-				B += c.B;
-			}
-			return Color.FromArgb(A / colours.Count, R / colours.Count, G / colours.Count, B / colours.Count);
+			return Utils.BlendColours(colours);
 		}
 
 		//Load image. Load nothing if it doesn't exist
