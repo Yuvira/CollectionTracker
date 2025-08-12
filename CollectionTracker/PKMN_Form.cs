@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -768,9 +769,6 @@ namespace CollectionTracker {
 			int y = location.Y;
 			while (true) {
 
-				//Clear leading spaces
-				if (desc.StartsWith(" ")) { desc = desc.Substring(1); }
-
 				//Get index of next object
 				int i = PKMN_Utils.IndexOfMany(desc, new List<char>() { '{', '[', '<' });
 
@@ -826,7 +824,6 @@ namespace CollectionTracker {
 					//Write until next object, clear written text, and continue
 					else {
 						string substr = desc.Substring(0, i);
-						if (substr.EndsWith(" ")) { substr = substr.Substring(0, substr.Length - 1); }
 						location = PKMN_WriteDescription(substr, panel, location);
 						desc = desc.Substring(i);
 					}
@@ -851,73 +848,86 @@ namespace CollectionTracker {
 				if (i > 0)
 					location = new Point(5, location.Y + TEXT_HEIGHT + 5);
 
-				//Split words
-				string[] words = lines[i].Split(' ');
-				if (words.Length == 0) { continue; }
+				//Get space indices
+				lines[i] = new Regex("[ ]{2,}", RegexOptions.None).Replace(lines[i], " ");
+				if (lines[i].Length == 0)
+					continue;
+				List<int> spaces = new List<int> { 0 };
+				for (int j = lines[i].IndexOf(' '); j > -1; j = lines[i].IndexOf(' ', j + 1))
+					spaces.Add(j);
+
+				//Split into words
+				List<string> words = new List<string>();
+				for (int j = 1; j <= spaces.Count; ++j) {
+					if (j == spaces.Count)
+						words.Add(lines[i].Substring(spaces[j - 1]));
+					else
+						words.Add(lines[i].Substring(spaces[j - 1], spaces[j] - spaces[j - 1]));
+				}
+
+				//Loop labels
 				int idx = 0;
-
-				//Loop lines
 				while (true) {
-
-					//Generate label
-					Label label = new Label();
-					panel.Controls.Add(label);
 
 					//Get available width
 					int maxWidth = panel.Width - (location.X + 5);
 
-					//If first word doesn't fit, force if it's the only word in the line or skip to the next
-					if (TextRenderer.MeasureText(words[idx], label.Font).Width > maxWidth) {
-						if (location.X == 5) {
-							label.Location = location;
-							label.Size = new Size(TextRenderer.MeasureText(words[idx], label.Font).Width, 30);
-							label.Text = words[idx];
-							label.TextAlign = ContentAlignment.MiddleLeft;
-							location = new Point(5, location.Y + TEXT_HEIGHT);
-							++idx;
-							continue;
-						}
-						location = new Point(5, location.Y + TEXT_HEIGHT);
-						maxWidth = panel.Width - (location.X + 5);
-					}
-
 					//Loop words in line
-					string str = words[idx];
+					string str = "";
 					while (true) {
 
 						//If we're done with our text or the next word would exceed available width, generate the label and break
-						if (idx + 1 >= words.Length || TextRenderer.MeasureText(str + " " + words[idx + 1], label.Font).Width > maxWidth) {
-							label.Location = location;
-							if (str.StartsWith("`")) {
-								label.Font = Utils.FONT_BOLD;
-								str = str.Substring(1);
+						if (idx == words.Count || TextRenderer.MeasureText(str + words[idx], Utils.FONT_DEFAULT).Width > maxWidth) {
+
+							//First word is exceeding max width, add it if it fills the entire line or skip to next
+							if (idx < words.Count && str.Length == 0 && location.X == 5) {
+									str += words[idx];
+									++idx;
+							}
+
+							//Process bold/colour markers
+							Font font = Utils.FONT_DEFAULT;
+							Color? colour = null;
+							if (str.StartsWith("`") || str.StartsWith(" `")) {
+								font = Utils.FONT_BOLD;
+								if (str.StartsWith("`"))
+									str = str.Substring(1);
+								else
+									str = str.Remove(1, 1);
 							}
 							foreach (string marker in PKMN_Utils.markerColours.Keys) {
-								if (str.StartsWith(marker)) {
-									label.ForeColor = PKMN_Utils.markerColours[marker];
-									str = str.Substring(1);
+								if (str.StartsWith(marker) || str.StartsWith(" " + marker)) {
+									colour = PKMN_Utils.markerColours[marker];
+									if (str.StartsWith(marker))
+										str = str.Substring(1);
+									else
+										str = str.Remove(1, 1);
 								}
 							}
-							label.Size = new Size(TextRenderer.MeasureText(str, label.Font).Width, TEXT_HEIGHT);
-							label.Text = str;
-							label.TextAlign = ContentAlignment.MiddleLeft;
-							if (idx + 1 >= words.Length)
-								location = new Point(location.X + TextRenderer.MeasureText(str, label.Font).Width, location.Y);
-							else
+
+							//Generate label and break
+							int textWidth = TextRenderer.MeasureText(str, font).Width - TEXT_MARGIN;
+							Label label = Utils.GenerateLabel(location, new Size(textWidth, TEXT_HEIGHT), str, font, colour);
+							panel.Controls.Add(label);
+							if (idx == words.Count)
+								location = new Point(location.X + textWidth, location.Y);
+							else {
 								location = new Point(5, location.Y + TEXT_HEIGHT);
-							++idx;
+								if (words[idx].StartsWith(" "))
+									words[idx] = words[idx].Substring(1);
+							}
 							break;
+
 						}
 
-						//Otherwise add to string and continue
-						str += " " + words[idx + 1];
+						//We can keep going, add word to string and continues
+						str += words[idx];
 						++idx;
-						continue;
 
 					}
 
 					//Break if we're done with this line
-					if (idx >= words.Length)
+					if (idx >= words.Count)
 						break;
 
 				}
