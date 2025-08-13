@@ -494,7 +494,7 @@ namespace CollectionTracker {
 			{ "{P}", Color.DarkMagenta       },
 			{ "{R}", Color.Red               },
 			{ "{W}", Color.SlateBlue         },
-			{ "{Y}", Color.Pink              },
+			{ "{Y}", Color.DeepPink          },
 		};
 
 		//Card type colour list
