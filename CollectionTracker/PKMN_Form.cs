@@ -932,8 +932,13 @@ namespace CollectionTracker {
 									location = new Point(location.X + textWidth, location.Y);
 								else {
 									location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
-									if (words[idx].StartsWith(" "))
+									if (words[idx].StartsWith(" ")) {
+										if (words[idx].Equals(" ") && idx == words.Count - 1) {
+											++idx;
+											break;
+										}
 										words[idx] = words[idx].Substring(1);
+									}
 								}
 								break;
 
@@ -1010,7 +1015,8 @@ namespace CollectionTracker {
 			//No symbol found, insert text box
 			if (symbol == null) {
 				int textWidth = TextRenderer.MeasureText(str, Utils.FONT_DEFAULT).Width;
-				if (textWidth > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
+				if (textWidth > control.Width - (location.X + 5))
+					location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
 				Label label = Utils.GenerateLabel(location, new Size(textWidth, height), str);
 				label.BackColor = Color.White;
 				control.Controls.Add(label);
@@ -1020,7 +1026,8 @@ namespace CollectionTracker {
 
 			//Insert image
 			int width = (int)(height * symbol.aspect);
-			if (width > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
+			if (width > control.Width - (location.X + 5))
+				location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
 			PictureBox icon = Utils.GeneratePictureBox(location, new Size(width, height));
 			PKMN_Utils.TryLoadImage(icon, symbol.imgPath);
 			control.Controls.Add(icon);
