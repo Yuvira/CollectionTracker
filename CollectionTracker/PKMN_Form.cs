@@ -761,7 +761,11 @@ namespace CollectionTracker {
 			string[] lines = desc.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 			for (int i = 0; i < lines.Length; ++i) {
 				if (lines[i].StartsWith("{")) {
-					lines[i] = lines[i].Insert(lines[i].LastIndexOf('}') + 2, "`");
+					int lastIndex = lines[i].LastIndexOf('}');
+					if (lastIndex + 2 < lines[i].Length)
+						lines[i] = lines[i].Insert(lastIndex + 2, "`");
+					else
+						lines[i] = lines[i].Insert(lines[i].LastIndexOf('}', lastIndex - 1) + 2, "`");
 					foreach (string symbol in PKMN_Utils.abilityMarkers.Keys)
 						if (lines[i].StartsWith(symbol))
 							lines[i] = lines[i].Insert(lines[i].LastIndexOf('}') + 3, PKMN_Utils.abilityMarkers[symbol]);
