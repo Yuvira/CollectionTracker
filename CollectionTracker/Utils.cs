@@ -193,6 +193,9 @@ namespace CollectionTracker {
 			{ "𝘗", "P" },
 			{ "𝘌", "E" },
 			{ "𝘟", "X" },
+			{ "𝘊", "C" },
+			{ "𝘈", "A" },
+			{ "𝘎", "G" },
 		};
 
 		//Convert input to searchable string by replacing non-standard characters and switching to lowercase
