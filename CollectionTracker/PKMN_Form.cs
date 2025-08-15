@@ -764,7 +764,7 @@ namespace CollectionTracker {
 					int lastIndex = lines[i].LastIndexOf('}');
 					if (lastIndex + 2 < lines[i].Length)
 						lines[i] = lines[i].Insert(lastIndex + 2, "`");
-					else
+					if (lastIndex + 3 >= lines[i].Length || lines[i][lastIndex + 3] == '—')
 						lines[i] = lines[i].Insert(lines[i].LastIndexOf('}', lastIndex - 1) + 2, "`");
 					foreach (string symbol in PKMN_Utils.abilityMarkers.Keys)
 						if (lines[i].StartsWith(symbol))
