@@ -540,11 +540,10 @@ namespace CollectionTracker {
 		}
 
 		//Replace all instances of ability terms in a string with symbol indicators
-		public static string ReplaceAbilitySymbols(string str, bool useAbility2) {
+		public static string ReplaceAbilitySymbols(string str, int abilitySymbol) {
 			foreach (KeyValuePair<string, string> kvp in abilitySymbols)
 				str = str.Replace(kvp.Key, kvp.Value);
-			if (useAbility2)
-				str = str.Replace("{ABILITY1}", "{ABILITY2}");
+			str = str.Replace("{ABILITY1}", "{ABILITY" + abilitySymbol.ToString() + "}");
 			return str;
 		}
 
