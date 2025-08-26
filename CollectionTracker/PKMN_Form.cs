@@ -143,7 +143,7 @@ namespace CollectionTracker {
 			setRow.Controls.Add(label);
 
 			//Progress bar
-			ProgressBar bar = Utils.GenerateProgressBar(new Point(470, 15), new Size(265, 30), (int)(((float)setOwned / setCount) * 100));
+			ProgressBar bar = Utils.GenerateProgressBar(new Point(470, 15), new Size(265, 30), setOwned > 0 ? (int)(((float)setOwned / setCount) * 100) : 0);
 			setRow.Controls.Add(bar);
 
 			//Missing cardref label
