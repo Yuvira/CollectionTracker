@@ -1624,7 +1624,6 @@ namespace CollectionTracker {
 					return;
 				}
 				pkmnCatalog.cards.Add(card);
-				PKMN_UpdateCardList();
 				pkmnCardDialog.Text = "-";
 			}
 			else {
@@ -1632,6 +1631,7 @@ namespace CollectionTracker {
 				pkmnCardDialog.Text = "Card Data Updated";
 				if (pkmnDetailPrint.card == pkmnUpdateCard) { PKMN_LoadCardDetails(pkmnDetailPrint); }
 			}
+			PKMN_UpdateCardList();
 
 			//Reset fields
 			PKMN_ResetEntryFields();
@@ -1661,7 +1661,7 @@ namespace CollectionTracker {
 		//Clear and refresh list of card names
 		private void PKMN_UpdateCardList() {
 			pkmnCardrefField.Items.Clear();
-			foreach (PKMN_Card card in pkmnCatalog.cards) { pkmnCardrefField.Items.Add(card); }
+			pkmnCardrefField.Items.AddRange(pkmnCatalog.cards.ToArray());
 		}
 
 		//Update monster list label
