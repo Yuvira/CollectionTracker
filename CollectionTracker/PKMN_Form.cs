@@ -1746,7 +1746,7 @@ namespace CollectionTracker {
 		private bool PKMN_OnClickPrintAutofill() {
 			PKMN_Set set = (PKMN_Set)pkmnSetField.SelectedItem;
 			if (set != null) {
-				pkmnCardrefField.SelectedIndex = 1;
+				pkmnCardrefField.SelectedIndex = 2;
 				string code = set.code;
 				string num = pkmnNumberField.Value.ToString().PadLeft(4, '0');
 				pkmnPrintIDField.Text = code.ToLower() + "/" + pkmnNumberField.Value.ToString();
