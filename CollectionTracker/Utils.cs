@@ -55,7 +55,7 @@ namespace CollectionTracker {
 			Button button = new Button();
 			button.Location = position;
 			button.Size = size;
-			button.Text = text;
+			button.Text = text.Replace("&", "&&");
 			button.TextAlign = ContentAlignment.MiddleCenter;
 			if (imgPath.Length > 0) {
 				button.Image = new Bitmap(Image.FromFile(imgPath), new Size(35, 35));
@@ -71,7 +71,7 @@ namespace CollectionTracker {
 			Label label = new Label();
 			label.Location = position;
 			label.Size = size;
-			label.Text = text;
+			label.Text = text.Replace("&", "&&");
 			label.Font = font != null ? font : FONT_DEFAULT;
 			label.ForeColor = color ?? SystemColors.ControlText;
 			label.TextAlign = ContentAlignment.MiddleLeft;
@@ -122,7 +122,7 @@ namespace CollectionTracker {
 			box.Location = position;
 			box.Size = size;
 			box.Checked = check;
-			box.Text = text;
+			box.Text = text.Replace("&", "&&");
 			box.TextAlign = ContentAlignment.MiddleLeft;
 			return box;
 		}
