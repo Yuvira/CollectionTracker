@@ -469,10 +469,13 @@ namespace CollectionTracker {
 
 		//Ability symbol list
 		public static readonly Dictionary<string, string> abilityMarkers = new Dictionary<string, string> {
-			{ "{PK-POW}",   "*" },
-			{ "{PK-BDY}",   "~" },
-			{ "{ABILITY1}", "*" },
-			{ "{ABILITY2}", "*" },
+			{ "{PK-POW}",    "*" },
+			{ "{PK-BDY}",    "~" },
+			{ "{ABILITY1}",  "*" },
+			{ "{ABILITY2}",  "*" },
+			{ "{ABILITY3}",  "*" },
+			{ "{ABILITY3D}", "*" },
+			{ "{ABILITY4}",  "*" },
 		};
 
 		//Marker colour list
