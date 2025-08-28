@@ -580,8 +580,7 @@ namespace CollectionTracker {
 			//Card Type
 			if (card.cardTypes.Length > 0) {
 				y2 += LINE_SPACING;
-				PKMN_WriteLineWithSymbols(card.cardTypes, headerPanel, new Point(LEFT_PAD, y2), Utils.FONT_DEFAULT);
-				y2 += TEXT_HEIGHT;
+				y2 += TEXT_HEIGHT * PKMN_WriteListWithSymbols(card.cardTypes, headerPanel, new Point(LEFT_PAD, y2), Utils.FONT_DEFAULT);
 			}
 
 			//Pokemon stage
@@ -711,6 +710,73 @@ namespace CollectionTracker {
 		}
 
 		#region Description Generators
+
+		//Write list on line(s). Return number of lines used
+		private int PKMN_WriteListWithSymbols(string list, Panel panel, Point location, Font font) {
+
+			//Split list items
+			string[] strs = list.Split(new string[] { " / " }, StringSplitOptions.None);
+			for (int i = 1; i < strs.Length; ++i)
+				strs[i] = " / " + strs[i];
+
+			//Generate array of item widths and loop
+			int[] widths = new int[strs.Length];
+			for (int i = 0; i < strs.Length; ++i) {
+
+				//Find symbols
+				string str = strs[i];
+				int startIdx = 0;
+				while (true) {
+
+					//Get symbol text
+					int j = str.IndexOf('{', startIdx);
+					if (j == -1)
+						break;
+					int j2 = str.IndexOf('}', j) + 1;
+					if (j2 == 0)
+						break;
+
+					//Get symbol object, calculate width, and remove
+					PKMN_Symbol symbol = pkmnCatalog.symbols.FirstOrDefault(s => s.symbol == str.Substring(j, j2 - j));
+					if (symbol == null) {
+						startIdx = j2;
+					}
+					else {
+						widths[i] += (int)(TEXT_HEIGHT * symbol.aspect);
+						str = str.Remove(j, j2 - j);
+					}
+
+				}
+
+				//Calculate remaining width from text
+				widths[i] += TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
+
+			}
+
+			//Generate lines
+			int width = 0;
+			int maxWidth = panel.Width + (location.X + 5);
+			List<string> lines = new List<string>();
+			string line = "";
+			for (int i = 0; i < strs.Length; ++i) {
+				if (width + widths[i] > maxWidth) {
+					lines.Add(line);
+					line = "";
+					width = 0;
+				}
+				width += widths[i];
+				line += strs[i];
+			}
+			lines.Add(line);
+
+			//Render lines
+			for (int i = 0; i < lines.Count; ++i)
+				PKMN_WriteLineWithSymbols(lines[i], panel, new Point(location.X, location.Y + (i * TEXT_HEIGHT)), font);
+
+			//Return line count
+			return lines.Count;
+
+		}
 
 		//Write string and replace symbols
 		private void PKMN_WriteLineWithSymbols(string str, Panel panel, Point location, Font font) {
