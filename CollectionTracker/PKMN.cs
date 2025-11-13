@@ -322,16 +322,18 @@ namespace CollectionTracker {
 		[ProtoMember(3)] public string imgPath;
 		[ProtoMember(4)] public DateTime date;
 		[ProtoMember(5)] public bool leadBonusSheet;
+		[ProtoMember(7)] public int mainSetCount;
 
 		//Constructor
-		public PKMN_Set() : this("", "", "", "", DateTime.Now, false) { }
-		public PKMN_Set(string name, string code, string setType, string imgPath, DateTime date, bool leadBonusSheet) {
+		public PKMN_Set() : this("", "", "", "", DateTime.Now, false, 0) { }
+		public PKMN_Set(string name, string code, string setType, string imgPath, DateTime date, bool leadBonusSheet, int mainSetCount) {
 			this.name = name;
 			this.code = code;
 			this.setType = setType;
 			this.imgPath = imgPath;
 			this.date = date;
 			this.leadBonusSheet = leadBonusSheet;
+			this.mainSetCount = mainSetCount;
 		}
 
 		//Copy function
@@ -342,6 +344,7 @@ namespace CollectionTracker {
 			imgPath = set.imgPath;
 			date = set.date;
 			leadBonusSheet = set.leadBonusSheet;
+			mainSetCount = set.mainSetCount;
 		}
 
 		//ToString
@@ -475,6 +478,7 @@ namespace CollectionTracker {
 			{ "{ABILITY2}",  "*" },
 			{ "{ABILITY3}",  "*" },
 			{ "{ABILITY3D}", "*" },
+			{ "{ABILITY3L}", "*" },
 			{ "{ABILITY4}",  "*" },
 		};
 

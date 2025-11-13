@@ -126,6 +126,10 @@ namespace CollectionTracker {
 			List<PKMN_Printing> cardsInSet = pkmnCatalog.printings.Where(print => print.set == set).ToList();
 			int setCount = cardsInSet.Count;
 			int setOwned = cardsInSet.Count(print => print.AnyOwned());
+			if (pkmnMainSetCheckbox.Checked && set.mainSetCount > 0) {
+				setCount = set.mainSetCount;
+				setOwned = cardsInSet.Count(print => print.cardNumber <= setCount && print.AnyOwned());
+			}
 			bool missingCardref = cardsInSet.Count(print => print.card.name.Equals("") || print.card.name.Equals("_")) > 0;
 
 			//Set info box
@@ -182,23 +186,6 @@ namespace CollectionTracker {
 
 		//On filter changed
 		private void PKMN_OnSetFilterToggled(object sender, EventArgs e) => PKMN_UpdateSets();
-
-		//Expand or collapse set box
-		private void PKMN_ExpandCollapseSet(PKMN_Set set) {
-			for (int i = 0; i < pkmnSetlist.Count; ++i) {
-				(PKMN_Set set, Panel panel, bool expanded) listSet = pkmnSetlist[i];
-				if (listSet.set == set) {
-					foreach ((PKMN_Set set, Panel panel, bool expanded) listSet2 in pkmnSetlist) {
-						if (listSet2.set != listSet.set && listSet2.set.date.Date == set.date.Date) {
-							if (listSet.expanded) { listSet2.panel.Hide(); }
-							else { listSet2.panel.Show(); }
-						}
-					}
-					pkmnSetlist[i] = (listSet.set, listSet.panel, !listSet.expanded);
-					break;
-				}
-			}
-		}
 
 		//Filter catalog by set ID
 		private void PKMN_FilterCatalogBySet(PKMN_Set set) {
@@ -755,7 +742,7 @@ namespace CollectionTracker {
 
 			//Generate lines
 			int width = 0;
-			int maxWidth = panel.Width + (location.X + 5);
+			int maxWidth = panel.Width - (location.X + 5);
 			List<string> lines = new List<string>();
 			string line = "";
 			for (int i = 0; i < strs.Length; ++i) {
@@ -2047,8 +2034,9 @@ namespace CollectionTracker {
 			public Label pathLabel;
 			public PictureBox iconBox;
 			public CheckBox leadBonusSheetCheckbox;
-			public PKMN_FormSet() : this(null, null, null, null, null, null, null, null, null) { }
-			public PKMN_FormSet(PKMN_Set set, Panel panel, TextBox nameBox, TextBox codeBox, TextBox typeBox, DateTimePicker dateBox, Label pathLabel, PictureBox iconBox, CheckBox leadBonusSheetCheckbox) {
+			public NumericUpDown mainSetCountBox;
+			public PKMN_FormSet() : this(null, null, null, null, null, null, null, null, null, null) { }
+			public PKMN_FormSet(PKMN_Set set, Panel panel, TextBox nameBox, TextBox codeBox, TextBox typeBox, DateTimePicker dateBox, Label pathLabel, PictureBox iconBox, CheckBox leadBonusSheetCheckbox, NumericUpDown mainSetCountBox) {
 				this.set = set;
 				this.panel = panel;
 				this.nameBox = nameBox;
@@ -2058,6 +2046,7 @@ namespace CollectionTracker {
 				this.pathLabel = pathLabel;
 				this.iconBox = iconBox;
 				this.leadBonusSheetCheckbox = leadBonusSheetCheckbox;
+				this.mainSetCountBox = mainSetCountBox;
 			}
 		}
 
@@ -2101,7 +2090,7 @@ namespace CollectionTracker {
 			int i = pkmnFormSets.Count;
 
 			//Group box
-			Panel setEntry = Utils.GeneratePanel(Point.Empty, new Size(350, 200));
+			Panel setEntry = Utils.GeneratePanel(Point.Empty, new Size(350, 235));
 
 			//Name box
 			TextBox name = Utils.GenerateTextBox(new Point(5, 5), new Size(340, 30), useRef ? refSet.name : "Name");
@@ -2119,12 +2108,16 @@ namespace CollectionTracker {
 			DateTimePicker date = Utils.GenerateDateTimePicker(new Point(5, 110), new Size(340, 30), useRef ? refSet.date : DateTime.Now);
 			setEntry.Controls.Add(date);
 
+			//Main set count
+			NumericUpDown mainSetCount = Utils.GenerateNumericUpDown(new Point(5, 145), new Size(340, 30), useRef ? refSet.mainSetCount : 0);
+			setEntry.Controls.Add(mainSetCount);
+
 			//Leading bonus sheet box
-			CheckBox bsBox = Utils.GenerateCheckbox(new Point(5, 140), new Size(285, 35), useRef ? refSet.leadBonusSheet : false, "Has leading bonus sheet");
+			CheckBox bsBox = Utils.GenerateCheckbox(new Point(5, 175), new Size(285, 35), useRef ? refSet.leadBonusSheet : false, "Has leading bonus sheet");
 			setEntry.Controls.Add(bsBox);
 
 			//Path label
-			Label path = Utils.GenerateLabel(new Point(5, 170), new Size(340, TEXT_HEIGHT), "");
+			Label path = Utils.GenerateLabel(new Point(5, 205), new Size(340, TEXT_HEIGHT), "");
 			setEntry.Controls.Add(path);
 
 			//Icon box
@@ -2139,7 +2132,7 @@ namespace CollectionTracker {
 			}
 
 			//Create object and set up search event
-			PKMN_FormSet set = new PKMN_FormSet(useRef ? refSet : null, setEntry, name, code, type, date, path, icon, bsBox);
+			PKMN_FormSet set = new PKMN_FormSet(useRef ? refSet : null, setEntry, name, code, type, date, path, icon, bsBox, mainSetCount);
 			icon.Click += new EventHandler((sender, e) => PKMN_OnClickSearchSetIcon(set));
 
 			//Add to list and layout
@@ -2173,7 +2166,8 @@ namespace CollectionTracker {
 					formSet.typeBox.Text,
 					formSet.pathLabel.Text,
 					formSet.dateBox.Value,
-					formSet.leadBonusSheetCheckbox.Checked
+					formSet.leadBonusSheetCheckbox.Checked,
+					(int)formSet.mainSetCountBox.Value
 				);
 				if (formSet.set == null) { pkmnCatalog.sets.Add(set); }
 				else { formSet.set.Copy(set); }
