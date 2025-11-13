@@ -365,6 +365,8 @@ namespace CollectionTracker {
 			this.pkmnMoveField = new System.Windows.Forms.ComboBox();
 			this.pkmnDetailImgbox = new System.Windows.Forms.PictureBox();
 			this.pkmnCardPage = new System.Windows.Forms.TabPage();
+			this.pkmnEntryAbilityNum = new System.Windows.Forms.NumericUpDown();
+			this.pkmnEntryAbilityLabel = new System.Windows.Forms.Label();
 			this.pkmnPokemonButton = new System.Windows.Forms.Button();
 			this.pkmnTrainerButton = new System.Windows.Forms.Button();
 			this.pkmnImportButton = new System.Windows.Forms.Button();
@@ -441,8 +443,7 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorPageLabel = new System.Windows.Forms.Label();
 			this.pkmnSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSetGeneratorLabel = new System.Windows.Forms.Label();
-			this.pkmnEntryAbilityLabel = new System.Windows.Forms.Label();
-			this.pkmnEntryAbilityNum = new System.Windows.Forms.NumericUpDown();
+			this.pkmnMainSetCheckbox = new System.Windows.Forms.CheckBox();
 			this.ygoTabControl.SuspendLayout();
 			this.ygoSetPage.SuspendLayout();
 			this.ygoSearchPage.SuspendLayout();
@@ -520,6 +521,7 @@ namespace CollectionTracker {
 			this.pkmnDetailPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pkmnDetailImgbox)).BeginInit();
 			this.pkmnCardPage.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnEntryAbilityNum)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pkmnHPField)).BeginInit();
 			this.pkmnPrintPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pkmnPrintAutoLimit)).BeginInit();
@@ -530,7 +532,6 @@ namespace CollectionTracker {
 			this.pkmnSymbolLayout.SuspendLayout();
 			this.pkmnSymbolHeaderPanel.SuspendLayout();
 			this.pkmnSetPage.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pkmnEntryAbilityNum)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// ygoNameLabel
@@ -3531,6 +3532,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnSetlistPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.pkmnSetlistPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pkmnSetlistPage.Controls.Add(this.pkmnMainSetCheckbox);
 			this.pkmnSetlistPage.Controls.Add(this.pkmnPrevSetButton);
 			this.pkmnSetlistPage.Controls.Add(this.pkmnSetPageLabel);
 			this.pkmnSetlistPage.Controls.Add(this.pkmnNextSetButton);
@@ -4180,12 +4182,43 @@ namespace CollectionTracker {
 			this.pkmnCardPage.Controls.Add(this.pkmnOracleLabel);
 			this.pkmnCardPage.Controls.Add(this.pkmnOracleField);
 			this.pkmnCardPage.Controls.Add(this.pkmnTypeLabel);
-			this.pkmnCardPage.Location = new System.Drawing.Point(4, 33);
+			this.pkmnCardPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnCardPage.Name = "pkmnCardPage";
 			this.pkmnCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnCardPage.Size = new System.Drawing.Size(1262, 658);
+			this.pkmnCardPage.Size = new System.Drawing.Size(1262, 666);
 			this.pkmnCardPage.TabIndex = 0;
 			this.pkmnCardPage.Text = "Card Entry";
+			// 
+			// pkmnEntryAbilityNum
+			// 
+			this.pkmnEntryAbilityNum.Location = new System.Drawing.Point(670, 145);
+			this.pkmnEntryAbilityNum.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.pkmnEntryAbilityNum.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.pkmnEntryAbilityNum.Name = "pkmnEntryAbilityNum";
+			this.pkmnEntryAbilityNum.Size = new System.Drawing.Size(135, 29);
+			this.pkmnEntryAbilityNum.TabIndex = 59;
+			this.pkmnEntryAbilityNum.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
+			// pkmnEntryAbilityLabel
+			// 
+			this.pkmnEntryAbilityLabel.Location = new System.Drawing.Point(555, 145);
+			this.pkmnEntryAbilityLabel.Name = "pkmnEntryAbilityLabel";
+			this.pkmnEntryAbilityLabel.Size = new System.Drawing.Size(120, 29);
+			this.pkmnEntryAbilityLabel.TabIndex = 58;
+			this.pkmnEntryAbilityLabel.Text = "Ability Symbol";
+			this.pkmnEntryAbilityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// pkmnPokemonButton
 			// 
@@ -4971,36 +5004,16 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorLabel.Text = "Edit Sets";
 			this.pkmnSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// pkmnEntryAbilityLabel
+			// pkmnMainSetCheckbox
 			// 
-			this.pkmnEntryAbilityLabel.Location = new System.Drawing.Point(555, 145);
-			this.pkmnEntryAbilityLabel.Name = "pkmnEntryAbilityLabel";
-			this.pkmnEntryAbilityLabel.Size = new System.Drawing.Size(120, 29);
-			this.pkmnEntryAbilityLabel.TabIndex = 58;
-			this.pkmnEntryAbilityLabel.Text = "Ability Symbol";
-			this.pkmnEntryAbilityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// pkmnEntryAbilityNum
-			// 
-			this.pkmnEntryAbilityNum.Location = new System.Drawing.Point(670, 145);
-			this.pkmnEntryAbilityNum.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-			this.pkmnEntryAbilityNum.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.pkmnEntryAbilityNum.Name = "pkmnEntryAbilityNum";
-			this.pkmnEntryAbilityNum.Size = new System.Drawing.Size(135, 29);
-			this.pkmnEntryAbilityNum.TabIndex = 59;
-			this.pkmnEntryAbilityNum.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			this.pkmnMainSetCheckbox.AutoSize = true;
+			this.pkmnMainSetCheckbox.Location = new System.Drawing.Point(150, 7);
+			this.pkmnMainSetCheckbox.Name = "pkmnMainSetCheckbox";
+			this.pkmnMainSetCheckbox.Size = new System.Drawing.Size(127, 25);
+			this.pkmnMainSetCheckbox.TabIndex = 8;
+			this.pkmnMainSetCheckbox.Text = "Main Set Only";
+			this.pkmnMainSetCheckbox.UseVisualStyleBackColor = true;
+			this.pkmnMainSetCheckbox.CheckedChanged += new System.EventHandler(this.PKMN_OnSetFilterToggled);
 			// 
 			// Form1
 			// 
@@ -5105,6 +5118,7 @@ namespace CollectionTracker {
 			((System.ComponentModel.ISupportInitialize)(this.pkmnDetailImgbox)).EndInit();
 			this.pkmnCardPage.ResumeLayout(false);
 			this.pkmnCardPage.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pkmnEntryAbilityNum)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pkmnHPField)).EndInit();
 			this.pkmnPrintPage.ResumeLayout(false);
 			this.pkmnPrintPage.PerformLayout();
@@ -5117,7 +5131,6 @@ namespace CollectionTracker {
 			this.pkmnSymbolHeaderPanel.ResumeLayout(false);
 			this.pkmnSetPage.ResumeLayout(false);
 			this.pkmnSetPage.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pkmnEntryAbilityNum)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -5539,6 +5552,7 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Label pkmnOwnedPrintingsLabel;
 		private NumericUpDown pkmnEntryAbilityNum;
 		private Label pkmnEntryAbilityLabel;
+		private CheckBox pkmnMainSetCheckbox;
 	}
 }
 
