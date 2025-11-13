@@ -112,6 +112,8 @@ namespace CollectionTracker {
 			NumericUpDown nud = new NumericUpDown();
 			nud.Location = position;
 			nud.Size = size;
+			nud.Minimum = decimal.MinValue;
+			nud.Maximum = decimal.MaxValue;
 			nud.Value = value;
 			return nud;
 		}
