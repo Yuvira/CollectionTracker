@@ -938,6 +938,13 @@ namespace CollectionTracker {
 			if (print != null) { YGO_LoadCardDetails(print); }
 		}
 
+		//Highlight desk rows
+		private List<int> highlightRows = new List<int>();
+		private void YGO_PaintLocationCell(object sender, TableLayoutCellPaintEventArgs args) {
+			if (highlightRows.Contains(args.Row))
+				args.Graphics.FillRectangle(Brushes.CornflowerBlue, args.CellBounds);
+		}
+
 		//Load location table
 		private void YGO_LoadLocationTable(YGO_Printing print) {
 
@@ -947,16 +954,19 @@ namespace CollectionTracker {
 			ygoLocationTable.RowCount = 0;
 			ygoLocationTable.RowStyles.Clear();
 			ygoLocationTable.Size = new Size(ygoLocationTable.Size.Width, 10);
+			highlightRows.Clear();
 
 			//Loop rarities and locations
 			foreach (YGO_Rarity rarity in print.rarities) {
 				for (int i = 0; i < rarity.locations.Count; ++i) {
+
+					//Get row data
 					string rar = rarity.name;
 					string loc = rarity.locations[i];
-					ygoLocationTable.Size = new Size(ygoLocationTable.Size.Width, ygoLocationTable.Size.Height + 35);
 
-					//Add row
+					//Add row and resize
 					++ygoLocationTable.RowCount;
+					ygoLocationTable.Size = new Size(ygoLocationTable.Size.Width, ygoLocationTable.Size.Height + 35);
 					ygoLocationTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
 
 					//Rarity label
@@ -989,6 +999,14 @@ namespace CollectionTracker {
 					moveButton.Text = "Move 1";
 					moveButton.UseVisualStyleBackColor = true;
 					moveButton.Click += new EventHandler((sender, e) => YGO_MoveOne(print, loc, rar));
+
+					//Highlight row
+					if (loc.Equals("Desk")) {
+						highlightRows.Add(i);
+						rarityLabel.BackColor = Color.CornflowerBlue;
+						locationLabel.BackColor = Color.CornflowerBlue;
+						countLabel.BackColor = Color.CornflowerBlue;
+					}
 
 				}
 			}
