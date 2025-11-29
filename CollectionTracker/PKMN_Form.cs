@@ -81,6 +81,8 @@ namespace CollectionTracker {
 		private void PKMN_UpdateSets() {
 
 			//Clear controls
+			foreach ((PKMN_Set set, Panel panel, bool expanded) listSet in pkmnSetlist)
+				listSet.panel.Dispose();
 			pkmnSetlist.Clear();
 			pkmnSetlistPage.Controls.Remove(pkmnSetlistLayout);
 			pkmnSetlistLayout.Controls.Clear();
