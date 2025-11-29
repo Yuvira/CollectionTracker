@@ -656,7 +656,7 @@ namespace CollectionTracker {
 			this.ygoSearchPage.Controls.Add(this.ygoSearchAttributeLabel);
 			this.ygoSearchPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoSearchPage.Name = "ygoSearchPage";
-			this.ygoSearchPage.Size = new System.Drawing.Size(1262, 674);
+			this.ygoSearchPage.Size = new System.Drawing.Size(1262, 666);
 			this.ygoSearchPage.TabIndex = 6;
 			this.ygoSearchPage.Text = "Search";
 			// 
@@ -820,7 +820,7 @@ namespace CollectionTracker {
 			this.ygoCatalogPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoCatalogPage.Name = "ygoCatalogPage";
 			this.ygoCatalogPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoCatalogPage.Size = new System.Drawing.Size(1262, 674);
+			this.ygoCatalogPage.Size = new System.Drawing.Size(1262, 666);
 			this.ygoCatalogPage.TabIndex = 2;
 			this.ygoCatalogPage.Text = "Catalog";
 			// 
@@ -880,7 +880,7 @@ namespace CollectionTracker {
 			this.ygoCatalogLayout.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.ygoCatalogLayout.Location = new System.Drawing.Point(3, 38);
 			this.ygoCatalogLayout.Name = "ygoCatalogLayout";
-			this.ygoCatalogLayout.Size = new System.Drawing.Size(1252, 628);
+			this.ygoCatalogLayout.Size = new System.Drawing.Size(1252, 620);
 			this.ygoCatalogLayout.TabIndex = 1;
 			// 
 			// ygoCatalogIndex
@@ -1102,6 +1102,7 @@ namespace CollectionTracker {
 			this.ygoDetailImgbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ygoDetailImgbox.TabIndex = 0;
 			this.ygoDetailImgbox.TabStop = false;
+			this.ygoDetailImgbox.MouseClick += new MouseEventHandler(this.YGO_ClickDetailCard);
 			// 
 			// ygoCardPage
 			// 
@@ -1132,10 +1133,10 @@ namespace CollectionTracker {
 			this.ygoCardPage.Controls.Add(this.ygoAttributeLabel);
 			this.ygoCardPage.Controls.Add(this.ygoCardTypeLabel);
 			this.ygoCardPage.Controls.Add(this.ygoNameLabel);
-			this.ygoCardPage.Location = new System.Drawing.Point(4, 33);
+			this.ygoCardPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoCardPage.Name = "ygoCardPage";
 			this.ygoCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoCardPage.Size = new System.Drawing.Size(1262, 658);
+			this.ygoCardPage.Size = new System.Drawing.Size(1262, 666);
 			this.ygoCardPage.TabIndex = 0;
 			this.ygoCardPage.Text = "Card Entry";
 			// 
@@ -1406,7 +1407,7 @@ namespace CollectionTracker {
 			this.ygoPrintPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoPrintPage.Name = "ygoPrintPage";
 			this.ygoPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoPrintPage.Size = new System.Drawing.Size(1262, 674);
+			this.ygoPrintPage.Size = new System.Drawing.Size(1262, 666);
 			this.ygoPrintPage.TabIndex = 1;
 			this.ygoPrintPage.Text = "Printing Entry";
 			// 
@@ -1454,7 +1455,7 @@ namespace CollectionTracker {
 			// 
 			this.ygoCardrefDescriptor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.ygoCardrefDescriptor.AutoSize = true;
-			this.ygoCardrefDescriptor.Location = new System.Drawing.Point(5, 611);
+			this.ygoCardrefDescriptor.Location = new System.Drawing.Point(5, 603);
 			this.ygoCardrefDescriptor.MaximumSize = new System.Drawing.Size(0, 21);
 			this.ygoCardrefDescriptor.Name = "ygoCardrefDescriptor";
 			this.ygoCardrefDescriptor.Size = new System.Drawing.Size(16, 21);
@@ -1512,7 +1513,7 @@ namespace CollectionTracker {
 			// 
 			this.ygoIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.ygoIODialog.AutoSize = true;
-			this.ygoIODialog.Location = new System.Drawing.Point(260, 638);
+			this.ygoIODialog.Location = new System.Drawing.Point(260, 630);
 			this.ygoIODialog.Name = "ygoIODialog";
 			this.ygoIODialog.Size = new System.Drawing.Size(16, 21);
 			this.ygoIODialog.TabIndex = 56;
@@ -1522,7 +1523,7 @@ namespace CollectionTracker {
 			// ygoSaveButton
 			// 
 			this.ygoSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.ygoSaveButton.Location = new System.Drawing.Point(5, 635);
+			this.ygoSaveButton.Location = new System.Drawing.Point(5, 627);
 			this.ygoSaveButton.Name = "ygoSaveButton";
 			this.ygoSaveButton.Size = new System.Drawing.Size(250, 29);
 			this.ygoSaveButton.TabIndex = 55;
@@ -1722,7 +1723,7 @@ namespace CollectionTracker {
 			this.ygoSetsPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoSetsPage.Name = "ygoSetsPage";
 			this.ygoSetsPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoSetsPage.Size = new System.Drawing.Size(1262, 674);
+			this.ygoSetsPage.Size = new System.Drawing.Size(1262, 666);
 			this.ygoSetsPage.TabIndex = 5;
 			this.ygoSetsPage.Text = "Sets";
 			// 
@@ -1801,7 +1802,7 @@ namespace CollectionTracker {
 			this.ygoSetGeneratorLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.ygoSetGeneratorLayout.Location = new System.Drawing.Point(3, 38);
 			this.ygoSetGeneratorLayout.Name = "ygoSetGeneratorLayout";
-			this.ygoSetGeneratorLayout.Size = new System.Drawing.Size(1252, 628);
+			this.ygoSetGeneratorLayout.Size = new System.Drawing.Size(1252, 620);
 			this.ygoSetGeneratorLayout.TabIndex = 2;
 			// 
 			// ygoSetGeneratorLabel
@@ -3640,7 +3641,7 @@ namespace CollectionTracker {
 			this.pkmnSearchPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnSearchPage.Name = "pkmnSearchPage";
 			this.pkmnSearchPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnSearchPage.Size = new System.Drawing.Size(1262, 666);
+			this.pkmnSearchPage.Size = new System.Drawing.Size(1262, 674);
 			this.pkmnSearchPage.TabIndex = 7;
 			this.pkmnSearchPage.Text = "Search";
 			// 
@@ -3874,7 +3875,7 @@ namespace CollectionTracker {
 			this.pkmnCatalogPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnCatalogPage.Name = "pkmnCatalogPage";
 			this.pkmnCatalogPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnCatalogPage.Size = new System.Drawing.Size(1262, 666);
+			this.pkmnCatalogPage.Size = new System.Drawing.Size(1262, 674);
 			this.pkmnCatalogPage.TabIndex = 2;
 			this.pkmnCatalogPage.Text = "Catalog";
 			// 
@@ -3934,7 +3935,7 @@ namespace CollectionTracker {
 			this.pkmnCatalogLayout.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.pkmnCatalogLayout.Location = new System.Drawing.Point(3, 38);
 			this.pkmnCatalogLayout.Name = "pkmnCatalogLayout";
-			this.pkmnCatalogLayout.Size = new System.Drawing.Size(1252, 620);
+			this.pkmnCatalogLayout.Size = new System.Drawing.Size(1252, 628);
 			this.pkmnCatalogLayout.TabIndex = 0;
 			// 
 			// pkmnCatalogIndex
@@ -3964,7 +3965,7 @@ namespace CollectionTracker {
 			this.pkmnDetailPage.Controls.Add(this.pkmnDetailImgbox);
 			this.pkmnDetailPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnDetailPage.Name = "pkmnDetailPage";
-			this.pkmnDetailPage.Size = new System.Drawing.Size(1262, 666);
+			this.pkmnDetailPage.Size = new System.Drawing.Size(1262, 674);
 			this.pkmnDetailPage.TabIndex = 4;
 			this.pkmnDetailPage.Text = "Card Details";
 			// 
@@ -3989,7 +3990,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnDetailDialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.pkmnDetailDialog.AutoSize = true;
-			this.pkmnDetailDialog.Location = new System.Drawing.Point(261, 630);
+			this.pkmnDetailDialog.Location = new System.Drawing.Point(261, 638);
 			this.pkmnDetailDialog.MinimumSize = new System.Drawing.Size(0, 29);
 			this.pkmnDetailDialog.Name = "pkmnDetailDialog";
 			this.pkmnDetailDialog.Size = new System.Drawing.Size(16, 29);
@@ -4010,7 +4011,7 @@ namespace CollectionTracker {
 			// pkmnDeletePrintingButton
 			// 
 			this.pkmnDeletePrintingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.pkmnDeletePrintingButton.Location = new System.Drawing.Point(5, 630);
+			this.pkmnDeletePrintingButton.Location = new System.Drawing.Point(5, 638);
 			this.pkmnDeletePrintingButton.Name = "pkmnDeletePrintingButton";
 			this.pkmnDeletePrintingButton.Size = new System.Drawing.Size(250, 29);
 			this.pkmnDeletePrintingButton.TabIndex = 25;
@@ -4197,7 +4198,7 @@ namespace CollectionTracker {
 			this.pkmnCardPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnCardPage.Name = "pkmnCardPage";
 			this.pkmnCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnCardPage.Size = new System.Drawing.Size(1262, 666);
+			this.pkmnCardPage.Size = new System.Drawing.Size(1262, 674);
 			this.pkmnCardPage.TabIndex = 0;
 			this.pkmnCardPage.Text = "Card Entry";
 			// 
@@ -4505,7 +4506,7 @@ namespace CollectionTracker {
 			this.pkmnPrintPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnPrintPage.Name = "pkmnPrintPage";
 			this.pkmnPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnPrintPage.Size = new System.Drawing.Size(1262, 666);
+			this.pkmnPrintPage.Size = new System.Drawing.Size(1262, 674);
 			this.pkmnPrintPage.TabIndex = 1;
 			this.pkmnPrintPage.Text = "Printing Entry";
 			// 
@@ -4565,7 +4566,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnCardrefDescriptor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.pkmnCardrefDescriptor.AutoSize = true;
-			this.pkmnCardrefDescriptor.Location = new System.Drawing.Point(5, 603);
+			this.pkmnCardrefDescriptor.Location = new System.Drawing.Point(5, 611);
 			this.pkmnCardrefDescriptor.MaximumSize = new System.Drawing.Size(0, 21);
 			this.pkmnCardrefDescriptor.Name = "pkmnCardrefDescriptor";
 			this.pkmnCardrefDescriptor.Size = new System.Drawing.Size(16, 21);
@@ -4651,7 +4652,7 @@ namespace CollectionTracker {
 			// 
 			this.pkmnIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.pkmnIODialog.AutoSize = true;
-			this.pkmnIODialog.Location = new System.Drawing.Point(260, 630);
+			this.pkmnIODialog.Location = new System.Drawing.Point(260, 638);
 			this.pkmnIODialog.Name = "pkmnIODialog";
 			this.pkmnIODialog.Size = new System.Drawing.Size(16, 21);
 			this.pkmnIODialog.TabIndex = 25;
@@ -4661,7 +4662,7 @@ namespace CollectionTracker {
 			// pkmnSaveButton
 			// 
 			this.pkmnSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.pkmnSaveButton.Location = new System.Drawing.Point(5, 627);
+			this.pkmnSaveButton.Location = new System.Drawing.Point(5, 635);
 			this.pkmnSaveButton.Name = "pkmnSaveButton";
 			this.pkmnSaveButton.Size = new System.Drawing.Size(250, 29);
 			this.pkmnSaveButton.TabIndex = 24;
@@ -4853,7 +4854,7 @@ namespace CollectionTracker {
 			this.pkmnSymbolPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnSymbolPage.Name = "pkmnSymbolPage";
 			this.pkmnSymbolPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnSymbolPage.Size = new System.Drawing.Size(1262, 666);
+			this.pkmnSymbolPage.Size = new System.Drawing.Size(1262, 674);
 			this.pkmnSymbolPage.TabIndex = 5;
 			this.pkmnSymbolPage.Text = "Symbols";
 			// 
@@ -4865,7 +4866,7 @@ namespace CollectionTracker {
 			this.pkmnSymbolLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.pkmnSymbolLayout.Location = new System.Drawing.Point(3, 3);
 			this.pkmnSymbolLayout.Name = "pkmnSymbolLayout";
-			this.pkmnSymbolLayout.Size = new System.Drawing.Size(1252, 656);
+			this.pkmnSymbolLayout.Size = new System.Drawing.Size(1252, 664);
 			this.pkmnSymbolLayout.TabIndex = 0;
 			// 
 			// pkmnSymbolHeaderPanel
@@ -4924,7 +4925,7 @@ namespace CollectionTracker {
 			this.pkmnSetPage.Location = new System.Drawing.Point(4, 25);
 			this.pkmnSetPage.Name = "pkmnSetPage";
 			this.pkmnSetPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnSetPage.Size = new System.Drawing.Size(1262, 666);
+			this.pkmnSetPage.Size = new System.Drawing.Size(1262, 674);
 			this.pkmnSetPage.TabIndex = 6;
 			this.pkmnSetPage.Text = "Sets";
 			// 
@@ -5003,7 +5004,7 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.pkmnSetGeneratorLayout.Location = new System.Drawing.Point(3, 38);
 			this.pkmnSetGeneratorLayout.Name = "pkmnSetGeneratorLayout";
-			this.pkmnSetGeneratorLayout.Size = new System.Drawing.Size(1252, 620);
+			this.pkmnSetGeneratorLayout.Size = new System.Drawing.Size(1252, 628);
 			this.pkmnSetGeneratorLayout.TabIndex = 1;
 			// 
 			// pkmnSetGeneratorLabel

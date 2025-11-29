@@ -105,12 +105,11 @@ namespace CollectionTracker {
 
 			//Set info box
 			GroupBox box = new GroupBox();
-			ygoSetlistLayout.Controls.Add(box);
 			box.Size = new Size(820, 70);
+			ygoSetlistLayout.Controls.Add(box);
 
 			//Filter button
 			Button filter = new Button();
-			box.Controls.Add(filter);
 			filter.Location = new Point(5, 15);
 			filter.Size = new Size(350, 50);
 			filter.Text = set.name;
@@ -120,52 +119,41 @@ namespace CollectionTracker {
 			filter.ImageAlign = ContentAlignment.MiddleRight;
 			filter.TextAlign = ContentAlignment.MiddleCenter;
 			filter.Click += new EventHandler((sender, e) => YGO_FilterCatalogBySet(set));
+			filter.MouseUp += new MouseEventHandler((sender, e) => {
+				if (e.Button == MouseButtons.Right)
+					System.Diagnostics.Process.Start("https://yugipedia.com/wiki/" + set.code);
+			});
+			box.Controls.Add(filter);
 
 			//Progress label
 			Label label = new Label();
-			box.Controls.Add(label);
 			label.Location = new Point(360, 15);
 			label.Size = new Size(100, 50);
 			label.Text = setOwned.ToString() + '/' + setCount.ToString();
 			label.TextAlign = ContentAlignment.MiddleCenter;
+			box.Controls.Add(label);
 
 			//Progress bar
 			ProgressBar bar = new ProgressBar();
-			box.Controls.Add(bar);
 			bar.Location = new Point(470, 25);
 			bar.Size = new Size(265, 30);
-			if (setCount > 0) { bar.Value = (int)(((float)setOwned / setCount) * 100); }
+			if (setCount > 0)
+				bar.Value = (int)(((float)setOwned / setCount) * 100);
+			box.Controls.Add(bar);
 
 			//Missing cardref label
 			if (missingCardref) {
 				Label cardrefLabel = new Label();
-				box.Controls.Add(cardrefLabel);
 				cardrefLabel.Location = new Point(780, 15);
 				cardrefLabel.Size = new Size(35, 50);
 				cardrefLabel.Text = "*";
 				cardrefLabel.TextAlign = ContentAlignment.MiddleCenter;
+				box.Controls.Add(cardrefLabel);
 			}
 
 			//Add to list
 			ygoSetlist.Add((set, box, false));
 
-		}
-
-		//Expand or collapse set box
-		private void YGO_ExpandCollapseSet(YGO_Set set) {
-			for (int i = 0; i < ygoSetlist.Count; ++i) {
-				(YGO_Set set, GroupBox box, bool expanded) listSet = ygoSetlist[i];
-				if (listSet.set == set) {
-					foreach ((YGO_Set set, GroupBox box, bool expanded) listSet2 in ygoSetlist) {
-						if (listSet2.set != listSet.set && listSet2.set.date.Date == set.date.Date) {
-							if (listSet.expanded) { listSet2.box.Hide(); }
-							else { listSet2.box.Show(); }
-						}
-					}
-					ygoSetlist[i] = (listSet.set, listSet.box, !listSet.expanded);
-					break;
-				}
-			}
 		}
 
 		//Filter catalog by set ID
@@ -1061,27 +1049,11 @@ namespace CollectionTracker {
 		}
 
 		//Flip card image
-		private void YGO_FlipCard(object sender, EventArgs e) => YGO_FlipCard();
-		private void YGO_FlipCard() {
-
-			//Return if no reference set
-			if (ygoDetailPrint == null) { return; }
-
-			//Only flip if card has a second face
-			if (!ygoDetailPrint.card.name.Contains(" // ")) { return; }
-
-			//Get printing and flip
-			ygoDetailFlipped = !ygoDetailFlipped;
-
-			//Swap image if there's a back image reference
-			if (ygoDetailPrint.backImgPath.Length > 1) {
-				if (ygoDetailFlipped) { YGO_Utils.TryLoadCardImage(ygoDetailImgbox, ygoDetailPrint.backImgPath); }
-				else { YGO_Utils.TryLoadImage(ygoDetailImgbox, ygoDetailPrint.imgPath); }
-			}
-
-			//Otherwise rotate 180
-			else { ygoDetailImgbox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone); }
-
+		private void YGO_ClickDetailCard(object sender, MouseEventArgs e) {
+			if (ygoDetailPrint == null)
+				return;
+			if (e.Button == MouseButtons.Right)
+				Process.Start("https://yugipedia.com/wiki/" + ygoDetailPrint.printID.Substring(0, 10));
 		}
 
 		//Edit card data
