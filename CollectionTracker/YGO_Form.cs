@@ -1302,13 +1302,25 @@ namespace CollectionTracker {
 
 		//Check if card exists with name
 		private void YGO_CheckCardNameExists() {
-			if (ygoCatalog.cards.Select(card => card.name).Contains(ygoNameField.Text)) {
+			if (ygoCatalog.cards.Select(card => card.name).Contains(ygoNameField.Text))
 				ygoCardDialog.Text = ygoNameField.Text + " already exists";
-			}
+			else
+				ygoCardDialog.Text = "-";
 		}
 
 		//Import card text
 		private void YGO_OnClickImport(object sender, EventArgs e) {
+
+			//Reset fields
+			ygoCardTypeField.Text = "";
+			ygoAttributeField.Text = "";
+			ygoPropertyField.Text = "";
+			ygoTypesField.Text = "";
+			ygoOracleField.Text = "";
+			ygoLevelField.Value = 0;
+			ygoScaleField.Value = 0;
+			ygoAtkField.Value = 0;
+			ygoDefField.Value = 0;
 
 			//Split and set values
 			string[] lines = ygoImportField.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
@@ -1321,17 +1333,25 @@ namespace CollectionTracker {
 					ygoPropertyField.Text = lines[i].Replace("Property \t", "");
 				if (lines[i].StartsWith("Types"))
 					ygoTypesField.Text = lines[i].Replace("Types \t", "");
-				if (lines[i].StartsWith("Level"))
+				if (lines[i].StartsWith("Level \t"))
 					ygoLevelField.Value = decimal.Parse(lines[i].Replace("Level \t", "").Replace("CG Star.svg", "").Replace(" ", ""));
-				if (lines[i].StartsWith("Rank"))
+				if (lines[i].StartsWith("Rank \t"))
 					ygoLevelField.Value = decimal.Parse(lines[i].Replace("Rank \t", "").Replace("Rank Star.svg", "").Replace(" ", ""));
 				if (lines[i].StartsWith("ATK / DEF")) {
 					string[] values = lines[i].Replace("ATK / DEF \t", "").Replace(" ", "").Split('/');
+					if (values[0].Equals("?"))
+						values[0] = "0";
+					if (values[1].Equals("?"))
+						values[1] = "0";
 					ygoAtkField.Value = decimal.Parse(values[0]);
 					ygoDefField.Value = decimal.Parse(values[1]);
 				}
 				if (lines[i].StartsWith("ATK / LINK")) {
 					string[] values = lines[i].Replace("ATK / LINK \t", "").Replace(" ", "").Split('/');
+					if (values[0].Equals("?"))
+						values[0] = "0";
+					if (values[1].Equals("?"))
+						values[1] = "0";
 					ygoAtkField.Value = decimal.Parse(values[0]);
 					ygoDefField.Value = decimal.Parse(values[1]);
 				}
