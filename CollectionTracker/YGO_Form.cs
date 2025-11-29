@@ -75,6 +75,8 @@ namespace CollectionTracker {
 		private void YGO_UpdateSets() {
 
 			//Clear controls and sort sets
+			foreach ((YGO_Set set, GroupBox box, bool expanded) listSet in ygoSetlist)
+				listSet.box.Dispose();
 			ygoSetlist.Clear();
 			ygoSetlistLayout.Controls.Clear();
 			ygoCatalog.sets.Sort(new YGO_SetComparer().Compare);
