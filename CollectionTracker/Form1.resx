@@ -120,4 +120,21 @@
   <metadata name="imageFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="pkmnSearchReminderLabel.Text" xml:space="preserve">
+    <value>Fields:
+n - Name
+t - Card Types
+o - Oracle Text
+s - Set Code
+l - Location
+
+Operators:
+:  - Field contains the given value
+!: - Field does not contain the given value anywhere
+~: - Raw field contains the given value
+=  - Field or subfield equals the given value
+!= - Field or subfield does not equal the given value
+~= - Raw field or subfield equals the given value
+== - Full field equals the given value</value>
+  </data>
 </root>

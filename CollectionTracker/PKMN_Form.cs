@@ -65,7 +65,7 @@ namespace CollectionTracker {
 		private List<PKMN_Set> pkmnSetFilter = new List<PKMN_Set>();
 		private List<CheckBox> pkmnSetToggles = new List<CheckBox>();
 		public int pkmnSetPagenum = 0;
-		public int pkmnSetsPerPage = 15;
+		public int pkmnSetsPerPage = 1000;
 
 		//Paging
 		private void PKMN_OnClickPrevSet(object sender, EventArgs e) {
@@ -79,6 +79,9 @@ namespace CollectionTracker {
 
 		//Clear set list and update data
 		private void PKMN_UpdateSets() {
+
+			//Suspend
+			pkmnSetlistLayout.SuspendLayout();
 
 			//Clear controls
 			foreach ((PKMN_Set set, Panel panel, bool expanded) listSet in pkmnSetlist)
@@ -118,6 +121,9 @@ namespace CollectionTracker {
 			for (int i = startIndex; i < maxIndex; ++i) { PKMN_CreateSetRow(pkmnSetFilter[i]); }
 			pkmnSetlistLayout.ResumeLayout();
 			pkmnSetlistPage.Controls.Add(pkmnSetlistLayout);
+
+			//Resume
+			pkmnSetlistLayout.ResumeLayout();
 
 		}
 

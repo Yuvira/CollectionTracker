@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,11 +27,14 @@ namespace CollectionTracker {
 			ygoRarities = new List<string>();
 			ygoCatalog = new YGO_Catalog();
 			ygoPrintFilter = new List<YGO_Printing>();
-			ygoDetailBoxes = new List<GroupBox>();
+			ygoDetailPanels = new List<Panel>();
 			ygoNameField.LostFocus += new EventHandler((sender, e) => YGO_CheckCardNameExists());
 			YGO_Utils.TryLoadCardImage(ygoPrintImgboxBack, YGO_Utils.CARD_BACK_PATH);
 			ygoClient.DefaultRequestHeaders.Add("User-Agent", "CollectionTracker");
 			ygoClient.DefaultRequestHeaders.Add("Accept", "application/json");
+			ygoTooltipPanel.Paint += Utils.PanelPaintDefault;
+			ygoDetailPanel.Paint += Utils.PanelPaintDefault;
+			ygoPrintingsPanel.Paint += Utils.PanelPaintDefault;
 			YGO_LoadCatalog();
 		}
 
@@ -57,9 +61,9 @@ namespace CollectionTracker {
 		#region Set List
 
 		//Properties
-		private List<(YGO_Set set, GroupBox box, bool expanded)> ygoSetlist = new List<(YGO_Set, GroupBox, bool)>();
+		private List<(YGO_Set set, Panel panel, bool expanded)> ygoSetlist = new List<(YGO_Set, Panel, bool)>();
 		public int ygoSetPagenum = 0;
-		public int ygoSetsPerPage = 15;
+		public int ygoSetsPerPage = 1000;
 
 		//Paging
 		private void YGO_OnClickPrevSet(object sender, EventArgs e) {
@@ -74,25 +78,35 @@ namespace CollectionTracker {
 		//Clear set list and update data
 		private void YGO_UpdateSets() {
 
+			//Suspend
+			ygoSetlistLayout.SuspendLayout();
+
 			//Clear controls and sort sets
-			foreach ((YGO_Set set, GroupBox box, bool expanded) listSet in ygoSetlist)
-				listSet.box.Dispose();
+			foreach ((YGO_Set set, Panel panel, bool expanded) listSet in ygoSetlist)
+				listSet.panel.Dispose();
 			ygoSetlist.Clear();
 			ygoSetlistLayout.Controls.Clear();
 			ygoCatalog.sets.Sort(new YGO_SetComparer().Compare);
 
 			//Pagination
 			int maxPage = ygoCatalog.sets.Count / ygoSetsPerPage;
-			if (ygoSetPagenum > maxPage) { ygoSetPagenum = 0; }
-			if (ygoSetPagenum < 0) { ygoSetPagenum = maxPage; }
+			if (ygoSetPagenum > maxPage)
+				ygoSetPagenum = 0;
+			if (ygoSetPagenum < 0)
+				ygoSetPagenum = maxPage;
 			int startIndex = ygoSetPagenum * ygoSetsPerPage;
 			int maxIndex = ygoSetsPerPage;
-			if (ygoSetPagenum == maxPage) { maxIndex = ygoCatalog.sets.Count % ygoSetsPerPage; }
+			if (ygoSetPagenum == maxPage)
+				maxIndex = ygoCatalog.sets.Count % ygoSetsPerPage;
 			maxIndex += startIndex;
 			ygoSetPageLabel.Text = (ygoSetPagenum + 1) + " / " + (maxPage + 1);
 
 			//Create set rows
-			for (int i = startIndex; i < maxIndex; ++i) { YGO_CreateSetRow(ygoCatalog.sets[i]); }
+			for (int i = startIndex; i < maxIndex; ++i)
+				YGO_CreateSetRow(ygoCatalog.sets[i]);
+
+			//Resume
+			ygoSetlistLayout.ResumeLayout();
 
 		}
 
@@ -106,55 +120,36 @@ namespace CollectionTracker {
 			bool missingCardref = cardsInSet.Count(print => print.card.name.Equals("") || print.card.name.Equals("_")) > 0;
 
 			//Set info box
-			GroupBox box = new GroupBox();
-			box.Size = new Size(820, 70);
-			ygoSetlistLayout.Controls.Add(box);
+			Panel panel = Utils.GeneratePanel(Point.Empty, new Size(820, 60));
+			ygoSetlistLayout.Controls.Add(panel);
 
 			//Filter button
-			Button filter = new Button();
-			filter.Location = new Point(5, 15);
-			filter.Size = new Size(350, 50);
-			filter.Text = set.name;
-			filter.UseVisualStyleBackColor = true;
-			if (set.imgPath.Length > 0) { filter.Image = new Bitmap(Image.FromFile(set.imgPath), new Size(35, 35)); }
-			filter.TextImageRelation = TextImageRelation.ImageBeforeText;
-			filter.ImageAlign = ContentAlignment.MiddleRight;
-			filter.TextAlign = ContentAlignment.MiddleCenter;
+			Button filter = Utils.GenerateButton(new Point(5, 5), new Size(350, 50), set.name, set.imgPath);
 			filter.Click += new EventHandler((sender, e) => YGO_FilterCatalogBySet(set));
 			filter.MouseUp += new MouseEventHandler((sender, e) => {
 				if (e.Button == MouseButtons.Right)
-					System.Diagnostics.Process.Start("https://yugipedia.com/wiki/" + set.code);
+					Process.Start("https://yugipedia.com/wiki/" + set.code);
 			});
-			box.Controls.Add(filter);
+			panel.Controls.Add(filter);
 
 			//Progress label
-			Label label = new Label();
-			label.Location = new Point(360, 15);
-			label.Size = new Size(100, 50);
-			label.Text = setOwned.ToString() + '/' + setCount.ToString();
+			Label label = Utils.GenerateLabel(new Point(360, 20), new Size(100, TEXT_HEIGHT), setOwned.ToString() + '/' + setCount.ToString());
 			label.TextAlign = ContentAlignment.MiddleCenter;
-			box.Controls.Add(label);
+			panel.Controls.Add(label);
 
 			//Progress bar
-			ProgressBar bar = new ProgressBar();
-			bar.Location = new Point(470, 25);
-			bar.Size = new Size(265, 30);
-			if (setCount > 0)
-				bar.Value = (int)(((float)setOwned / setCount) * 100);
-			box.Controls.Add(bar);
+			ProgressBar bar = Utils.GenerateProgressBar(new Point(470, 15), new Size(265, 30), setOwned > 0 ? (int)(((float)setOwned / setCount) * 100) : 0);
+			panel.Controls.Add(bar);
 
 			//Missing cardref label
 			if (missingCardref) {
-				Label cardrefLabel = new Label();
-				cardrefLabel.Location = new Point(780, 15);
-				cardrefLabel.Size = new Size(35, 50);
-				cardrefLabel.Text = "*";
+				Label cardrefLabel = Utils.GenerateLabel(new Point(780, 20), new Size(35, TEXT_HEIGHT), "*");
 				cardrefLabel.TextAlign = ContentAlignment.MiddleCenter;
-				box.Controls.Add(cardrefLabel);
+				panel.Controls.Add(cardrefLabel);
 			}
 
 			//Add to list
-			ygoSetlist.Add((set, box, false));
+			ygoSetlist.Add((set, panel, false));
 
 		}
 
@@ -293,22 +288,19 @@ namespace CollectionTracker {
 				YGO_Printing print = ygoPrintFilter[i];
 
 				//Card box
-				GroupBox box = new GroupBox();
-				ygoCatalogLayout.Controls.Add(box);
-				box.Location = new Point(3, 3);
-				box.Size = new Size(300, 430 + (30 * print.rarities.Count));
-				if (!print.AnyOwned()) { box.BackColor = SystemColors.ControlDarkDark; }
-				box.SuspendLayout();
+				Panel cardPanel = Utils.GeneratePanel(new Point(3, 3), new Size(300, 430 + (30 * print.rarities.Count)));
+				if (!print.AnyOwned())
+					cardPanel.BackColor = SystemColors.ControlDarkDark;
+				ygoCatalogLayout.Controls.Add(cardPanel);
+
+				//Suspend
+				cardPanel.SuspendLayout();
 
 				//Image box
-				PictureBox img = new PictureBox();
-				box.Controls.Add(img);
-				img.BorderStyle = BorderStyle.Fixed3D;
-				img.SizeMode = PictureBoxSizeMode.StretchImage;
-				img.Location = new Point(0, 0);
-				img.Size = new Size(300, 420);
-				YGO_Utils.TryLoadCardImage(img, print.imgPath);
+				PictureBox img = Utils.GeneratePictureBox(Point.Empty, new Size(300, 420));
 				img.Click += new EventHandler((sender, e) => YGO_LoadCardDetails(print));
+				YGO_Utils.TryLoadCardImage(img, print.imgPath);
+				cardPanel.Controls.Add(img);
 
 				//Loop treatments
 				for (int j = 0; j < print.rarities.Count; ++j) {
@@ -316,68 +308,52 @@ namespace CollectionTracker {
 					//Get treatment at index
 					YGO_Rarity treatment = print.rarities[j];
 
-					//Treatment label
-					Label rarityLabel = new Label();
-					box.Controls.Add(rarityLabel);
-					rarityLabel.Location = new Point(60, 425 + (j * 30));
-					rarityLabel.Size = new Size(120, 30);
-					rarityLabel.Text = treatment.name;
-					rarityLabel.AutoEllipsis = true;
-					rarityLabel.TextAlign = ContentAlignment.MiddleRight;
+					//Rarity label
+					Label treatmentLabel = Utils.GenerateLabel(new Point(60, 430 + (j * 30)), new Size(115, TEXT_HEIGHT), treatment.name);
+					treatmentLabel.TextAlign = ContentAlignment.MiddleRight;
+					cardPanel.Controls.Add(treatmentLabel);
 
 					//Count label
-					Label label = new Label();
-					box.Controls.Add(label);
-					label.Location = new Point(180, 425 + (j * 30));
-					label.Size = new Size(60, 30);
-					label.Text = print.OwnedCountOfTreatment(treatment.name).ToString();
-					label.TextAlign = ContentAlignment.MiddleLeft;
+					Label label = Utils.GenerateLabel(new Point(185, 430 + (j * 30)), new Size(55, TEXT_HEIGHT), print.OwnedCountOfTreatment(treatment.name).ToString());
+					cardPanel.Controls.Add(label);
 
 					//Decrement
-					Button leftButton = new Button();
-					box.Controls.Add(leftButton);
-					leftButton.Location = new Point(5, 425 + (j * 30));
-					leftButton.Size = new Size(55, 29);
-					leftButton.Text = "<";
-					leftButton.UseVisualStyleBackColor = true;
-					leftButton.Click += new EventHandler((sender, e) => YGO_DecrementCardCount(box, label, print, treatment.name));
+					Button leftButton = Utils.GenerateButton(new Point(5, 425 + (j * 30)), new Size(55, 29), "<");
+					leftButton.Click += new EventHandler((sender, e) => YGO_DecrementCardCount(cardPanel, label, print, treatment.name));
+					cardPanel.Controls.Add(leftButton);
 
 					//Increment
-					Button rightButton = new Button();
-					box.Controls.Add(rightButton);
-					rightButton.Location = new Point(240, 425 + (j * 30));
-					rightButton.Size = new Size(55, 29);
-					rightButton.Text = ">";
-					rightButton.UseVisualStyleBackColor = true;
-					rightButton.Click += new EventHandler((sender, e) => YGO_IncrementCardCount(box, label, print, treatment.name));
+					Button rightButton = Utils.GenerateButton(new Point(240, 425 + (j * 30)), new Size(55, 29), ">");
+					rightButton.Click += new EventHandler((sender, e) => YGO_IncrementCardCount(cardPanel, label, print, treatment.name));
+					cardPanel.Controls.Add(rightButton);
 
 				}
 
 				//Resume
-				box.ResumeLayout();
+				cardPanel.ResumeLayout();
 
 			}
 			ygoCatalogPage.Controls.Add(ygoCatalogLayout);
 		}
 
 		//Increment card quantity
-		private void YGO_IncrementCardCount(GroupBox box, Label label, YGO_Printing print, string treatment) {
+		private void YGO_IncrementCardCount(Panel panel, Label label, YGO_Printing print, string treatment) {
 			if (print != null) {
 				print.Increment(treatment);
 				label.Text = print.OwnedCountOfTreatment(treatment).ToString();
-				if (!print.AnyOwned()) { box.BackColor = SystemColors.ControlDarkDark; }
-				else { box.BackColor = SystemColors.ControlDark; }
+				if (!print.AnyOwned()) { panel.BackColor = SystemColors.ControlDarkDark; }
+				else { panel.BackColor = SystemColors.ControlDark; }
 			}
 			else { label.Text = "Print is null!"; }
 		}
 
 		//Decrement card quantity
-		private void YGO_DecrementCardCount(GroupBox box, Label label, YGO_Printing print, string treatment) {
+		private void YGO_DecrementCardCount(Panel panel, Label label, YGO_Printing print, string treatment) {
 			if (print != null) {
 				print.Decrement(treatment);
 				label.Text = print.OwnedCountOfTreatment(treatment).ToString();
-				if (!print.AnyOwned()) { box.BackColor = SystemColors.ControlDarkDark; }
-				else { box.BackColor = SystemColors.ControlDark; }
+				if (!print.AnyOwned()) { panel.BackColor = SystemColors.ControlDarkDark; }
+				else { panel.BackColor = SystemColors.ControlDark; }
 			}
 			else { label.Text = "Print is null!"; }
 		}
@@ -388,7 +364,7 @@ namespace CollectionTracker {
 
 		//Properties
 		public bool ygoDetailFlipped = false;
-		public List<GroupBox> ygoDetailBoxes;
+		public List<Panel> ygoDetailPanels;
 		public YGO_Printing ygoDetailPrint = null;
 		public YGO_Printing ygoDetailPrev = null;
 		public YGO_Printing ygoDetailNext = null;
@@ -410,120 +386,100 @@ namespace CollectionTracker {
 			YGO_Card card = print.card;
 
 			//Clear old boxes
-			foreach (GroupBox gbox in ygoDetailBoxes) { ygoDetailPage.Controls.Remove(gbox); }
-			ygoDetailBoxes.Clear();
+			foreach (Panel panel in ygoDetailPanels) {
+				//Utils.RemovePanelPaintEvent(panel);
+				ygoDetailPage.Controls.Remove(panel);
+			}
+			ygoDetailPanels.Clear();
 
 			//Y position to create elements at
 			int y = 5;
 
 			//Box-relative Y position
-			int y2 = 20;
+			int y2 = TOP_PAD;
 
-			//Face box
-			GroupBox box = new GroupBox();
-			ygoDetailPage.Controls.Add(box);
-			box.Size = new Size(ygoDetailBox.Size.Width, 100);
+			//Header
+			Panel headerPanel = Utils.GeneratePanel(new Point(ygoDetailPanel.Location.X, y), new Size(ygoDetailPanel.Size.Width, 100));
+			//YGO_AddDetailPanelPaintEvent(headerPanel, borderColour, borderColour2);
+			ygoDetailPanels.Add(headerPanel);
 
 			//Name
-			Label name = new Label();
-			box.Controls.Add(name);
-			name.Location = new Point(5, y2);
-			name.Size = new Size(TextRenderer.MeasureText(card.name, name.Font).Width, TEXT_HEIGHT);
-			name.Text = card.name;
-			name.TextAlign = ContentAlignment.MiddleLeft;
-			y2 += TEXT_HEIGHT + 10;
+			YGO_WriteLine(card.name, headerPanel, new Point(LEFT_PAD, y2), Utils.FONT_BOLD);
+			y2 += TEXT_HEIGHT;
 
 			//Card Type
 			if (card.cardType.Length > 0) {
+				y2 += LINE_SPACING;
 				string s = card.cardType;
 				if (card.attribute.Length > 0)
 					s = card.attribute + " " + s;
 				if (card.property.Length > 0)
 					s = card.property + " " + s;
-				Label type = new Label();
-				box.Controls.Add(type);
-				type.Location = new Point(5, y2);
-				type.Size = new Size(ygoDetailBox.Size.Width - 10, TEXT_HEIGHT);
-				type.Text = s;
-				type.TextAlign = ContentAlignment.MiddleLeft;
-				y2 += TEXT_HEIGHT + 10;
+				YGO_WriteLine(s, headerPanel, new Point(LEFT_PAD, y2), Utils.FONT_DEFAULT);
+				y2 += TEXT_HEIGHT;
 			}
-
-			//Monster Types
-			if (card.types.Length > 0) {
-				Label type = new Label();
-				box.Controls.Add(type);
-				type.Location = new Point(5, y2);
-				type.Size = new Size(ygoDetailBox.Size.Width - 10, TEXT_HEIGHT);
-				type.Text = card.types;
-				type.TextAlign = ContentAlignment.MiddleLeft;
-				y2 += TEXT_HEIGHT + 10;
-			}
-
-			//Oracle Text
-			if (card.oracleText.Length > 0)
-				y2 += 10 + YGO_GenerateDescription(card.oracleText, box, new Point(5, y2));
 
 			//Level
 			if (card.types.Length > 0) {
-				Label level = new Label();
-				box.Controls.Add(level);
-				level.Location = new Point(5, y2);
-				level.Size = new Size(ygoDetailBox.Size.Width - 10, 30);
-				level.Text = "Level " + card.level.ToString();
-				level.TextAlign = ContentAlignment.MiddleLeft;
-				y2 += 35;
+				y2 += LINE_SPACING;
+				string str = "Level ";
+				if (card.types.Contains("Xyz"))
+					str = "Rank ";
+				else if (card.types.Contains("Link"))
+					str = "Link-";
+				YGO_WriteLine(str + card.level.ToString(), headerPanel, new Point(LEFT_PAD, y2), Utils.FONT_DEFAULT);
+				y2 += TEXT_HEIGHT;
 			}
 
 			//Pendulum Scale
 			if (card.types.Contains("Pendulum")) {
-				Label scale = new Label();
-				box.Controls.Add(scale);
-				scale.Location = new Point(5, y2);
-				scale.Size = new Size(ygoDetailBox.Size.Width - 10, 30);
-				scale.Text = "Pendulum " + card.pendulumScale.ToString();
-				scale.TextAlign = ContentAlignment.MiddleLeft;
-				y2 += 35;
-			}
-
-			//ATK/DEF/LINK
-			if (card.types.Length > 0) {
-				string s = card.atk.ToString() + " ATK / ";
-				if (card.types.Contains("Link"))
-					s += "LINK " + card.def.ToString();
-				else
-					s += card.def.ToString() + " DEF";
-				Label atk = new Label();
-				box.Controls.Add(atk);
-				atk.Location = new Point(5, y2);
-				atk.Size = new Size(ygoDetailBox.Size.Width - 10, 30);
-				atk.Text = s;
-				atk.TextAlign = ContentAlignment.MiddleLeft;
-				y2 += 35;
-			}
-
-			//Flavor Text (apply to last face box)
-			if (print.flavorText.Length > 0) {
-				Label flavor = new Label();
-				box.Controls.Add(flavor);
-				flavor.Font = Utils.FONT_ITALIC;
-				flavor.Location = new Point(5, y2);
-				flavor.AutoSize = true;
-				flavor.MaximumSize = new Size(ygoDetailBox.Size.Width - 10, 0);
-				flavor.Text = print.flavorText;
-				flavor.TextAlign = ContentAlignment.MiddleLeft;
-				y2 += 5 + flavor.Size.Height;
+				y2 += LINE_SPACING;
+				YGO_WriteLine("Scale " + card.pendulumScale.ToString(), headerPanel, new Point(LEFT_PAD, y2), Utils.FONT_DEFAULT);
+				y2 += TEXT_HEIGHT;
 			}
 
 			//Size box and set position for next
-			y2 += 5;
-			box.Location = new Point(ygoDetailBox.Location.X, y);
-			box.Size = new Size(ygoDetailBox.Size.Width, y2);
-			ygoDetailBoxes.Add(box);
-			y += 10 + y2;
+			y2 += BOTTOM_PAD;
+			headerPanel.Height = y2;
+			ygoDetailPage.Controls.Add(headerPanel);
+			y += y2 + 5;
+
+			//Oracle panel
+			y2 = TOP_PAD;
+			Panel oraclePanel = Utils.GeneratePanel(new Point(ygoDetailPanel.Location.X, y), new Size(ygoDetailPanel.Size.Width, 100));
+			//YGO_AddDetailPanelPaintEvent(oraclePanel, borderColour, borderColour2);
+			ygoDetailPanels.Add(oraclePanel);
+
+			//Monster Types
+			if (card.types.Length > 0) {
+				YGO_WriteLine(card.types, oraclePanel, new Point(LEFT_PAD, y2), Utils.FONT_BOLD);
+				y2 += TEXT_HEIGHT + LINE_SPACING;
+			}
+
+			//Oracle Text
+			if (card.oracleText.Length > 0)
+				y2 += YGO_GenerateDescription(card.oracleText, oraclePanel, new Point(LEFT_PAD, y2));
+
+			//ATK/DEF
+			if (card.types.Length > 0) {
+				y2 += LINE_SPACING;
+				string s = card.atk.ToString() + " ATK";
+				if (!card.types.Contains("Link"))
+					s += " / " + card.def.ToString() + " DEF";
+				int width = TextRenderer.MeasureText(s.Replace("&", "&&"), Utils.FONT_BOLD).Width - TEXT_MARGIN;
+				Label atkdef = Utils.GenerateLabel(new Point(ygoDetailPanel.Size.Width - (width + LEFT_PAD), y2), new Size(width, TEXT_HEIGHT), s, Utils.FONT_BOLD);
+				oraclePanel.Controls.Add(atkdef);
+				y2 += TEXT_HEIGHT;
+			}
+
+			//Size box and set position for next
+			y2 += BOTTOM_PAD;
+			oraclePanel.Height = y2;
+			ygoDetailPage.Controls.Add(oraclePanel);
+			y += y2 + 5;
 
 			//Load location table
-			ygoDetailBox.Location = new Point(ygoDetailBox.Location.X, y);
+			ygoDetailPanel.Location = new Point(ygoDetailPanel.Location.X, y);
 			YGO_LoadLocationTable(print);
 
 			//Load printings
@@ -550,7 +506,7 @@ namespace CollectionTracker {
 			ygoDetailNextButton.Text = ygoDetailNext.card.name;
 
 			//Hide tooltip
-			ygoTooltipBox.Hide();
+			ygoTooltipPanel.Hide();
 			ygoCardtipBox.Hide();
 
 			//Set tab
@@ -561,7 +517,7 @@ namespace CollectionTracker {
 		#region Description Generators
 
 		//Generate description box. Returns total height of the description field
-		private int YGO_GenerateDescription(string desc, GroupBox box, Point location) {
+		private int YGO_GenerateDescription(string desc, Panel panel, Point location) {
 
 			//Set initial y position and loop fields
 			int y = location.Y;
@@ -580,7 +536,7 @@ namespace CollectionTracker {
 					if (desc[0] == '{') {
 						int i2 = desc.IndexOf('}');
 						if (i2 > 0) {
-							location = YGO_InsertSymbol(desc.Substring(0, i2 + 1), box, location, TEXT_HEIGHT);
+							location = YGO_InsertSymbol(desc.Substring(0, i2 + 1), panel, location, TEXT_HEIGHT);
 							desc = desc.Substring(i2 + 1);
 						}
 						else { desc = desc.Substring(1); }
@@ -591,7 +547,7 @@ namespace CollectionTracker {
 						int i2 = desc.IndexOf("|");
 						int i3 = desc.IndexOf("]");
 						if (i2 > 0 && i3 > 0) {
-							location = YGO_InsertTooltip(desc.Substring(1, i2 - 1), desc.Substring(i2 + 1, (i3 - i2) - 1), box, location);
+							location = YGO_InsertTooltip(desc.Substring(1, i2 - 1), desc.Substring(i2 + 1, (i3 - i2) - 1), panel, location);
 							desc = desc.Substring(i3 + 1);
 						}
 						else { desc = desc.Substring(1); }
@@ -602,7 +558,7 @@ namespace CollectionTracker {
 						int i2 = desc.IndexOf("|");
 						int i3 = desc.IndexOf(">");
 						if (i2 > 0 && i3 > 0) {
-							location = YGO_InsertCardtip(desc.Substring(1, i2 - 1), desc.Substring(i2 + 1, (i3 - i2) - 1), box, location);
+							location = YGO_InsertCardtip(desc.Substring(1, i2 - 1), desc.Substring(i2 + 1, (i3 - i2) - 1), panel, location);
 							desc = desc.Substring(i3 + 1);
 						}
 						else { desc = desc.Substring(1); }
@@ -612,7 +568,7 @@ namespace CollectionTracker {
 					else if (desc[0] == '`') {
 						int i2 = desc.IndexOf('`', 1);
 						if (i2 > 0) {
-							location = YGO_InsertBold(desc.Substring(1, i2 - 1), box, location);
+							location = YGO_InsertBold(desc.Substring(1, i2 - 1), panel, location);
 							desc = desc.Substring(i2 + 1);
 						}
 						else { desc = desc.Substring(1); }
@@ -622,7 +578,7 @@ namespace CollectionTracker {
 					else if (desc[0] == '~') {
 						int i2 = desc.IndexOf('~', 1);
 						if (i2 > 0) {
-							location = YGO_InsertItalic(desc.Substring(1, i2 - 1), box, location);
+							location = YGO_InsertItalic(desc.Substring(1, i2 - 1), panel, location);
 							desc = desc.Substring(i2 + 1);
 						}
 						else { desc = desc.Substring(1); }
@@ -638,7 +594,7 @@ namespace CollectionTracker {
 
 					//There are no more objects, write remaining text and exit
 					if (i == -1) {
-						location = YGO_WriteDescription(desc, box, location);
+						location = YGO_WriteDescription(desc, panel, location);
 						break;
 					}
 
@@ -646,7 +602,7 @@ namespace CollectionTracker {
 					else {
 						string substr = desc.Substring(0, i);
 						if (substr.EndsWith(" ")) { substr = substr.Substring(0, substr.Length - 1); }
-						location = YGO_WriteDescription(substr, box, location);
+						location = YGO_WriteDescription(substr, panel, location);
 						desc = desc.Substring(i);
 					}
 
@@ -660,7 +616,7 @@ namespace CollectionTracker {
 		}
 
 		//Write description text. Returns new text position
-		private Point YGO_WriteDescription(string desc, GroupBox box, Point location) {
+		private Point YGO_WriteDescription(string desc, Panel panel, Point location) {
 
 			//Loop line breaks
 			string[] lines = desc.Split(new string[] { "\r\n" }, StringSplitOptions.None);
@@ -668,65 +624,73 @@ namespace CollectionTracker {
 
 				//Jump location
 				if (i > 0)
-					location = new Point(5, location.Y + TEXT_HEIGHT + 5);
+					location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT + 5);
 
-				//Split words
-				string[] words = lines[i].Split(' ');
-				if (words.Length == 0) { continue; }
+				//Get space indices
+				lines[i] = new Regex("[ ]{2,}", RegexOptions.None).Replace(lines[i], " ");
+				if (lines[i].Length == 0)
+					continue;
+				List<int> spaces = new List<int> { 0 };
+				for (int j = lines[i].IndexOf(' '); j > -1; j = lines[i].IndexOf(' ', j + 1))
+					spaces.Add(j);
+
+				//Split into words
+				List<string> words = new List<string>();
+				for (int j = 1; j <= spaces.Count; ++j) {
+					if (j == spaces.Count)
+						words.Add(lines[i].Substring(spaces[j - 1]));
+					else
+						words.Add(lines[i].Substring(spaces[j - 1], spaces[j] - spaces[j - 1]));
+				}
+
+				//Loop labels
 				int idx = 0;
-
-				//Loop lines
 				while (true) {
 
-					//Generate label
-					Label label = new Label();
-					box.Controls.Add(label);
-
 					//Get available width
-					int maxWidth = box.Width - (location.X + 5);
-
-					//If first word doesn't fit, force if it's the only word in the line or skip to the next
-					if (TextRenderer.MeasureText(words[idx], label.Font).Width > maxWidth) {
-						if (location.X == 5) {
-							label.Location = location;
-							label.Size = new Size(TextRenderer.MeasureText(words[idx], label.Font).Width, 30);
-							label.Text = words[idx];
-							label.TextAlign = ContentAlignment.MiddleLeft;
-							location = new Point(5, location.Y + TEXT_HEIGHT);
-							++idx;
-							continue;
-						}
-						location = new Point(5, location.Y + TEXT_HEIGHT);
-						maxWidth = box.Width - (location.X + 5);
-					}
+					int maxWidth = panel.Width - (location.X + 5);
 
 					//Loop words in line
-					string str = words[idx];
+					string str = "";
 					while (true) {
 
 						//If we're done with our text or the next word would exceed available width, generate the label and break
-						if (idx + 1 >= words.Length || TextRenderer.MeasureText(str + " " + words[idx + 1], label.Font).Width > maxWidth) {
-							label.Location = location;
-							label.Size = new Size(TextRenderer.MeasureText(str, label.Font).Width, TEXT_HEIGHT);
-							label.Text = str;
-							label.TextAlign = ContentAlignment.MiddleLeft;
-							if (idx + 1 >= words.Length)
-								location = new Point(location.X + TextRenderer.MeasureText(str, label.Font).Width, location.Y);
-							else
-								location = new Point(5, location.Y + TEXT_HEIGHT);
-							++idx;
+						if (idx == words.Count || TextRenderer.MeasureText((str + words[idx]).Replace("&", "&&"), Utils.FONT_DEFAULT).Width > maxWidth) {
+
+							//First word is exceeding max width, add it if it fills the entire line or skip to next
+							if (idx < words.Count && str.Length == 0 && location.X == 5) {
+								str += words[idx];
+								++idx;
+							}
+
+							//Generate label and break
+							int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), Utils.FONT_DEFAULT).Width - TEXT_MARGIN;
+							Label label = Utils.GenerateLabel(location, new Size(textWidth, TEXT_HEIGHT), str, Utils.FONT_DEFAULT);
+							panel.Controls.Add(label);
+							if (idx == words.Count)
+								location = new Point(location.X + textWidth, location.Y);
+							else {
+								location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
+								if (words[idx].StartsWith(" ")) {
+									if (words[idx].Equals(" ") && idx == words.Count - 1) {
+										++idx;
+										break;
+									}
+									words[idx] = words[idx].Substring(1);
+								}
+							}
 							break;
+
 						}
 
-						//Otherwise add to string and continue
-						str += " " + words[idx + 1];
+						//We can keep going, add word to string and continues
+						str += words[idx];
 						++idx;
-						continue;
 
 					}
 
 					//Break if we're done with this line
-					if (idx >= words.Length)
+					if (idx >= words.Count)
 						break;
 
 				}
@@ -736,6 +700,14 @@ namespace CollectionTracker {
 			//Return end of text
 			return location;
 
+		}
+		
+		//Write simple text
+		private Point YGO_WriteLine(string str, Panel panel, Point location, Font font) {
+			int width = TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
+			Label label = Utils.GenerateLabel(location, new Size(width, TEXT_HEIGHT), str, font);
+			panel.Controls.Add(label);
+			return new Point(location.X + width, location.Y);
 		}
 
 		//Get list of symbols from string
@@ -767,7 +739,7 @@ namespace CollectionTracker {
 			label.Text = str;
 			label.TextAlign = ContentAlignment.MiddleLeft;
 			label.MouseEnter += new EventHandler((sender, e) => YGO_ShowTooltip(label, tooltip));
-			label.MouseLeave += new EventHandler((sender, e) => ygoTooltipBox.Hide());
+			label.MouseLeave += new EventHandler((sender, e) => ygoTooltipPanel.Hide());
 			location = new Point(location.X + textWidth, location.Y);
 			return location;
 		}
@@ -866,14 +838,14 @@ namespace CollectionTracker {
 
 		//Show tooltip window relative to given control with given text
 		private void YGO_ShowTooltip(Control control, string str) {
-			int posX = control.Parent.Location.X + control.Location.X + (control.Width / 2) - (ygoTooltipBox.Width / 2);
+			int posX = control.Parent.Location.X + control.Location.X + (control.Width / 2) - (ygoTooltipPanel.Width / 2);
 			int posY = control.Parent.Location.Y + control.Location.Y + TEXT_HEIGHT;
-			ygoTooltipBox.Show();
-			ygoTooltipBox.BringToFront();
-			ygoTooltipBox.Location = new Point(posX, posY);
-			ygoTooltipBox.Controls.Clear();
-			int height = YGO_GenerateDescription(str, ygoTooltipBox, new Point(5, 15));
-			ygoTooltipBox.Size = new Size(ygoTooltipBox.Width, height + 20);
+			ygoTooltipPanel.Show();
+			ygoTooltipPanel.BringToFront();
+			ygoTooltipPanel.Location = new Point(posX, posY);
+			ygoTooltipPanel.Controls.Clear();
+			int height = YGO_GenerateDescription(str, ygoTooltipPanel, new Point(5, 15));
+			ygoTooltipPanel.Size = new Size(ygoTooltipPanel.Width, height + 20);
 		}
 
 		//Show tooltip window relative to given control with given text
@@ -939,7 +911,7 @@ namespace CollectionTracker {
 		private void YGO_LoadLocationTable(YGO_Printing print) {
 
 			//Clear
-			ygoDetailBox.Controls.Remove(ygoLocationTable);
+			ygoDetailPanel.Controls.Remove(ygoLocationTable);
 			ygoLocationTable.Controls.Clear();
 			ygoLocationTable.RowCount = 0;
 			ygoLocationTable.RowStyles.Clear();
@@ -1002,8 +974,8 @@ namespace CollectionTracker {
 			}
 
 			//Resume
-			ygoDetailBox.Controls.Add(ygoLocationTable);
-			ygoDetailBox.Size = new Size(ygoDetailBox.Size.Width, ygoLocationTable.Size.Height + 100);
+			ygoDetailPanel.Controls.Add(ygoLocationTable);
+			ygoDetailPanel.Size = new Size(ygoDetailPanel.Size.Width, ygoLocationTable.Size.Height + 110);
 
 		}
 
@@ -1026,28 +998,27 @@ namespace CollectionTracker {
 
 		//Load printings list
 		private void YGO_LoadPrintingsList(YGO_Card card, YGO_Printing curPrint) {
-			ygoPrintingsBox.Controls.Clear();
+			ygoPrintingsPanel.Controls.Clear();
 			if (card.name.Equals("_"))
 				return;
 			List<YGO_Printing> prints = ygoCatalog.printings.Where(p => p.card == card).ToList();
 			prints.Sort(new YGO_PrintComparerNumericReverse().Compare);
 			for (int i = 0; i < prints.Count; ++i) {
-				Label label = new Label();
-				label.Font = Utils.FONT_UNDERLINE;
-				if (prints[i] != curPrint)
-					label.ForeColor = Color.Blue;
-				ygoPrintingsBox.Controls.Add(label);
-				label.Location = new Point(5, 20 + (i * 30));
-				label.Size = new Size(ygoPrintingsBox.Width - 10, TEXT_HEIGHT);
-				label.Text = prints[i].printID.ToUpper() + " - " + prints[i].set.name;
-				label.TextAlign = ContentAlignment.MiddleLeft;
+				Label label = Utils.GenerateLabel(
+					new Point(LEFT_PAD, TOP_PAD + (i * TEXT_HEIGHT)),
+					new Size(pkmnPrintingsPanel.Width - 10, TEXT_HEIGHT),
+					prints[i].printID.ToUpper() + " - " + prints[i].set.name,
+					Utils.FONT_UNDERLINE,
+					prints[i] != curPrint ? Color.Blue : default
+				);
 				string id = prints[i].printID;
-				if (prints[i] != curPrint)
-					label.Click += new EventHandler((sender, e) => YGO_LoadCardtip(id));
 				label.MouseEnter += new EventHandler((sender, e) => YGO_ShowCardtip(label, id));
 				label.MouseLeave += new EventHandler((sender, e) => ygoCardtipBox.Hide());
+				if (prints[i] != curPrint)
+					label.Click += new EventHandler((sender, e) => YGO_LoadCardtip(id));
+				ygoPrintingsPanel.Controls.Add(label);
 			}
-			ygoPrintingsBox.Height = 20 + (prints.Count * 30);
+			ygoPrintingsPanel.Height = TOP_PAD + BOTTOM_PAD + (prints.Count * TEXT_HEIGHT);
 		}
 
 		//Flip card image
