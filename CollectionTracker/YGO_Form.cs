@@ -332,8 +332,12 @@ namespace CollectionTracker {
 			}
 
 			//Show catalog
-			if (ygoSortMode) { ygoPrintFilter.Sort(new YGO_PrintComparerNumeric().Compare); }
-			else { ygoPrintFilter.Sort(new YGO_PrintComparerAlphabetical().Compare); }
+			if (ygoSortMode)
+				ygoPrintFilter.Sort(new YGO_PrintComparerNumeric().Compare);
+			else
+				ygoPrintFilter.Sort(new YGO_PrintComparerAlphabetical().Compare);
+			if (!ygoSearchAllPrintingsCheckbox.Checked)
+				ygoPrintFilter = ygoPrintFilter.GroupBy(p => p.card).Select(g => g.First()).ToList();
 			ygoCatalogPagenum = 0;
 			YGO_UpdateCatalog();
 			ygoTabControl.SelectedTab = ygoCatalogPage;
