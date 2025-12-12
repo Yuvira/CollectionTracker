@@ -1317,7 +1317,7 @@ namespace CollectionTracker {
 					if (values[1].Equals("?"))
 						values[1] = "0";
 					ygoAtkField.Value = decimal.Parse(values[0]);
-					ygoDefField.Value = decimal.Parse(values[1]);
+					ygoLevelField.Value = decimal.Parse(values[1]);
 				}
 				if (lines[i].StartsWith("Pendulum Scale"))
 					ygoScaleField.Value = decimal.Parse(lines[i].Replace("Pendulum Scale \tPendulum Scale.png ", ""));
@@ -1325,7 +1325,7 @@ namespace CollectionTracker {
 					if (ygoTypesField.Text.Contains("Fusion") || ygoTypesField.Text.Contains("Xyz") || ygoTypesField.Text.Contains("Link") || ygoTypesField.Text.Contains("Synchro"))
 						ygoOracleField.Text = lines[i - 1] + "\r\n" + lines[i];
 					else if (ygoTypesField.Text.Contains("Pendulum"))
-						ygoOracleField.Text = "`Pendulum Effect`\r\n" + lines[i - 2].Substring(4) + "\r\n`Monster Effect`\r\n" + lines[i].Substring(4);
+						ygoOracleField.Text = lines[i - 2].Substring(4) + "\r\n\r\n//\r\n\r\n" + lines[i].Substring(4);
 					else
 						ygoOracleField.Text = lines[i];
 				}
