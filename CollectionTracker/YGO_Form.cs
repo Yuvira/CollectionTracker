@@ -148,6 +148,13 @@ namespace CollectionTracker {
 				panel.Controls.Add(cardrefLabel);
 			}
 
+			//No cards logged but folder exists
+			else if (cardsInSet.Count == 0 && Directory.Exists("resources/ygo/" + set.code)) {
+				Label cardrefLabel = Utils.GenerateLabel(new Point(780, 20), new Size(35, TEXT_HEIGHT), "&");
+				cardrefLabel.TextAlign = ContentAlignment.MiddleCenter;
+				panel.Controls.Add(cardrefLabel);
+			}
+
 			//Add to list
 			ygoSetlist.Add((set, panel, false));
 
