@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -438,52 +439,63 @@ namespace CollectionTracker {
 				y2 += TEXT_HEIGHT;
 			}
 
-			//Pendulum Scale
-			if (card.types.Contains("Pendulum")) {
-				y2 += LINE_SPACING;
-				YGO_WriteLine("Scale " + card.pendulumScale.ToString(), headerPanel, new Point(LEFT_PAD, y2), Utils.FONT_DEFAULT);
-				y2 += TEXT_HEIGHT;
-			}
-
 			//Size box and set position for next
 			y2 += BOTTOM_PAD;
 			headerPanel.Height = y2;
 			ygoDetailPage.Controls.Add(headerPanel);
 			y += y2 + 5;
 
-			//Oracle panel
-			y2 = TOP_PAD;
-			Panel oraclePanel = Utils.GeneratePanel(new Point(ygoDetailPanel.Location.X, y), new Size(ygoDetailPanel.Size.Width, 100));
-			//YGO_AddDetailPanelPaintEvent(oraclePanel, borderColour, borderColour2);
-			ygoDetailPanels.Add(oraclePanel);
-
-			//Monster Types
-			if (card.types.Length > 0) {
-				YGO_WriteLine(card.types, oraclePanel, new Point(LEFT_PAD, y2), Utils.FONT_BOLD);
-				y2 += TEXT_HEIGHT + LINE_SPACING;
-			}
-
 			//Oracle Text
-			if (card.oracleText.Length > 0)
-				y2 += YGO_GenerateDescription(card.oracleText, oraclePanel, new Point(LEFT_PAD, y2));
+			if (card.oracleText.Length > 0) {
 
-			//ATK/DEF
-			if (card.types.Length > 0) {
-				y2 += LINE_SPACING;
-				string s = card.atk.ToString() + " ATK";
-				if (!card.types.Contains("Link"))
-					s += " / " + card.def.ToString() + " DEF";
-				int width = TextRenderer.MeasureText(s.Replace("&", "&&"), Utils.FONT_BOLD).Width - TEXT_MARGIN;
-				Label atkdef = Utils.GenerateLabel(new Point(ygoDetailPanel.Size.Width - (width + LEFT_PAD), y2), new Size(width, TEXT_HEIGHT), s, Utils.FONT_BOLD);
-				oraclePanel.Controls.Add(atkdef);
-				y2 += TEXT_HEIGHT;
+				//Split text boxes and loop
+				string[] oTexts = card.oracleText.Split(new string[] { "\r\n\r\n//\r\n\r\n" }, StringSplitOptions.None);
+				for (int i = 0; i < oTexts.Length; ++i) {
+
+					//Generate panel
+					y2 = TOP_PAD;
+					Panel oPanel = Utils.GeneratePanel(new Point(ygoDetailPanel.Location.X, y), new Size(ygoDetailPanel.Size.Width, 100));
+					ygoDetailPanels.Add(oPanel);
+
+					//Pendulum scale
+					if (i == 0 && card.types.Contains("Pendulum")) {
+						YGO_WriteLine("Scale " + card.pendulumScale.ToString(), oPanel, new Point(LEFT_PAD, y2), Utils.FONT_BOLD);
+						y2 += TEXT_HEIGHT;
+					}
+
+					//Monster types
+					if ((i == 1 || !card.types.Contains("Pendulum")) && card.types.Length > 0) {
+						YGO_WriteLine(card.types, oPanel, new Point(LEFT_PAD, y2), Utils.FONT_BOLD);
+						y2 += TEXT_HEIGHT;
+					}
+
+					//Oracle text
+					if (oTexts[i].Length > 0) {
+						if (card.types.Length > 0)
+							y2 += LINE_SPACING;
+						y2 += YGO_GenerateDescription(oTexts[i], oPanel, new Point(LEFT_PAD, y2));
+					}
+
+					//ATK/DEF
+					if ((i == 1 || !card.types.Contains("Pendulum")) && card.types.Length > 0) {
+						y2 += LINE_SPACING;
+						string s = card.atk.ToString() + " ATK";
+						if (!card.types.Contains("Link"))
+							s += " / " + card.def.ToString() + " DEF";
+						int width = TextRenderer.MeasureText(s.Replace("&", "&&"), Utils.FONT_BOLD).Width - TEXT_MARGIN;
+						Label atkdef = Utils.GenerateLabel(new Point(ygoDetailPanel.Size.Width - (width + LEFT_PAD), y2), new Size(width, TEXT_HEIGHT), s, Utils.FONT_BOLD);
+						oPanel.Controls.Add(atkdef);
+						y2 += TEXT_HEIGHT;
+					}
+
+					//Size box and set position for next
+					y2 += BOTTOM_PAD;
+					oPanel.Height = y2;
+					ygoDetailPage.Controls.Add(oPanel);
+					y += y2 + 5;
+
+				}
 			}
-
-			//Size box and set position for next
-			y2 += BOTTOM_PAD;
-			oraclePanel.Height = y2;
-			ygoDetailPage.Controls.Add(oraclePanel);
-			y += y2 + 5;
 
 			//Load location table
 			ygoDetailPanel.Location = new Point(ygoDetailPanel.Location.X, y);
