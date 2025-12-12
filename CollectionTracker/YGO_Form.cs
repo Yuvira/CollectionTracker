@@ -180,6 +180,23 @@ namespace CollectionTracker {
 
 		#region Search
 
+		//Refresh search lists
+		private void YGO_OnClickReloadSearchLists(object sender, EventArgs e) => YGO_ReloadSearchLists();
+		private void YGO_ReloadSearchLists() {
+			ygoSearchTypesList.Items.Clear();
+			ygoSearchTypesList.Items.Add("--");
+			ygoSearchSetField.Items.Clear();
+			ygoSearchSetField.Items.Add("--");
+			ygoSearchLocationField.Items.Clear();
+			ygoSearchLocationField.Items.Add("--");
+			foreach (string name in ygoCatalog.cards.SelectMany(c => c.types.Split(new string[] { " / " }, StringSplitOptions.None)).Distinct())
+				ygoSearchTypesList.Items.Add(name);
+			foreach (YGO_Set set in ygoCatalog.sets)
+				ygoSearchSetField.Items.Add(set);
+			foreach (string name in ygoCatalog.printings.SelectMany(p => p.rarities).SelectMany(t => t.locations).Distinct())
+				ygoSearchLocationField.Items.Add(name);
+		}
+
 		//Check if string contains all in a given array of substrings
 		private bool YGO_CheckSubstring(string s, string[] arr) {
 			foreach (string ss in arr) {
@@ -190,44 +207,128 @@ namespace CollectionTracker {
 			return true;
 		}
 
+		//Add selected type to type field
+		private void YGO_OnSearchTypesChanged(object sender, EventArgs e) {
+			string s = ygoSearchTypesList.SelectedItem?.ToString() ?? "";
+			if (s.Equals("") || s.Equals("--"))
+				return;
+			if (!ygoSearchTypesField.Text.Equals(""))
+				ygoSearchTypesField.Text += '|';
+			ygoSearchTypesField.Text += s;
+		}
+
+		//Apply advanced search terms to search bar
+		private void YGO_OnClickApplySearchTerms(object sender, EventArgs e) {
+
+			//Clear search
+			ygoSearchField.Text = "";
+
+			//Apply terms
+			if (ygoSearchNameField.Text.Length > 0)
+				YGO_AddSearchTerm("n:" + ygoSearchNameField.Text);
+			if (ygoSearchCardTypeField.Text.Length > 0)
+				YGO_AddSearchTerm("c:" + ygoSearchCardTypeField.Text);
+			if (ygoSearchAttributeField.Text.Length > 0)
+				YGO_AddSearchTerm("a:" + ygoSearchAttributeField.Text);
+			if (ygoSearchPropertyField.Text.Length > 0)
+				YGO_AddSearchTerm("p:" + ygoSearchPropertyField.Text);
+			if (ygoSearchTypesField.Text.Length > 0)
+				foreach (string term in ygoSearchTypesField.Text.Split('|'))
+					YGO_AddSearchTerm("t=" + ygoSearchTypesField.Text);
+			if (ygoSearchOracleField.Text.Length > 0)
+				YGO_AddSearchTerm("o:" + ygoSearchOracleField.Text);
+			if (ygoSearchSetField.SelectedItem is YGO_Set set)
+				YGO_AddSearchTerm("s=" + set.code);
+			string loc = ygoSearchLocationField.SelectedItem?.ToString() ?? "";
+			if (!loc.Equals("") && !loc.Equals("--"))
+				YGO_AddSearchTerm("l=" + loc);
+
+		}
+
+		//Add term to search field
+		private void YGO_AddSearchTerm(string term) {
+			if (ygoSearchField.Text.Length > 0)
+				ygoSearchField.Text += '&';
+			ygoSearchField.Text += term;
+		}
+
 		//Search for card matching given criteria
 		private void YGO_Search(object sender, EventArgs e) {
+
+			//Check for any input
+			if (ygoSearchField.Text.Length <= 0) {
+				ygoSearchDialog.Text = "No search terms provided!";
+				return;
+			}
+
+			//Get logical operation type
+			char logicalOp = '|';
+			if (ygoSearchField.Text.Contains('&'))
+				logicalOp = '&';
+			if (ygoSearchField.Text.Contains('|')) {
+				if (logicalOp == '&') {
+					ygoSearchDialog.Text = "Mixed and/or operators provided!";
+					return;
+				}
+			}
 
 			//Clear print filter
 			ygoPrintFilter.Clear();
 			ygoPrintFilter = new List<YGO_Printing>();
 
-			//Parameters
-			bool searchName = ygoSearchNameField.Text.Length > 0;
-			bool searchCardType = ygoSearchCardTypeField.Text.Length > 0;
-			bool searchAttribute = ygoSearchAttributeField.Text.Length > 0;
-			bool searchProperty = ygoSearchPropertyField.Text.Length > 0;
-			bool searchTypes = ygoSearchTypesField.Text.Length > 0;
-			bool searchOracle = ygoSearchOracleField.Text.Length > 0;
-			string set = ygoSearchSetField.SelectedItem?.ToString() ?? "";
-			string loc = ygoSearchLocationField.SelectedItem?.ToString() ?? "";
-			bool searchSet = !set.Equals("") && !set.Equals("--");
-			bool searchLoc = !loc.Equals("") && !loc.Equals("--");
+			//Split terms into array
+			string[] termArray;
+			if (logicalOp == '&')
+				termArray = ygoSearchField.Text.Split('&');
+			else
+				termArray = ygoSearchField.Text.Split('|');
 
-			//Search
-			foreach (YGO_Printing print in ygoCatalog.printings) {
-				if (searchName && !YGO_CheckSubstring(print.card.name, ygoSearchNameField.Text.Split('|'))) { continue; }
-				if (searchCardType && !YGO_CheckSubstring(print.card.cardType, ygoSearchCardTypeField.Text.Split('|'))) { continue; }
-				if (searchAttribute && !YGO_CheckSubstring(print.card.attribute, ygoSearchAttributeField.Text.Split('|'))) { continue; }
-				if (searchProperty && !YGO_CheckSubstring(print.card.property, ygoSearchPropertyField.Text.Split('|'))) { continue; }
-				if (searchTypes && !YGO_CheckSubstring(print.card.types, ygoSearchTypesField.Text.Split('|'))) { continue; }
-				if (searchOracle && !YGO_CheckSubstring(print.card.oracleText, ygoSearchOracleField.Text.Split('|'))) { continue; }
-				if (searchSet && print.set != ygoSearchSetField.SelectedItem) { continue; }
-				if (searchLoc) {
-					bool add = false;
-					foreach (YGO_Rarity rarity in print.rarities) {
-						if (rarity.locations.Contains(loc)) {
-							add = true;
-						}
-					}
-					if (!add) { continue; }
+			//Convert array of terms into list of (field, operator, value)
+			List<(string field, string op, string value)> terms = new List<(string, string, string)>();
+			List<string> ops = new List<string> { "!:", "!=", "~:", "~=", "==", ":", "=" };
+			foreach (string term in termArray) {
+				string[] splitTerm;
+				foreach (string op in ops) {
+					splitTerm = term.Split(new string[] { op }, StringSplitOptions.None);
+					if (splitTerm.Length != 2)
+						continue;
+					terms.Add((splitTerm[0], op, splitTerm[1]));
+					break;
 				}
-				ygoPrintFilter.Add(print);
+			}
+
+			//Search printings
+			bool[] matches = new bool[terms.Count];
+			string searchField;
+			foreach (YGO_Printing print in ygoCatalog.printings) {
+				for (int i = 0; i < terms.Count; ++i) {
+					if (terms[i].field.ToLower().Equals("n"))
+						searchField = print.card.name;
+					else if (terms[i].field.ToLower().Equals("c"))
+						searchField = print.card.cardType;
+					else if (terms[i].field.ToLower().Equals("a"))
+						searchField = print.card.attribute;
+					else if (terms[i].field.ToLower().Equals("p"))
+						searchField = print.card.property;
+					else if (terms[i].field.ToLower().Equals("t"))
+						searchField = print.card.types;
+					else if (terms[i].field.ToLower().Equals("o"))
+						searchField = print.card.oracleText;
+					else if (terms[i].field.ToLower().Equals("s"))
+						searchField = print.set.code;
+					else if (terms[i].field.ToLower().Equals("l"))
+						searchField = string.Join(" / ", print.rarities.SelectMany(t => t.locations).Distinct());
+					else
+						continue;
+					bool fieldIsList = false;
+					if (terms[i].field.ToLower().Equals("t") || terms[i].field.ToLower().Equals("l"))
+						fieldIsList = true;
+					matches[i] = Utils.EvaluateSearchOperation(searchField, terms[i].op, terms[i].value, new Dictionary<string, string>(), fieldIsList);
+				}
+				if (logicalOp == '&' && !matches.Contains(false))
+					ygoPrintFilter.Add(print);
+				else if (logicalOp == '|' && matches.Contains(true))
+					ygoPrintFilter.Add(print);
 			}
 
 			//Show catalog
@@ -1025,7 +1126,7 @@ namespace CollectionTracker {
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = Utils.GenerateLabel(
 					new Point(LEFT_PAD, TOP_PAD + (i * TEXT_HEIGHT)),
-					new Size(pkmnPrintingsPanel.Width - 10, TEXT_HEIGHT),
+					new Size(ygoPrintingsPanel.Width - 10, TEXT_HEIGHT),
 					prints[i].printID.ToUpper() + " - " + prints[i].set.name,
 					Utils.FONT_UNDERLINE,
 					prints[i] != curPrint ? Color.Blue : default
