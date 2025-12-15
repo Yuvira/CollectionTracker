@@ -1427,10 +1427,14 @@ namespace CollectionTracker {
 				if (lines[i].StartsWith("Pendulum Scale"))
 					ygoScaleField.Value = decimal.Parse(lines[i].Replace("Pendulum Scale \tPendulum Scale.png ", ""));
 				if (i == lines.Length - 1) {
-					if (ygoTypesField.Text.Contains("Fusion") || ygoTypesField.Text.Contains("Xyz") || ygoTypesField.Text.Contains("Link") || ygoTypesField.Text.Contains("Synchro"))
+					if (ygoTypesField.Text.Contains("Pendulum")) {
+						if (ygoTypesField.Text.Contains("Fusion") || ygoTypesField.Text.Contains("Xyz") || ygoTypesField.Text.Contains("Link") || ygoTypesField.Text.Contains("Synchro"))
+							ygoOracleField.Text = lines[i - 3].Substring(4) + "\r\n\r\n//\r\n\r\n" + lines[i - 1].Substring(4) + "\r\n" + lines[i].Substring(4);
+						else
+							ygoOracleField.Text = lines[i - 2].Substring(4) + "\r\n\r\n//\r\n\r\n" + lines[i].Substring(4);
+					}
+					else if (ygoTypesField.Text.Contains("Fusion") || ygoTypesField.Text.Contains("Xyz") || ygoTypesField.Text.Contains("Link") || ygoTypesField.Text.Contains("Synchro"))
 						ygoOracleField.Text = lines[i - 1] + "\r\n" + lines[i];
-					else if (ygoTypesField.Text.Contains("Pendulum"))
-						ygoOracleField.Text = lines[i - 2].Substring(4) + "\r\n\r\n//\r\n\r\n" + lines[i].Substring(4);
 					else
 						ygoOracleField.Text = lines[i];
 				}
