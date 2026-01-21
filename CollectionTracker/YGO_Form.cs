@@ -1590,6 +1590,8 @@ namespace CollectionTracker {
 				ygoCardrefDescriptor.Text = path;
 				if (YGO_Utils.TryLoadCardImage(ygoPrintImgbox, path + ".png", ygoImgpathLabel))
 					return true;
+				if (YGO_Utils.TryLoadCardImage(ygoPrintImgbox, path + ".jpg", ygoImgpathLabel))
+					return true;
 			}
 			return false;
 		}
