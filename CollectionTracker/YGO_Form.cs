@@ -63,6 +63,7 @@ namespace CollectionTracker {
 
 		//Properties
 		private List<(YGO_Set set, Panel panel, bool expanded)> ygoSetlist = new List<(YGO_Set, Panel, bool)>();
+		private List<YGO_Set> ygoSetFilter = new List<YGO_Set>();
 		public int ygoSetPagenum = 0;
 		public int ygoSetsPerPage = 1000;
 
@@ -87,10 +88,18 @@ namespace CollectionTracker {
 				listSet.panel.Dispose();
 			ygoSetlist.Clear();
 			ygoSetlistLayout.Controls.Clear();
-			ygoCatalog.sets.Sort(new YGO_SetComparer().Compare);
+
+			//Filter sets
+			ygoSetFilter.Clear();
+			foreach (YGO_Set set in ygoCatalog.sets) {
+				if (set.name.ToLower().Contains(ygoSetlistFilterField.Text.ToLower()) || set.code.ToLower().Contains(ygoSetlistFilterField.Text.ToLower())) {
+					ygoSetFilter.Add(set);
+				}
+			}
+			ygoSetFilter.Sort(new YGO_SetComparer().Compare);
 
 			//Pagination
-			int maxPage = ygoCatalog.sets.Count / ygoSetsPerPage;
+			int maxPage = ygoSetFilter.Count / ygoSetsPerPage;
 			if (ygoSetPagenum > maxPage)
 				ygoSetPagenum = 0;
 			if (ygoSetPagenum < 0)
@@ -98,13 +107,13 @@ namespace CollectionTracker {
 			int startIndex = ygoSetPagenum * ygoSetsPerPage;
 			int maxIndex = ygoSetsPerPage;
 			if (ygoSetPagenum == maxPage)
-				maxIndex = ygoCatalog.sets.Count % ygoSetsPerPage;
+				maxIndex = ygoSetFilter.Count % ygoSetsPerPage;
 			maxIndex += startIndex;
 			ygoSetPageLabel.Text = (ygoSetPagenum + 1) + " / " + (maxPage + 1);
 
 			//Create set rows
 			for (int i = startIndex; i < maxIndex; ++i)
-				YGO_CreateSetRow(ygoCatalog.sets[i]);
+				YGO_CreateSetRow(ygoSetFilter[i]);
 
 			//Resume
 			ygoSetlistLayout.ResumeLayout();
@@ -160,6 +169,9 @@ namespace CollectionTracker {
 			ygoSetlist.Add((set, panel, false));
 
 		}
+
+		//Filter sets by text
+		private void YGO_OnSetlistFilterChanged(object sender, EventArgs e) => YGO_UpdateSets();
 
 		//Filter catalog by set ID
 		private void YGO_FilterCatalogBySet(YGO_Set set) {

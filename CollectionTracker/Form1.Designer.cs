@@ -455,6 +455,8 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorPageLabel = new System.Windows.Forms.Label();
 			this.pkmnSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSetGeneratorLabel = new System.Windows.Forms.Label();
+			this.ygoSetlistFilterLabel = new System.Windows.Forms.Label();
+			this.ygoSetlistFilterField = new System.Windows.Forms.TextBox();
 			this.ygoTabControl.SuspendLayout();
 			this.ygoSetPage.SuspendLayout();
 			this.ygoSearchPage.SuspendLayout();
@@ -575,6 +577,8 @@ namespace CollectionTracker {
 			// 
 			this.ygoSetPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.ygoSetPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ygoSetPage.Controls.Add(this.ygoSetlistFilterField);
+			this.ygoSetPage.Controls.Add(this.ygoSetlistFilterLabel);
 			this.ygoSetPage.Controls.Add(this.ygoSetPageLabel);
 			this.ygoSetPage.Controls.Add(this.ygoNextSetButton);
 			this.ygoSetPage.Controls.Add(this.ygoPrevSetButton);
@@ -583,7 +587,7 @@ namespace CollectionTracker {
 			this.ygoSetPage.Location = new System.Drawing.Point(4, 33);
 			this.ygoSetPage.Name = "ygoSetPage";
 			this.ygoSetPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoSetPage.Size = new System.Drawing.Size(1262, 666);
+			this.ygoSetPage.Size = new System.Drawing.Size(1262, 658);
 			this.ygoSetPage.TabIndex = 3;
 			this.ygoSetPage.Text = "Set List";
 			// 
@@ -639,7 +643,7 @@ namespace CollectionTracker {
 			this.ygoSetlistLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.ygoSetlistLayout.Location = new System.Drawing.Point(3, 38);
 			this.ygoSetlistLayout.Name = "ygoSetlistLayout";
-			this.ygoSetlistLayout.Size = new System.Drawing.Size(850, 620);
+			this.ygoSetlistLayout.Size = new System.Drawing.Size(850, 612);
 			this.ygoSetlistLayout.TabIndex = 1;
 			this.ygoSetlistLayout.WrapContents = false;
 			// 
@@ -672,9 +676,9 @@ namespace CollectionTracker {
 			this.ygoSearchPage.Controls.Add(this.ygoSearchPropertyLabel);
 			this.ygoSearchPage.Controls.Add(this.ygoSearchOracleLabel);
 			this.ygoSearchPage.Controls.Add(this.ygoSearchAttributeLabel);
-			this.ygoSearchPage.Location = new System.Drawing.Point(4, 33);
+			this.ygoSearchPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoSearchPage.Name = "ygoSearchPage";
-			this.ygoSearchPage.Size = new System.Drawing.Size(1262, 658);
+			this.ygoSearchPage.Size = new System.Drawing.Size(1262, 666);
 			this.ygoSearchPage.TabIndex = 6;
 			this.ygoSearchPage.Text = "Search";
 			// 
@@ -1237,10 +1241,10 @@ namespace CollectionTracker {
 			this.ygoCardPage.Controls.Add(this.ygoAttributeLabel);
 			this.ygoCardPage.Controls.Add(this.ygoCardTypeLabel);
 			this.ygoCardPage.Controls.Add(this.ygoNameLabel);
-			this.ygoCardPage.Location = new System.Drawing.Point(4, 25);
+			this.ygoCardPage.Location = new System.Drawing.Point(4, 33);
 			this.ygoCardPage.Name = "ygoCardPage";
 			this.ygoCardPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoCardPage.Size = new System.Drawing.Size(1262, 666);
+			this.ygoCardPage.Size = new System.Drawing.Size(1262, 658);
 			this.ygoCardPage.TabIndex = 0;
 			this.ygoCardPage.Text = "Card Entry";
 			// 
@@ -5132,6 +5136,24 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorLabel.Text = "Edit Sets";
 			this.pkmnSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// ygoSetlistFilterLabel
+			// 
+			this.ygoSetlistFilterLabel.AutoSize = true;
+			this.ygoSetlistFilterLabel.Location = new System.Drawing.Point(500, 8);
+			this.ygoSetlistFilterLabel.Name = "ygoSetlistFilterLabel";
+			this.ygoSetlistFilterLabel.Size = new System.Drawing.Size(48, 21);
+			this.ygoSetlistFilterLabel.TabIndex = 11;
+			this.ygoSetlistFilterLabel.Text = "Filter:";
+			this.ygoSetlistFilterLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ygoSetlistFilterField
+			// 
+			this.ygoSetlistFilterField.Location = new System.Drawing.Point(550, 5);
+			this.ygoSetlistFilterField.Name = "ygoSetlistFilterField";
+			this.ygoSetlistFilterField.Size = new System.Drawing.Size(300, 29);
+			this.ygoSetlistFilterField.TabIndex = 12;
+			this.ygoSetlistFilterField.TextChanged += new System.EventHandler(this.YGO_OnSetlistFilterChanged);
+			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -5680,6 +5702,8 @@ namespace CollectionTracker {
 		private Button ygoApplySearchTermsButton;
 		private Label ygoSearchDialog;
 		private CheckBox ygoSearchAllPrintingsCheckbox;
+		private TextBox ygoSetlistFilterField;
+		private Label ygoSetlistFilterLabel;
 	}
 }
 
