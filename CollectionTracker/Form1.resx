@@ -127,6 +127,7 @@ t - Monster Types
 o - Oracle Text
 s - Set Code
 l - Location
+f - Favorite
 
 Operators:
 :  - Field contains the given value

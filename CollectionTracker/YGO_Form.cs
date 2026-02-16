@@ -330,6 +330,8 @@ namespace CollectionTracker {
 						searchField = print.set.code;
 					else if (terms[i].field.ToLower().Equals("l"))
 						searchField = string.Join(" / ", print.rarities.SelectMany(t => t.locations).Distinct());
+					else if (terms[i].field.ToLower().Equals("f"))
+						searchField = print.card.favorite.ToString();
 					else
 						continue;
 					bool fieldIsList = false;
@@ -417,8 +419,7 @@ namespace CollectionTracker {
 
 				//Card box
 				Panel cardPanel = Utils.GeneratePanel(new Point(3, 3), new Size(300, 430 + (30 * print.rarities.Count)));
-				if (!print.AnyOwned())
-					cardPanel.BackColor = SystemColors.ControlDarkDark;
+				YGO_SetCatalogPrintingColor(cardPanel, print);
 				ygoCatalogLayout.Controls.Add(cardPanel);
 
 				//Suspend
@@ -426,7 +427,12 @@ namespace CollectionTracker {
 
 				//Image box
 				PictureBox img = Utils.GeneratePictureBox(Point.Empty, new Size(300, 420));
-				img.Click += new EventHandler((sender, e) => YGO_LoadCardDetails(print));
+				img.MouseUp += new MouseEventHandler((sender, e) => {
+					if (e.Button == MouseButtons.Left)
+						YGO_LoadCardDetails(print);
+					else if (e.Button == MouseButtons.Right)
+						YGO_ToggleFavorite(print);
+				});
 				YGO_Utils.TryLoadCardImage(img, print.imgPath);
 				cardPanel.Controls.Add(img);
 
@@ -469,8 +475,7 @@ namespace CollectionTracker {
 			if (print != null) {
 				print.Increment(treatment);
 				label.Text = print.OwnedCountOfTreatment(treatment).ToString();
-				if (!print.AnyOwned()) { panel.BackColor = SystemColors.ControlDarkDark; }
-				else { panel.BackColor = SystemColors.ControlDark; }
+				YGO_SetCatalogPrintingColor(panel, print);
 			}
 			else { label.Text = "Print is null!"; }
 		}
@@ -480,10 +485,33 @@ namespace CollectionTracker {
 			if (print != null) {
 				print.Decrement(treatment);
 				label.Text = print.OwnedCountOfTreatment(treatment).ToString();
-				if (!print.AnyOwned()) { panel.BackColor = SystemColors.ControlDarkDark; }
-				else { panel.BackColor = SystemColors.ControlDark; }
+				YGO_SetCatalogPrintingColor(panel, print);
 			}
 			else { label.Text = "Print is null!"; }
+		}
+
+		//Toggle favorite status for a card
+		private void YGO_ToggleFavorite(YGO_Printing print)
+		{
+			print.card.ToggleFavorite();
+			foreach (Control control in ygoCatalogLayout.Controls)
+			YGO_SetCatalogPrintingColor(control, print);
+		}
+
+		//Set panel color
+		private void YGO_SetCatalogPrintingColor(Control control, YGO_Printing print) {
+			if (print.card.favorite) {
+				if (print.AnyOwned())
+					control.BackColor = Color.Red;
+				else
+					control.BackColor = Color.DarkRed;
+			}
+			else {
+				if (print.AnyOwned())
+					control.BackColor = SystemColors.ControlDark;
+				else
+					control.BackColor = SystemColors.ControlDarkDark;
+			}
 		}
 
 		#endregion
@@ -1476,7 +1504,8 @@ namespace CollectionTracker {
 				(int)ygoLevelField.Value,
 				(int)ygoScaleField.Value,
 				(int)ygoAtkField.Value,
-				(int)ygoDefField.Value
+				(int)ygoDefField.Value,
+				false
 			);
 
 			//Create or update card in catalog

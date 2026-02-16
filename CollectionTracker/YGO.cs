@@ -55,10 +55,11 @@ namespace CollectionTracker {
 		[ProtoMember(8)]  public int pendulumScale;
 		[ProtoMember(9)]  public int atk;
 		[ProtoMember(10)] public int def;
+		[ProtoMember(11)] public bool favorite;
 
 		//Constructor
-		public YGO_Card() : this("", "", "", "", "", "", 0, 0, 0, 0) { }
-		public YGO_Card(string name, string cardType, string attribute, string property, string types, string oracleText, int level, int pendulumScale, int atk, int def) {
+		public YGO_Card() : this("", "", "", "", "", "", 0, 0, 0, 0, false) { }
+		public YGO_Card(string name, string cardType, string attribute, string property, string types, string oracleText, int level, int pendulumScale, int atk, int def, bool favorite) {
 			this.name = name;
 			this.cardType = cardType;
 			this.attribute = attribute;
@@ -69,6 +70,7 @@ namespace CollectionTracker {
 			this.pendulumScale = pendulumScale;
 			this.atk = atk;
 			this.def = def;
+			this.favorite = favorite;
 		}
 
 		//Copy function
@@ -83,7 +85,11 @@ namespace CollectionTracker {
 			pendulumScale = card.pendulumScale;
 			atk = card.atk;
 			def = card.def;
+			favorite = card.favorite;
 		}
+
+		//Toggle favorite status
+		public void ToggleFavorite() => favorite = !favorite;
 
 		//ToString
 		public override string ToString() => name;

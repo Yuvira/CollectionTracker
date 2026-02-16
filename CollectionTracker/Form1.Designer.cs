@@ -695,9 +695,9 @@ namespace CollectionTracker {
 			this.ygoSearchPage.Controls.Add(this.ygoSearchPropertyLabel);
 			this.ygoSearchPage.Controls.Add(this.ygoSearchOracleLabel);
 			this.ygoSearchPage.Controls.Add(this.ygoSearchAttributeLabel);
-			this.ygoSearchPage.Location = new System.Drawing.Point(4, 25);
+			this.ygoSearchPage.Location = new System.Drawing.Point(4, 33);
 			this.ygoSearchPage.Name = "ygoSearchPage";
-			this.ygoSearchPage.Size = new System.Drawing.Size(1262, 666);
+			this.ygoSearchPage.Size = new System.Drawing.Size(1262, 658);
 			this.ygoSearchPage.TabIndex = 6;
 			this.ygoSearchPage.Text = "Search";
 			// 
@@ -727,7 +727,7 @@ namespace CollectionTracker {
 			this.ygoSearchReminderLabel.AutoSize = true;
 			this.ygoSearchReminderLabel.Location = new System.Drawing.Point(480, 8);
 			this.ygoSearchReminderLabel.Name = "ygoSearchReminderLabel";
-			this.ygoSearchReminderLabel.Size = new System.Drawing.Size(366, 378);
+			this.ygoSearchReminderLabel.Size = new System.Drawing.Size(366, 399);
 			this.ygoSearchReminderLabel.TabIndex = 92;
 			this.ygoSearchReminderLabel.Text = resources.GetString("ygoSearchReminderLabel.Text");
 			this.ygoSearchReminderLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1532,10 +1532,10 @@ namespace CollectionTracker {
 			this.ygoPrintPage.Controls.Add(this.ygoNumberLabel);
 			this.ygoPrintPage.Controls.Add(this.ygoSetField);
 			this.ygoPrintPage.Controls.Add(this.ygoSetLabel);
-			this.ygoPrintPage.Location = new System.Drawing.Point(4, 33);
+			this.ygoPrintPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoPrintPage.Name = "ygoPrintPage";
 			this.ygoPrintPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ygoPrintPage.Size = new System.Drawing.Size(1262, 658);
+			this.ygoPrintPage.Size = new System.Drawing.Size(1262, 666);
 			this.ygoPrintPage.TabIndex = 1;
 			this.ygoPrintPage.Text = "Printing Entry";
 			// 
@@ -1595,7 +1595,7 @@ namespace CollectionTracker {
 			// 
 			this.ygoCardrefDescriptor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.ygoCardrefDescriptor.AutoSize = true;
-			this.ygoCardrefDescriptor.Location = new System.Drawing.Point(5, 595);
+			this.ygoCardrefDescriptor.Location = new System.Drawing.Point(5, 603);
 			this.ygoCardrefDescriptor.MaximumSize = new System.Drawing.Size(0, 21);
 			this.ygoCardrefDescriptor.Name = "ygoCardrefDescriptor";
 			this.ygoCardrefDescriptor.Size = new System.Drawing.Size(16, 21);
@@ -1653,7 +1653,7 @@ namespace CollectionTracker {
 			// 
 			this.ygoIODialog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.ygoIODialog.AutoSize = true;
-			this.ygoIODialog.Location = new System.Drawing.Point(260, 622);
+			this.ygoIODialog.Location = new System.Drawing.Point(260, 630);
 			this.ygoIODialog.Name = "ygoIODialog";
 			this.ygoIODialog.Size = new System.Drawing.Size(16, 21);
 			this.ygoIODialog.TabIndex = 56;
@@ -1663,7 +1663,7 @@ namespace CollectionTracker {
 			// ygoSaveButton
 			// 
 			this.ygoSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.ygoSaveButton.Location = new System.Drawing.Point(5, 619);
+			this.ygoSaveButton.Location = new System.Drawing.Point(5, 627);
 			this.ygoSaveButton.Name = "ygoSaveButton";
 			this.ygoSaveButton.Size = new System.Drawing.Size(250, 29);
 			this.ygoSaveButton.TabIndex = 55;
