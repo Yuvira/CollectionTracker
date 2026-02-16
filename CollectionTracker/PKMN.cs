@@ -186,7 +186,7 @@ namespace CollectionTracker {
 			PKMN_Treatment treatment = treatments.FirstOrDefault(t => t.name.Equals(name));
 			if (treatment != null) {
 				if (treatment.locations.Count > 0) {
-					return Decrement(treatment, 0);
+					return Decrement(treatment, treatment.locations.Count - 1);
 				}
 			}
 			return false;

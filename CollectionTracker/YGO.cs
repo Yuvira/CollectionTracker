@@ -167,7 +167,7 @@ namespace CollectionTracker {
 			YGO_Rarity rarity = rarities.FirstOrDefault(t => t.name.Equals(name));
 			if (rarity != null) {
 				if (rarity.locations.Count > 0) {
-					return Decrement(rarity, 0);
+					return Decrement(rarity, rarity.locations.Count - 1);
 				}
 			}
 			return false;
