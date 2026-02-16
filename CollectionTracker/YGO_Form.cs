@@ -366,6 +366,7 @@ namespace CollectionTracker {
 		#region Catalog
 
 		//Properties
+		public List<(YGO_Printing print, Panel panel)> ygoCatalogList = new List<(YGO_Printing print, Panel panel)>();
 		public int ygoCatalogPagenum = 0;
 		public int ygoCardsPerPage = 50;
 		public bool ygoSortMode = true;
@@ -397,6 +398,9 @@ namespace CollectionTracker {
 
 			//Remove and clear layout controls
 			ygoCatalogPage.Controls.Remove(ygoCatalogLayout);
+			foreach ((YGO_Printing print, Panel panel) catalogPrint in ygoCatalogList)
+				catalogPrint.panel.Dispose();
+			ygoCatalogList.Clear();
 			ygoCatalogLayout.Controls.Clear();
 
 			//Pagination
@@ -463,6 +467,9 @@ namespace CollectionTracker {
 
 				}
 
+				//Add to list
+				ygoCatalogList.Add((print, cardPanel));
+
 				//Resume
 				cardPanel.ResumeLayout();
 
@@ -494,8 +501,8 @@ namespace CollectionTracker {
 		private void YGO_ToggleFavorite(YGO_Printing print)
 		{
 			print.card.ToggleFavorite();
-			foreach (Control control in ygoCatalogLayout.Controls)
-			YGO_SetCatalogPrintingColor(control, print);
+			foreach ((YGO_Printing print, Panel panel) catalogPrint in ygoCatalogList)
+				YGO_SetCatalogPrintingColor(catalogPrint.panel, catalogPrint.print);
 		}
 
 		//Set panel color
