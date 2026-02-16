@@ -1164,8 +1164,12 @@ namespace CollectionTracker {
 		private void YGO_ClickDetailCard(object sender, MouseEventArgs e) {
 			if (ygoDetailPrint == null)
 				return;
-			if (e.Button == MouseButtons.Right)
-				Process.Start("https://yugipedia.com/wiki/" + ygoDetailPrint.printID.Substring(0, 10));
+			if (e.Button != MouseButtons.Right)
+				return;
+			if (char.IsLetter(ygoDetailPrint.printID[ygoDetailPrint.printID.Length - 1]))
+				Process.Start("https://yugipedia.com/wiki/" + ygoDetailPrint.printID.Substring(0, ygoDetailPrint.printID.Length - 1));
+			else
+				Process.Start("https://yugipedia.com/wiki/" + ygoDetailPrint.printID);
 		}
 
 		//Edit card data
@@ -1585,7 +1589,10 @@ namespace CollectionTracker {
 				ygoCardrefField.SelectedItem = ygoCatalog.cards.FirstOrDefault(c => c.name.Equals("_"));
 				string code = set.code;
 				string num = ygoNumberField.Value.ToString().PadLeft(3, '0');
-				ygoPrintIDField.Text = code + "-EN" + num;
+				if (ygoPrintIDENToggle.Checked)
+					ygoPrintIDField.Text = code + "-EN" + num;
+				else
+					ygoPrintIDField.Text = code + "-" + num;
 				string path = "resources/ygo/" + code + "/EN" + num;
 				ygoCardrefDescriptor.Text = path;
 				if (YGO_Utils.TryLoadCardImage(ygoPrintImgbox, path + ".png", ygoImgpathLabel))
