@@ -33,7 +33,7 @@ namespace CollectionTracker {
 			pkmnCatalog = Catalog.LoadFromFile("resources/pkmn/catalog2.bin");
 
 			//Open homepage
-			page = new Homepage(this);
+			SetPage(new Homepage(this));
 
 		}
 
@@ -43,7 +43,12 @@ namespace CollectionTracker {
 		public void SetCatalogPKMN() => curCatalog = pkmnCatalog;
 
 		//Replace current page
-		public void SetPage(TrackerPage page) => this.page = page;
+		public void SetPage(TrackerPage page) {
+			if (this.page != null)
+				Controls.Remove(this.page.Panel);
+			Controls.Add(page.Panel);
+			this.page = page;
+		}
 
 	}
 

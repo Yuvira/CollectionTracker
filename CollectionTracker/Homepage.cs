@@ -76,9 +76,7 @@ namespace CollectionTracker {
 		}
 
 		//Show setlist
-		private void OpenSetlist(object sender, EventArgs e) {
-
-		}
+		private void OpenSetlist(object sender, EventArgs e) => parent.SetPage(new Setlist(parent));
 
 		//Search event handlers
 		private void SearchButtonPressed(object sender, EventArgs e) => Search();
