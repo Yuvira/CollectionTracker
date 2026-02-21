@@ -16,6 +16,7 @@ namespace CollectionTracker {
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
 		}
 		public void AddBorder(Color color, int width) => pens.Add(new Pen(color, width));
+		public void ClearBorders() => pens.Clear();
 		protected override void OnPaint(PaintEventArgs e) {
 			if (pens.Count > 0) {
 				e.Graphics.FillRectangle(Utils.BRUSH_BACK, ClientRectangle);

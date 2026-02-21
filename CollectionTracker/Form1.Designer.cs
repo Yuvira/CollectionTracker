@@ -361,7 +361,7 @@ namespace CollectionTracker {
 			this.pkmnCatalogIndex = new System.Windows.Forms.Label();
 			this.pkmnDetailPage = new System.Windows.Forms.TabPage();
 			this.pkmnDetailFilterCountLabel = new System.Windows.Forms.Label();
-			this.pkmnPrintingsPanel = new System.Windows.Forms.Panel();
+			this.pkmnPrintingsPanel = new TrackerPanel();
 			this.pkmnDetailDialog = new System.Windows.Forms.Label();
 			this.pkmnDetailAutogenButton = new System.Windows.Forms.Button();
 			this.pkmnDeletePrintingButton = new System.Windows.Forms.Button();
@@ -370,7 +370,7 @@ namespace CollectionTracker {
 			this.pkmnCardtipPanel = new System.Windows.Forms.Panel();
 			this.pkmnCardtipImage = new System.Windows.Forms.PictureBox();
 			this.pkmnTooltipPanel = new System.Windows.Forms.Panel();
-			this.pkmnDetailPanel = new System.Windows.Forms.Panel();
+			this.pkmnDetailPanel = new TrackerPanel();
 			this.pkmnOwnedPrintingsLabel = new System.Windows.Forms.Label();
 			this.pkmnReloadLocationsButton = new System.Windows.Forms.Button();
 			this.pkmnEditPrintButton = new System.Windows.Forms.Button();
@@ -5507,7 +5507,7 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Panel pkmnCardtipPanel;
 		private System.Windows.Forms.PictureBox pkmnCardtipImage;
 		private System.Windows.Forms.Panel pkmnTooltipPanel;
-		private System.Windows.Forms.Panel pkmnDetailPanel;
+		private TrackerPanel pkmnDetailPanel;
 		private System.Windows.Forms.Button pkmnReloadLocationsButton;
 		private System.Windows.Forms.Button pkmnEditPrintButton;
 		private System.Windows.Forms.Button pkmnEditCardButton;
@@ -5692,7 +5692,7 @@ namespace CollectionTracker {
 		private System.Windows.Forms.Button ygoImportButton;
 		private System.Windows.Forms.TextBox ygoImportField;
 		private System.Windows.Forms.GroupBox mtgPrintingsBox;
-		private System.Windows.Forms.Panel pkmnPrintingsPanel;
+		private TrackerPanel pkmnPrintingsPanel;
 		private System.Windows.Forms.Button pkmnTrainerButton;
 		private System.Windows.Forms.Button pkmnClipboardexButton;
 		private System.Windows.Forms.Button pkmnClipboardPrismButton;

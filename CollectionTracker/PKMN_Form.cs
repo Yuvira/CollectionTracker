@@ -536,7 +536,7 @@ namespace CollectionTracker {
 			Color borderColour2 = PKMN_Utils.GetColourFromCardType(card.cardTypes);
 
 			//Header box
-			Panel headerPanel = Utils.GeneratePanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
+			TrackerPanel headerPanel = Utils.GenerateTrackerPanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
 			pkmnDetailPage.Controls.Add(headerPanel);
 
 			//Name
@@ -581,6 +581,7 @@ namespace CollectionTracker {
 			//Size box and set position for next
 			y2 += BOTTOM_PAD;
 			headerPanel.Height = y2;
+			PKMN_AddDetailPanelPaintEvent(headerPanel, borderColour, borderColour2);
 			pkmnDetailPanels.Add(headerPanel);
 			y += y2 + 5;
 
@@ -589,12 +590,13 @@ namespace CollectionTracker {
 
 				//Box and text
 				y2 = TOP_PAD;
-				Panel oraclePanel = Utils.GeneratePanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
+				TrackerPanel oraclePanel = Utils.GenerateTrackerPanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
 				pkmnDetailPage.Controls.Add(oraclePanel);
 				y2 += BOTTOM_PAD + PKMN_GenerateDescription(PKMN_AddAbilityMarkers(card.oracleText), oraclePanel, new Point(LEFT_PAD, y2));
 
 				//Size box and set position for next
 				oraclePanel.Height = y2;
+				PKMN_AddDetailPanelPaintEvent(oraclePanel, borderColour, borderColour2);
 				pkmnDetailPanels.Add(oraclePanel);
 				y += y2 + 5;
 
@@ -605,7 +607,7 @@ namespace CollectionTracker {
 
 				//Footer box
 				y2 = TOP_PAD;
-				Panel footerPanel = Utils.GeneratePanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
+				TrackerPanel footerPanel = Utils.GenerateTrackerPanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
 				pkmnDetailPage.Controls.Add(footerPanel);
 
 				//Weakness
@@ -623,6 +625,7 @@ namespace CollectionTracker {
 				//Size box and set position for next
 				y2 += BOTTOM_PAD - LINE_SPACING;
 				footerPanel.Height = y2;
+				PKMN_AddDetailPanelPaintEvent(footerPanel, borderColour, borderColour2);
 				pkmnDetailPanels.Add(footerPanel);
 				y += y2 + 5;
 
@@ -633,7 +636,7 @@ namespace CollectionTracker {
 
 				//Flavor box
 				y2 = TOP_PAD;
-				Panel flavorPanel = Utils.GeneratePanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
+				TrackerPanel flavorPanel = Utils.GenerateTrackerPanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
 				pkmnDetailPage.Controls.Add(flavorPanel);
 
 				//Text
@@ -645,6 +648,7 @@ namespace CollectionTracker {
 
 				//Size box and set position for next
 				flavorPanel.Height = y2;
+				PKMN_AddDetailPanelPaintEvent(flavorPanel, borderColour, borderColour2);
 				pkmnDetailPanels.Add(flavorPanel);
 				y += y2 + 5;
 
@@ -658,10 +662,8 @@ namespace CollectionTracker {
 			PKMN_LoadPrintingsList(print.card, print);
 
 			//Location and printing borders
-			pkmnDetailPage.Controls.Remove(pkmnDetailPanel);
-			pkmnDetailPage.Controls.Remove(pkmnPrintingsPanel);
-			pkmnDetailPage.Controls.Add(pkmnDetailPanel);
-			pkmnDetailPage.Controls.Add(pkmnPrintingsPanel);
+			PKMN_AddDetailPanelPaintEvent(pkmnDetailPanel, borderColour, borderColour2);
+			PKMN_AddDetailPanelPaintEvent(pkmnPrintingsPanel, borderColour, borderColour2);
 
 			//Nav buttons
 			int idx = pkmnPrintFilter.IndexOf(print);
@@ -1257,6 +1259,14 @@ namespace CollectionTracker {
 				pkmnPrintingsPanel.Controls.Add(label);
 			}
 			pkmnPrintingsPanel.Height = TOP_PAD + BOTTOM_PAD + (prints.Count * TEXT_HEIGHT);
+		}
+
+		//Create paint events for detail panels
+		private void PKMN_AddDetailPanelPaintEvent(TrackerPanel panel, Color col1, Color col2) {
+			panel.ClearBorders();
+			panel.AddBorder(col1, 3);
+			if (col2 != Color.Empty)
+				panel.AddBorder(col2, 1);
 		}
 
 		//Flip card image
