@@ -33,9 +33,6 @@ namespace CollectionTracker {
 			YGO_Utils.TryLoadCardImage(ygoPrintImgboxBack, YGO_Utils.CARD_BACK_PATH);
 			ygoClient.DefaultRequestHeaders.Add("User-Agent", "CollectionTracker");
 			ygoClient.DefaultRequestHeaders.Add("Accept", "application/json");
-			ygoTooltipPanel.Paint += Utils.PanelPaintDefault;
-			ygoDetailPanel.Paint += Utils.PanelPaintDefault;
-			ygoPrintingsPanel.Paint += Utils.PanelPaintDefault;
 			YGO_LoadCatalog();
 		}
 

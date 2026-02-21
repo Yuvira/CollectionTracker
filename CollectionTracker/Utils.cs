@@ -6,6 +6,29 @@ using System.Windows.Forms;
 
 namespace CollectionTracker {
 
+	#region Custom Controls
+
+	//Custom panel class
+	public class TrackerPanel : Panel {
+		private List<Pen> pens;
+		public TrackerPanel() : base() {
+			pens = new List<Pen>();
+			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+		}
+		public void AddBorder(Color color, int width) => pens.Add(new Pen(color, width));
+		protected override void OnPaint(PaintEventArgs e) {
+			if (pens.Count > 0) {
+				e.Graphics.FillRectangle(Utils.BRUSH_BACK, ClientRectangle);
+				foreach (Pen pen in pens)
+					e.Graphics.DrawRectangle(pen, 0, 0, ClientSize.Width - 1, ClientSize.Height - 1);
+			}
+			else
+				base.OnPaint(e);
+		}
+	}
+
+	#endregion
+
 	//Global utilities
 	public static class Utils {
 
@@ -23,40 +46,34 @@ namespace CollectionTracker {
 		public static readonly Font FONT_ITALIC = new Font(FONT_DEFAULT, FontStyle.Italic);
 		public static readonly Font FONT_UNDERLINE = new Font(FONT_DEFAULT, FontStyle.Underline);
 
-		//Custom colours
+		//Brush references
+		public static readonly SolidBrush BRUSH_BACK = new SolidBrush(COLOR_BACK);
+
+		//Color references
+		public static readonly Color COLOR_BACK = SystemColors.ControlDark;
+		public static readonly Color COLOR_FRONT = Color.Black;
 		public static readonly Color COLOR_DARK_ORANGE = BlendColours(new List<Color> { Color.Orange, Color.Black });
 
 		#region Control Generators
-
-		//Panel paint event managers
-		private static List<(Panel, Color, int)> paintPanels = new List<(Panel, Color, int)>();
-		public static void AddPanelPaintEvent(Panel panel, Color colour, int width, bool removeExisting = true) {
-			if (removeExisting)
-				RemovePanelPaintEvent(panel);
-			paintPanels.Add((panel, colour, width));
-		}
-		public static void RemovePanelPaintEvent(Panel panel) => paintPanels.RemoveAll(pp => pp.Item1 == panel);
 
 		//Panel generator
 		public static Panel GeneratePanel(Point position, Size size) {
 			Panel panel = new Panel();
 			panel.Location = position;
 			panel.Size = size;
-			panel.Paint += PanelPaintDefault;
+			panel.BorderStyle = BorderStyle.FixedSingle;
 			return panel;
 		}
-		public static void PanelPaintDefault(object sender, PaintEventArgs e) {
-			Panel panel = sender as Panel;
-			if (!paintPanels.Select(pp => pp.Item1).Contains(panel)) {
-				PanelPaint(e.Graphics, panel, 1, SystemColors.ControlLight, ButtonBorderStyle.Solid);
-				return;
-			}
-			foreach ((Panel panel, Color colour, int width) pp in paintPanels)
-				if (panel == pp.panel)
-					PanelPaint(e.Graphics, panel, pp.width, pp.colour, ButtonBorderStyle.Solid);
+
+		//Custom panel generator
+		public static TrackerPanel GenerateTrackerPanel(Point position, Size size, bool useDefaultBorder = false) {
+			TrackerPanel panel = new TrackerPanel();
+			panel.Location = position;
+			panel.Size = size;
+			if (useDefaultBorder)
+				panel.AddBorder(COLOR_FRONT, 1);
+			return panel;
 		}
-		public static void PanelPaint(Graphics graphics, Panel panel, int width, Color color, ButtonBorderStyle style) =>
-			ControlPaint.DrawBorder(graphics, panel.DisplayRectangle, color, width, style, color, width, style, color, width, style, color, width, style);
 
 		//Button generator
 		public static Button GenerateButton(Point position, Size size, string text, string imgPath = "") {
