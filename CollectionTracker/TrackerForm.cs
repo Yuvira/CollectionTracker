@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿using ProtoBuf;
+using System;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -28,9 +31,15 @@ namespace CollectionTracker {
 			KeyPreview = true;
 
 			//Initialize catalogs
-			mtgCatalog = Catalog.LoadFromFile("resources/mtg/catalog2.bin");
-			ygoCatalog = Catalog.LoadFromFile("resources/ygo/catalog2.bin");
-			pkmnCatalog = Catalog.LoadFromFile("resources/pkmn/catalog2.bin");
+			if (TryLoadCatalogFromFile("resources/mtg/catalog.bin", out MTG_Catalog mtg))
+				mtgCatalog = new Catalog(mtg);
+			if (TryLoadCatalogFromFile("resources/ygo/catalog.bin", out YGO_Catalog ygo))
+				ygoCatalog = new Catalog(ygo);
+			if (TryLoadCatalogFromFile("resources/pkmn/catalog.bin", out PKMN_Catalog pkmn))
+				pkmnCatalog = new Catalog(pkmn);
+			//mtgCatalog = Catalog.LoadFromFile("resources/mtg/catalog2.bin");
+			//ygoCatalog = Catalog.LoadFromFile("resources/ygo/catalog2.bin");
+			//pkmnCatalog = Catalog.LoadFromFile("resources/pkmn/catalog2.bin");
 
 			//Open homepage
 			SetPage(new Homepage(this));
@@ -48,6 +57,20 @@ namespace CollectionTracker {
 				Controls.Remove(this.page.Panel);
 			Controls.Add(page.Panel);
 			this.page = page;
+		}
+
+		//Catalog loaders
+		public static bool TryLoadCatalogFromFile<T>(string path, out T catalog) {
+			try {
+				using (Stream stream = File.Open(path, FileMode.Open))
+					catalog = Serializer.Deserialize<T>(stream);
+				return true;
+			}
+			catch (Exception ex) {
+				MessageBox.Show($"Error: {ex.Message}");
+				catalog = default;
+				return false;
+			}
 		}
 
 	}

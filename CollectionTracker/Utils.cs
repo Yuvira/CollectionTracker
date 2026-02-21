@@ -328,6 +328,9 @@ namespace CollectionTracker {
 
 		#region Misc. Utilities
 
+		//Split by string delimiter
+		public static string[] SplitString(string str, string delim) => str.Split(new string[] { delim }, StringSplitOptions.None);
+
 		//Measure width of text
 		public static int MeasureWidth(string str, Font font, bool useMargin = true) {
 			if (useMargin)

@@ -32,6 +32,58 @@ namespace CollectionTracker {
 			symbols = new List<Symbol>();
 		}
 
+		#region Conversions
+
+		//Conversion
+		public Catalog(MTG_Catalog catalog) {
+			sets = new List<Set>();
+			cards = new List<Card>();
+			printings = new List<Printing>();
+			symbols = new List<Symbol>();
+			for (int i = 0; i < catalog.sets.Count; ++i)
+				sets.Add(new Set(catalog.sets[i]));
+			for (int i = 0; i < catalog.cards.Count; ++i)
+				cards.Add(new Card(catalog.cards[i]));
+			for (int i = 0; i < catalog.printings.Count; ++i)
+				printings.Add(new Printing(catalog.printings[i]));
+			for (int i = 0; i < catalog.symbols.Count; ++i)
+				symbols.Add(new Symbol(catalog.symbols[i]));
+			foreach (Printing print in printings)
+				print.LoadRefs(this);
+		}
+		public Catalog(YGO_Catalog catalog) {
+			sets = new List<Set>();
+			cards = new List<Card>();
+			printings = new List<Printing>();
+			symbols = new List<Symbol>();
+			for (int i = 0; i < catalog.sets.Count; ++i)
+				sets.Add(new Set(catalog.sets[i]));
+			for (int i = 0; i < catalog.cards.Count; ++i)
+				cards.Add(new Card(catalog.cards[i]));
+			for (int i = 0; i < catalog.printings.Count; ++i)
+				printings.Add(new Printing(catalog.printings[i]));
+			foreach (Printing print in printings)
+				print.LoadRefs(this);
+		}
+		public Catalog(PKMN_Catalog catalog) {
+			sets = new List<Set>();
+			cards = new List<Card>();
+			printings = new List<Printing>();
+			symbols = new List<Symbol>();
+			for (int i = 0; i < catalog.sets.Count; ++i)
+				sets.Add(new Set(catalog.sets[i]));
+			for (int i = 0; i < catalog.cards.Count; ++i)
+				cards.Add(new Card(catalog.cards[i]));
+			for (int i = 0; i < catalog.printings.Count; ++i)
+				printings.Add(new Printing(catalog.printings[i]));
+			for (int i = 0; i < catalog.symbols.Count; ++i)
+				symbols.Add(new Symbol(catalog.symbols[i]));
+			foreach (Printing print in printings)
+				print.LoadRefs(this);
+		}
+
+		#endregion
+
 		//Load
 		public static Catalog LoadFromFile(string path) {
 			try {
@@ -68,9 +120,11 @@ namespace CollectionTracker {
 		//Serialized properties
 		[ProtoMember(1)] private string name;
 		[ProtoMember(2)] private string code;
-		[ProtoMember(3)] private string imgPath;
+		[ProtoMember(3)] private string type;
 		[ProtoMember(4)] private string date;
-		[ProtoMember(5)] private string prefixOrder;
+		[ProtoMember(5)] private string imgPath;
+		[ProtoMember(6)] private int mainCount;
+		[ProtoMember(7)] private string prefixOrder;
 
 		//Accessors
 		public string Name => name;
@@ -81,21 +135,58 @@ namespace CollectionTracker {
 		public string PrefixOrder => prefixOrder;
 
 		//Constructor
-		public Set() : this("", "", "", DateTime.Now.ToString("yyyy-MM-dd"), "") { }
-		public Set(string name, string code, string imgPath, string date, string prefixOrder) {
+		public Set() : this("", "", "", DateTime.Now.ToString("yyyy-MM-dd"), "", 0, "") { }
+		public Set(string name, string code, string type, string date, string imgPath, int mainCount, string prefixOrder) {
 			this.name = name;
 			this.code = code;
-			this.imgPath = imgPath;
+			this.type = type;
 			this.date = date;
+			this.imgPath = imgPath;
+			this.mainCount = mainCount;
 			this.prefixOrder = prefixOrder;
 		}
+
+		#region Conversions
+
+		//Conversions
+		public Set(MTG_Set set) {
+			name = set.name;
+			code = set.code;
+			type = "";
+			date = set.date.ToString("yyyy-MM-dd");
+			imgPath = set.imgPath;
+			mainCount = 0;
+			prefixOrder = "";
+		}
+		public Set(YGO_Set set) {
+			name = set.name;
+			code = set.code;
+			type = "";
+			date = set.date.ToString("yyyy-MM-dd");
+			imgPath = set.imgPath;
+			mainCount = 0;
+			prefixOrder = "";
+		}
+		public Set(PKMN_Set set) {
+			name = set.name;
+			code = set.code;
+			type = set.setType;
+			date = set.date.ToString("yyyy-MM-dd");
+			imgPath = set.imgPath;
+			mainCount = set.mainSetCount;
+			prefixOrder = "";
+		}
+
+		#endregion
 
 		//Copy function
 		public void Copy(Set set) {
 			name = set.name;
 			code = set.code;
-			imgPath = set.imgPath;
+			type = set.type;
 			date = set.date;
+			imgPath = set.imgPath;
+			mainCount = set.mainCount;
 			prefixOrder = set.prefixOrder;
 		}
 
@@ -119,12 +210,184 @@ namespace CollectionTracker {
 		//Serialized properties
 		[ProtoMember(1)] private Dictionary<string, string> fields;
 		[ProtoMember(2)] private List<Dictionary<string, string>> faces;
+		[ProtoMember(3)] private bool favorite;
 
 		//Constructor
 		public Card() {
 			fields = new Dictionary<string, string>();
 			faces = new List<Dictionary<string, string>>();
+			favorite = false;
 		}
+
+		#region Conversions
+
+		//Conversions
+		private static string MTGColorToString(MTG_Colour color) {
+			string s = "";
+			if (color.HasFlag(MTG_Colour.White))
+				s += "W";
+			if (color.HasFlag(MTG_Colour.Blue))
+				s += "U";
+			if (color.HasFlag(MTG_Colour.Black))
+				s += "B";
+			if (color.HasFlag(MTG_Colour.Red))
+				s += "R";
+			if (color.HasFlag(MTG_Colour.Green))
+				s += "G";
+			return s;
+		}
+		public Card(MTG_Card card) {
+			fields = new Dictionary<string, string>();
+			faces = new List<Dictionary<string, string>>();
+			if (!card.name.Contains(" // ")) {
+				if (!string.IsNullOrEmpty(card.name))
+					fields.Add("name", card.name);
+				fields.Add("identity", MTGColorToString(card.identity));
+				fields.Add("color", MTGColorToString(card.colour));
+				if (!string.IsNullOrEmpty(card.cost))
+					fields.Add("cost", card.cost);
+				if (!string.IsNullOrEmpty(card.cardTypes)) {
+					fields.Add("type", card.cardTypes);
+					if (card.cardTypes.Contains("Creature") || card.cardTypes.Contains("Vehicle")) {
+						fields.Add("power", card.power.ToString());
+						fields.Add("toughness", card.toughness.ToString());
+					}
+					if (card.cardTypes.Contains("Planeswalker"))
+						fields.Add("loyalty", card.toughness.ToString());
+				}
+				if (!string.IsNullOrEmpty(card.oracleText))
+					fields.Add("oracle", card.oracleText);
+			}
+			else {
+				fields.Add("identity", MTGColorToString(card.identity));
+				Dictionary<string, string> front = new Dictionary<string, string>();
+				Dictionary<string, string> back = new Dictionary<string, string>();
+				string[] names = Utils.SplitString(card.name, " // ");
+				if (names.Length > 0 && !string.IsNullOrEmpty(names[0]))
+					front.Add("name", names[0]);
+				if (names.Length > 1 && !string.IsNullOrEmpty(names[1]))
+					back.Add("name", names[1]);
+				front.Add("color", MTGColorToString(card.colour));
+				if (!string.IsNullOrEmpty(card.cost)) {
+					if (!card.cost.Contains(" // "))
+						front.Add("cost", card.cost);
+					else {
+						string[] costs = Utils.SplitString(card.cost, " // ");
+						if (costs.Length > 0 && !string.IsNullOrEmpty(costs[0]))
+							front.Add("cost", costs[0]);
+						if (costs.Length > 1 && !string.IsNullOrEmpty(costs[1]))
+							back.Add("cost", costs[1]);
+					}
+				}
+				if (!string.IsNullOrEmpty(card.cardTypes)) {
+					if (!card.cardTypes.Contains(" // ")) {
+						front.Add("type", card.cardTypes);
+						if (card.cardTypes.Contains("Creature") || card.cardTypes.Contains("Vehicle")) {
+							front.Add("power", card.power.ToString());
+							front.Add("toughness", card.toughness.ToString());
+						}
+						if (card.cardTypes.Contains("Planeswalker"))
+							front.Add("loyalty", card.toughness.ToString());
+					}
+					else {
+						string[] types = Utils.SplitString(card.cardTypes, " // ");
+						if (types.Length > 0 && !string.IsNullOrEmpty(types[0])) {
+							front.Add("type", types[0]);
+							if (types[0].Contains("Creature") || types[0].Contains("Vehicle")) {
+								front.Add("power", card.power.ToString());
+								front.Add("toughness", card.toughness.ToString());
+							}
+							if (types[0].Contains("Planeswalker"))
+								front.Add("loyalty", card.toughness.ToString());
+						}
+						if (types.Length > 1 && !string.IsNullOrEmpty(types[1])) {
+							back.Add("type", types[1]);
+							if (types[1].Contains("Creature") || types[1].Contains("Vehicle")) {
+								back.Add("power", card.power2.ToString());
+								back.Add("toughness", card.toughness2.ToString());
+							}
+							if (types[1].Contains("Planeswalker"))
+								back.Add("loyalty", card.toughness2.ToString());
+						}
+					}
+				}
+				if (!string.IsNullOrEmpty(card.oracleText)) {
+					if (!card.oracleText.Contains("\r\n//\r\n"))
+						front.Add("oracle", card.oracleText);
+					else {
+						string[] texts = Utils.SplitString(card.oracleText, "\r\n//\r\n");
+						if (texts.Length > 0 && !string.IsNullOrEmpty(texts[0]))
+							front.Add("oracle", texts[0]);
+						if (texts.Length > 1 && !string.IsNullOrEmpty(texts[1]))
+							back.Add("oracle", texts[1]);
+					}
+				}
+				faces.Add(front);
+				faces.Add(back);
+			}
+			favorite = false;
+		}
+		public Card(YGO_Card card) {
+			fields = new Dictionary<string, string>();
+			faces = new List<Dictionary<string, string>>();
+			if (!string.IsNullOrEmpty(card.name))
+				fields.Add("name", card.name);
+			if (!string.IsNullOrEmpty(card.cardType))
+				fields.Add("cardtype", card.cardType);
+			if (!string.IsNullOrEmpty(card.attribute))
+				fields.Add("attribute", card.attribute);
+			if (!string.IsNullOrEmpty(card.property))
+				fields.Add("property", card.property);
+			if (!string.IsNullOrEmpty(card.types)) {
+				fields.Add("monstertype", card.types);
+				fields.Add("level", card.level.ToString());
+				fields.Add("attack", card.atk.ToString());
+				fields.Add("defense", card.def.ToString());
+				if (card.types.Contains("Pendulum"))
+					fields.Add("pendulum", card.pendulumScale.ToString());
+			}
+			if (!string.IsNullOrEmpty(card.oracleText)) {
+				if (!card.oracleText.Contains("\r\n\r\n//\r\n\r\n"))
+					fields.Add("oracle", card.oracleText);
+				else {
+					Dictionary<string, string> front = new Dictionary<string, string>();
+					Dictionary<string, string> back = new Dictionary<string, string>();
+					string[] texts = Utils.SplitString(card.oracleText, "\r\n\r\n//\r\n\r\n");
+					if (texts.Length > 0 && !string.IsNullOrEmpty(texts[0]))
+						front.Add("oracle", texts[0]);
+					if (texts.Length > 1 && !string.IsNullOrEmpty(texts[1]))
+						back.Add("oracle", texts[1]);
+					faces.Add(front);
+					faces.Add(back);
+				}
+			}
+			favorite = card.favorite;
+		}
+		public Card(PKMN_Card card) {
+			fields = new Dictionary<string, string>();
+			faces = new List<Dictionary<string, string>>();
+			if (!string.IsNullOrEmpty(card.name))
+				fields.Add("name", card.name);
+			if (!string.IsNullOrEmpty(card.energyType))
+				fields.Add("energy", card.energyType);
+			if (!string.IsNullOrEmpty(card.cardTypes))
+				fields.Add("type", card.cardTypes);
+			if (!string.IsNullOrEmpty(card.stage))
+				fields.Add("stage", card.stage);
+			if (card.hp > 0)
+				fields.Add("hp", card.hp.ToString());
+			if (!string.IsNullOrEmpty(card.oracleText))
+				fields.Add("oracle", card.oracleText);
+			if (!string.IsNullOrEmpty(card.weakness))
+				fields.Add("weak", card.weakness);
+			if (!string.IsNullOrEmpty(card.resistance))
+				fields.Add("resist", card.resistance);
+			if (!string.IsNullOrEmpty(card.retreatCost))
+				fields.Add("retreat", card.retreatCost);
+			favorite = false;
+		}
+
+		#endregion
 
 		//Copy function
 		public void Copy(Card card) {
@@ -132,6 +395,7 @@ namespace CollectionTracker {
 			faces = new List<Dictionary<string, string>>();
 			foreach (Dictionary<string, string> face in card.faces)
 				faces.Add(new Dictionary<string, string>(face));
+			favorite = card.favorite;
 		}
 
 	}
@@ -148,6 +412,7 @@ namespace CollectionTracker {
 		[ProtoMember(2)] private int cardIndex;
 		[ProtoMember(3)] private List<Treatment> treatments;
 		[ProtoMember(4)] private Dictionary<string, string> fields;
+		[ProtoMember(4)] private List<string> imagePaths;
 
 		//Private properties
 		private Set set;
@@ -167,7 +432,70 @@ namespace CollectionTracker {
 			this.card = card;
 			this.treatments = new List<Treatment>(treatments);
 			fields = new Dictionary<string, string>();
+			imagePaths = new List<string>();
 		}
+
+		#region Conversions
+
+		//Conversions
+		public Printing(MTG_Printing print) {
+			setIndex = print.SetIndex;
+			cardIndex = print.CardIndex;
+			treatments = new List<Treatment>();
+			foreach (MTG_Treatment treatment in print.treatments)
+				treatments.Add(new Treatment(treatment));
+			fields = new Dictionary<string, string>();
+			fields.Add("cn", print.cardNumber.ToString());
+			if (!string.IsNullOrEmpty(print.rarity))
+				fields.Add("rarity", print.rarity);
+			if (!string.IsNullOrEmpty(print.flavorText))
+				fields.Add("flavor", print.flavorText);
+			if (!string.IsNullOrEmpty(print.scryfallID))
+				fields.Add("printid", print.scryfallID);
+			imagePaths = new List<string>();
+			if (!string.IsNullOrEmpty(print.imgPath))
+				imagePaths.Add(print.imgPath);
+			if (!string.IsNullOrEmpty(print.backImgPath))
+				imagePaths.Add(print.backImgPath);
+		}
+		public Printing(YGO_Printing print) {
+			setIndex = print.SetIndex;
+			cardIndex = print.CardIndex;
+			treatments = new List<Treatment>();
+			foreach (YGO_Rarity treatment in print.rarities)
+				treatments.Add(new Treatment(treatment));
+			fields = new Dictionary<string, string>();
+			fields.Add("cn", print.cardNumber.ToString());
+			if (!string.IsNullOrEmpty(print.printID))
+				fields.Add("printid", print.printID);
+			imagePaths = new List<string>();
+			if (!string.IsNullOrEmpty(print.imgPath))
+				imagePaths.Add(print.imgPath);
+			if (!string.IsNullOrEmpty(print.backImgPath))
+				imagePaths.Add(print.backImgPath);
+		}
+		public Printing(PKMN_Printing print) {
+			setIndex = print.SetIndex;
+			cardIndex = print.CardIndex;
+			treatments = new List<Treatment>();
+			foreach (PKMN_Treatment treatment in print.treatments)
+				treatments.Add(new Treatment(treatment));
+			fields = new Dictionary<string, string>();
+			fields.Add("cn", print.cardNumber.ToString());
+			if (!string.IsNullOrEmpty(print.rarity))
+				fields.Add("rarity", print.rarity);
+			if (!string.IsNullOrEmpty(print.flavorText))
+				fields.Add("flavor", print.flavorText);
+			if (!string.IsNullOrEmpty(print.printID))
+				fields.Add("printid", print.printID);
+			imagePaths = new List<string>();
+			if (!string.IsNullOrEmpty(print.imgPath))
+				imagePaths.Add(print.imgPath);
+			if (!string.IsNullOrEmpty(print.backImgPath))
+				imagePaths.Add(print.backImgPath);
+		}
+
+		#endregion
 
 		//Copy function
 		public void Copy(Printing print) {
@@ -177,6 +505,7 @@ namespace CollectionTracker {
 			foreach (Treatment treatment in print.treatments)
 				treatments.Add(new Treatment(treatment));
 			fields = new Dictionary<string, string>(print.fields);
+			imagePaths = new List<string>(print.imagePaths);
 		}
 
 		//Count modifiers
@@ -239,6 +568,30 @@ namespace CollectionTracker {
 			this.name = name;
 			locations = new List<Location>();
 		}
+
+		#region Conversions
+
+		//Conversions
+		public Treatment(MTG_Treatment treatment) {
+			name = treatment.name;
+			locations = new List<Location>();
+			for (int i = 0; i < treatment.locations.Count; ++i)
+				locations.Add(new Location(treatment.locations[i], treatment.quantities[i]));
+		}
+		public Treatment(YGO_Rarity treatment) {
+			name = treatment.name;
+			locations = new List<Location>();
+			for (int i = 0; i < treatment.locations.Count; ++i)
+				locations.Add(new Location(treatment.locations[i], treatment.quantities[i]));
+		}
+		public Treatment(PKMN_Treatment treatment) {
+			name = treatment.name;
+			locations = new List<Location>();
+			for (int i = 0; i < treatment.locations.Count; ++i)
+				locations.Add(new Location(treatment.locations[i], treatment.quantities[i]));
+		}
+
+		#endregion
 
 		//Copy constructor
 		public Treatment(Treatment treatment) {
@@ -333,6 +686,24 @@ namespace CollectionTracker {
 			this.imgPath = imgPath;
 			this.aspect = aspect;
 		}
+
+		#region Conversions
+
+		//Conversions
+		public Symbol(MTG_Symbol symbol) {
+			name = symbol.name;
+			text = symbol.symbol;
+			imgPath = symbol.imgPath;
+			aspect = symbol.aspect;
+		}
+		public Symbol(PKMN_Symbol symbol) {
+			name = symbol.name;
+			text = symbol.symbol;
+			imgPath = symbol.imgPath;
+			aspect = symbol.aspect;
+		}
+
+		#endregion
 
 		//Copy constructor
 		public Symbol(Symbol symbol) {

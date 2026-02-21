@@ -130,6 +130,10 @@ namespace CollectionTracker {
 		[ProtoMember(8)] private int cardIndex; public MTG_Card card;
 		[ProtoMember(9)] public string scryfallID;
 
+		//Accessors
+		public int SetIndex => setIndex;
+		public int CardIndex => cardIndex;
+
 		//Constructor
 		public MTG_Printing() : this(null, 0, "", "", "", "", new List<MTG_Treatment>(), new MTG_Card(), "") { }
 		public MTG_Printing(MTG_Set set, int cardNumber, string flavorText, string imgPath, string backImgPath, string rarity, List<MTG_Treatment> treatments, MTG_Card card, string scryfallID) {

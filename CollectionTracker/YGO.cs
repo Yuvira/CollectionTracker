@@ -114,6 +114,10 @@ namespace CollectionTracker {
 		[ProtoMember(7)] private int cardIndex; public YGO_Card card;
 		[ProtoMember(8)] public string printID;
 
+		//Accessors
+		public int SetIndex => setIndex;
+		public int CardIndex => cardIndex;
+
 		//Constructor
 		public YGO_Printing() : this(null, 0, "", "", "", new List<YGO_Rarity>(), new YGO_Card(), "") { }
 		public YGO_Printing(YGO_Set set, int cardNumber, string flavorText, string imgPath, string backImgPath, List<YGO_Rarity> rarities, YGO_Card card, string printID) {

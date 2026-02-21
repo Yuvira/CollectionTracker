@@ -131,6 +131,10 @@ namespace CollectionTracker {
 		[ProtoMember(8)] private int cardIndex; public PKMN_Card card;
 		[ProtoMember(9)] public string printID;
 
+		//Accessors
+		public int SetIndex => setIndex;
+		public int CardIndex => cardIndex;
+
 		//Constructor
 		public PKMN_Printing() : this(null, 0, "", "", "", "", new List<PKMN_Treatment>(), new PKMN_Card(), "") { }
 		public PKMN_Printing(PKMN_Set set, int cardNumber, string flavorText, string imgPath, string backImgPath, string rarity, List<PKMN_Treatment> treatments, PKMN_Card card, string printID) {
