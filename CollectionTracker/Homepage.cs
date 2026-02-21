@@ -12,10 +12,7 @@ namespace CollectionTracker {
 		TextBox searchBox;
 
 		//Constructor
-		public Homepage(TrackerForm form) : base(form) { }
-
-		//Initializer
-		public override void Init() {
+		public Homepage(TrackerForm form) : base(form) {
 
 			//Catalog selectors
 			TrackerPanel catalogPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(382, 42), panel.Size, new Point(0, 32)));

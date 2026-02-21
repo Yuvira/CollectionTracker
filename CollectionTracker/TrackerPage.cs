@@ -19,11 +19,7 @@ namespace CollectionTracker {
 			parent = form;
 			panel = Utils.GenerateTrackerPanel(new Rectangle(0, parent.ToolbarHeight, form.ClientSize.Width, form.ClientSize.Height - parent.ToolbarHeight));
 			panel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			Init();
 		}
-
-		//Initialize
-		public abstract void Init();
 
 	}
 

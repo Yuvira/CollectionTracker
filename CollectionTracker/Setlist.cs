@@ -8,10 +8,7 @@ namespace CollectionTracker {
 	public class Setlist : TrackerPage {
 
 		//Constructor
-		public Setlist(TrackerForm form) : base(form) { }
-
-		//Initializer
-		public override void Init() {
+		public Setlist(TrackerForm form) : base(form) {
 
 			//Catalog selectors
 			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";
