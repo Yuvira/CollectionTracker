@@ -137,26 +137,26 @@ namespace CollectionTracker {
 			bool missingCardref = cardsInSet.Count(print => print.card.name.Equals("") || print.card.name.Equals("_")) > 0;
 
 			//Set info box
-			Panel setRow = Utils.GeneratePanel(Point.Empty, new Size(820, 60));
+			Panel setRow = Utils.GeneratePanel(new Rectangle(0, 0, 820, 60));
 			pkmnSetlistLayout.Controls.Add(setRow);
 
 			//Filter button
-			Button filter = Utils.GenerateButton(new Point(5, 5), new Size(350, 50), set.name, set.imgPath);
+			Button filter = Utils.GenerateButton(new Rectangle(5, 5, 350, 50), set.name, set.imgPath);
 			filter.Click += new EventHandler((sender, e) => PKMN_FilterCatalogBySet(set));
 			setRow.Controls.Add(filter);
 
 			//Progress label
-			Label label = Utils.GenerateLabel(new Point(360, 20), new Size(100, TEXT_HEIGHT), setOwned.ToString() + '/' + setCount.ToString());
+			Label label = Utils.GenerateLabel(new Rectangle(360, 20, 100, TEXT_HEIGHT), setOwned.ToString() + '/' + setCount.ToString());
 			label.TextAlign = ContentAlignment.MiddleCenter;
 			setRow.Controls.Add(label);
 
 			//Progress bar
-			ProgressBar bar = Utils.GenerateProgressBar(new Point(470, 15), new Size(265, 30), setOwned > 0 ? (int)(((float)setOwned / setCount) * 100) : 0);
+			ProgressBar bar = Utils.GenerateProgressBar(new Rectangle(470, 15, 265, 30), setOwned > 0 ? (int)(((float)setOwned / setCount) * 100) : 0);
 			setRow.Controls.Add(bar);
 
 			//Missing cardref label
 			if (missingCardref) {
-				Label cardrefLabel = Utils.GenerateLabel(new Point(780, 20), new Size(35, TEXT_HEIGHT), "*");
+				Label cardrefLabel = Utils.GenerateLabel(new Rectangle(780, 20, 35, TEXT_HEIGHT), "*");
 				setRow.Controls.Add(cardrefLabel);
 			}
 
@@ -172,7 +172,7 @@ namespace CollectionTracker {
 			string[] toggleTypes = pkmnSetToggles.Select(t => t.Text).Distinct().ToArray();
 			foreach (string type in setTypes) {
 				if (!toggleTypes.Contains(type)) {
-					pkmnSetToggles.Add(Utils.GenerateCheckbox(Point.Empty, new Size(200, 30), true, type));
+					pkmnSetToggles.Add(Utils.GenerateCheckbox(new Rectangle(0, 0, 200, 30), true, type));
 					pkmnSetlistPage.Controls.Add(pkmnSetToggles.Last());
 					pkmnSetToggles.Last().CheckedChanged += new EventHandler(PKMN_OnSetFilterToggled);
 				}
@@ -424,7 +424,7 @@ namespace CollectionTracker {
 				PKMN_Printing print = pkmnPrintFilter[i];
 
 				//Card box
-				Panel cardPanel = Utils.GeneratePanel(new Point(3, 3), new Size(300, 430 + (30 * print.treatments.Count)));
+				Panel cardPanel = Utils.GeneratePanel(new Rectangle(3, 3, 300, 430 + (30 * print.treatments.Count)));
 				if (!print.AnyOwned()) { cardPanel.BackColor = SystemColors.ControlDarkDark; }
 				pkmnCatalogLayout.Controls.Add(cardPanel);
 
@@ -432,7 +432,7 @@ namespace CollectionTracker {
 				cardPanel.SuspendLayout();
 
 				//Image box
-				PictureBox img = Utils.GeneratePictureBox(Point.Empty, new Size(300, 420));
+				PictureBox img = Utils.GeneratePictureBox(new Rectangle(0, 0, 300, 420));
 				img.Click += new EventHandler((sender, e) => PKMN_LoadCardDetails(print));
 				PKMN_Utils.TryLoadCardImage(img, print.imgPath);
 				cardPanel.Controls.Add(img);
@@ -444,21 +444,21 @@ namespace CollectionTracker {
 					PKMN_Treatment treatment = print.treatments[j];
 
 					//Treatment label
-					Label treatmentLabel = Utils.GenerateLabel(new Point(60, 430 + (j * 30)), new Size(115, TEXT_HEIGHT), treatment.name);
+					Label treatmentLabel = Utils.GenerateLabel(new Rectangle(60, 430 + (j * 30), 115, TEXT_HEIGHT), treatment.name);
 					treatmentLabel.TextAlign = ContentAlignment.MiddleRight;
 					cardPanel.Controls.Add(treatmentLabel);
 
 					//Count label
-					Label label = Utils.GenerateLabel(new Point(185, 430 + (j * 30)), new Size(55, TEXT_HEIGHT), print.OwnedCountOfTreatment(treatment.name).ToString());
+					Label label = Utils.GenerateLabel(new Rectangle(185, 430 + (j * 30), 55, TEXT_HEIGHT), print.OwnedCountOfTreatment(treatment.name).ToString());
 					cardPanel.Controls.Add(label);
 
 					//Decrement
-					Button leftButton = Utils.GenerateButton(new Point(5, 425 + (j * 30)), new Size(55, 29), "<");
+					Button leftButton = Utils.GenerateButton(new Rectangle(5, 425 + (j * 30), 55, 29), "<");
 					leftButton.Click += new EventHandler((sender, e) => PKMN_DecrementCardCount(cardPanel, label, print, treatment.name));
 					cardPanel.Controls.Add(leftButton);
 
 					//Increment
-					Button rightButton = Utils.GenerateButton(new Point(240, 425 + (j * 30)), new Size(55, 29), ">");
+					Button rightButton = Utils.GenerateButton(new Rectangle(240, 425 + (j * 30), 55, 29), ">");
 					rightButton.Click += new EventHandler((sender, e) => PKMN_IncrementCardCount(cardPanel, label, print, treatment.name));
 					cardPanel.Controls.Add(rightButton);
 
@@ -536,7 +536,7 @@ namespace CollectionTracker {
 			Color borderColour2 = PKMN_Utils.GetColourFromCardType(card.cardTypes);
 
 			//Header box
-			Panel headerPanel = Utils.GeneratePanel(new Point(pkmnDetailPanel.Location.X, y), new Size(pkmnDetailPanel.Size.Width, 100));
+			Panel headerPanel = Utils.GeneratePanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
 			pkmnDetailPage.Controls.Add(headerPanel);
 
 			//Name
@@ -552,7 +552,7 @@ namespace CollectionTracker {
 				int hpWidth = TextRenderer.MeasureText(hpText.Replace("&", "&&"), Utils.FONT_BOLD).Width - TEXT_MARGIN;
 
 				//Draw HP label
-				Label hp = Utils.GenerateLabel(new Point(pkmnDetailPanel.Size.Width - (symbolWidth + hpWidth), y2), new Size(hpWidth, TEXT_HEIGHT), hpText, Utils.FONT_BOLD);
+				Label hp = Utils.GenerateLabel(new Rectangle(pkmnDetailPanel.Size.Width - (symbolWidth + hpWidth), y2, hpWidth, TEXT_HEIGHT), hpText, Utils.FONT_BOLD);
 				headerPanel.Controls.Add(hp);
 
 				//Draw symbols
@@ -589,7 +589,7 @@ namespace CollectionTracker {
 
 				//Box and text
 				y2 = TOP_PAD;
-				Panel oraclePanel = Utils.GeneratePanel(new Point(pkmnDetailPanel.Location.X, y), new Size(pkmnDetailPanel.Size.Width, 100));
+				Panel oraclePanel = Utils.GeneratePanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
 				pkmnDetailPage.Controls.Add(oraclePanel);
 				y2 += BOTTOM_PAD + PKMN_GenerateDescription(PKMN_AddAbilityMarkers(card.oracleText), oraclePanel, new Point(LEFT_PAD, y2));
 
@@ -605,7 +605,7 @@ namespace CollectionTracker {
 
 				//Footer box
 				y2 = TOP_PAD;
-				Panel footerPanel = Utils.GeneratePanel(new Point(pkmnDetailPanel.Location.X, y), new Size(pkmnDetailPanel.Size.Width, 100));
+				Panel footerPanel = Utils.GeneratePanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
 				pkmnDetailPage.Controls.Add(footerPanel);
 
 				//Weakness
@@ -633,11 +633,11 @@ namespace CollectionTracker {
 
 				//Flavor box
 				y2 = TOP_PAD;
-				Panel flavorPanel = Utils.GeneratePanel(new Point(pkmnDetailPanel.Location.X, y), new Size(pkmnDetailPanel.Size.Width, 100));
+				Panel flavorPanel = Utils.GeneratePanel(new Rectangle(pkmnDetailPanel.Location.X, y, pkmnDetailPanel.Size.Width, 100));
 				pkmnDetailPage.Controls.Add(flavorPanel);
 
 				//Text
-				Label flavor = Utils.GenerateLabel(new Point(LEFT_PAD, y2), new Size(0, 0), print.flavorText, Utils.FONT_ITALIC);
+				Label flavor = Utils.GenerateLabel(new Rectangle(LEFT_PAD, y2, 0, 0), print.flavorText, Utils.FONT_ITALIC);
 				flavor.MaximumSize = new Size(pkmnDetailPanel.Size.Width - 10, 0);
 				flavor.AutoSize = true;
 				flavorPanel.Controls.Add(flavor);
@@ -800,7 +800,7 @@ namespace CollectionTracker {
 		//Write simple text
 		private Point PKMN_WriteLine(string str, Panel panel, Point location, Font font) {
 			int width = TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
-			Label label = Utils.GenerateLabel(location, new Size(width, TEXT_HEIGHT), str, font);
+			Label label = Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), str, font);
 			panel.Controls.Add(label);
 			return new Point(location.X + width, location.Y);
 		}
@@ -979,7 +979,7 @@ namespace CollectionTracker {
 
 								//Generate label and break
 								int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
-								Label label = Utils.GenerateLabel(location, new Size(textWidth, TEXT_HEIGHT), str, font, colour);
+								Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, TEXT_HEIGHT)), str, font, colour);
 								panel.Controls.Add(label);
 								if (idx == words.Count)
 									location = new Point(location.X + textWidth, location.Y);
@@ -1038,7 +1038,7 @@ namespace CollectionTracker {
 		private Point PKMN_InsertTooltip(string str, string tooltip, Control control, Point location) {
 			int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), Utils.FONT_UNDERLINE).Width;
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
-			Label label = Utils.GenerateLabel(location, new Size(textWidth, TEXT_HEIGHT), str, Utils.FONT_UNDERLINE, Color.Blue);
+			Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, TEXT_HEIGHT)), str, Utils.FONT_UNDERLINE, Color.Blue);
 			label.MouseEnter += new EventHandler((sender, e) => PKMN_ShowTooltip(label, tooltip));
 			label.MouseLeave += new EventHandler((sender, e) => pkmnTooltipPanel.Hide());
 			control.Controls.Add(label);
@@ -1050,7 +1050,7 @@ namespace CollectionTracker {
 		private Point PKMN_InsertCardtip(string str, string cardtip, Control control, Point location) {
 			int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), Utils.FONT_UNDERLINE).Width;
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
-			Label label = Utils.GenerateLabel(location, new Size(textWidth, TEXT_HEIGHT), str, Utils.FONT_UNDERLINE, Color.Green);
+			Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, TEXT_HEIGHT)), str, Utils.FONT_UNDERLINE, Color.Green);
 			label.MouseEnter += new EventHandler((sender, e) => PKMN_ShowCardtip(label, cardtip));
 			label.MouseLeave += new EventHandler((sender, e) => pkmnCardtipPanel.Hide());
 			label.Click += new EventHandler((sender, e) => PKMN_LoadCardtip(cardtip));
@@ -1070,7 +1070,7 @@ namespace CollectionTracker {
 				int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), Utils.FONT_DEFAULT).Width;
 				if (textWidth > control.Width - (location.X + 5))
 					location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
-				Label label = Utils.GenerateLabel(location, new Size(textWidth, height), str);
+				Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, height)), str);
 				label.BackColor = Color.White;
 				control.Controls.Add(label);
 				location = new Point(location.X + textWidth, location.Y);
@@ -1081,7 +1081,7 @@ namespace CollectionTracker {
 			int width = (int)(height * symbol.aspect);
 			if (width > control.Width - (location.X + 5))
 				location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
-			PictureBox icon = Utils.GeneratePictureBox(location, new Size(width, height));
+			PictureBox icon = Utils.GeneratePictureBox(new Rectangle(location, new Size(width, height)));
 			PKMN_Utils.TryLoadImage(icon, symbol.imgPath);
 			control.Controls.Add(icon);
 			location = new Point(location.X + width, location.Y);
@@ -1244,8 +1244,7 @@ namespace CollectionTracker {
 			prints.Sort(new PKMN_PrintComparerNumericReverse().Compare);
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = Utils.GenerateLabel(
-					new Point(LEFT_PAD, TOP_PAD + (i * TEXT_HEIGHT)),
-					new Size(pkmnPrintingsPanel.Width - 10, TEXT_HEIGHT),
+					new Rectangle(LEFT_PAD, TOP_PAD + (i * TEXT_HEIGHT), pkmnPrintingsPanel.Width - 10, TEXT_HEIGHT),
 					prints[i].printID.ToUpper() + " - " + prints[i].set.name,
 					Utils.FONT_UNDERLINE,
 					prints[i] != curPrint ? Color.Blue : default
@@ -1927,29 +1926,29 @@ namespace CollectionTracker {
 			int i = pkmnFormSymbols.Count;
 
 			//Group box
-			Panel symbolEntry = Utils.GeneratePanel(Point.Empty, new Size(325, 110));
+			Panel symbolEntry = Utils.GeneratePanel(new Rectangle(0, 0, 325, 110));
 
 			//Symbol box
-			TextBox symbol = Utils.GenerateTextBox(new Point(5, 5), new Size(245, 30), useRef ? refSymbol.symbol : "Symbol");
+			TextBox symbol = Utils.GenerateTextBox(new Rectangle(5, 5, 245, 30), useRef ? refSymbol.symbol : "Symbol");
 			symbolEntry.Controls.Add(symbol);
 
 			//Name box
-			TextBox name = Utils.GenerateTextBox(new Point(5, 40), new Size(245, 30), useRef ? refSymbol.name : "Name");
+			TextBox name = Utils.GenerateTextBox(new Rectangle(5, 40, 245, 30), useRef ? refSymbol.name : "Name");
 			symbolEntry.Controls.Add(name);
 
 			//Aspect box
-			NumericUpDown aspect = Utils.GenerateNumericUpDown(new Point(5, 75), new Size(55, 30), useRef ? refSymbol.aspect : 1.00m);
+			NumericUpDown aspect = Utils.GenerateNumericUpDown(new Rectangle(5, 75, 55, 30), useRef ? refSymbol.aspect : 1.00m);
 			aspect.DecimalPlaces = 2;
 			aspect.Increment = 0.01m;
 			aspect.Minimum = 0.01m;
 			symbolEntry.Controls.Add(aspect);
 
 			//Path label
-			Label path = Utils.GenerateLabel(new Point(65, 80), new Size(255, TEXT_HEIGHT), "");
+			Label path = Utils.GenerateLabel(new Rectangle(65, 80, 255, TEXT_HEIGHT), "");
 			symbolEntry.Controls.Add(path);
 
 			//Icon box
-			PictureBox icon = Utils.GeneratePictureBox(new Point(255, 5), new Size(65, 65));
+			PictureBox icon = Utils.GeneratePictureBox(new Rectangle(255, 5, 65, 65));
 			icon.Click += new EventHandler((sender, e) => PKMN_OnClickSearchSymbol(i));
 			icon.Cursor = Cursors.Hand;
 			symbolEntry.Controls.Add(icon);
@@ -2079,38 +2078,38 @@ namespace CollectionTracker {
 			int i = pkmnFormSets.Count;
 
 			//Group box
-			Panel setEntry = Utils.GeneratePanel(Point.Empty, new Size(350, 235));
+			Panel setEntry = Utils.GeneratePanel(new Rectangle(0, 0, 350, 235));
 
 			//Name box
-			TextBox name = Utils.GenerateTextBox(new Point(5, 5), new Size(340, 30), useRef ? refSet.name : "Name");
+			TextBox name = Utils.GenerateTextBox(new Rectangle(5, 5, 340, 30), useRef ? refSet.name : "Name");
 			setEntry.Controls.Add(name);
 
 			//Code box
-			TextBox code = Utils.GenerateTextBox(new Point(5, 40), new Size(270, 30), useRef ? refSet.code : "Code");
+			TextBox code = Utils.GenerateTextBox(new Rectangle(5, 40, 270, 30), useRef ? refSet.code : "Code");
 			setEntry.Controls.Add(code);
 
 			//Type box
-			TextBox type = Utils.GenerateTextBox(new Point(5, 75), new Size(270, 30), useRef ? refSet.setType : "Type");
+			TextBox type = Utils.GenerateTextBox(new Rectangle(5, 75, 270, 30), useRef ? refSet.setType : "Type");
 			setEntry.Controls.Add(type);
 
 			//Date box
-			DateTimePicker date = Utils.GenerateDateTimePicker(new Point(5, 110), new Size(340, 30), useRef ? refSet.date : DateTime.Now);
+			DateTimePicker date = Utils.GenerateDateTimePicker(new Rectangle(5, 110, 340, 30), useRef ? refSet.date : DateTime.Now);
 			setEntry.Controls.Add(date);
 
 			//Main set count
-			NumericUpDown mainSetCount = Utils.GenerateNumericUpDown(new Point(5, 145), new Size(340, 30), useRef ? refSet.mainSetCount : 0);
+			NumericUpDown mainSetCount = Utils.GenerateNumericUpDown(new Rectangle(5, 145, 340, 30), useRef ? refSet.mainSetCount : 0);
 			setEntry.Controls.Add(mainSetCount);
 
 			//Leading bonus sheet box
-			CheckBox bsBox = Utils.GenerateCheckbox(new Point(5, 175), new Size(285, 35), useRef ? refSet.leadBonusSheet : false, "Has leading bonus sheet");
+			CheckBox bsBox = Utils.GenerateCheckbox(new Rectangle(5, 175, 285, 35), useRef ? refSet.leadBonusSheet : false, "Has leading bonus sheet");
 			setEntry.Controls.Add(bsBox);
 
 			//Path label
-			Label path = Utils.GenerateLabel(new Point(5, 205), new Size(340, TEXT_HEIGHT), "");
+			Label path = Utils.GenerateLabel(new Rectangle(5, 205, 340, TEXT_HEIGHT), "");
 			setEntry.Controls.Add(path);
 
 			//Icon box
-			PictureBox icon = Utils.GeneratePictureBox(new Point(280, 40), new Size(65, 65));
+			PictureBox icon = Utils.GeneratePictureBox(new Rectangle(280, 40, 65, 65));
 			icon.Cursor = Cursors.Hand;
 			setEntry.Controls.Add(icon);
 

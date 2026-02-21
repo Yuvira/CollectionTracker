@@ -57,29 +57,29 @@ namespace CollectionTracker {
 		#region Control Generators
 
 		//Panel generator
-		public static Panel GeneratePanel(Point position, Size size) {
+		public static Panel GeneratePanel(Rectangle rect) {
 			Panel panel = new Panel();
-			panel.Location = position;
-			panel.Size = size;
+			panel.Location = rect.Location;
+			panel.Size = rect.Size;
 			panel.BorderStyle = BorderStyle.FixedSingle;
 			return panel;
 		}
 
 		//Custom panel generator
-		public static TrackerPanel GenerateTrackerPanel(Point position, Size size, bool useDefaultBorder = false) {
+		public static TrackerPanel GenerateTrackerPanel(Rectangle rect, bool useDefaultBorder = false) {
 			TrackerPanel panel = new TrackerPanel();
-			panel.Location = position;
-			panel.Size = size;
+			panel.Location = rect.Location;
+			panel.Size = rect.Size;
 			if (useDefaultBorder)
 				panel.AddBorder(COLOR_FRONT, 1);
 			return panel;
 		}
 
 		//Button generator
-		public static Button GenerateButton(Point position, Size size, string text, string imgPath = "") {
+		public static Button GenerateButton(Rectangle rect, string text, string imgPath = "") {
 			Button button = new Button();
-			button.Location = position;
-			button.Size = size;
+			button.Location = rect.Location;
+			button.Size = rect.Size;
 			button.Text = text.Replace("&", "&&");
 			button.TextAlign = ContentAlignment.MiddleCenter;
 			if (imgPath.Length > 0) {
@@ -92,10 +92,10 @@ namespace CollectionTracker {
 		}
 
 		//Label Generator
-		public static Label GenerateLabel(Point position, Size size, string text, Font font = null, Color? color = null) {
+		public static Label GenerateLabel(Rectangle rect, string text, Font font = null, Color? color = null) {
 			Label label = new Label();
-			label.Location = position;
-			label.Size = size;
+			label.Location = rect.Location;
+			label.Size = rect.Size;
 			label.Text = text.Replace("&", "&&");
 			label.Font = font != null ? font : FONT_DEFAULT;
 			label.ForeColor = color ?? SystemColors.ControlText;
@@ -105,29 +105,29 @@ namespace CollectionTracker {
 		}
 
 		//Progress bar generator
-		public static ProgressBar GenerateProgressBar(Point position, Size size, int value = 0) {
+		public static ProgressBar GenerateProgressBar(Rectangle rect, int value = 0) {
 			ProgressBar bar = new ProgressBar();
-			bar.Location = position;
-			bar.Size = size;
+			bar.Location = rect.Location;
+			bar.Size = rect.Size;
 			bar.Value = value;
 			return bar;
 		}
 
 		//Picture box generator
-		public static PictureBox GeneratePictureBox(Point position, Size size) {
+		public static PictureBox GeneratePictureBox(Rectangle rect) {
 			PictureBox box = new PictureBox();
-			box.Location = position;
-			box.Size = size;
+			box.Location = rect.Location;
+			box.Size = rect.Size;
 			box.BorderStyle = BorderStyle.None;
 			box.SizeMode = PictureBoxSizeMode.StretchImage;
 			return box;
 		}
 
 		//Text box generator
-		public static TextBox GenerateTextBox(Point position, Size size, string text, bool multiline = false) {
+		public static TextBox GenerateTextBox(Rectangle rect, string text, bool multiline = false) {
 			TextBox box = new TextBox();
-			box.Location = position;
-			box.Size = size;
+			box.Location = rect.Location;
+			box.Size = rect.Size;
 			box.Text = text;
 			if (multiline) {
 				box.Multiline = true;
@@ -137,10 +137,10 @@ namespace CollectionTracker {
 		}
 
 		//Numeric up down generator
-		public static NumericUpDown GenerateNumericUpDown(Point position, Size size, decimal value) {
+		public static NumericUpDown GenerateNumericUpDown(Rectangle rect, decimal value) {
 			NumericUpDown nud = new NumericUpDown();
-			nud.Location = position;
-			nud.Size = size;
+			nud.Location = rect.Location;
+			nud.Size = rect.Size;
 			nud.Minimum = decimal.MinValue;
 			nud.Maximum = decimal.MaxValue;
 			nud.Value = value;
@@ -148,10 +148,10 @@ namespace CollectionTracker {
 		}
 
 		//Checkbox generator
-		public static CheckBox GenerateCheckbox(Point position, Size size, bool check, string text = "") {
+		public static CheckBox GenerateCheckbox(Rectangle rect, bool check, string text = "") {
 			CheckBox box = new CheckBox();
-			box.Location = position;
-			box.Size = size;
+			box.Location = rect.Location;
+			box.Size = rect.Size;
 			box.Checked = check;
 			box.Text = text.Replace("&", "&&");
 			box.TextAlign = ContentAlignment.MiddleLeft;
@@ -159,10 +159,10 @@ namespace CollectionTracker {
 		}
 
 		//Date time picker
-		public static DateTimePicker GenerateDateTimePicker(Point position, Size size, DateTime? value = null) {
+		public static DateTimePicker GenerateDateTimePicker(Rectangle rect, DateTime? value = null) {
 			DateTimePicker dtp = new DateTimePicker();
-			dtp.Location = position;
-			dtp.Size = size;
+			dtp.Location = rect.Location;
+			dtp.Size = rect.Size;
 			dtp.Value = value ?? DateTime.Now;
 			return dtp;
 		}

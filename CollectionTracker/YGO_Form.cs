@@ -127,11 +127,11 @@ namespace CollectionTracker {
 			bool missingCardref = cardsInSet.Count(print => print.card.name.Equals("") || print.card.name.Equals("_")) > 0;
 
 			//Set info box
-			Panel panel = Utils.GeneratePanel(Point.Empty, new Size(820, 60));
+			Panel panel = Utils.GeneratePanel(new Rectangle(0, 0, 820, 60));
 			ygoSetlistLayout.Controls.Add(panel);
 
 			//Filter button
-			Button filter = Utils.GenerateButton(new Point(5, 5), new Size(350, 50), set.name, set.imgPath);
+			Button filter = Utils.GenerateButton(new Rectangle(5, 5, 350, 50), set.name, set.imgPath);
 			filter.Click += new EventHandler((sender, e) => YGO_FilterCatalogBySet(set));
 			filter.MouseUp += new MouseEventHandler((sender, e) => {
 				if (e.Button == MouseButtons.Right)
@@ -140,24 +140,24 @@ namespace CollectionTracker {
 			panel.Controls.Add(filter);
 
 			//Progress label
-			Label label = Utils.GenerateLabel(new Point(360, 20), new Size(100, TEXT_HEIGHT), setOwned.ToString() + '/' + setCount.ToString());
+			Label label = Utils.GenerateLabel(new Rectangle(360, 20, 100, TEXT_HEIGHT), setOwned.ToString() + '/' + setCount.ToString());
 			label.TextAlign = ContentAlignment.MiddleCenter;
 			panel.Controls.Add(label);
 
 			//Progress bar
-			ProgressBar bar = Utils.GenerateProgressBar(new Point(470, 15), new Size(265, 30), setOwned > 0 ? (int)(((float)setOwned / setCount) * 100) : 0);
+			ProgressBar bar = Utils.GenerateProgressBar(new Rectangle(470, 15, 265, 30), setOwned > 0 ? (int)(((float)setOwned / setCount) * 100) : 0);
 			panel.Controls.Add(bar);
 
 			//Missing cardref label
 			if (missingCardref) {
-				Label cardrefLabel = Utils.GenerateLabel(new Point(780, 20), new Size(35, TEXT_HEIGHT), "*");
+				Label cardrefLabel = Utils.GenerateLabel(new Rectangle(780, 20, 35, TEXT_HEIGHT), "*");
 				cardrefLabel.TextAlign = ContentAlignment.MiddleCenter;
 				panel.Controls.Add(cardrefLabel);
 			}
 
 			//No cards logged but folder exists
 			else if (cardsInSet.Count == 0 && Directory.Exists("resources/ygo/" + set.code)) {
-				Label cardrefLabel = Utils.GenerateLabel(new Point(780, 20), new Size(35, TEXT_HEIGHT), "&");
+				Label cardrefLabel = Utils.GenerateLabel(new Rectangle(780, 20, 35, TEXT_HEIGHT), "&");
 				cardrefLabel.TextAlign = ContentAlignment.MiddleCenter;
 				panel.Controls.Add(cardrefLabel);
 			}
@@ -419,7 +419,7 @@ namespace CollectionTracker {
 				YGO_Printing print = ygoPrintFilter[i];
 
 				//Card box
-				Panel cardPanel = Utils.GeneratePanel(new Point(3, 3), new Size(300, 430 + (30 * print.rarities.Count)));
+				Panel cardPanel = Utils.GeneratePanel(new Rectangle(3, 3, 300, 430 + (30 * print.rarities.Count)));
 				YGO_SetCatalogPrintingColor(cardPanel, print);
 				ygoCatalogLayout.Controls.Add(cardPanel);
 
@@ -427,7 +427,7 @@ namespace CollectionTracker {
 				cardPanel.SuspendLayout();
 
 				//Image box
-				PictureBox img = Utils.GeneratePictureBox(Point.Empty, new Size(300, 420));
+				PictureBox img = Utils.GeneratePictureBox(new Rectangle(0, 0, 300, 420));
 				img.MouseUp += new MouseEventHandler((sender, e) => {
 					if (e.Button == MouseButtons.Left)
 						YGO_LoadCardDetails(print);
@@ -444,21 +444,21 @@ namespace CollectionTracker {
 					YGO_Rarity treatment = print.rarities[j];
 
 					//Rarity label
-					Label treatmentLabel = Utils.GenerateLabel(new Point(60, 430 + (j * 30)), new Size(115, TEXT_HEIGHT), treatment.name);
+					Label treatmentLabel = Utils.GenerateLabel(new Rectangle(60, 430 + (j * 30), 115, TEXT_HEIGHT), treatment.name);
 					treatmentLabel.TextAlign = ContentAlignment.MiddleRight;
 					cardPanel.Controls.Add(treatmentLabel);
 
 					//Count label
-					Label label = Utils.GenerateLabel(new Point(185, 430 + (j * 30)), new Size(55, TEXT_HEIGHT), print.OwnedCountOfTreatment(treatment.name).ToString());
+					Label label = Utils.GenerateLabel(new Rectangle(185, 430 + (j * 30), 55, TEXT_HEIGHT), print.OwnedCountOfTreatment(treatment.name).ToString());
 					cardPanel.Controls.Add(label);
 
 					//Decrement
-					Button leftButton = Utils.GenerateButton(new Point(5, 425 + (j * 30)), new Size(55, 29), "<");
+					Button leftButton = Utils.GenerateButton(new Rectangle(5, 425 + (j * 30), 55, 29), "<");
 					leftButton.Click += new EventHandler((sender, e) => YGO_DecrementCardCount(cardPanel, label, print, treatment.name));
 					cardPanel.Controls.Add(leftButton);
 
 					//Increment
-					Button rightButton = Utils.GenerateButton(new Point(240, 425 + (j * 30)), new Size(55, 29), ">");
+					Button rightButton = Utils.GenerateButton(new Rectangle(240, 425 + (j * 30), 55, 29), ">");
 					rightButton.Click += new EventHandler((sender, e) => YGO_IncrementCardCount(cardPanel, label, print, treatment.name));
 					cardPanel.Controls.Add(rightButton);
 
@@ -559,7 +559,7 @@ namespace CollectionTracker {
 			int y2 = TOP_PAD;
 
 			//Header
-			Panel headerPanel = Utils.GeneratePanel(new Point(ygoDetailPanel.Location.X, y), new Size(ygoDetailPanel.Size.Width, 100));
+			Panel headerPanel = Utils.GeneratePanel(new Rectangle(ygoDetailPanel.Location.X, y, ygoDetailPanel.Size.Width, 100));
 			//YGO_AddDetailPanelPaintEvent(headerPanel, borderColour, borderColour2);
 			ygoDetailPanels.Add(headerPanel);
 
@@ -606,7 +606,7 @@ namespace CollectionTracker {
 
 					//Generate panel
 					y2 = TOP_PAD;
-					Panel oPanel = Utils.GeneratePanel(new Point(ygoDetailPanel.Location.X, y), new Size(ygoDetailPanel.Size.Width, 100));
+					Panel oPanel = Utils.GeneratePanel(new Rectangle(ygoDetailPanel.Location.X, y, ygoDetailPanel.Size.Width, 100));
 					ygoDetailPanels.Add(oPanel);
 
 					//Pendulum scale
@@ -635,7 +635,7 @@ namespace CollectionTracker {
 						if (!card.types.Contains("Link"))
 							s += " / " + card.def.ToString() + " DEF";
 						int width = TextRenderer.MeasureText(s.Replace("&", "&&"), Utils.FONT_BOLD).Width - TEXT_MARGIN;
-						Label atkdef = Utils.GenerateLabel(new Point(ygoDetailPanel.Size.Width - (width + LEFT_PAD), y2), new Size(width, TEXT_HEIGHT), s, Utils.FONT_BOLD);
+						Label atkdef = Utils.GenerateLabel(new Rectangle(ygoDetailPanel.Size.Width - (width + LEFT_PAD), y2, width, TEXT_HEIGHT), s, Utils.FONT_BOLD);
 						oPanel.Controls.Add(atkdef);
 						y2 += TEXT_HEIGHT;
 					}
@@ -836,7 +836,7 @@ namespace CollectionTracker {
 
 							//Generate label and break
 							int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), Utils.FONT_DEFAULT).Width - TEXT_MARGIN;
-							Label label = Utils.GenerateLabel(location, new Size(textWidth, TEXT_HEIGHT), str, Utils.FONT_DEFAULT);
+							Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, TEXT_HEIGHT)), str, Utils.FONT_DEFAULT);
 							panel.Controls.Add(label);
 							if (idx == words.Count)
 								location = new Point(location.X + textWidth, location.Y);
@@ -876,7 +876,7 @@ namespace CollectionTracker {
 		//Write simple text
 		private Point YGO_WriteLine(string str, Panel panel, Point location, Font font) {
 			int width = TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
-			Label label = Utils.GenerateLabel(location, new Size(width, TEXT_HEIGHT), str, font);
+			Label label = Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), str, font);
 			panel.Controls.Add(label);
 			return new Point(location.X + width, location.Y);
 		}
@@ -1176,8 +1176,7 @@ namespace CollectionTracker {
 			prints.Sort(new YGO_PrintComparerNumericReverse().Compare);
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = Utils.GenerateLabel(
-					new Point(LEFT_PAD, TOP_PAD + (i * TEXT_HEIGHT)),
-					new Size(ygoPrintingsPanel.Width - 10, TEXT_HEIGHT),
+					new Rectangle(LEFT_PAD, TOP_PAD + (i * TEXT_HEIGHT), ygoPrintingsPanel.Width - 10, TEXT_HEIGHT),
 					prints[i].printID.ToUpper() + " - " + prints[i].set.name,
 					Utils.FONT_UNDERLINE,
 					prints[i] != curPrint ? Color.Blue : default

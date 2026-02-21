@@ -15,7 +15,7 @@ namespace CollectionTracker {
 
 			//Generate panel and initialize
 			parent = form;
-			panel = Utils.GenerateTrackerPanel(Point.Empty, form.Size);
+			panel = Utils.GenerateTrackerPanel(new Rectangle(Point.Empty, form.Size));
 			panel.Dock = DockStyle.Fill;
 			Init();
 
