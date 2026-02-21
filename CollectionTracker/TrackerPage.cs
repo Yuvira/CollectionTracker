@@ -12,12 +12,13 @@ namespace CollectionTracker {
 
 		//Accessors
 		public TrackerPanel Panel => panel;
+		public Catalog Catalog => parent.Catalog;
 
 		//Constructor
 		public TrackerPage(TrackerForm form) {
 			parent = form;
-			panel = Utils.GenerateTrackerPanel(new Rectangle(Point.Empty, form.ClientSize));
-			panel.Dock = DockStyle.Fill;
+			panel = Utils.GenerateTrackerPanel(new Rectangle(0, parent.ToolbarHeight, form.ClientSize.Width, form.ClientSize.Height - parent.ToolbarHeight));
+			panel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			Init();
 		}
 

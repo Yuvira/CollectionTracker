@@ -10,6 +10,8 @@ namespace CollectionTracker {
 	public partial class TrackerForm : Form {
 
 		//Properties
+		private MenuStrip toolbar;
+		private ToolStripLabel catalogLabel;
 		private Catalog mtgCatalog;
 		private Catalog ygoCatalog;
 		private Catalog pkmnCatalog;
@@ -19,6 +21,7 @@ namespace CollectionTracker {
 		//Accessors
 		public Catalog Catalog => curCatalog;
 		public TrackerPage Page => page;
+		public int ToolbarHeight => toolbar.Height;
 
 		//Constructor
 		public TrackerForm() {
@@ -29,6 +32,14 @@ namespace CollectionTracker {
 			Font = Utils.FONT_DEFAULT;
 			Text = "Collection Tracker";
 			KeyPreview = true;
+
+			//Generate toolbar and add home button / catalog label
+			toolbar = new MenuStrip();
+			ToolStripButton homeButton = Utils.GenerateTSButton("Home", new EventHandler(OpenHomePage));
+			toolbar.Items.Add(homeButton);
+			catalogLabel = Utils.GenerateTSLabel("", true, 10);
+			toolbar.Items.Add(catalogLabel);
+			Controls.Add(toolbar);
 
 			//Initialize catalogs
 			if (TryLoadCatalogFromFile("resources/mtg/catalog.bin", out MTG_Catalog mtg))
@@ -42,14 +53,26 @@ namespace CollectionTracker {
 			//pkmnCatalog = Catalog.LoadFromFile("resources/pkmn/catalog2.bin");
 
 			//Open homepage
-			SetPage(new Homepage(this));
+			OpenHomePage();
 
 		}
 
+		//Open default page
+		public void OpenHomePage(object sender = null, EventArgs e = null) => SetPage(new Homepage(this));
+
 		//Set current catalog
-		public void SetCatalogMTG() => curCatalog = mtgCatalog;
-		public void SetCatalogYGO() => curCatalog = ygoCatalog;
-		public void SetCatalogPKMN() => curCatalog = pkmnCatalog;
+		public void SetCatalogMTG() {
+			curCatalog = mtgCatalog;
+			catalogLabel.Text = "Magic";
+		}
+		public void SetCatalogYGO() {
+			curCatalog = ygoCatalog;
+			catalogLabel.Text = "Yu-Gi-Oh!";
+		}
+		public void SetCatalogPKMN() {
+			curCatalog = pkmnCatalog;
+			catalogLabel.Text = "Pokémon";
+		}
 
 		//Replace current page
 		public void SetPage(TrackerPage page) {

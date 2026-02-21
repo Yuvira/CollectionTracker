@@ -14,8 +14,9 @@ namespace CollectionTracker {
 		public override void Init() {
 
 			//Catalog selectors
-			int textWidth = Utils.MeasureWidth("Setlist", Utils.FONT_DEFAULT);
-			Label label = Utils.GenerateLabel(new Rectangle((panel.Width - 850) / 2, 5, textWidth, Utils.TEXT_HEIGHT), "Setlist");
+			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";
+			int textWidth = Utils.MeasureWidth(str, Utils.FONT_DEFAULT);
+			Label label = Utils.GenerateLabel(new Rectangle((panel.Width - 850) / 2, 5, textWidth, Utils.TEXT_HEIGHT), str);
 			label.Anchor = AnchorStyles.Top;
 
 			//Panel

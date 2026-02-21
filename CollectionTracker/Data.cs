@@ -7,6 +7,17 @@ using System.Windows.Forms;
 
 namespace CollectionTracker {
 
+	#region Enums
+
+	public enum Game {
+		NONE,
+		MTG,
+		YGO,
+		PKMN
+	}
+
+	#endregion
+
 	#region Catalog
 
 	[ProtoContract]
@@ -17,12 +28,14 @@ namespace CollectionTracker {
 		[ProtoMember(2)] private List<Card> cards;
 		[ProtoMember(3)] private List<Printing> printings;
 		[ProtoMember(4)] private List<Symbol> symbols;
+		[ProtoMember(5)] private Game game;
 
 		//Accessors
 		public List<Set> Sets => sets;
 		public List<Card> Cards => cards;
 		public List<Printing> Printings => printings;
 		public List<Symbol> Symbols => symbols;
+		public Game Game => game;
 
 		//Constructor
 		public Catalog() {
@@ -30,6 +43,7 @@ namespace CollectionTracker {
 			cards = new List<Card>();
 			printings = new List<Printing>();
 			symbols = new List<Symbol>();
+			game = Game.NONE;
 		}
 
 		#region Conversions
@@ -50,6 +64,7 @@ namespace CollectionTracker {
 				symbols.Add(new Symbol(catalog.symbols[i]));
 			foreach (Printing print in printings)
 				print.LoadRefs(this);
+			game = Game.MTG;
 		}
 		public Catalog(YGO_Catalog catalog) {
 			sets = new List<Set>();
@@ -64,6 +79,7 @@ namespace CollectionTracker {
 				printings.Add(new Printing(catalog.printings[i]));
 			foreach (Printing print in printings)
 				print.LoadRefs(this);
+			game = Game.YGO;
 		}
 		public Catalog(PKMN_Catalog catalog) {
 			sets = new List<Set>();
@@ -80,6 +96,7 @@ namespace CollectionTracker {
 				symbols.Add(new Symbol(catalog.symbols[i]));
 			foreach (Printing print in printings)
 				print.LoadRefs(this);
+			game = Game.PKMN;
 		}
 
 		#endregion

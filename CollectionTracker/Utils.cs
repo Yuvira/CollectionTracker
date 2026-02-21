@@ -182,6 +182,25 @@ namespace CollectionTracker {
 			return dtp;
 		}
 
+		//Toolstrip button
+		public static ToolStripButton GenerateTSButton(string text, EventHandler eventHandler) {
+			ToolStripButton button = new ToolStripButton();
+			button.Text = text;
+			button.Click += eventHandler;
+			return button;
+		}
+
+		//Toolstrip label
+		public static ToolStripLabel GenerateTSLabel(string text, bool rightAlign = false, int rightPad = 0) {
+			ToolStripLabel label = new ToolStripLabel();
+			label.Text = text;
+			if (rightAlign)
+				label.Alignment = ToolStripItemAlignment.Right;
+			if (rightPad > 0)
+				label.Padding = new Padding(0, 0, rightPad, 0);
+			return label;
+		}
+
 		#endregion
 
 		#region Search Tools
