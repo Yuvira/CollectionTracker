@@ -100,7 +100,7 @@ namespace CollectionTracker {
 			//Clear controls and sort sets
 			mtgSetlist.Clear();
 			mtgSetLayout.Controls.Clear();
-			mtgCatalog.sets.Sort(new SetComparer().Compare);
+			mtgCatalog.sets.Sort(new MTG_SetComparer().Compare);
 
 			//Get non-subsets
 			List<MTG_Set> sets = mtgCatalog.sets.Where(s => s.indent == 0).ToList();

@@ -269,7 +269,7 @@ namespace CollectionTracker {
 	//Numeric comparer
 	public class PrintComparerNumeric : IComparer<MTG_Printing> {
 		public int Compare(MTG_Printing print1, MTG_Printing print2) {
-			int setCompare = new SetComparer().Compare(print1.set, print2.set);
+			int setCompare = new MTG_SetComparer().Compare(print1.set, print2.set);
 			if (setCompare != 0) { return setCompare; }
 			if (print1.cardNumber < print2.cardNumber) { return -1; }
 			if (print2.cardNumber < print1.cardNumber) { return 1; }
@@ -280,7 +280,7 @@ namespace CollectionTracker {
 	//Reverse numeric comparer
 	public class PrintComparerNumericReverse : IComparer<MTG_Printing> {
 		public int Compare(MTG_Printing print1, MTG_Printing print2) {
-			int setCompare = new SetComparer().Compare(print1.set, print2.set);
+			int setCompare = new MTG_SetComparer().Compare(print1.set, print2.set);
 			if (setCompare != 0) { return setCompare; }
 			if (print1.cardNumber < print2.cardNumber) { return 1; }
 			if (print2.cardNumber < print1.cardNumber) { return -1; }
@@ -337,7 +337,7 @@ namespace CollectionTracker {
 	}
 
 	//Comparer
-	public class SetComparer : IComparer<MTG_Set> {
+	public class MTG_SetComparer : IComparer<MTG_Set> {
 		public int Compare(MTG_Set set1, MTG_Set set2) {
 			if (set1.date.Date > set2.date.Date) { return -1; }
 			if (set2.date.Date > set1.date.Date) { return 1; }
