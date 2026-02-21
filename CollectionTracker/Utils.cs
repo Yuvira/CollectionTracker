@@ -53,6 +53,7 @@ namespace CollectionTracker {
 		//Color references
 		public static readonly Color COLOR_BACK = SystemColors.ControlDark;
 		public static readonly Color COLOR_FRONT = Color.Black;
+		public static readonly Color COLOR_BUTTON = SystemColors.ControlLight;
 		public static readonly Color COLOR_DARK_ORANGE = BlendColours(new List<Color> { Color.Orange, Color.Black });
 
 		#region Control Generators
@@ -89,6 +90,19 @@ namespace CollectionTracker {
 				button.ImageAlign = ContentAlignment.MiddleRight;
 			}
 			button.UseVisualStyleBackColor = true;
+			return button;
+		}
+
+		//Button generator
+		public static RadioButton GenerateRadioButton(Rectangle rect, string text) {
+			RadioButton button = new RadioButton();
+			button.Location = rect.Location;
+			button.Size = rect.Size;
+			button.Text = text.Replace("&", "&&");
+			button.TextAlign = ContentAlignment.MiddleCenter;
+			button.Appearance = Appearance.Button;
+			button.FlatStyle = FlatStyle.Popup;
+			button.BackColor = COLOR_BUTTON;
 			return button;
 		}
 
@@ -313,6 +327,16 @@ namespace CollectionTracker {
 		#endregion
 
 		#region Misc. Utilities
+
+		//Center rect of given size within width
+		public static Rectangle CenterRect(Size controlSize, Size containerSize, Point offset = default) {
+			return new Rectangle(
+				((containerSize.Width - controlSize.Width) / 2) - offset.X,
+				((containerSize.Height - controlSize.Height) / 2) - offset.Y,
+				controlSize.Width,
+				controlSize.Height
+			);
+		}
 
 		//Blend list of colours
 		public static Color BlendColours(List<Color> cols) {
