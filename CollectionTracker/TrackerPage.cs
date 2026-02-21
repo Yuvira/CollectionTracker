@@ -16,7 +16,7 @@ namespace CollectionTracker {
 		//Constructor
 		public TrackerPage(TrackerForm form) {
 			parent = form;
-			panel = Utils.GenerateTrackerPanel(new Rectangle(Point.Empty, form.Size));
+			panel = Utils.GenerateTrackerPanel(new Rectangle(Point.Empty, form.ClientSize));
 			panel.Dock = DockStyle.Fill;
 			Init();
 		}
