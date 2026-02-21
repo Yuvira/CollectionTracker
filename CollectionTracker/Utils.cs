@@ -124,11 +124,15 @@ namespace CollectionTracker {
 		}
 
 		//Text box generator
-		public static TextBox GenerateTextBox(Point position, Size size, string text) {
+		public static TextBox GenerateTextBox(Point position, Size size, string text, bool multiline = false) {
 			TextBox box = new TextBox();
 			box.Location = position;
 			box.Size = size;
 			box.Text = text;
+			if (multiline) {
+				box.Multiline = true;
+				box.ScrollBars = ScrollBars.Vertical;
+			}
 			return box;
 		}
 
