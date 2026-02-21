@@ -458,6 +458,7 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorPageLabel = new System.Windows.Forms.Label();
 			this.pkmnSetGeneratorLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.pkmnSetGeneratorLabel = new System.Windows.Forms.Label();
+			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.ygoTabControl.SuspendLayout();
 			this.ygoSetPage.SuspendLayout();
 			this.ygoSearchPage.SuspendLayout();
@@ -695,9 +696,9 @@ namespace CollectionTracker {
 			this.ygoSearchPage.Controls.Add(this.ygoSearchPropertyLabel);
 			this.ygoSearchPage.Controls.Add(this.ygoSearchOracleLabel);
 			this.ygoSearchPage.Controls.Add(this.ygoSearchAttributeLabel);
-			this.ygoSearchPage.Location = new System.Drawing.Point(4, 33);
+			this.ygoSearchPage.Location = new System.Drawing.Point(4, 25);
 			this.ygoSearchPage.Name = "ygoSearchPage";
-			this.ygoSearchPage.Size = new System.Drawing.Size(1262, 658);
+			this.ygoSearchPage.Size = new System.Drawing.Size(1262, 666);
 			this.ygoSearchPage.TabIndex = 6;
 			this.ygoSearchPage.Text = "Search";
 			// 
@@ -1966,6 +1967,7 @@ namespace CollectionTracker {
 			this.formTabControl.Controls.Add(this.mtgPage);
 			this.formTabControl.Controls.Add(this.ygoPage);
 			this.formTabControl.Controls.Add(this.pkmnPage);
+			this.formTabControl.Controls.Add(this.tabPage1);
 			this.formTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.formTabControl.Location = new System.Drawing.Point(0, 0);
 			this.formTabControl.Name = "formTabControl";
@@ -3645,10 +3647,10 @@ namespace CollectionTracker {
 			// 
 			this.pkmnPage.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.pkmnPage.Controls.Add(this.pkmnTabControl);
-			this.pkmnPage.Location = new System.Drawing.Point(4, 25);
+			this.pkmnPage.Location = new System.Drawing.Point(4, 33);
 			this.pkmnPage.Name = "pkmnPage";
 			this.pkmnPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnPage.Size = new System.Drawing.Size(1276, 709);
+			this.pkmnPage.Size = new System.Drawing.Size(1276, 701);
 			this.pkmnPage.TabIndex = 2;
 			this.pkmnPage.Text = "PKMN";
 			// 
@@ -3667,7 +3669,7 @@ namespace CollectionTracker {
 			this.pkmnTabControl.Location = new System.Drawing.Point(3, 3);
 			this.pkmnTabControl.Name = "pkmnTabControl";
 			this.pkmnTabControl.SelectedIndex = 0;
-			this.pkmnTabControl.Size = new System.Drawing.Size(1270, 703);
+			this.pkmnTabControl.Size = new System.Drawing.Size(1270, 695);
 			this.pkmnTabControl.TabIndex = 1;
 			// 
 			// pkmnSetlistPage
@@ -3683,7 +3685,7 @@ namespace CollectionTracker {
 			this.pkmnSetlistPage.Location = new System.Drawing.Point(4, 33);
 			this.pkmnSetlistPage.Name = "pkmnSetlistPage";
 			this.pkmnSetlistPage.Padding = new System.Windows.Forms.Padding(3);
-			this.pkmnSetlistPage.Size = new System.Drawing.Size(1262, 666);
+			this.pkmnSetlistPage.Size = new System.Drawing.Size(1262, 658);
 			this.pkmnSetlistPage.TabIndex = 3;
 			this.pkmnSetlistPage.Text = "Set List";
 			// 
@@ -3747,7 +3749,7 @@ namespace CollectionTracker {
 			this.pkmnSetlistLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.pkmnSetlistLayout.Location = new System.Drawing.Point(3, 38);
 			this.pkmnSetlistLayout.Name = "pkmnSetlistLayout";
-			this.pkmnSetlistLayout.Size = new System.Drawing.Size(850, 620);
+			this.pkmnSetlistLayout.Size = new System.Drawing.Size(850, 612);
 			this.pkmnSetlistLayout.TabIndex = 0;
 			this.pkmnSetlistLayout.WrapContents = false;
 			// 
@@ -5168,6 +5170,15 @@ namespace CollectionTracker {
 			this.pkmnSetGeneratorLabel.Text = "Edit Sets";
 			this.pkmnSetGeneratorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// tabPage1
+			// 
+			this.tabPage1.BackColor = System.Drawing.SystemColors.ControlDark;
+			this.tabPage1.Location = new System.Drawing.Point(4, 33);
+			this.tabPage1.Name = "tabPage1";
+			this.tabPage1.Size = new System.Drawing.Size(1276, 701);
+			this.tabPage1.TabIndex = 3;
+			this.tabPage1.Text = "tabPage1";
+			// 
 			// Form1
 			// 
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -5719,6 +5730,7 @@ namespace CollectionTracker {
 		private TextBox ygoSetlistFilterField;
 		private Label ygoSetlistFilterLabel;
 		private CheckBox ygoPrintIDENToggle;
+		private TabPage tabPage1;
 	}
 }
 
