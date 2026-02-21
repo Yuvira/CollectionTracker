@@ -634,7 +634,7 @@ namespace CollectionTracker {
 						string s = card.atk.ToString() + " ATK";
 						if (!card.types.Contains("Link"))
 							s += " / " + card.def.ToString() + " DEF";
-						int width = TextRenderer.MeasureText(s.Replace("&", "&&"), Utils.FONT_BOLD).Width - TEXT_MARGIN;
+						int width = Utils.MeasureWidth(s, Utils.FONT_BOLD);
 						Label atkdef = Utils.GenerateLabel(new Rectangle(ygoDetailPanel.Size.Width - (width + LEFT_PAD), y2, width, TEXT_HEIGHT), s, Utils.FONT_BOLD);
 						oPanel.Controls.Add(atkdef);
 						y2 += TEXT_HEIGHT;
@@ -826,7 +826,7 @@ namespace CollectionTracker {
 					while (true) {
 
 						//If we're done with our text or the next word would exceed available width, generate the label and break
-						if (idx == words.Count || TextRenderer.MeasureText((str + words[idx]).Replace("&", "&&"), Utils.FONT_DEFAULT).Width > maxWidth) {
+						if (idx == words.Count || Utils.MeasureWidth(str + words[idx], Utils.FONT_DEFAULT, false) > maxWidth) {
 
 							//First word is exceeding max width, add it if it fills the entire line or skip to next
 							if (idx < words.Count && str.Length == 0 && location.X == 5) {
@@ -835,7 +835,7 @@ namespace CollectionTracker {
 							}
 
 							//Generate label and break
-							int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), Utils.FONT_DEFAULT).Width - TEXT_MARGIN;
+							int textWidth = Utils.MeasureWidth(str, Utils.FONT_DEFAULT);
 							Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, TEXT_HEIGHT)), str, Utils.FONT_DEFAULT);
 							panel.Controls.Add(label);
 							if (idx == words.Count)
@@ -875,7 +875,7 @@ namespace CollectionTracker {
 		
 		//Write simple text
 		private Point YGO_WriteLine(string str, Panel panel, Point location, Font font) {
-			int width = TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
+			int width = Utils.MeasureWidth(str, font);
 			Label label = Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), str, font);
 			panel.Controls.Add(label);
 			return new Point(location.X + width, location.Y);

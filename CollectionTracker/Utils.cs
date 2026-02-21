@@ -328,6 +328,14 @@ namespace CollectionTracker {
 
 		#region Misc. Utilities
 
+		//Measure width of text
+		public static int MeasureWidth(string str, Font font, bool useMargin = true) {
+			if (useMargin)
+				return TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
+			else
+				return TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width;
+		}
+
 		//Center rect of given size within width
 		public static Rectangle CenterRect(Size controlSize, Size containerSize, Point offset = default) {
 			return new Rectangle(

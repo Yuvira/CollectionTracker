@@ -549,7 +549,7 @@ namespace CollectionTracker {
 				List<string> symbols = PKMN_GetSymbols(card.energyType);
 				string hpText = card.hp.ToString() + " HP";
 				int symbolWidth = (symbols.Count * TEXT_HEIGHT) + 10;
-				int hpWidth = TextRenderer.MeasureText(hpText.Replace("&", "&&"), Utils.FONT_BOLD).Width - TEXT_MARGIN;
+				int hpWidth = Utils.MeasureWidth(hpText, Utils.FONT_BOLD);
 
 				//Draw HP label
 				Label hp = Utils.GenerateLabel(new Rectangle(pkmnDetailPanel.Size.Width - (symbolWidth + hpWidth), y2, hpWidth, TEXT_HEIGHT), hpText, Utils.FONT_BOLD);
@@ -734,7 +734,7 @@ namespace CollectionTracker {
 				}
 
 				//Calculate remaining width from text
-				widths[i] += TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
+				widths[i] += Utils.MeasureWidth(str, font);
 
 			}
 
@@ -801,7 +801,7 @@ namespace CollectionTracker {
 
 		//Write simple text
 		private Point PKMN_WriteLine(string str, Panel panel, Point location, Font font) {
-			int width = TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
+			int width = Utils.MeasureWidth(str, font);
 			Label label = Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), str, font);
 			panel.Controls.Add(label);
 			return new Point(location.X + width, location.Y);
@@ -951,7 +951,7 @@ namespace CollectionTracker {
 						while (true) {
 
 							//If we're done with our text or the next word would exceed available width, generate the label and break
-							if (idx == words.Count || TextRenderer.MeasureText((str + words[idx]).Replace("&", "&&"), Utils.FONT_DEFAULT).Width > maxWidth) {
+							if (idx == words.Count || Utils.MeasureWidth(str + words[idx], Utils.FONT_DEFAULT, false) > maxWidth) {
 
 								//First word is exceeding max width, add it if it fills the entire line or skip to next
 								if (idx < words.Count && str.Length == 0 && location.X == 5) {
@@ -980,7 +980,7 @@ namespace CollectionTracker {
 								}
 
 								//Generate label and break
-								int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
+								int textWidth = Utils.MeasureWidth(str, font);
 								Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, TEXT_HEIGHT)), str, font, colour);
 								panel.Controls.Add(label);
 								if (idx == words.Count)
@@ -1038,7 +1038,7 @@ namespace CollectionTracker {
 
 		//Insert clickable tooltip text at position. Returns position at end of added text
 		private Point PKMN_InsertTooltip(string str, string tooltip, Control control, Point location) {
-			int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), Utils.FONT_UNDERLINE).Width;
+			int textWidth = Utils.MeasureWidth(str, Utils.FONT_UNDERLINE, false);
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
 			Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, TEXT_HEIGHT)), str, Utils.FONT_UNDERLINE, Color.Blue);
 			label.MouseEnter += new EventHandler((sender, e) => PKMN_ShowTooltip(label, tooltip));
@@ -1050,7 +1050,7 @@ namespace CollectionTracker {
 
 		//Insert clickable cardtip text at position. Returns position at end of added text
 		private Point PKMN_InsertCardtip(string str, string cardtip, Control control, Point location) {
-			int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), Utils.FONT_UNDERLINE).Width;
+			int textWidth = Utils.MeasureWidth(str, Utils.FONT_UNDERLINE, false);
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
 			Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, TEXT_HEIGHT)), str, Utils.FONT_UNDERLINE, Color.Green);
 			label.MouseEnter += new EventHandler((sender, e) => PKMN_ShowCardtip(label, cardtip));
@@ -1069,7 +1069,7 @@ namespace CollectionTracker {
 
 			//No symbol found, insert text box
 			if (symbol == null) {
-				int textWidth = TextRenderer.MeasureText(str.Replace("&", "&&"), Utils.FONT_DEFAULT).Width;
+				int textWidth = Utils.MeasureWidth(str, Utils.FONT_DEFAULT, false);
 				if (textWidth > control.Width - (location.X + 5))
 					location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
 				Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, height)), str);
