@@ -27,7 +27,7 @@ namespace CollectionTracker {
 			BackColor = Utils.COLOR_BACK;
 			ClientSize = new Size(1600, 900);
 			Font = Utils.FONT_DEFAULT;
-			Name = "Collection Tracker";
+			Text = "Collection Tracker";
 			KeyPreview = true;
 
 			//Initialize catalogs
