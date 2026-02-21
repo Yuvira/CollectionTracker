@@ -53,7 +53,7 @@ namespace CollectionTracker {
 		//Color references
 		public static readonly Color COLOR_BACK = SystemColors.ControlDark;
 		public static readonly Color COLOR_FRONT = Color.Black;
-		public static readonly Color COLOR_BUTTON = SystemColors.Control;
+		public static readonly Color COLOR_BUTTON = SystemColors.ControlLight;
 		public static readonly Color COLOR_DARK_ORANGE = BlendColours(new List<Color> { Color.Orange, Color.Black });
 
 		#region Control Generators
