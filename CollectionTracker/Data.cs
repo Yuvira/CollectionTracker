@@ -1,7 +1,9 @@
 ﻿using ProtoBuf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace CollectionTracker {
 
@@ -30,14 +32,28 @@ namespace CollectionTracker {
 			symbols = new List<Symbol>();
 		}
 
-		//Save and load print references
-		public void SavePrintRefs() {
+		//Load
+		public static Catalog LoadFromFile(string path) {
+			try {
+				Catalog catalog;
+				using (Stream stream = File.Open(path, FileMode.OpenOrCreate))
+					catalog = Serializer.Deserialize<Catalog>(stream);
+				foreach (Printing print in catalog.printings)
+					print.LoadRefs(catalog);
+				return catalog;
+			}
+			catch (Exception ex) {
+				MessageBox.Show($"Error: {ex.Message}");
+				return null;
+			}
+		}
+
+		//Save
+		public void SaveToFile(string path) {
 			foreach (Printing print in printings)
 				print.SaveRefs(this);
-		}
-		public void LoadPrintRefs() {
-			foreach (Printing print in printings)
-				print.LoadRefs(this);
+			using (Stream stream = File.Open(path, FileMode.Create))
+				Serializer.Serialize(stream, this);
 		}
 
 	}
