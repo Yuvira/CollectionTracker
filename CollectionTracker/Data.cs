@@ -11,10 +11,16 @@ namespace CollectionTracker {
 	public class Catalog {
 
 		//Serialized properties
-		[ProtoMember(1)] public List<Set> sets;
-		[ProtoMember(2)] public List<Card> cards;
-		[ProtoMember(3)] public List<Printing> printings;
-		[ProtoMember(4)] public List<Symbol> symbols;
+		[ProtoMember(1)] private List<Set> sets;
+		[ProtoMember(2)] private List<Card> cards;
+		[ProtoMember(3)] private List<Printing> printings;
+		[ProtoMember(4)] private List<Symbol> symbols;
+
+		//Accessors
+		public List<Set> Sets => sets;
+		public List<Card> Cards => cards;
+		public List<Printing> Printings => printings;
+		public List<Symbol> Symbols => symbols;
 
 		//Constructor
 		public Catalog() {
@@ -183,12 +189,12 @@ namespace CollectionTracker {
 
 		//Save and load reference objects
 		public void SaveRefs(Catalog catalog) {
-			setIndex = catalog.sets.IndexOf(set);
-			cardIndex = catalog.cards.IndexOf(card);
+			setIndex = catalog.Sets.IndexOf(set);
+			cardIndex = catalog.Cards.IndexOf(card);
 		}
 		public void LoadRefs(Catalog catalog) {
-			set = catalog.sets[setIndex];
-			card = catalog.cards[cardIndex];
+			set = catalog.Sets[setIndex];
+			card = catalog.Cards[cardIndex];
 		}
 
 
