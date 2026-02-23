@@ -33,14 +33,6 @@ namespace CollectionTracker {
 	//Global utilities
 	public static class Utils {
 
-		//Formatting constants
-		public const int TEXT_HEIGHT = 21;
-		public const int TEXT_MARGIN = 8;
-		public const int LINE_SPACING = 9;
-		public const int LEFT_PAD = 8;
-		public const int TOP_PAD = 8;
-		public const int BOTTOM_PAD = 8;
-
 		//Font style references
 		public static readonly Font FONT_DEFAULT = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
 		public static readonly Font FONT_BOLD = new Font(FONT_DEFAULT, FontStyle.Bold);
@@ -353,7 +345,7 @@ namespace CollectionTracker {
 		//Measure width of text
 		public static int MeasureWidth(string str, Font font, bool useMargin = true) {
 			if (useMargin)
-				return TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TEXT_MARGIN;
+				return TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TrackerPage.TEXT_MARGIN;
 			else
 				return TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width;
 		}

@@ -59,12 +59,12 @@ namespace CollectionTracker {
 			panel.Controls.Add(searchPanel);
 
 			//Check current catalog
-			if (parent.Catalog != null) {
-				if (parent.Catalog.Game == Game.MTG)
+			if (Catalog != null) {
+				if (Catalog.Game == Game.MTG)
 					mtgButton.Checked = true;
-				else if (parent.Catalog.Game == Game.YGO)
+				else if (Catalog.Game == Game.YGO)
 					ygoButton.Checked = true;
-				else if (parent.Catalog.Game == Game.PKMN)
+				else if (Catalog.Game == Game.PKMN)
 					pkmnButton.Checked = true;
 			}
 
