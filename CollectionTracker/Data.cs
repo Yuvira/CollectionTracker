@@ -9,6 +9,7 @@ namespace CollectionTracker {
 
 	#region Enums
 
+	//Game type
 	public enum Game {
 		NONE,
 		MTG,
@@ -36,6 +37,17 @@ namespace CollectionTracker {
 		public List<Printing> Printings => printings;
 		public List<Symbol> Symbols => symbols;
 		public Game Game => game;
+		public string ResourcePath {
+			get {
+				if (game == Game.MTG)
+					return "resources/mtg/";
+				if (game == Game.YGO)
+					return "resources/ygo/";
+				if (game == Game.PKMN)
+					return "resources/pkmn/";
+				return "";
+			}
+		}
 
 		//Constructor
 		public Catalog() {
@@ -101,6 +113,8 @@ namespace CollectionTracker {
 
 		#endregion
 
+		#region I/O
+
 		//Load
 		public static Catalog LoadFromFile(string path) {
 			try {
@@ -124,6 +138,8 @@ namespace CollectionTracker {
 			using (Stream stream = File.Open(path, FileMode.Create))
 				Serializer.Serialize(stream, this);
 		}
+
+		#endregion
 
 	}
 
@@ -196,6 +212,8 @@ namespace CollectionTracker {
 
 		#endregion
 
+		#region Copy
+
 		//Copy function
 		public void Copy(Set set) {
 			name = set.name;
@@ -207,8 +225,14 @@ namespace CollectionTracker {
 			prefixOrder = set.prefixOrder;
 		}
 
+		#endregion
+
+		#region Utils
+
 		//ToString
 		public override string ToString() => name;
+
+		#endregion
 
 	}
 
@@ -228,6 +252,9 @@ namespace CollectionTracker {
 		[ProtoMember(1)] private Dictionary<string, string> fields;
 		[ProtoMember(2)] private List<Dictionary<string, string>> faces;
 		[ProtoMember(3)] private bool favorite;
+
+		//Accessors
+		public bool IsMultiface => faces.Count > 0;
 
 		//Constructor
 		public Card() {
@@ -406,6 +433,8 @@ namespace CollectionTracker {
 
 		#endregion
 
+		#region Copy
+
 		//Copy function
 		public void Copy(Card card) {
 			fields = new Dictionary<string, string>(card.fields);
@@ -414,6 +443,30 @@ namespace CollectionTracker {
 				faces.Add(new Dictionary<string, string>(face));
 			favorite = card.favorite;
 		}
+
+		#endregion
+
+		#region Field Accessors
+
+		//Get field
+		public bool TryGetField(string field, out string value) {
+			if (fields.ContainsKey(field)) {
+				value = fields[field];
+				return true;
+			}
+			value = "";
+			foreach (Dictionary<string, string> face in faces) {
+				if (face.ContainsKey(field)) {
+					if (string.IsNullOrEmpty(value))
+						value = face[field];
+					else
+						value = " // " + face[field];
+				}
+			}
+			return string.IsNullOrEmpty(value);
+		}
+
+		#endregion
 
 	}
 
@@ -439,6 +492,7 @@ namespace CollectionTracker {
 		public Set Set => set;
 		public Card Card => card;
 		public List<Treatment> Treatments => treatments;
+		public string Date => TryGetField("date", out string value) ? value : Set.Date;
 		public bool IsOwned => OwnedCount > 0;
 		public int OwnedCount => treatments.Sum(t => t.OwnedCount);
 
@@ -514,6 +568,8 @@ namespace CollectionTracker {
 
 		#endregion
 
+		#region Copy
+
 		//Copy function
 		public void Copy(Printing print) {
 			set = print.set;
@@ -524,6 +580,23 @@ namespace CollectionTracker {
 			fields = new Dictionary<string, string>(print.fields);
 			imagePaths = new List<string>(print.imagePaths);
 		}
+
+		#endregion
+
+		#region Field Accessors
+
+		//Get field
+		public bool TryGetField(string field, out string value) {
+			if (fields.ContainsKey(field)) {
+				value = fields[field];
+				return true;
+			}
+			return Card.TryGetField(field, out value);
+		}
+
+		#endregion
+
+		#region Count Modifiers
 
 		//Count modifiers
 		public void Increment(string treatmentName) => Increment(treatmentName, "Desk");
@@ -549,6 +622,10 @@ namespace CollectionTracker {
 				Increment(treatmentName, toLocation);
 		}
 
+		#endregion
+
+		#region I/O
+
 		//Save and load reference objects
 		public void SaveRefs(Catalog catalog) {
 			setIndex = catalog.Sets.IndexOf(set);
@@ -559,6 +636,7 @@ namespace CollectionTracker {
 			card = catalog.Cards[cardIndex];
 		}
 
+		#endregion
 
 	}
 
@@ -610,6 +688,8 @@ namespace CollectionTracker {
 
 		#endregion
 
+		#region Copy
+
 		//Copy constructor
 		public Treatment(Treatment treatment) {
 			name = treatment.name;
@@ -617,6 +697,10 @@ namespace CollectionTracker {
 			foreach (Location location in treatment.locations)
 				locations.Add(new Location(location));
 		}
+
+		#endregion
+
+		#region Count Modifiers
 
 		//Count modifiers
 		public void Increment(string locationName) {
@@ -636,6 +720,10 @@ namespace CollectionTracker {
 			return true;
 		}
 
+		#endregion
+
+		#region Utils
+
 		//Static default list generator
 		public static List<Treatment> GenerateTreatments(List<string> treatments) {
 			List<Treatment> list = new List<Treatment>();
@@ -643,6 +731,8 @@ namespace CollectionTracker {
 				list.Add(new Treatment(treatment));
 			return list;
 		}
+
+		#endregion
 
 	}
 
@@ -664,15 +754,23 @@ namespace CollectionTracker {
 			this.count = count;
 		}
 
+		#region Copy
+
 		//Copy constructor
 		public Location(Location location) {
 			name = location.name;
 			count = location.count;
 		}
 
+		#endregion
+
+		#region Count Modifiers
+
 		//Count modifiers
 		public void Increment() => ++count;
 		public void Decrement() => --count;
+
+		#endregion
 
 	}
 
@@ -722,6 +820,8 @@ namespace CollectionTracker {
 
 		#endregion
 
+		#region Copy
+
 		//Copy constructor
 		public Symbol(Symbol symbol) {
 			name = symbol.name;
@@ -729,6 +829,8 @@ namespace CollectionTracker {
 			imgPath = symbol.imgPath;
 			aspect = symbol.aspect;
 		}
+
+		#endregion
 
 	}
 
