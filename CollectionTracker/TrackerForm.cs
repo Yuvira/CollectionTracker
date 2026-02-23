@@ -76,8 +76,10 @@ namespace CollectionTracker {
 
 		//Replace current page
 		public void SetPage(TrackerPage page) {
-			if (this.page != null)
+			if (this.page != null) {
+				this.page.Panel.Dispose();
 				Controls.Remove(this.page.Panel);
+			}
 			Controls.Add(page.Panel);
 			this.page = page;
 		}
