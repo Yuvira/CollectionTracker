@@ -37,17 +37,6 @@ namespace CollectionTracker {
 		public List<Printing> Printings => printings;
 		public List<Symbol> Symbols => symbols;
 		public Game Game => game;
-		public string ResourcePath {
-			get {
-				if (game == Game.MTG)
-					return "resources/mtg/";
-				if (game == Game.YGO)
-					return "resources/ygo/";
-				if (game == Game.PKMN)
-					return "resources/pkmn/";
-				return "";
-			}
-		}
 
 		//Constructor
 		public Catalog() {

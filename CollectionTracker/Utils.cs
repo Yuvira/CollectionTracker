@@ -48,6 +48,19 @@ namespace CollectionTracker {
 		public static readonly Color COLOR_BUTTON = SystemColors.ControlLight;
 		public static readonly Color COLOR_DARK_ORANGE = BlendColours(new List<Color> { Color.Orange, Color.Black });
 
+		//Resource paths
+		public static readonly Dictionary<Game, string> ResourcePaths = new Dictionary<Game, string> {
+			{ Game.MTG  , "resources/mtg/"  },
+			{ Game.YGO  , "resources/ygo/"  },
+			{ Game.PKMN , "resources/pkmn/" },
+		};
+
+		//Set URL paths
+		public static readonly Dictionary<Game, string> SetURLs = new Dictionary<Game, string> {
+			{ Game.MTG , "https://scryfall.com/sets/"  },
+			{ Game.YGO , "https://yugipedia.com/wiki/" },
+		};
+
 		#region Control Generators
 
 		//Panel generator
