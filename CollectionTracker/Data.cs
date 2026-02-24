@@ -383,7 +383,7 @@ namespace CollectionTracker {
 			if (!string.IsNullOrEmpty(card.property))
 				fields.Add("property", card.property);
 			if (!string.IsNullOrEmpty(card.types)) {
-				fields.Add("monstertype", card.types);
+				fields.Add("type", card.types);
 				fields.Add("level", card.level.ToString());
 				fields.Add("attack", card.atk.ToString());
 				fields.Add("defense", card.def.ToString());
@@ -587,11 +587,12 @@ namespace CollectionTracker {
 
 		//Get field
 		public bool TryGetField(string field, out string value) {
-			if (fields.ContainsKey(field)) {
-				value = fields[field];
+			if (Card.TryGetField(field, out value))
 				return true;
-			}
-			return Card.TryGetField(field, out value);
+			if (!fields.ContainsKey(field))
+				return false;
+			value = fields[field];
+			return true;
 		}
 
 		#endregion
