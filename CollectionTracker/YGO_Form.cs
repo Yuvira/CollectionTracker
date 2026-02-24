@@ -334,7 +334,7 @@ namespace CollectionTracker {
 					bool fieldIsList = false;
 					if (terms[i].field.ToLower().Equals("t") || terms[i].field.ToLower().Equals("l"))
 						fieldIsList = true;
-					matches[i] = Utils.EvaluateSearchOperation(searchField, terms[i].op, terms[i].value, new Dictionary<string, string>(), fieldIsList);
+					matches[i] = SearchUtils.EvaluateSearchOperation(searchField, terms[i].op, terms[i].value, new Dictionary<string, string>(), fieldIsList);
 				}
 				if (logicalOp == '&' && !matches.Contains(false))
 					ygoPrintFilter.Add(print);

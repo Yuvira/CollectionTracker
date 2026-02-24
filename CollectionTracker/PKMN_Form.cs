@@ -342,7 +342,7 @@ namespace CollectionTracker {
 					bool fieldIsList = false;
 					if (terms[i].field.ToLower().Equals("t") || terms[i].field.ToLower().Equals("l"))
 						fieldIsList = true;
-					matches[i] = Utils.EvaluateSearchOperation(searchField, terms[i].op, terms[i].value, symbolDict, fieldIsList);
+					matches[i] = SearchUtils.EvaluateSearchOperation(searchField, terms[i].op, terms[i].value, symbolDict, fieldIsList);
 				}
 				if (logicalOp == '&' && !matches.Contains(false))
 					pkmnPrintFilter.Add(print);
