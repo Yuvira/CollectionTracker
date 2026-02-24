@@ -91,7 +91,7 @@ namespace CollectionTracker {
 			if (e.KeyChar == (char)Keys.Return)
 				Search();
 		}
-		private void Search() => MessageBox.Show(searchBox.Text);
+		private void Search() => parent.SetPage(new Printlist(parent, searchBox.Text));
 
 	}
 

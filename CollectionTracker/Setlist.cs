@@ -14,7 +14,7 @@ namespace CollectionTracker {
 		//Constructor
 		public Setlist(TrackerForm form) : base(form) {
 
-			//Catalog selectors
+			//Header
 			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";
 			int textWidth = Utils.MeasureWidth(str, Utils.FONT_DEFAULT);
 			Label headerLabel = Utils.GenerateLabel(new Rectangle((panel.Width - 850) / 2, 5, textWidth, TEXT_HEIGHT), str);
@@ -25,8 +25,10 @@ namespace CollectionTracker {
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 
-			//Loop sets
+			//Suspend
 			listPanel.SuspendLayout();
+
+			//Loop sets
 			for (int i = 0; i < Catalog.Sets.Count; ++i) {
 
 				//Important values
@@ -81,6 +83,8 @@ namespace CollectionTracker {
 				listPanel.Controls.Add(setPanel);
 
 			}
+
+			//Resume
 			listPanel.ResumeLayout();
 
 			//Add to panel
@@ -88,6 +92,12 @@ namespace CollectionTracker {
 			panel.Controls.Add(listPanel);
 
 		}
+
+		//Filter sets by text
+		//private void OnFilterChanged(object sender, EventArgs e) => YGO_UpdateSets();
+
+		//Filter catalog by set ID
+		private void FilterBySet(Set set) => parent.SetPage(new Printlist(parent, $"s={set.Code}"));
 
 	}
 
