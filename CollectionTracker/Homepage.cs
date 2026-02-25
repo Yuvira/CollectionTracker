@@ -20,17 +20,17 @@ namespace CollectionTracker {
 
 			//Magic button
 			RadioButton mtgButton = Utils.GenerateRadioButton(new Rectangle(5, 5, 120, 30), "Magic");
-			mtgButton.CheckedChanged += new EventHandler(SetCatalogMTG);
+			mtgButton.CheckedChanged += SetCatalogMTG;
 			catalogPanel.Controls.Add(mtgButton);
 
 			//Yu-Gi-Oh! button
 			RadioButton ygoButton = Utils.GenerateRadioButton(new Rectangle(130, 5, 120, 30), "Yu-Gi-Oh!");
-			ygoButton.CheckedChanged += new EventHandler(SetCatalogYGO);
+			ygoButton.CheckedChanged += SetCatalogYGO;
 			catalogPanel.Controls.Add(ygoButton);
 
 			//Pokémon button
 			RadioButton pkmnButton = Utils.GenerateRadioButton(new Rectangle(255, 5, 120, 30), "Pokémon");
-			pkmnButton.CheckedChanged += new EventHandler(SetCatalogPKMN);
+			pkmnButton.CheckedChanged += SetCatalogPKMN;
 			catalogPanel.Controls.Add(pkmnButton);
 
 			//Search tools
@@ -40,17 +40,18 @@ namespace CollectionTracker {
 			//Search bar
 			searchBox = Utils.GenerateTextBox(new Rectangle(5, 5, 370, 30), "Search");
 			searchBox.Size = new Size(370, 30);
-			searchBox.KeyPress += new KeyPressEventHandler(SearchEnterPressed);
+			searchBox.Click += SearchBoxClicked;
+			searchBox.KeyPress += SearchEnterPressed;
 			searchPanel.Controls.Add(searchBox);
 
 			//Search button
 			Button searchButton = Utils.GenerateButton(new Rectangle(5, 35, 183, 30), "Search");
-			searchButton.Click += new EventHandler(SearchButtonPressed);
+			searchButton.Click += SearchButtonClicked;
 			searchPanel.Controls.Add(searchButton);
 
 			//Setlist button
 			Button setlistButton = Utils.GenerateButton(new Rectangle(192, 35, 183, 30), "All Sets");
-			setlistButton.Click += new EventHandler(OpenSetlist);
+			setlistButton.Click += OpenSetlist;
 			searchPanel.Controls.Add(setlistButton);
 
 			//Add to panel
@@ -86,7 +87,11 @@ namespace CollectionTracker {
 		private void OpenSetlist(object sender, EventArgs e) => parent.SetPage(new Setlist(parent));
 
 		//Search event handlers
-		private void SearchButtonPressed(object sender, EventArgs e) => Search();
+		private void SearchBoxClicked(object sender, EventArgs e) {
+			if (searchBox.Text.Equals("Search"))
+				searchBox.SelectAll();
+		}
+		private void SearchButtonClicked(object sender, EventArgs e) => Search();
 		private void SearchEnterPressed(object sender, KeyPressEventArgs e) {
 			if (e.KeyChar == (char)Keys.Return)
 				Search();
