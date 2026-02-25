@@ -47,12 +47,12 @@ namespace CollectionTracker {
 					parent.Panel.Controls.Add(countLabel);
 
 					//Decrement
-					decrementButton = Utils.GenerateButton(new Rectangle(5, 425 + (idx * 30), 55, 29), "<");
+					decrementButton = Utils.GenerateButton(new Rectangle(5, 425 + (idx * 30), 55, BUTTON_HEIGHT), "<");
 					decrementButton.Click += DecrementCount;
 					parent.Panel.Controls.Add(decrementButton);
 
 					//Increment
-					incrementButton = Utils.GenerateButton(new Rectangle(240, 425 + (idx * 30), 55, 29), ">");
+					incrementButton = Utils.GenerateButton(new Rectangle(240, 425 + (idx * 30), 55, BUTTON_HEIGHT), ">");
 					incrementButton.Click += IncrementCount;
 					parent.Panel.Controls.Add(incrementButton);
 
@@ -130,11 +130,13 @@ namespace CollectionTracker {
 					Utils.TryLoadCardImage(imgBox, print.ImagePaths[0], parent.Catalog.Game);
 
 				//Add treatments
+				panel.SuspendLayout();
 				foreach (Treatmentrow row in rows)
 					row.Dispose();
 				rows.Clear();
 				for (int i = 0; i < print.Treatments.Count; ++i)
 					rows.Add(new Treatmentrow(this, print, i));
+				panel.ResumeLayout();
 
 				//Return height
 				return panel.Height;
@@ -162,6 +164,8 @@ namespace CollectionTracker {
 
 		//Controls
 		private Label headerLabel;
+		private Button prevPageButton;
+		private Button nextPageButton;
 		private Panel listPanel;
 
 		//Accessors
@@ -174,12 +178,19 @@ namespace CollectionTracker {
 			printings = SearchUtils.SearchPrintings(Catalog, searchTerms);
 
 			//Header
-			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";
-			headerLabel = Utils.GenerateLabel(new Rectangle((panel.Width - 1245) / 2, 5, Utils.MeasureWidth(str), TEXT_HEIGHT), str);
+			headerLabel = Utils.GenerateLabel(new Rectangle(panel.Width / 2, 10, 0, TEXT_HEIGHT), "");
 			headerLabel.Anchor = AnchorStyles.Top;
 
+			//Page buttons
+			prevPageButton = Utils.GenerateButton(new Rectangle((panel.Width - 1245) / 2, 5, 120, BUTTON_HEIGHT), "<");
+			prevPageButton.Anchor = AnchorStyles.Top;
+			prevPageButton.Click += PrevPage;
+			nextPageButton = Utils.GenerateButton(new Rectangle(((panel.Width + 1245) / 2) - 120, 5, 120, BUTTON_HEIGHT), ">");
+			nextPageButton.Anchor = AnchorStyles.Top;
+			nextPageButton.Click += NextPage;
+
 			//Panel
-			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1245, panel.Height - 40), panel.Size, new Point(0, -15)));
+			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1245, panel.Height - 40), panel.Size, new Point(0, -20)));
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 
@@ -197,14 +208,17 @@ namespace CollectionTracker {
 
 			//Add to panel
 			panel.Controls.Add(headerLabel);
+			panel.Controls.Add(prevPageButton);
+			panel.Controls.Add(nextPageButton);
 			panel.Controls.Add(listPanel);
 
+			//Update
 			UpdateEntries();
 
 		}
 
 		//Update entries
-		public void UpdateEntries() {
+		private void UpdateEntries() {
 
 			//Paging
 			int maxPage = 0;
@@ -217,17 +231,29 @@ namespace CollectionTracker {
 			int startIdx = page * EntriesPerPage;
 
 			//Header
-			headerLabel.Text = printings.Count.ToString();
+			string str = $"Showing {startIdx + 1} - {Math.Min((page + 1) * EntriesPerPage, printings.Count)} of {printings.Count}";
+			int width = Utils.MeasureWidth(str);
+			headerLabel.Location = new Point((panel.Width - width) / 2, 5);
+			headerLabel.Width = width;
+			headerLabel.Text = str;
+
+			//Button visibility
+			prevPageButton.Visible = printings.Count > EntriesPerPage;
+			nextPageButton.Visible = printings.Count > EntriesPerPage;
+
+			//Reset scroll
+			listPanel.AutoScrollPosition = new Point(0, 0);
 
 			//Loop entries
 			int idx;
 			int yPos = 5;
 			int maxHeight;
+			listPanel.SuspendLayout();
 			for (int y = 0; y < rowsPerPage; ++y) {
 				maxHeight = 0;
 				for (int x = 0; x < entriesPerRow; ++x) {
 					idx = x + (y * entriesPerRow);
-					if (idx < printings.Count) {
+					if (startIdx + idx < printings.Count) {
 						maxHeight = Math.Max(maxHeight, entries[idx].SetPrinting(printings, startIdx + idx));
 						entries[idx].Panel.Location = new Point(5 + (x * 305), yPos);
 						entries[idx].Panel.Visible = true;
@@ -237,7 +263,18 @@ namespace CollectionTracker {
 				}
 				yPos += maxHeight + 5;
 			}
+			listPanel.ResumeLayout();
 
+		}
+
+		//Paging
+		private void PrevPage(object sender, EventArgs e) {
+			--page;
+			UpdateEntries();
+		}
+		private void NextPage(object sender, EventArgs e) {
+			++page;
+			UpdateEntries();
 		}
 
 	}

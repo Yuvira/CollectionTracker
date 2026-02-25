@@ -19,17 +19,17 @@ namespace CollectionTracker {
 			catalogPanel.Anchor = AnchorStyles.None;
 
 			//Magic button
-			RadioButton mtgButton = Utils.GenerateRadioButton(new Rectangle(5, 5, 120, 30), "Magic");
+			RadioButton mtgButton = Utils.GenerateRadioButton(new Rectangle(5, 5, 120, BUTTON_HEIGHT), "Magic");
 			mtgButton.CheckedChanged += SetCatalogMTG;
 			catalogPanel.Controls.Add(mtgButton);
 
 			//Yu-Gi-Oh! button
-			RadioButton ygoButton = Utils.GenerateRadioButton(new Rectangle(130, 5, 120, 30), "Yu-Gi-Oh!");
+			RadioButton ygoButton = Utils.GenerateRadioButton(new Rectangle(130, 5, 120, BUTTON_HEIGHT), "Yu-Gi-Oh!");
 			ygoButton.CheckedChanged += SetCatalogYGO;
 			catalogPanel.Controls.Add(ygoButton);
 
 			//Pokémon button
-			RadioButton pkmnButton = Utils.GenerateRadioButton(new Rectangle(255, 5, 120, 30), "Pokémon");
+			RadioButton pkmnButton = Utils.GenerateRadioButton(new Rectangle(255, 5, 120, BUTTON_HEIGHT), "Pokémon");
 			pkmnButton.CheckedChanged += SetCatalogPKMN;
 			catalogPanel.Controls.Add(pkmnButton);
 
@@ -38,19 +38,19 @@ namespace CollectionTracker {
 			searchPanel.Anchor = AnchorStyles.None;
 
 			//Search bar
-			searchBox = Utils.GenerateTextBox(new Rectangle(5, 5, 370, 30), "Search");
+			searchBox = Utils.GenerateTextBox(new Rectangle(5, 5, 370, BUTTON_HEIGHT), "Search");
 			searchBox.Size = new Size(370, 30);
 			searchBox.Click += SearchBoxClicked;
 			searchBox.KeyPress += SearchEnterPressed;
 			searchPanel.Controls.Add(searchBox);
 
 			//Search button
-			Button searchButton = Utils.GenerateButton(new Rectangle(5, 35, 183, 30), "Search");
+			Button searchButton = Utils.GenerateButton(new Rectangle(5, 35, 183, BUTTON_HEIGHT), "Search");
 			searchButton.Click += SearchButtonClicked;
 			searchPanel.Controls.Add(searchButton);
 
 			//Setlist button
-			Button setlistButton = Utils.GenerateButton(new Rectangle(192, 35, 183, 30), "All Sets");
+			Button setlistButton = Utils.GenerateButton(new Rectangle(192, 35, 183, BUTTON_HEIGHT), "All Sets");
 			setlistButton.Click += OpenSetlist;
 			searchPanel.Controls.Add(setlistButton);
 

@@ -14,6 +14,7 @@ namespace CollectionTracker {
 		public const int LEFT_PAD = 8;
 		public const int TOP_PAD = 8;
 		public const int BOTTOM_PAD = 8;
+		public const int BUTTON_HEIGHT = 30;
 
 		//Properties
 		protected TrackerForm parent;
