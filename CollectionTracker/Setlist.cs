@@ -102,11 +102,11 @@ namespace CollectionTracker {
 			//Header
 			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";
 			int textWidth = Utils.MeasureWidth(str, Utils.FONT_DEFAULT);
-			headerLabel = Utils.GenerateLabel(new Rectangle((panel.Width - 850) / 2, 5, textWidth, TEXT_HEIGHT), str);
+			headerLabel = Utils.GenerateLabel(new Rectangle(Math.Max((panel.Width - 850) / 2, 5), 5, textWidth, TEXT_HEIGHT), str);
 			headerLabel.Anchor = AnchorStyles.Top;
 
 			//Panel
-			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(850, panel.Height - 40), panel.Size, new Point(0, -15)));
+			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(Math.Min(panel.Width - 10, 850), panel.Height - 40), panel.Size, new Point(0, -15)));
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 
