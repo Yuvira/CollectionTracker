@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -27,7 +28,17 @@ namespace CollectionTracker {
 			parent = form;
 			panel = Utils.GenerateTrackerPanel(new Rectangle(0, parent.ToolbarHeight, form.ClientSize.Width, form.ClientSize.Height - parent.ToolbarHeight));
 			panel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			parent.Resize += OnFormResize;
 		}
+
+		//Dispose
+		public virtual void Dispose() {
+			parent.Resize -= OnFormResize;
+			panel.Dispose();
+		}
+
+		//Resize
+		protected virtual void OnFormResize(object sender, EventArgs e) { }
 
 	}
 

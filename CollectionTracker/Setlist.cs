@@ -89,6 +89,8 @@ namespace CollectionTracker {
 
 		//Properties
 		private List<Setrow> rows;
+		private Label headerLabel;
+		private Panel listPanel;
 
 		//Constructor
 		public Setlist(TrackerForm form) : base(form) {
@@ -96,11 +98,11 @@ namespace CollectionTracker {
 			//Header
 			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";
 			int textWidth = Utils.MeasureWidth(str, Utils.FONT_DEFAULT);
-			Label headerLabel = Utils.GenerateLabel(new Rectangle((panel.Width - 850) / 2, 5, textWidth, TEXT_HEIGHT), str);
+			headerLabel = Utils.GenerateLabel(new Rectangle((panel.Width - 850) / 2, 5, textWidth, TEXT_HEIGHT), str);
 			headerLabel.Anchor = AnchorStyles.Top;
 
 			//Panel
-			Panel listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(850, panel.Height - 40), panel.Size, new Point(0, -15)));
+			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(850, panel.Height - 40), panel.Size, new Point(0, -15)));
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 
