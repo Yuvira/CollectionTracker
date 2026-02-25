@@ -91,9 +91,13 @@ namespace CollectionTracker {
 		private List<Setrow> rows;
 		private Label headerLabel;
 		private Panel listPanel;
+		private int lastWidth;
 
 		//Constructor
 		public Setlist(TrackerForm form) : base(form) {
+
+			//Width
+			lastWidth = panel.Width;
 
 			//Header
 			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";
@@ -123,6 +127,18 @@ namespace CollectionTracker {
 
 		//Filter catalog by set ID
 		private void FilterBySet(Set set) => parent.SetPage(new Printlist(parent, $"s={set.Code}"));
+
+		//Resize event
+		protected override void OnFormResize(object sender, EventArgs e) {
+			base.OnFormResize(sender, e);
+			if (panel.Width >= 860 && lastWidth >= 860)
+				return;
+			headerLabel.Location = new Point(Math.Max((panel.Width - 850) / 2, 5), 5);
+			Rectangle rect = Utils.CenterRect(new Size(Math.Min(panel.Width - 10, 850), panel.Height - 40), panel.Size, new Point(0, -15));
+			listPanel.Location = rect.Location;
+			listPanel.Size = rect.Size;
+			lastWidth = panel.Width;
+		}
 
 	}
 
