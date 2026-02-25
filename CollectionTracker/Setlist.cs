@@ -20,11 +20,13 @@ namespace CollectionTracker {
 			private Setlist parent;
 			private Set set;
 			private string setURL;
+
+			//Controls
 			private Panel panel;
 			private Button filter;
 			private Label progressLabel;
 			private ProgressBar progressBar;
-			private Label cardRefLabel;
+			private Label cardRefLabel = null;
 
 			//Accessors
 			public Panel Panel => panel;
@@ -42,7 +44,7 @@ namespace CollectionTracker {
 				int setOwned = setPrints.Count(print => print.IsOwned);
 				bool missingCardref = setPrints.Count(print => !print.TryGetField("name", out string value) || value.Equals("_")) > 0;
 
-				//Set info box
+				//Panel
 				panel = Utils.GeneratePanel(new Rectangle(5, 5 + (idx * 65), 820, 60));
 
 				//Filter button
@@ -74,10 +76,13 @@ namespace CollectionTracker {
 					cardRefLabel.TextAlign = ContentAlignment.MiddleCenter;
 					panel.Controls.Add(cardRefLabel);
 				}
+
 			}
 
 			//Filter
 			private void FilterBySet(object sender, EventArgs e) => parent.FilterBySet(set);
+
+			//Load set URL
 			private void LoadSetURL(object sender, MouseEventArgs e) {
 				if (e.Button == MouseButtons.Right)
 					Process.Start(setURL);
@@ -101,8 +106,7 @@ namespace CollectionTracker {
 
 			//Header
 			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";
-			int textWidth = Utils.MeasureWidth(str, Utils.FONT_DEFAULT);
-			headerLabel = Utils.GenerateLabel(new Rectangle(Math.Max((panel.Width - 850) / 2, 5), 5, textWidth, TEXT_HEIGHT), str);
+			headerLabel = Utils.GenerateLabel(new Rectangle(Math.Max((panel.Width - 850) / 2, 5), 5, Utils.MeasureWidth(str), TEXT_HEIGHT), str);
 			headerLabel.Anchor = AnchorStyles.Top;
 
 			//Panel

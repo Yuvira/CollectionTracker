@@ -484,6 +484,7 @@ namespace CollectionTracker {
 		public string Date => TryGetField("date", out string value) ? value : Set.Date;
 		public bool IsOwned => OwnedCount > 0;
 		public int OwnedCount => treatments.Sum(t => t.OwnedCount);
+		public List<string> ImagePaths => imagePaths;
 
 		//Constructor
 		public Printing() : this(null, null, new List<Treatment>()) { }
@@ -693,12 +694,18 @@ namespace CollectionTracker {
 		#region Count Modifiers
 
 		//Count modifiers
+		public void Increment() => Increment("Desk");
 		public void Increment(string locationName) {
 			Location location = locations.FirstOrDefault(l => l.Name.Equals(locationName));
 			if (location != null)
 				location.Increment();
 			else
 				locations.Add(new Location(locationName, 1));
+		}
+		public bool Decrement() {
+			if (locations.Count > 0)
+				return Decrement(locations.Count - 1);
+			return false;
 		}
 		public bool Decrement(string locationName) => Decrement(locations.FindIndex(l => l.Name.Equals(locationName)));
 		public bool Decrement(int index) {

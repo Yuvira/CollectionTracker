@@ -61,6 +61,13 @@ namespace CollectionTracker {
 			{ Game.YGO , "https://yugipedia.com/wiki/" },
 		};
 
+		//Default card back imagepaths
+		public static readonly Dictionary<Game, string> CardBackPaths = new Dictionary<Game, string> {
+			{ Game.MTG  , "resources/mtg/back.png"  },
+			{ Game.YGO  , "resources/ygo/back.png"  },
+			{ Game.PKMN , "resources/pkmn/back.png" },
+		};
+
 		#region Control Generators
 
 		//Panel generator
@@ -214,7 +221,9 @@ namespace CollectionTracker {
 		public static string[] SplitString(string str, string delim) => str.Split(new string[] { delim }, StringSplitOptions.None);
 
 		//Measure width of text
-		public static int MeasureWidth(string str, Font font, bool useMargin = true) {
+		public static int MeasureWidth(string str, Font font = null, bool useMargin = true) {
+			if (font == null)
+				font = FONT_DEFAULT;
 			if (useMargin)
 				return TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TrackerPage.TEXT_MARGIN;
 			else
@@ -241,6 +250,25 @@ namespace CollectionTracker {
 				B += c.B;
 			}
 			return Color.FromArgb(A / cols.Count, R / cols.Count, G / cols.Count, B / cols.Count);
+		}
+
+		//Try to load card image and return default path if failed
+		public static bool TryLoadCardImage(PictureBox imgBox, string path, Game game, Label label = null) {
+			try {
+				imgBox.Load(path);
+				if (label != null)
+					label.Text = path;
+				return true;
+			}
+			catch (Exception) {
+				if (CardBackPaths.ContainsKey(game)) {
+					try { imgBox.Load(CardBackPaths[game]); }
+					catch (Exception) { }
+				}
+				if (label != null)
+					label.Text = "Failed!";
+				return false;
+			}
 		}
 
 		#endregion

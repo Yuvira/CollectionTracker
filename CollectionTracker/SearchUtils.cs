@@ -178,7 +178,7 @@ namespace CollectionTracker {
 						printList.Add(print);
 				}
 				catch (Exception e) {
-					MessageBox.Show(e.Message);
+					MessageBox.Show($"{e.Message} [{evalString}:{index}]");
 					return printList;
 				}
 			}
@@ -223,6 +223,8 @@ namespace CollectionTracker {
 		}
 		private static bool ParseOperand() {
 			bool left = ParseValue();
+			if (index >= evalString.Length)
+				return left;
 			if (evalString[index] == '&') {
 				++index;
 				return left && ParseValue();
