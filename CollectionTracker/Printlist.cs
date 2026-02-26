@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -145,8 +143,8 @@ namespace CollectionTracker {
 
 			//Handle click event
 			private void OnClick(object sender, MouseEventArgs e) {
-				//if (e.Button == MouseButtons.Left)
-				//	YGO_LoadCardDetails(print);
+				if (e.Button == MouseButtons.Left)
+					parent.ShowDetails(print);
 				//else if (e.Button == MouseButtons.Right)
 				//	YGO_ToggleFavorite(print);
 			}
@@ -276,6 +274,9 @@ namespace CollectionTracker {
 			++page;
 			UpdateEntries();
 		}
+
+		//Details
+		public void ShowDetails(Printing print) => parent.SetPage(new Detailpage(parent, print));
 
 	}
 

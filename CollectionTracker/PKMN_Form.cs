@@ -951,7 +951,7 @@ namespace CollectionTracker {
 						while (true) {
 
 							//If we're done with our text or the next word would exceed available width, generate the label and break
-							if (idx == words.Count || Utils.MeasureWidth(str + words[idx], Utils.FONT_DEFAULT, false) > maxWidth) {
+							if (idx == words.Count || Utils.MeasureWidth(str + words[idx], Utils.FONT_DEFAULT) > maxWidth) {
 
 								//First word is exceeding max width, add it if it fills the entire line or skip to next
 								if (idx < words.Count && str.Length == 0 && location.X == 5) {
@@ -1038,7 +1038,7 @@ namespace CollectionTracker {
 
 		//Insert clickable tooltip text at position. Returns position at end of added text
 		private Point PKMN_InsertTooltip(string str, string tooltip, Control control, Point location) {
-			int textWidth = Utils.MeasureWidth(str, Utils.FONT_UNDERLINE, false);
+			int textWidth = Utils.MeasureWidth(str, Utils.FONT_UNDERLINE);
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
 			Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, TEXT_HEIGHT)), str, Utils.FONT_UNDERLINE, Color.Blue);
 			label.MouseEnter += new EventHandler((sender, e) => PKMN_ShowTooltip(label, tooltip));
@@ -1050,7 +1050,7 @@ namespace CollectionTracker {
 
 		//Insert clickable cardtip text at position. Returns position at end of added text
 		private Point PKMN_InsertCardtip(string str, string cardtip, Control control, Point location) {
-			int textWidth = Utils.MeasureWidth(str, Utils.FONT_UNDERLINE, false);
+			int textWidth = Utils.MeasureWidth(str, Utils.FONT_UNDERLINE);
 			if (textWidth > control.Width - (location.X + 5)) { location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT); }
 			Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, TEXT_HEIGHT)), str, Utils.FONT_UNDERLINE, Color.Green);
 			label.MouseEnter += new EventHandler((sender, e) => PKMN_ShowCardtip(label, cardtip));
@@ -1069,7 +1069,7 @@ namespace CollectionTracker {
 
 			//No symbol found, insert text box
 			if (symbol == null) {
-				int textWidth = Utils.MeasureWidth(str, Utils.FONT_DEFAULT, false);
+				int textWidth = Utils.MeasureWidth(str, Utils.FONT_DEFAULT);
 				if (textWidth > control.Width - (location.X + 5))
 					location = new Point(LEFT_PAD, location.Y + TEXT_HEIGHT);
 				Label label = Utils.GenerateLabel(new Rectangle(location, new Size(textWidth, height)), str);

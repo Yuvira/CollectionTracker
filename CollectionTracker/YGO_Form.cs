@@ -826,7 +826,7 @@ namespace CollectionTracker {
 					while (true) {
 
 						//If we're done with our text or the next word would exceed available width, generate the label and break
-						if (idx == words.Count || Utils.MeasureWidth(str + words[idx], Utils.FONT_DEFAULT, false) > maxWidth) {
+						if (idx == words.Count || Utils.MeasureWidth(str + words[idx], Utils.FONT_DEFAULT) > maxWidth) {
 
 							//First word is exceeding max width, add it if it fills the entire line or skip to next
 							if (idx < words.Count && str.Length == 0 && location.X == 5) {

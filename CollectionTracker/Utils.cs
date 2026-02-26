@@ -33,6 +33,8 @@ namespace CollectionTracker {
 	//Global utilities
 	public static class Utils {
 
+		#region Static References
+
 		//Font style references
 		public static readonly Font FONT_DEFAULT = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
 		public static readonly Font FONT_BOLD = new Font(FONT_DEFAULT, FontStyle.Bold);
@@ -47,6 +49,9 @@ namespace CollectionTracker {
 		public static readonly Color COLOR_FRONT = Color.Black;
 		public static readonly Color COLOR_BUTTON = SystemColors.ControlLight;
 		public static readonly Color COLOR_DARK_ORANGE = BlendColours(new List<Color> { Color.Orange, Color.Black });
+
+		//Formatting characters
+		public static readonly char[] FORMAT_CHARS = { '{', '<' };
 
 		//Resource paths
 		public static readonly Dictionary<Game, string> ResourcePaths = new Dictionary<Game, string> {
@@ -67,6 +72,16 @@ namespace CollectionTracker {
 			{ Game.YGO  , "resources/ygo/back.png"  },
 			{ Game.PKMN , "resources/pkmn/back.png" },
 		};
+
+		//String-defined colors
+		public static readonly Dictionary<string, Color> ColorDefinitions = new Dictionary<string, Color> {
+			{ "red"   , Color.Red   },
+			{ "green" , Color.Green },
+			{ "blue"  , Color.Blue  },
+			{ "white" , Color.White },
+		};
+
+		#endregion
 
 		#region Control Generators
 
@@ -215,20 +230,47 @@ namespace CollectionTracker {
 
 		#endregion
 
-		#region Misc. Utilities
+		#region Formatting Utilities
 
 		//Split by string delimiter
 		public static string[] SplitString(string str, string delim) => str.Split(new string[] { delim }, StringSplitOptions.None);
 
+		//Get unescaped formatting marker
+		public static int FindFormatMarkerIndex(string str, int idx = 0, char formatChar = ' ') {
+			while (idx < str.Length) {
+				if (formatChar == ' ')
+					idx = str.IndexOfAny(FORMAT_CHARS, idx);
+				else
+					idx = str.IndexOf(formatChar, idx);
+				if (idx <= 0 || str[idx = 1] != '\\')
+					return idx;
+				++idx;
+			}
+			return -1;
+		}
+
 		//Measure width of text
-		public static int MeasureWidth(string str, Font font = null, bool useMargin = true) {
+		public static int MeasureWidth(string str, Font font = null) {
 			if (font == null)
 				font = FONT_DEFAULT;
-			if (useMargin)
-				return TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TrackerPage.TEXT_MARGIN;
-			else
-				return TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width;
+			return TextRenderer.MeasureText(str.Replace("&", "&&"), font).Width - TrackerPage.TEXT_MARGIN;
 		}
+
+		//Get color from string
+		public static Color? GetColorFromString(string str) {
+			if (ColorDefinitions.ContainsKey(str.ToLower()))
+				return ColorDefinitions[str.ToLower()];
+			string[] values = str.Split(',');
+			if (values.Length == 3 && int.TryParse(values[0], out int R) && int.TryParse(values[1], out int G) && int.TryParse(values[2], out int B))
+				return Color.FromArgb(255, R, G, B);
+			if (values.Length == 4 && int.TryParse(values[0], out int A) && int.TryParse(values[1], out R) && int.TryParse(values[2], out G) && int.TryParse(values[3], out B))
+				return Color.FromArgb(A, R, G, B);
+			return null;
+		}
+
+		#endregion
+
+		#region Misc. Utilities
 
 		//Center rect of given size within width
 		public static Rectangle CenterRect(Size controlSize, Size containerSize, Point offset = default) {
@@ -250,6 +292,15 @@ namespace CollectionTracker {
 				B += c.B;
 			}
 			return Color.FromArgb(A / cols.Count, R / cols.Count, G / cols.Count, B / cols.Count);
+		}
+
+		//Load image. Load nothing if it doesn't exist
+		public static bool TryLoadImage(PictureBox box, string path) {
+			try {
+				box.Load(path);
+				return true;
+			}
+			catch (Exception) { return false; }
 		}
 
 		//Try to load card image and return default path if failed
