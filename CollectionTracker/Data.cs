@@ -243,6 +243,8 @@ namespace CollectionTracker {
 		[ProtoMember(3)] private bool favorite;
 
 		//Accessors
+		public Dictionary<string, string> Fields => fields;
+		public List<Dictionary<string, string>> Faces => faces;
 		public bool IsMultiface => faces.Count > 0;
 
 		//Constructor
@@ -449,10 +451,10 @@ namespace CollectionTracker {
 					if (string.IsNullOrEmpty(value))
 						value = face[field];
 					else
-						value = " // " + face[field];
+						value += " // " + face[field];
 				}
 			}
-			return string.IsNullOrEmpty(value);
+			return !string.IsNullOrEmpty(value);
 		}
 
 		#endregion
@@ -577,7 +579,7 @@ namespace CollectionTracker {
 
 		//Get field
 		public bool TryGetField(string field, out string value) {
-			if (Card.TryGetField(field, out value))
+			if (card.TryGetField(field, out value))
 				return true;
 			if (!fields.ContainsKey(field))
 				return false;

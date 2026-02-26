@@ -32,6 +32,11 @@ namespace CollectionTracker {
 				Utils.TryLoadCardImage(imgBox, this.printing.ImagePaths[0], Catalog.Game);
 			contentPanel.Controls.Add(imgBox);
 
+			//Edit card
+			Button editCardButton = Utils.GenerateButton(new Rectangle(5, 550, 100, BUTTON_HEIGHT), "Edit Card");
+			editCardButton.Click += EditCard;
+			contentPanel.Controls.Add(editCardButton);
+
 			//Card data
 			if (Catalog.Game == Game.MTG)
 				LayoutDataMTG(contentPanel);
@@ -41,6 +46,9 @@ namespace CollectionTracker {
 
 		}
 
+		//Modify card data
+		private void EditCard(object sender, EventArgs e) => parent.SetPage(new Cardentry(parent, printing.Card));
+
 		#region MTG Layout
 
 		//Data layout
@@ -48,6 +56,8 @@ namespace CollectionTracker {
 
 			//Header panel
 			Panel headerPanel = Utils.GeneratePanel(new Rectangle(410, 5, 450, 0));
+			if (printing.TryGetField("name", out string name))
+				MessageBox.Show(name);
 			if (printing.TryGetField("oracle", out string oracle)) {
 				int height = GenerateDescription(oracle, headerPanel, new Point(LEFT_PAD, TOP_PAD));
 				headerPanel.Height = height + TOP_PAD + BOTTOM_PAD;
