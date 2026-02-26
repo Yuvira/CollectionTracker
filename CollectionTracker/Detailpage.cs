@@ -56,8 +56,6 @@ namespace CollectionTracker {
 
 			//Header panel
 			Panel headerPanel = Utils.GeneratePanel(new Rectangle(410, 5, 450, 0));
-			if (printing.TryGetField("name", out string name))
-				MessageBox.Show(name);
 			if (printing.TryGetField("oracle", out string oracle)) {
 				int height = GenerateDescription(oracle, headerPanel, new Point(LEFT_PAD, TOP_PAD));
 				headerPanel.Height = height + TOP_PAD + BOTTOM_PAD;

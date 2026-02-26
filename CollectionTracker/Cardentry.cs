@@ -31,24 +31,31 @@ namespace CollectionTracker {
 				this.parent = parent;
 
 				//Panel
-				panel = Utils.GenerateTrackerPanel(new Rectangle(0, yPos, 780, (cardFields.Keys.Count * 35) + TEXT_HEIGHT));
+				panel = Utils.GenerateTrackerPanel(new Rectangle(0, yPos, 780, 10));
 
 				//Header label
 				Label header = Utils.GenerateLabel(new Rectangle(0, 0, 780, TEXT_HEIGHT), headerText);
 				panel.Controls.Add(header);
 
 				//Fields
-				int idx = 0;
+				yPos = TEXT_HEIGHT + 5;
 				fields = new List<TextBox>();
 				values = new List<TextBox>();
 				panel.SuspendLayout();
 				foreach (string field in cardFields.Keys) {
-					fields.Add(Utils.GenerateTextBox(new Rectangle(0, TEXT_HEIGHT + 5 + (idx * 35), 150, 30), field));
-					values.Add(Utils.GenerateTextBox(new Rectangle(155, TEXT_HEIGHT + 5 + (idx * 35), 625, 30), cardFields[field]));
+					fields.Add(Utils.GenerateTextBox(new Rectangle(0, yPos, 150, 30), field));
+					if (field.ToLower().Equals("oracle")) {
+						values.Add(Utils.GenerateTextBox(new Rectangle(155, yPos, 625, 120), cardFields[field], true));
+						yPos += 125;
+					}
+					else {
+						values.Add(Utils.GenerateTextBox(new Rectangle(155, yPos, 625, 30), cardFields[field]));
+						yPos += 35;
+					}
 					panel.Controls.Add(fields[fields.Count - 1]);
 					panel.Controls.Add(values[values.Count - 1]);
-					++idx;
 				}
+				panel.Height = yPos - 5;
 				panel.ResumeLayout();
 
 			}
