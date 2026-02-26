@@ -47,7 +47,7 @@ namespace CollectionTracker {
 		}
 
 		//Modify card data
-		private void EditCard(object sender, EventArgs e) => parent.SetPage(new Cardentry(parent, printing.Card));
+		private void EditCard(object sender, EventArgs e) => parent.SetPage(new Cardentry(parent, printing.Card, printing));
 
 		#region MTG Layout
 

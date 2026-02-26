@@ -60,17 +60,32 @@ namespace CollectionTracker {
 
 			}
 
+			//Get fields as dictionary
+			public Dictionary<string, string> GetFieldDict() {
+				Dictionary<string, string> dict = new Dictionary<string, string>();
+				for (int i = 0; i < fields.Count; ++i)
+					if (!dict.ContainsKey(fields[i].Text))
+						dict.Add(fields[i].Text, values[i].Text);
+				return dict;
+			}
+
 		}
 
 		#endregion
 
 		//Properties
+		private Card cardref;
+		private Printing printref;
 		private Fieldlist fields;
 		private List<Fieldlist> faces;
 		private TrackerPanel listPanel;
 
 		//Constructor
-		public Cardentry(TrackerForm form, Card card) : base(form) {
+		public Cardentry(TrackerForm form, Card card, Printing print = null) : base(form) {
+
+			//References
+			cardref = card;
+			printref = print;
 
 			//Panel
 			listPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(800, panel.Height - 25), panel.Size, new Point(0, 0)));
@@ -93,6 +108,11 @@ namespace CollectionTracker {
 				yPos += faces[faces.Count - 1].Panel.Height + 5;
 			}
 
+			//Save button
+			Button saveButton = Utils.GenerateButton(new Rectangle(0, yPos, 100, BUTTON_HEIGHT), "Save");
+			saveButton.Click += SaveCard;
+			listPanel.Controls.Add(saveButton);
+
 			//Resume
 			listPanel.ResumeLayout();
 
@@ -101,5 +121,18 @@ namespace CollectionTracker {
 
 		}
 
+		//Save
+		private void SaveCard(object sender, EventArgs e) {
+			if (cardref != null) {
+				List<Dictionary<string, string>> faceDicts = new List<Dictionary<string, string>>();
+				foreach (Fieldlist face in faces)
+					faceDicts.Add(face.GetFieldDict());
+				cardref.CopyFields(fields.GetFieldDict(), faceDicts);
+			}
+			if (printref != null)
+				parent.SetPage(new Detailpage(parent, printref));
+		}
+
 	}
+
 }

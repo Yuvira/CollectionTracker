@@ -434,6 +434,12 @@ namespace CollectionTracker {
 				faces.Add(new Dictionary<string, string>(face));
 			favorite = card.favorite;
 		}
+		public void CopyFields(Dictionary<string, string> fields, List<Dictionary<string, string>> faces) {
+			this.fields = new Dictionary<string, string>(fields);
+			this.faces = new List<Dictionary<string, string>>();
+			foreach (Dictionary<string, string> face in faces)
+				this.faces.Add(new Dictionary<string, string>(face));
+		}
 
 		#endregion
 
