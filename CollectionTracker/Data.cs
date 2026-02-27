@@ -489,6 +489,7 @@ namespace CollectionTracker {
 		public Set Set => set;
 		public Card Card => card;
 		public List<Treatment> Treatments => treatments;
+		public Dictionary<string, string> Fields => fields;
 		public string Date => TryGetField("date", out string value) ? value : Set.Date;
 		public bool IsOwned => OwnedCount > 0;
 		public int OwnedCount => treatments.Sum(t => t.OwnedCount);
@@ -578,6 +579,7 @@ namespace CollectionTracker {
 			fields = new Dictionary<string, string>(print.fields);
 			imagePaths = new List<string>(print.imagePaths);
 		}
+		public void CopyFields(Dictionary<string, string> fields) => this.fields = new Dictionary<string, string>(fields);
 
 		#endregion
 

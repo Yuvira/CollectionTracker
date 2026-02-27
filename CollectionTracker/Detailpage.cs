@@ -37,6 +37,11 @@ namespace CollectionTracker {
 			editCardButton.Click += EditCard;
 			contentPanel.Controls.Add(editCardButton);
 
+			//Edit print
+			Button editPrintButton = Utils.GenerateButton(new Rectangle(110, 550, 100, BUTTON_HEIGHT), "Edit Print");
+			editPrintButton.Click += EditPrint;
+			contentPanel.Controls.Add(editPrintButton);
+
 			//Card data
 			if (Catalog.Game == Game.MTG)
 				LayoutDataMTG(contentPanel);
@@ -48,6 +53,7 @@ namespace CollectionTracker {
 
 		//Modify card data
 		private void EditCard(object sender, EventArgs e) => parent.SetPage(new Cardentry(parent, printing.Card, printing));
+		private void EditPrint(object sender, EventArgs e) => parent.SetPage(new Printentry(parent, printing));
 
 		#region MTG Layout
 

@@ -74,6 +74,7 @@
     <Compile Include="Cardentry.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Detailpage.cs" />
+    <Compile Include="Fieldlist.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,6 +90,7 @@
     <Compile Include="PKMN_Form.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Printentry.cs" />
     <Compile Include="Printlist.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
