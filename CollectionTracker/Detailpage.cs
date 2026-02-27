@@ -176,6 +176,11 @@ namespace CollectionTracker {
 								objects.Add(group.objects[j]);
 							break;
 						}
+						else {
+							for (int j = i; j < group.objects.Count; ++j)
+								objects.Add(group.objects[j]);
+							break;
+						}
 					}
 				}
 				else {
