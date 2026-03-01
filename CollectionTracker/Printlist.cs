@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -158,10 +159,13 @@ namespace CollectionTracker {
 		private int rowsPerPage = 15;
 		private int entriesPerRow = 4;
 		private List<Printing> printings;
+		private List<Printing> filteredPrints;
 		private List<Printentry> entries;
 
 		//Controls
 		private Label headerLabel;
+		private ComboBox sortBox;
+		private ComboBox filterBox;
 		private Button prevPageButton;
 		private Button nextPageButton;
 		private Panel listPanel;
@@ -174,10 +178,20 @@ namespace CollectionTracker {
 
 			//Get print list
 			printings = SearchUtils.SearchPrintings(Catalog, searchTerms);
+			filteredPrints = new List<Printing>(printings);
+			filteredPrints.Sort(new PrintComparerNewest().Compare);
 
 			//Header
-			headerLabel = Utils.GenerateLabel(new Rectangle(panel.Width / 2, 10, 0, TEXT_HEIGHT), "");
+			headerLabel = Utils.GenerateLabel(new Rectangle(((panel.Width - 1245) / 2) + 130, 10, 0, TEXT_HEIGHT), "");
 			headerLabel.Anchor = AnchorStyles.Top;
+
+			//Filter
+			filterBox = Utils.GenerateComboBox(new Rectangle(((panel.Width + 1245) / 2) - 250, 5, 120, BUTTON_HEIGHT), ComboBoxStyle.DropDownList, false);
+			filterBox.Items.AddRange(new string[] { "None", "Newest", "Oldest" });
+			filterBox.SelectedIndex = 0;
+			filterBox.SelectedValueChanged += FilterChanged;
+			int width = Utils.MeasureWidth("Filter");
+			Label filterLabel = Utils.GenerateLabel(new Rectangle(((panel.Width + 1245) / 2) - (260 + width), 10, width, TEXT_HEIGHT), "Filter");
 
 			//Page buttons
 			prevPageButton = Utils.GenerateButton(new Rectangle((panel.Width - 1245) / 2, 5, 120, BUTTON_HEIGHT), "<");
@@ -205,9 +219,11 @@ namespace CollectionTracker {
 			listPanel.ResumeLayout();
 
 			//Add to panel
-			panel.Controls.Add(headerLabel);
 			panel.Controls.Add(prevPageButton);
 			panel.Controls.Add(nextPageButton);
+			panel.Controls.Add(filterLabel);
+			panel.Controls.Add(headerLabel);
+			panel.Controls.Add(filterBox);
 			panel.Controls.Add(listPanel);
 
 			//Update
@@ -215,12 +231,27 @@ namespace CollectionTracker {
 
 		}
 
+		//Filter changed
+		private void FilterChanged(object sender, EventArgs e) {
+			filteredPrints = new List<Printing>(printings);
+			if (filterBox.SelectedItem.ToString().ToLower().Equals("newest")) {
+				filteredPrints.Sort(new PrintComparerNewest().Compare);
+				filteredPrints = filteredPrints.GroupBy(p => p.Card).Select(g => g.First()).ToList();
+			}
+			else if (filterBox.SelectedItem.ToString().ToLower().Equals("oldest")) {
+				filteredPrints.Sort(new PrintComparerOldest().Compare);
+				filteredPrints = filteredPrints.GroupBy(p => p.Card).Select(g => g.First()).ToList();
+			}
+			filteredPrints.Sort(new PrintComparerNewest().Compare);
+			UpdateEntries();
+		}
+
 		//Update entries
 		private void UpdateEntries() {
 
 			//Paging
 			int maxPage = 0;
-			while (((maxPage + 1) * EntriesPerPage) < printings.Count)
+			while (((maxPage + 1) * EntriesPerPage) < filteredPrints.Count)
 				++maxPage;
 			if (page > maxPage)
 				page = 0;
@@ -229,15 +260,13 @@ namespace CollectionTracker {
 			int startIdx = page * EntriesPerPage;
 
 			//Header
-			string str = $"Showing {startIdx + 1} - {Math.Min((page + 1) * EntriesPerPage, printings.Count)} of {printings.Count}";
-			int width = Utils.MeasureWidth(str);
-			headerLabel.Location = new Point((panel.Width - width) / 2, 5);
-			headerLabel.Width = width;
+			string str = $"Showing {startIdx + 1} - {Math.Min((page + 1) * EntriesPerPage, filteredPrints.Count)} of {filteredPrints.Count}";
+			headerLabel.Width = Utils.MeasureWidth(str);
 			headerLabel.Text = str;
 
 			//Button visibility
-			prevPageButton.Visible = printings.Count > EntriesPerPage;
-			nextPageButton.Visible = printings.Count > EntriesPerPage;
+			prevPageButton.Visible = filteredPrints.Count > EntriesPerPage;
+			nextPageButton.Visible = filteredPrints.Count > EntriesPerPage;
 
 			//Reset scroll
 			listPanel.AutoScrollPosition = new Point(0, 0);
@@ -251,8 +280,8 @@ namespace CollectionTracker {
 				maxHeight = 0;
 				for (int x = 0; x < entriesPerRow; ++x) {
 					idx = x + (y * entriesPerRow);
-					if (startIdx + idx < printings.Count) {
-						maxHeight = Math.Max(maxHeight, entries[idx].SetPrinting(printings, startIdx + idx));
+					if (startIdx + idx < filteredPrints.Count) {
+						maxHeight = Math.Max(maxHeight, entries[idx].SetPrinting(filteredPrints, startIdx + idx));
 						entries[idx].Panel.Location = new Point(5 + (x * 305), yPos);
 						entries[idx].Panel.Visible = true;
 					}

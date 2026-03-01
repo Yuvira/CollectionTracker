@@ -225,11 +225,6 @@ namespace CollectionTracker {
 
 	}
 
-	//Comparer
-	public class SetComparer : IComparer<Set> {
-		public int Compare(Set set1, Set set2) => set1.Date.CompareTo(set2.Date);
-	}
-
 	#endregion
 
 	#region Cards
@@ -550,7 +545,7 @@ namespace CollectionTracker {
 			foreach (MTG_Treatment treatment in print.treatments)
 				treatments.Add(new Treatment(treatment));
 			fields = new Dictionary<string, string>();
-			fields.Add("cn", print.cardNumber.ToString());
+			fields.Add("cn", print.cardNumber.ToString().PadLeft(4, '0'));
 			if (!string.IsNullOrEmpty(print.rarity))
 				fields.Add("rarity", print.rarity);
 			if (!string.IsNullOrEmpty(print.flavorText))
@@ -645,6 +640,13 @@ namespace CollectionTracker {
 				return false;
 			value = fields[field];
 			return true;
+		}
+		public string GetField(string field) {
+			if (card.TryGetField(field, out string value))
+				return value;
+			if (fields.ContainsKey(field))
+				return fields[field];
+			return "";
 		}
 
 		#endregion
@@ -891,6 +893,63 @@ namespace CollectionTracker {
 
 		#endregion
 
+	}
+
+	#endregion
+
+	#region Comparers
+
+	//Newest set
+	public class SetComparer : IComparer<Set> {
+		public int Compare(Set set1, Set set2) {
+			return set1.Date.CompareTo(set2.Date);
+		}
+	}
+
+	//Newest print
+	public class PrintComparerNewest : IComparer<Printing> {
+		public int Compare(Printing print1, Printing print2) {
+			int compare = print1.Date.CompareTo(print2.Date);
+			if (compare != 0)
+				return -compare;
+			compare = print1.Set.Name.CompareTo(print2.Set.Name);
+			if (compare != 0)
+				return compare;
+			return print1.GetField("cn").CompareTo(print2.GetField("cn"));
+		}
+	}
+
+	//Inverse newest print
+	public class PrintComparerInverseNewest : IComparer<Printing> {
+		public int Compare(Printing print1, Printing print2) {
+			int compare = print1.Date.CompareTo(print2.Date);
+			if (compare != 0)
+				return -compare;
+			compare = print1.Set.Name.CompareTo(print2.Set.Name);
+			if (compare != 0)
+				return compare;
+			return -print1.GetField("cn").CompareTo(print2.GetField("cn"));
+		}
+	}
+
+	//Oldest print
+	public class PrintComparerOldest : IComparer<Printing> {
+		public int Compare(Printing print1, Printing print2) {
+			int compare = print1.Date.CompareTo(print2.Date);
+			if (compare != 0)
+				return compare;
+			compare = print1.Set.Name.CompareTo(print2.Set.Name);
+			if (compare != 0)
+				return compare;
+			return print1.GetField("cn").CompareTo(print2.GetField("cn"));
+		}
+	}
+
+	//Alphabetical print
+	public class PrintComparerAlphabetical : IComparer<Printing> {
+		public int Compare(Printing print1, Printing print2) {
+			return print1.GetField("name").CompareTo(print2.GetField("name"));
+		}
 	}
 
 	#endregion
