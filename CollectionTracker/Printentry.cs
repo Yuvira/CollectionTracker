@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -8,6 +9,8 @@ namespace CollectionTracker {
 
 		//Properties
 		private Printing printref;
+		private ComboBox setBox;
+		private ComboBox cardBox;
 		private Fieldlist fields;
 		private TrackerPanel listPanel;
 
@@ -25,10 +28,26 @@ namespace CollectionTracker {
 			//Suspend
 			listPanel.SuspendLayout();
 
+			//Set
+			Label setLabel = Utils.GenerateLabel(new Rectangle(0, 0, 150, 30), "Set");
+			setBox = Utils.GenerateComboBox(new Rectangle(155, 0, 625, 30), ComboBoxStyle.DropDownList, true);
+			setBox.Items.AddRange(Catalog.Sets.ToArray());
+			setBox.SelectedItem = printref.Set;
+			listPanel.Controls.Add(setLabel);
+			listPanel.Controls.Add(setBox);
+
+			//Card
+			Label cardLabel = Utils.GenerateLabel(new Rectangle(0, 35, 150, 30), "Card");
+			cardBox = Utils.GenerateComboBox(new Rectangle(155, 35, 625, 30), ComboBoxStyle.DropDownList, true);
+			cardBox.Items.AddRange(Catalog.Cards.ToArray());
+			cardBox.SelectedItem = printref.Card;
+			listPanel.Controls.Add(cardLabel);
+			listPanel.Controls.Add(cardBox);
+
 			//Fields
-			fields = new Fieldlist(this, "Fields", print.Fields, 0);
+			fields = new Fieldlist(this, "Fields", print.Fields, 70);
 			listPanel.Controls.Add(fields.Panel);
-			int yPos = fields.Panel.Height + 5;
+			int yPos = fields.Panel.Height + 75;
 
 			//Save button
 			Button saveButton = Utils.GenerateButton(new Rectangle(0, yPos, 100, BUTTON_HEIGHT), "Save");

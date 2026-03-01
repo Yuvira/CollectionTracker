@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -147,6 +146,18 @@ namespace CollectionTracker {
 			button.FlatStyle = FlatStyle.Popup;
 			button.BackColor = COLOR_BUTTON;
 			return button;
+		}
+
+		//ComboBox generator
+		public static ComboBox GenerateComboBox(Rectangle rect, ComboBoxStyle style, bool sorted) {
+			ComboBox comboBox = new ComboBox();
+			comboBox.Location = rect.Location;
+			comboBox.Size = rect.Size;
+			comboBox.DropDownStyle = style;
+			comboBox.Sorted = sorted;
+			comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+			comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
+			return comboBox;
 		}
 
 		//Label Generator

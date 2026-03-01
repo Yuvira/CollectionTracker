@@ -490,6 +490,14 @@ namespace CollectionTracker {
 			return false;
 		}
 
+
+		#endregion
+
+		#region Utils
+
+		//ToString
+		public override string ToString() => TryGetField("name", out string name) ? name : "MISSING NAME FIELD";
+
 		#endregion
 
 	}
