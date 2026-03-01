@@ -140,7 +140,8 @@ namespace CollectionTracker {
 
 			//Check search string exists
 			if (string.IsNullOrWhiteSpace(search)) {
-				MessageBox.Show("No search terms provided!");
+				foreach (Printing print in catalog.Printings)
+					printList.Add(print);
 				return printList;
 			}
 
