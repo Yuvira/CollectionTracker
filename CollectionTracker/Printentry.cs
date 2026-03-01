@@ -66,7 +66,7 @@ namespace CollectionTracker {
 
 			//Save button
 			saveButton = Utils.GenerateButton(new Rectangle(0, 70, 100, BUTTON_HEIGHT), "Save");
-			saveButton.Click += SaveCard;
+			saveButton.Click += SavePrinting;
 			listPanel.Controls.Add(saveButton);
 
 			//Resize
@@ -92,9 +92,15 @@ namespace CollectionTracker {
 		}
 
 		//Save
-		private void SaveCard(object sender, EventArgs e) {
+		private void SavePrinting(object sender, EventArgs e) {
 			if (printref != null) {
+				if (setBox.SelectedItem != null && setBox.SelectedItem is Set set)
+					printref.CopySet(set);
+				if (cardBox.SelectedItem != null && cardBox.SelectedItem is Card card)
+					printref.CopyCard(card);
+				printref.CopyTreatments(treatments.GetTreatmentList());
 				printref.CopyFields(fields.GetFieldDict());
+				printref.CopyImgPaths(images.GetPathList());
 				parent.SetPage(new Detailpage(parent, printref));
 			}
 		}

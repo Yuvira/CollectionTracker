@@ -614,7 +614,24 @@ namespace CollectionTracker {
 			fields = new Dictionary<string, string>(print.fields);
 			imagePaths = new List<string>(print.imagePaths);
 		}
+		public void CopySet(Set set) => this.set = set;
+		public void CopyCard(Card card) => this.card = card;
+		public void CopyTreatments(List<string> names) {
+			foreach (string name in names) {
+				if (treatments.Select(t => t.Name).Contains(name))
+					continue;
+				else
+					treatments.Add(new Treatment(name));
+			}
+			for (int i = 0; i < treatments.Count; ++i) {
+				if (!names.Contains(treatments[i].Name)) {
+					treatments.RemoveAt(i);
+					--i;
+				}
+			}
+		}
 		public void CopyFields(Dictionary<string, string> fields) => this.fields = new Dictionary<string, string>(fields);
+		public void CopyImgPaths(List<string> paths) => this.imagePaths = new List<string>(paths);
 
 		#endregion
 
