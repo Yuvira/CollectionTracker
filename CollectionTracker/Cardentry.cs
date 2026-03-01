@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -13,7 +12,10 @@ namespace CollectionTracker {
 		private Printing printref;
 		private Fieldlist fields;
 		private List<Fieldlist> faces;
+
+		//Controls
 		private TrackerPanel listPanel;
+		private Button saveButton;
 
 		//Constructor
 		public Cardentry(TrackerForm form, Card card, Printing print = null) : base(form) {
@@ -32,21 +34,25 @@ namespace CollectionTracker {
 
 			//Fields
 			fields = new Fieldlist(this, "Fields", card.Fields, 0);
+			fields.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(fields.Panel);
 
 			//Faces
 			faces = new List<Fieldlist>();
-			int yPos = fields.Panel.Height + 5;
-			foreach (Dictionary<string, string> face in card.Faces) {
-				faces.Add(new Fieldlist(this, "Face", face, yPos));
-				listPanel.Controls.Add(faces[faces.Count - 1].Panel);
-				yPos += faces[faces.Count - 1].Panel.Height + 5;
+			foreach (Dictionary<string, string> faceFields in card.Faces) {
+				Fieldlist face = new Fieldlist(this, "Face", faceFields, 0);
+				face.OnListResize += OnFieldsResized;
+				listPanel.Controls.Add(face.Panel);
+				faces.Add(face);
 			}
 
 			//Save button
-			Button saveButton = Utils.GenerateButton(new Rectangle(0, yPos, 100, BUTTON_HEIGHT), "Save");
+			saveButton = Utils.GenerateButton(new Rectangle(0, 0, 100, BUTTON_HEIGHT), "Save");
 			saveButton.Click += SaveCard;
 			listPanel.Controls.Add(saveButton);
+
+			//Resize
+			OnFieldsResized();
 
 			//Resume
 			listPanel.ResumeLayout();
@@ -54,6 +60,16 @@ namespace CollectionTracker {
 			//Add to panel
 			panel.Controls.Add(listPanel);
 
+		}
+
+		//On resize
+		private void OnFieldsResized() {
+			int yPos = fields.Panel.Height + 5;
+			foreach (Fieldlist face in faces) {
+				face.Panel.Location = new Point(0, yPos);
+				yPos += face.Panel.Height + 5;
+			}
+			saveButton.Location = new Point(0, yPos);
 		}
 
 		//Save

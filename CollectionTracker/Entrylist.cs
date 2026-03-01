@@ -25,6 +25,9 @@ namespace CollectionTracker {
 		//Accessors
 		public TrackerPanel Panel => panel;
 
+		//Events
+		public Action OnListResize;
+
 		//Constructor
 		public Entrylist(TrackerPage parent, string headerText, int startY) {
 
@@ -55,9 +58,18 @@ namespace CollectionTracker {
 
 		}
 
+		//Resize
+		protected void Resize(int yPos) {
+			this.yPos = yPos;
+			addButton.Location = new Point(0, yPos);
+			panel.Height = yPos + 30;
+			OnListResize?.Invoke();
+		}
+
 		//Add row
 		public virtual void AddRow(object sender, EventArgs e) {
 			Button remove = Utils.GenerateButton(new Rectangle(0, yPos, 30, 30), "-");
+			remove.Click += RemoveRow;
 			Button up = Utils.GenerateButton(new Rectangle(35, yPos, 30, 30), "↑");
 			Button down = Utils.GenerateButton(new Rectangle(70, yPos, 30, 30), "↓");
 			panel.Controls.Add(remove);
@@ -66,6 +78,30 @@ namespace CollectionTracker {
 			removeButtons.Add(remove);
 			upButtons.Add(up);
 			downButtons.Add(down);
+		}
+
+		//Remove row
+		private void RemoveRow(object sender, EventArgs e) {
+			if (sender is Button remove) {
+				int idx = removeButtons.IndexOf(remove);
+				if (idx == -1)
+					return;
+				RemoveRow(idx);
+			}
+		}
+		protected abstract void RemoveRow(int idx);
+		protected void RemoveRow(int idx, int height) {
+			panel.Controls.Remove(removeButtons[idx]);
+			panel.Controls.Remove(upButtons[idx]);
+			panel.Controls.Remove(downButtons[idx]);
+			removeButtons.RemoveAt(idx);
+			upButtons.RemoveAt(idx);
+			downButtons.RemoveAt(idx);
+			for (int i = idx; i < removeButtons.Count; ++i) {
+				removeButtons[i].Location = new Point(removeButtons[i].Location.X, removeButtons[i].Location.Y - height);
+				upButtons[i].Location = new Point(upButtons[i].Location.X, upButtons[i].Location.Y - height);
+				downButtons[i].Location = new Point(downButtons[i].Location.X, downButtons[i].Location.Y - height);
+			}
 		}
 
 	}
@@ -112,9 +148,22 @@ namespace CollectionTracker {
 			panel.Controls.Add(value);
 			fields.Add(field);
 			values.Add(value);
-			addButton.Location = new Point(0, addButton.Location.Y + (value.Multiline ? 125 : 35));
-			yPos = addButton.Location.Y;
-			panel.Height = yPos + 30;
+			Resize(yPos + (value.Multiline ? 125 : 35));
+		}
+
+		//Remove row
+		protected override void RemoveRow(int idx) {
+			int height = values[idx].Height + 5;
+			RemoveRow(idx, height);
+			panel.Controls.Remove(fields[idx]);
+			panel.Controls.Remove(values[idx]);
+			fields.RemoveAt(idx);
+			values.RemoveAt(idx);
+			for (int i = idx; i < fields.Count; ++i) {
+				fields[i].Location = new Point(fields[i].Location.X, fields[i].Location.Y - height);
+				values[i].Location = new Point(values[i].Location.X, values[i].Location.Y - height);
+			}
+			Resize(yPos - height);
 		}
 
 		//Get fields as dictionary
@@ -163,9 +212,17 @@ namespace CollectionTracker {
 			treatment.Text = treatmentText;
 			panel.Controls.Add(treatment);
 			treatments.Add(treatment);
-			addButton.Location = new Point(0, addButton.Location.Y + 35);
-			yPos = addButton.Location.Y;
-			panel.Height = yPos + 30;
+			Resize(yPos + 35);
+		}
+
+		//Remove row
+		protected override void RemoveRow(int idx) {
+			RemoveRow(idx, 35);
+			panel.Controls.Remove(treatments[idx]);
+			treatments.RemoveAt(idx);
+			for (int i = idx; i < treatments.Count; ++i) 
+				treatments[i].Location = new Point(treatments[i].Location.X, treatments[i].Location.Y - 35);
+			Resize(yPos - 35);
 		}
 
 		//Get fields as dictionary
@@ -217,9 +274,21 @@ namespace CollectionTracker {
 			panel.Controls.Add(path);
 			searchButtons.Add(search);
 			imgPaths.Add(path);
-			addButton.Location = new Point(0, addButton.Location.Y + 35);
-			yPos = addButton.Location.Y;
-			panel.Height = yPos + 30;
+			Resize(yPos + 35);
+		}
+
+		//Remove row
+		protected override void RemoveRow(int idx) {
+			RemoveRow(idx, 35);
+			panel.Controls.Remove(searchButtons[idx]);
+			panel.Controls.Remove(imgPaths[idx]);
+			searchButtons.RemoveAt(idx);
+			imgPaths.RemoveAt(idx);
+			for (int i = idx; i < searchButtons.Count; ++i) {
+				searchButtons[i].Location = new Point(searchButtons[i].Location.X, searchButtons[i].Location.Y - 35);
+				imgPaths[i].Location = new Point(imgPaths[i].Location.X, imgPaths[i].Location.Y - 35);
+			}
+			Resize(yPos - 35);
 		}
 
 		//Get fields as dictionary

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,12 +9,15 @@ namespace CollectionTracker {
 
 		//Properties
 		private Printing printref;
-		private ComboBox setBox;
-		private ComboBox cardBox;
 		private Treatmentlist treatments;
 		private Fieldlist fields;
 		private Imagelist images;
+
+		//Controls
 		private TrackerPanel listPanel;
+		private ComboBox setBox;
+		private ComboBox cardBox;
+		private Button saveButton;
 
 		//Constructor
 		public Printentry(TrackerForm form, Printing print) : base(form) {
@@ -47,28 +49,28 @@ namespace CollectionTracker {
 			listPanel.Controls.Add(cardLabel);
 			listPanel.Controls.Add(cardBox);
 
-			//Y Position
-			int yPos = 70;
-
 			//Treatments
-			treatments = new Treatmentlist(this, "Treatments", printref.Treatments.Select(t => t.Name).ToList(), yPos);
+			treatments = new Treatmentlist(this, "Treatments", printref.Treatments.Select(t => t.Name).ToList(), 70);
+			treatments.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(treatments.Panel);
-			yPos += treatments.Panel.Height + 5;
 
 			//Fields
-			fields = new Fieldlist(this, "Fields", print.Fields, yPos);
+			fields = new Fieldlist(this, "Fields", print.Fields, 70);
+			fields.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(fields.Panel);
-			yPos += fields.Panel.Height + 5;
 
 			//Images
-			images = new Imagelist(this, "Images", print.ImagePaths, yPos);
+			images = new Imagelist(this, "Images", print.ImagePaths, 70);
+			images.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(images.Panel);
-			yPos += images.Panel.Height + 5;
 
 			//Save button
-			Button saveButton = Utils.GenerateButton(new Rectangle(0, yPos, 100, BUTTON_HEIGHT), "Save");
+			saveButton = Utils.GenerateButton(new Rectangle(0, 70, 100, BUTTON_HEIGHT), "Save");
 			saveButton.Click += SaveCard;
 			listPanel.Controls.Add(saveButton);
+
+			//Resize
+			OnFieldsResized();
 
 			//Resume
 			listPanel.ResumeLayout();
@@ -76,6 +78,17 @@ namespace CollectionTracker {
 			//Add to panel
 			panel.Controls.Add(listPanel);
 
+		}
+
+		//On resize
+		private void OnFieldsResized() {
+			int yPos = 70;
+			yPos += treatments.Panel.Height + 5;
+			fields.Panel.Location = new Point(0, yPos);
+			yPos += fields.Panel.Height + 5;
+			images.Panel.Location = new Point(0, yPos);
+			yPos += images.Panel.Height + 5;
+			saveButton.Location = new Point(0, yPos);
 		}
 
 		//Save
