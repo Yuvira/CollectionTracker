@@ -237,8 +237,8 @@ namespace CollectionTracker {
 					mtgPrintFilter.Add(print);
 				}
 			}
-			if (mtgSortMode) { mtgPrintFilter.Sort(new PrintComparerNumeric().Compare); }
-			else { mtgPrintFilter.Sort(new PrintComparerAlphabetical().Compare); }
+			if (mtgSortMode) { mtgPrintFilter.Sort(new MTG_PrintComparerNumeric().Compare); }
+			else { mtgPrintFilter.Sort(new MTG_PrintComparerAlphabetical().Compare); }
 			mtgCatalogPagenum = 0;
 			MTG_UpdateCatalog();
 			mtgTabControl.SelectedTab = mtgCatalogPage;
@@ -309,8 +309,8 @@ namespace CollectionTracker {
 			}
 
 			//Show catalog
-			if (mtgSortMode) { mtgPrintFilter.Sort(new PrintComparerNumeric().Compare); }
-			else { mtgPrintFilter.Sort(new PrintComparerAlphabetical().Compare); }
+			if (mtgSortMode) { mtgPrintFilter.Sort(new MTG_PrintComparerNumeric().Compare); }
+			else { mtgPrintFilter.Sort(new MTG_PrintComparerAlphabetical().Compare); }
 			mtgCatalogPagenum = 0;
 			MTG_UpdateCatalog();
 			mtgTabControl.SelectedTab = mtgCatalogPage;
@@ -331,8 +331,8 @@ namespace CollectionTracker {
 		private void MTG_OnClickSortNumeric(object sender, EventArgs e) => MTG_UpdateSortMode(true);
 		private void MTG_UpdateSortMode(bool mode) {
 			mtgSortMode = mode;
-			if (mtgSortMode) { mtgPrintFilter.Sort(new PrintComparerNumeric().Compare); }
-			else { mtgPrintFilter.Sort(new PrintComparerAlphabetical().Compare); }
+			if (mtgSortMode) { mtgPrintFilter.Sort(new MTG_PrintComparerNumeric().Compare); }
+			else { mtgPrintFilter.Sort(new MTG_PrintComparerAlphabetical().Compare); }
 			mtgCatalogPagenum = 0;
 			MTG_UpdateCatalog();
 			mtgTabControl.SelectedTab = mtgCatalogPage;
@@ -1021,7 +1021,7 @@ namespace CollectionTracker {
 			if (card.name.Equals("_"))
 				return;
 			List<MTG_Printing> prints = mtgCatalog.printings.Where(p => p.card == card).ToList();
-			prints.Sort(new PrintComparerNumericReverse().Compare);
+			prints.Sort(new MTG_PrintComparerNumericReverse().Compare);
 			for (int i = 0; i < prints.Count; ++i) {
 				Label label = new Label();
 				label.Font = Utils.FONT_UNDERLINE;
