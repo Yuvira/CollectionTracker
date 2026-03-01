@@ -347,14 +347,27 @@ namespace CollectionTracker {
 					}
 				}
 				if (!string.IsNullOrEmpty(card.oracleText)) {
-					if (!card.oracleText.Contains("\r\n//\r\n"))
-						front.Add("oracle", card.oracleText);
+					if (!card.oracleText.Contains("\r\n//\r\n")) {
+						string o = card.oracleText;
+						while (o.Contains("\r\n\r\n"))
+							o = o.Replace("\r\n\r\n", "\r\n");
+						front.Add("oracle", o);
+					}
 					else {
 						string[] texts = Utils.SplitString(card.oracleText, "\r\n//\r\n");
-						if (texts.Length > 0 && !string.IsNullOrEmpty(texts[0]))
-							front.Add("oracle", texts[0]);
-						if (texts.Length > 1 && !string.IsNullOrEmpty(texts[1]))
-							back.Add("oracle", texts[1]);
+						string o;
+						if (texts.Length > 0 && !string.IsNullOrEmpty(texts[0])) {
+							o = texts[0];
+							while (o.Contains("\r\n\r\n"))
+								o = o.Replace("\r\n\r\n", "\r\n");
+							front.Add("oracle", o);
+						}
+						if (texts.Length > 1 && !string.IsNullOrEmpty(texts[1])) {
+							o = texts[1];
+							while (o.Contains("\r\n\r\n"))
+								o = o.Replace("\r\n\r\n", "\r\n");
+							back.Add("oracle", o);
+						}
 					}
 				}
 				faces.Add(front);
@@ -461,6 +474,20 @@ namespace CollectionTracker {
 				}
 			}
 			return !string.IsNullOrEmpty(value);
+		}
+
+		//Get field from specific face
+		public bool TryGetField(string field, int face, out string value) {
+			if (face >= 0 && face < faces.Count && faces[face].ContainsKey(field)) {
+				value = faces[face][field];
+				return true;
+			}
+			if (face == 0 && fields.ContainsKey(field)) {
+				value = fields[field];
+				return true;
+			}
+			value = "";
+			return false;
 		}
 
 		#endregion

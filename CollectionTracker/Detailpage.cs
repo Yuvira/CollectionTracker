@@ -10,10 +10,10 @@ namespace CollectionTracker {
 	public class Detailpage : TrackerPage {
 
 		//Properties
-		Printing printing;
+		private Printing printing;
 
 		//Controls
-		Panel contentPanel;
+		private Panel contentPanel;
 
 		//Constructor
 		public Detailpage(TrackerForm form, Printing printing) : base(form) {
@@ -44,7 +44,7 @@ namespace CollectionTracker {
 
 			//Card data
 			if (Catalog.Game == Game.MTG)
-				LayoutDataMTG(contentPanel);
+				LayoutDataMTG();
 
 			//Add to panel
 			panel.Controls.Add(contentPanel);
@@ -57,24 +57,110 @@ namespace CollectionTracker {
 
 		#region MTG Layout
 
-		//Data layout
-		private void LayoutDataMTG(Panel contentPanel) {
+		//Color dictionary
+		private static readonly Dictionary<char, Color> MTGTypeColors = new Dictionary<char, Color> {
+			{ 'w', Color.White },
+			{ 'u', Color.Blue  },
+			{ 'b', Color.Black },
+			{ 'r', Color.Red   },
+			{ 'g', Color.Green },
+		};
 
-			//Header panel
-			Panel headerPanel = Utils.GeneratePanel(new Rectangle(410, 5, 450, 0));
-			if (printing.TryGetField("oracle", out string oracle)) {
-				int height = GenerateDescription(oracle, headerPanel, new Point(LEFT_PAD, TOP_PAD));
-				headerPanel.Height = height + TOP_PAD + BOTTOM_PAD;
+		//Data layout
+		private void LayoutDataMTG() {
+
+			//Y Position
+			int yPos;
+			int yPosPanel = 5;
+
+			//Print faces
+			for (int i = 0; i < Math.Max(printing.Card.Faces.Count, 1); ++i) {
+
+				//Panel
+				TrackerPanel facePanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+
+				//Position
+				yPos = TOP_PAD;
+
+				//Name and cost
+				bool hasName = printing.Card.TryGetField("name", i, out string name);
+				bool hasCost = printing.Card.TryGetField("cost", i, out string cost);
+				if (hasName)
+					GenerateDescription($"<b>{name}", facePanel, new Point(LEFT_PAD, yPos), false);
+				if (hasCost)
+					GenerateDescription(cost, facePanel, new Point(facePanel.Width - LEFT_PAD, yPos), false, true);
+				if (hasName || hasCost)
+					yPos += TEXT_HEIGHT;
+
+				//Type line
+				if (printing.Card.TryGetField("type", i, out string type)) {
+					yPos += BLOCK_SPACING;
+					yPos += GenerateDescription($"<b>{type}", facePanel, new Point(LEFT_PAD, yPos), false);
+				}
+
+				//Oracle text
+				if (printing.Card.TryGetField("oracle", i, out string oracle)) {
+					yPos += BLOCK_SPACING;
+					yPos += GenerateDescription(oracle, facePanel, new Point(LEFT_PAD, yPos));
+				}
+
+				//Power and toughness
+				bool hasPower = printing.Card.TryGetField("power", i, out string power);
+				bool hasToughness = printing.Card.TryGetField("toughness", i, out string toughness);
+				bool hasLoyalty = printing.Card.TryGetField("loyalty", i, out string loyalty);
+				string pt = "";
+				if (hasPower && hasToughness)
+					pt = $"{power} / {toughness}";
+				else if (hasPower)
+					pt = $"{power} Power";
+				else if (hasToughness)
+					pt = $"{toughness} Toughness";
+				if (hasLoyalty && (hasPower || hasToughness))
+					pt = $"{loyalty} Loyalty, {pt}";
+				else if (hasLoyalty)
+					pt = $"{loyalty} Loyalty";
+				if (hasPower || hasToughness || hasLoyalty) {
+					yPos += BLOCK_SPACING;
+					yPos += GenerateDescription($"<b>{pt}", facePanel, new Point(facePanel.Width - LEFT_PAD, yPos), false, true);
+				}
+
+				//Panel height
+				facePanel.Height = yPos + BOTTOM_PAD;
+				yPosPanel += yPos + BOTTOM_PAD + 5;
+
+				//Panel colors
+				if (printing.Card.TryGetField("color", i, out string color))
+					SetPanelColorsMTG(facePanel, color);
+				else
+					facePanel.AddBorder(Utils.COLOR_FRONT, 1);
+
+				//Add to content
+				contentPanel.Controls.Add(facePanel);
+
 			}
 
-			//Add to content
-			contentPanel.Controls.Add(headerPanel);
+		}
 
+		//Set panel color
+		private void SetPanelColorsMTG(TrackerPanel panel, string color) {
+			color = color.ToLower();
+			if (color.Length == 0)
+				panel.AddBorder(SystemColors.ControlDarkDark, 3);
+			else if (color.Length == 1 && MTGTypeColors.ContainsKey(color[0]))
+				panel.AddBorder(MTGTypeColors[color[0]], 3);
+			else if (color.Length == 2 && MTGTypeColors.ContainsKey(color[0]) && MTGTypeColors.ContainsKey(color[1]))
+				panel.AddDoubleBorder(MTGTypeColors[color[0]], MTGTypeColors[color[1]], 3);
+			else if (color.Length > 2)
+				panel.AddBorder(Color.Yellow, 3);
+			else
+				panel.AddBorder(Utils.COLOR_FRONT, 1);
 		}
 
 		#endregion
 
 		#region Description Generators
+
+		#region Description Object Classes
 
 		//Formatting settings
 		private struct FormatSettings {
@@ -88,7 +174,7 @@ namespace CollectionTracker {
 		//Description object class
 		private abstract class DescriptionObject {
 			public abstract int GetWidth();
-			public abstract Point GenerateControl(Panel panel, Point location);
+			public abstract Point GenerateControl(Panel panel, Point location, bool rightAlign = false);
 		}
 
 		//Description text
@@ -104,9 +190,13 @@ namespace CollectionTracker {
 
 			//Overrides
 			public override int GetWidth() => Utils.MeasureWidth(text, new Font(Utils.FONT_DEFAULT, settings.style));
-			public override Point GenerateControl(Panel panel, Point location) {
+			public override Point GenerateControl(Panel panel, Point location, bool rightAlign = false) {
 				int width = Utils.MeasureWidth(text, new Font(Utils.FONT_DEFAULT, settings.style));
+				if (rightAlign)
+					location.X -= width;
 				panel.Controls.Add(Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), text, new Font(Utils.FONT_DEFAULT, settings.style), settings.color));
+				if (rightAlign)
+					return location;
 				return new Point(location.X + width, location.Y);
 			}
 
@@ -127,11 +217,15 @@ namespace CollectionTracker {
 					return 0;
 				return (int)(symbol.Aspect * TEXT_HEIGHT);
 			}
-			public override Point GenerateControl(Panel panel, Point location) {
+			public override Point GenerateControl(Panel panel, Point location, bool rightAlign = false) {
 				int width = (int)(symbol.Aspect * TEXT_HEIGHT);
+				if (rightAlign)
+					location.X -= width;
 				PictureBox imgBox = Utils.GeneratePictureBox(new Rectangle(location, new Size(width, TEXT_HEIGHT)));
 				Utils.TryLoadImage(imgBox, symbol.ImgPath);
 				panel.Controls.Add(imgBox);
+				if (rightAlign)
+					return location;
 				return new Point(location.X + width, location.Y);
 			}
 
@@ -195,12 +289,18 @@ namespace CollectionTracker {
 					}
 				}
 			}
-			public void GenerateControls(Panel panel, Point location) {
-				foreach (DescriptionObject obj in objects)
-					location = obj.GenerateControl(panel, location);
+			public void GenerateControls(Panel panel, Point location, bool rightAlign = false) {
+				if (!rightAlign)
+					foreach (DescriptionObject obj in objects)
+						location = obj.GenerateControl(panel, location);
+				else
+					for (int i = objects.Count - 1; i >= 0; --i)
+						location = objects[i].GenerateControl(panel, location, rightAlign);
 			}
 
 		}
+
+		#endregion
 
 		//Process formatting marker
 		private FormatSettings ProcessFormatMarker(string text, FormatSettings settings) {
@@ -244,7 +344,11 @@ namespace CollectionTracker {
 		}
 
 		//Generate description text in panel at location. Returns total height of the description field
-		private int GenerateDescription(string description, Panel panel, Point location) {
+		private int GenerateDescription(string description, Panel panel, Point location, bool allowLineBreaks = true, bool rightAlign = false) {
+
+			//Remove line breaks
+			if (!allowLineBreaks)
+				description = description.Replace("\r\n", "");
 
 			//Return if nothing to display
 			if (string.IsNullOrWhiteSpace(description))
@@ -357,16 +461,16 @@ namespace CollectionTracker {
 					int maxWidth = panel.Width - (location.X + 5);
 					group = new DescriptionGroup();
 					for (int i = 0; i < groups.Count; ++i) {
-						if (group.objects.Count == 0 || group.GetWidth() + groups[i].GetWidth() <= maxWidth)
+						if (group.objects.Count == 0 || group.GetWidth() + groups[i].GetWidth() <= maxWidth || !allowLineBreaks)
 							group.Merge(groups[i]);
 						else {
-							group.GenerateControls(panel, location);
+							group.GenerateControls(panel, location, rightAlign);
 							location.Y += TEXT_HEIGHT;
 							group = new DescriptionGroup();
 							group.Merge(groups[i]);
 						}
 					}
-					group.GenerateControls(panel, location);
+					group.GenerateControls(panel, location, rightAlign);
 					location.Y += TEXT_HEIGHT;
 
 				}

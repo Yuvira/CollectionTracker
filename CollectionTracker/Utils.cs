@@ -10,18 +10,34 @@ namespace CollectionTracker {
 
 	//Custom panel class
 	public class TrackerPanel : Panel {
-		private List<Pen> pens;
+		private class PanelBorder {
+			protected Pen pen;
+			public PanelBorder(Color color, int width) => pen = new Pen(color, width);
+			public virtual void DrawBorder(Graphics g, int width, int height) => g.DrawRectangle(pen, 0, 0, width, height);
+		}
+		private class DoublePanelBorder : PanelBorder {
+			private Pen pen2;
+			public DoublePanelBorder(Color color1, Color color2, int width) : base(color1, width) => pen2 = new Pen(color2, width);
+			public override void DrawBorder(Graphics g, int width, int height) {
+				g.DrawLine(pen, 0, 0, width, 0);
+				g.DrawLine(pen, 0, 0, 0, height);
+				g.DrawLine(pen2, width, 0, width, height);
+				g.DrawLine(pen2, 0, height, width, height);
+			}
+		}
+		private List<PanelBorder> borders;
 		public TrackerPanel() : base() {
-			pens = new List<Pen>();
+			borders = new List<PanelBorder>();
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
 		}
-		public void AddBorder(Color color, int width) => pens.Add(new Pen(color, width));
-		public void ClearBorders() => pens.Clear();
+		public void AddBorder(Color color, int width) => borders.Add(new PanelBorder(color, width));
+		public void AddDoubleBorder(Color color1, Color color2, int width) => borders.Add(new DoublePanelBorder(color1, color2, width));
+		public void ClearBorders() => borders.Clear();
 		protected override void OnPaint(PaintEventArgs e) {
-			if (pens.Count > 0) {
+			if (borders.Count > 0) {
 				e.Graphics.FillRectangle(Utils.BRUSH_BACK, ClientRectangle);
-				foreach (Pen pen in pens)
-					e.Graphics.DrawRectangle(pen, 0, 0, ClientSize.Width - 1, ClientSize.Height - 1);
+				foreach (PanelBorder border in borders)
+					border.DrawBorder(e.Graphics, ClientSize.Width - 1, ClientSize.Height - 1);
 			}
 			else
 				base.OnPaint(e);
