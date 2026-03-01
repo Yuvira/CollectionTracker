@@ -74,7 +74,7 @@
     <Compile Include="Cardentry.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Detailpage.cs" />
-    <Compile Include="Fieldlist.cs" />
+    <Compile Include="Entrylist.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

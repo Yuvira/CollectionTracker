@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -11,7 +12,9 @@ namespace CollectionTracker {
 		private Printing printref;
 		private ComboBox setBox;
 		private ComboBox cardBox;
+		private Treatmentlist treatments;
 		private Fieldlist fields;
+		private Imagelist images;
 		private TrackerPanel listPanel;
 
 		//Constructor
@@ -44,10 +47,23 @@ namespace CollectionTracker {
 			listPanel.Controls.Add(cardLabel);
 			listPanel.Controls.Add(cardBox);
 
+			//Y Position
+			int yPos = 70;
+
+			//Treatments
+			treatments = new Treatmentlist(this, "Treatments", printref.Treatments.Select(t => t.Name).ToList(), yPos);
+			listPanel.Controls.Add(treatments.Panel);
+			yPos += treatments.Panel.Height + 5;
+
 			//Fields
-			fields = new Fieldlist(this, "Fields", print.Fields, 70);
+			fields = new Fieldlist(this, "Fields", print.Fields, yPos);
 			listPanel.Controls.Add(fields.Panel);
-			int yPos = fields.Panel.Height + 75;
+			yPos += fields.Panel.Height + 5;
+
+			//Images
+			images = new Imagelist(this, "Images", print.ImagePaths, yPos);
+			listPanel.Controls.Add(images.Panel);
+			yPos += images.Panel.Height + 5;
 
 			//Save button
 			Button saveButton = Utils.GenerateButton(new Rectangle(0, yPos, 100, BUTTON_HEIGHT), "Save");
