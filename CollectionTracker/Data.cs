@@ -653,6 +653,13 @@ namespace CollectionTracker {
 			return "";
 		}
 
+		//Get image
+		public string GetImagePath(int idx) {
+			if (idx < 0 || idx >= imagePaths.Count)
+				return "";
+			return imagePaths[idx];
+		}
+
 		#endregion
 
 		#region Count Modifiers

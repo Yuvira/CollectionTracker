@@ -9,11 +9,52 @@ namespace CollectionTracker {
 	//Detail page
 	public class Detailpage : TrackerPage {
 
+		#region Print List Row Class
+
+		//Print list row
+		private class DetailPrintrow {
+
+			//Properties
+			private Detailpage parent;
+			private Label label;
+			private string printid;
+
+			//Accessors
+			public Label Label => label;
+
+			//Constructor
+			public DetailPrintrow(Detailpage parent, string printid, string setname, int yPos, int width, bool isCurrent) {
+				this.parent = parent;
+				this.printid = printid;
+				label = Utils.GenerateLabel(
+					new Rectangle(LEFT_PAD, yPos, width, TEXT_HEIGHT),
+					printid.ToUpper() + " - " + setname,
+					Utils.FONT_UNDERLINE,
+					isCurrent ? default : Color.Blue
+				);
+				label.MouseEnter += ShowCardtip;
+				label.MouseLeave += HideCardtip;
+				if (!isCurrent)
+					label.Click += LoadCardtip;
+			}
+
+			//Cardtip functions
+			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(label, printid);
+			private void HideCardtip(object sender, EventArgs e) => parent.HideCardtip();
+			private void LoadCardtip(object sender, EventArgs e) => parent.LoadCardtip(printid);
+
+		}
+
+		#endregion
+
 		//Properties
 		private Printing printing;
 
 		//Controls
 		private Panel contentPanel;
+		private TrackerPanel printPanel;
+		private Panel tooltipPanel;
+		private PictureBox cardtipBox;
 
 		//Constructor
 		public Detailpage(TrackerForm form, Printing printing) : base(form) {
@@ -22,9 +63,17 @@ namespace CollectionTracker {
 			this.printing = printing;
 
 			//Generate content panel
-			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1270, panel.Height - 10), panel.Size));
+			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1290, panel.Height - 10), panel.Size));
 			contentPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			contentPanel.AutoScroll = true;
+
+			//Tooltips
+			tooltipPanel = Utils.GeneratePanel(new Rectangle(0, 0, 300, TEXT_HEIGHT));
+			tooltipPanel.Hide();
+			cardtipBox = Utils.GeneratePictureBox(new Rectangle(0, 0, 250, 350));
+			cardtipBox.Hide();
+			contentPanel.Controls.Add(tooltipPanel);
+			contentPanel.Controls.Add(cardtipBox);
 
 			//Image box
 			PictureBox imgBox = Utils.GeneratePictureBox(new Rectangle(5, 5, 400, 540));
@@ -41,6 +90,26 @@ namespace CollectionTracker {
 			Button editPrintButton = Utils.GenerateButton(new Rectangle(110, 550, 100, BUTTON_HEIGHT), "Edit Print");
 			editPrintButton.Click += EditPrint;
 			contentPanel.Controls.Add(editPrintButton);
+
+			//Print panel
+			printPanel = Utils.GenerateTrackerPanel(new Rectangle(865, 5, 400, TEXT_HEIGHT));
+			if (!printing.GetField("name").Equals("_") && !printing.GetField("name").Equals("")) {
+				List<Printing> prints = Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
+				prints.Sort(new PrintComparerInverseNewest().Compare);
+				for (int i = 0; i < prints.Count; ++i) {
+					DetailPrintrow row = new DetailPrintrow(
+						this,
+						prints[i].GetField("printid"),
+						prints[i].Set.Name,
+						TOP_PAD + (i * TEXT_HEIGHT),
+						printPanel.Width - 10,
+						prints[i] == printing
+					);
+					printPanel.Controls.Add(row.Label);
+				}
+				printPanel.Height = TOP_PAD + BOTTOM_PAD + (prints.Count * TEXT_HEIGHT);
+			}
+			contentPanel.Controls.Add(printPanel);
 
 			//Card data
 			if (Catalog.Game == Game.MTG)
@@ -139,6 +208,12 @@ namespace CollectionTracker {
 
 			}
 
+			//Colour panels
+			if (printing.Card.TryGetField("color", 0, out string color2))
+				SetPanelColorsMTG(printPanel, color2);
+			else
+				printPanel.AddBorder(Utils.COLOR_FRONT, 1);
+
 		}
 
 		//Set panel color
@@ -155,6 +230,76 @@ namespace CollectionTracker {
 			else
 				panel.AddBorder(Utils.COLOR_FRONT, 1);
 		}
+
+		#endregion
+
+		#region Tooltips / Cardtips
+
+		//Show tooltip window relative to given control with given text
+		public void ShowTooltip(Control control, string text) {
+			int posX = control.Parent.Location.X + control.Location.X + (control.Width / 2) - (tooltipPanel.Width / 2);
+			int posY = control.Parent.Location.Y + control.Location.Y + TEXT_HEIGHT;
+			tooltipPanel.Show();
+			tooltipPanel.BringToFront();
+			tooltipPanel.Location = new Point(posX, posY);
+			tooltipPanel.Controls.Clear();
+			int height = GenerateDescription(text, tooltipPanel, new Point(LEFT_PAD, TOP_PAD));
+			tooltipPanel.Height = height + TOP_PAD + BOTTOM_PAD;
+		}
+
+		//Show tooltip window relative to given control with given text
+		public void ShowCardtip(Control control, string printid) {
+
+			//Get modifier
+			char mod = ' ';
+			if (printid[printid.Length - 2] == '-') {
+				mod = printid.ToLower()[printid.Length - 1];
+				printid = printid.Substring(0, printid.Length - 2);
+			}
+
+			//Load printing
+			Printing print = Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(printid));
+			if (print != null) {
+
+				//Sideways cards
+				if (mod == 's')
+					cardtipBox.Size = new Size(350, 250);
+				else
+					cardtipBox.Size = new Size(250, 350);
+
+				//Position
+				int posX = control.Parent.Location.X + control.Location.X + (control.Width / 2) - (cardtipBox.Width / 2);
+				int posY = control.Parent.Location.Y + control.Location.Y + TEXT_HEIGHT;
+
+				//Show
+				cardtipBox.Show();
+				cardtipBox.BringToFront();
+				cardtipBox.Location = new Point(posX, posY);
+
+				//Load image
+				Utils.TryLoadCardImage(cardtipBox, print.GetImagePath(mod == 'b' ? 1 : 0), Catalog.Game);
+
+				//Rotation
+				Image image = cardtipBox.Image;
+				if (mod == 'u')
+					image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+				if (mod == 's')
+					image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+
+			}
+
+		}
+
+		//Show tooltip window relative to given control with given text
+		public void LoadCardtip(string printid) {
+			Printing print = Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(printid));
+			if (print != null)
+				parent.SetPage(new Detailpage(parent, print));
+		}
+
+		//Hide
+		public void HideTooltip() => tooltipPanel.Hide();
+		public void HideCardtip() => cardtipBox.Hide();
 
 		#endregion
 
@@ -307,38 +452,36 @@ namespace CollectionTracker {
 			if (string.IsNullOrWhiteSpace(text))
 				return settings;
 			string[] splits = text.Split('|');
-			if (splits.Length < 3) {
-				if (splits.Length == 1) {
-					if (splits[0].ToLower().Equals("b"))
-						settings.style |= FontStyle.Bold;
-					else if (splits[0].ToLower().Equals("/b"))
-						settings.style &= ~FontStyle.Bold;
-					else if (splits[0].ToLower().Equals("i"))
-						settings.style |= FontStyle.Italic;
-					else if (splits[0].ToLower().Equals("/i"))
-						settings.style &= ~FontStyle.Italic;
-					else if (splits[0].ToLower().Equals("u"))
-						settings.style |= FontStyle.Underline;
-					else if (splits[0].ToLower().Equals("/u"))
-						settings.style &= ~FontStyle.Underline;
-					else if (splits[0].ToLower().Equals("/c"))
-						settings.color = null;
-					else if (splits[0].ToLower().Equals("/tt"))
-						settings.tooltip = null;
-					else if (splits[0].ToLower().Equals("/ct"))
-						settings.printid = null;
+			if (splits.Length == 1) {
+				if (splits[0].ToLower().Equals("b"))
+					settings.style |= FontStyle.Bold;
+				else if (splits[0].ToLower().Equals("/b"))
+					settings.style &= ~FontStyle.Bold;
+				else if (splits[0].ToLower().Equals("i"))
+					settings.style |= FontStyle.Italic;
+				else if (splits[0].ToLower().Equals("/i"))
+					settings.style &= ~FontStyle.Italic;
+				else if (splits[0].ToLower().Equals("u"))
+					settings.style |= FontStyle.Underline;
+				else if (splits[0].ToLower().Equals("/u"))
+					settings.style &= ~FontStyle.Underline;
+				else if (splits[0].ToLower().Equals("/c"))
+					settings.color = null;
+				else if (splits[0].ToLower().Equals("/tt"))
+					settings.tooltip = null;
+				else if (splits[0].ToLower().Equals("/ct"))
+					settings.printid = null;
+			}
+			else if (splits.Length == 2) {
+				if (splits[0].ToLower().Equals("c")) {
+					Color? color = Utils.GetColorFromString(splits[1]);
+					if (color != null)
+						settings.color = color;
 				}
-				else if (splits.Length == 2) {
-					if (splits[0].ToLower().Equals("c")) {
-						Color? color = Utils.GetColorFromString(splits[1]);
-						if (color != null)
-							settings.color = color;
-					}
-					else if (splits[0].ToLower().Equals("tt"))
-						settings.tooltip = splits[1];
-					else if (splits[0].ToLower().Equals("ct"))
-						settings.printid = splits[1];
-				}
+				else if (splits[0].ToLower().Equals("tt"))
+					settings.tooltip = splits[1];
+				else if (splits[0].ToLower().Equals("ct"))
+					settings.printid = splits[1];
 			}
 			return settings;
 		}
