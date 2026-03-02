@@ -47,14 +47,72 @@ namespace CollectionTracker {
 
 		#endregion
 
+		#region Tooltip & Cardtip Classes
+
+		//Tooltip object
+		public class Tooltip {
+
+			//Properties
+			private Detailpage parent;
+			private Control control;
+			private string text;
+
+			//Constructor
+			public Tooltip(Detailpage parent, Control control, string text) {
+				this.parent = parent;
+				this.control = control;
+				this.text = text;
+				this.control.MouseEnter += ShowTooltip;
+				this.control.MouseLeave += HideTooltip;
+			}
+
+			//Tooltip functions
+			private void ShowTooltip(object sender, EventArgs e) => parent.ShowTooltip(control, text);
+			private void HideTooltip(object sender, EventArgs e) => parent.HideTooltip();
+
+		}
+
+		//Cardtip object
+		public class Cardtip {
+
+			//Properties
+			private Detailpage parent;
+			private Control control;
+			private string printid;
+
+			//Constructor
+			public Cardtip(Detailpage parent, Control control, string printid) {
+				this.parent = parent;
+				this.control = control;
+				this.printid = printid;
+				this.control.MouseEnter += ShowCardtip;
+				this.control.MouseLeave += HideCardtip;
+				this.control.Click += LoadCardtip;
+			}
+
+			//Cardtip functions
+			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(control, printid);
+			private void HideCardtip(object sender, EventArgs e) => parent.HideCardtip();
+			private void LoadCardtip(object sender, EventArgs e) => parent.LoadCardtip(printid);
+
+		}
+
+		#endregion
+
 		//Properties
 		private Printing printing;
+		private List<Tooltip> tooltips;
+		private List<Cardtip> cardtips;
 
 		//Controls
 		private Panel contentPanel;
 		private TrackerPanel printPanel;
 		private Panel tooltipPanel;
 		private PictureBox cardtipBox;
+
+		//Accessors
+		public List<Tooltip> Tooltips => tooltips;
+		public List<Cardtip> Cardtips => cardtips;
 
 		//Constructor
 		public Detailpage(TrackerForm form, Printing printing) : base(form) {
@@ -68,6 +126,8 @@ namespace CollectionTracker {
 			contentPanel.AutoScroll = true;
 
 			//Tooltips
+			tooltips = new List<Tooltip>();
+			cardtips = new List<Cardtip>();
 			tooltipPanel = Utils.GeneratePanel(new Rectangle(0, 0, 300, TEXT_HEIGHT));
 			tooltipPanel.Hide();
 			cardtipBox = Utils.GeneratePictureBox(new Rectangle(0, 0, 250, 350));
@@ -319,7 +379,7 @@ namespace CollectionTracker {
 		//Description object class
 		private abstract class DescriptionObject {
 			public abstract int GetWidth();
-			public abstract Point GenerateControl(Panel panel, Point location, bool rightAlign = false);
+			public abstract Point GenerateControl(Detailpage parent, Panel panel, Point location, bool rightAlign = false);
 		}
 
 		//Description text
@@ -335,11 +395,24 @@ namespace CollectionTracker {
 
 			//Overrides
 			public override int GetWidth() => Utils.MeasureWidth(text, new Font(Utils.FONT_DEFAULT, settings.style));
-			public override Point GenerateControl(Panel panel, Point location, bool rightAlign = false) {
+			public override Point GenerateControl(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
 				int width = Utils.MeasureWidth(text, new Font(Utils.FONT_DEFAULT, settings.style));
 				if (rightAlign)
 					location.X -= width;
-				panel.Controls.Add(Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), text, new Font(Utils.FONT_DEFAULT, settings.style), settings.color));
+				if (settings.tooltip != null || settings.printid != null)
+					settings.style |= FontStyle.Underline;
+				if (settings.tooltip != null && settings.printid != null)
+					settings.color = Color.Teal;
+				else if (settings.tooltip != null)
+					settings.color = Color.Blue;
+				else if (settings.printid != null)
+					settings.color = Color.Green;
+				Label label = Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), text, new Font(Utils.FONT_DEFAULT, settings.style), settings.color);
+				if (settings.tooltip != null)
+					parent.Tooltips.Add(new Tooltip(parent, label, settings.tooltip));
+				if (settings.printid != null)
+					parent.Cardtips.Add(new Cardtip(parent, label, settings.printid));
+				panel.Controls.Add(label);
 				if (rightAlign)
 					return location;
 				return new Point(location.X + width, location.Y);
@@ -362,7 +435,7 @@ namespace CollectionTracker {
 					return 0;
 				return (int)(symbol.Aspect * TEXT_HEIGHT);
 			}
-			public override Point GenerateControl(Panel panel, Point location, bool rightAlign = false) {
+			public override Point GenerateControl(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
 				int width = (int)(symbol.Aspect * TEXT_HEIGHT);
 				if (rightAlign)
 					location.X -= width;
@@ -434,13 +507,13 @@ namespace CollectionTracker {
 					}
 				}
 			}
-			public void GenerateControls(Panel panel, Point location, bool rightAlign = false) {
+			public void GenerateControls(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
 				if (!rightAlign)
 					foreach (DescriptionObject obj in objects)
-						location = obj.GenerateControl(panel, location);
+						location = obj.GenerateControl(parent, panel, location);
 				else
 					for (int i = objects.Count - 1; i >= 0; --i)
-						location = objects[i].GenerateControl(panel, location, rightAlign);
+						location = objects[i].GenerateControl(parent, panel, location, rightAlign);
 			}
 
 		}
@@ -607,13 +680,13 @@ namespace CollectionTracker {
 						if (group.objects.Count == 0 || group.GetWidth() + groups[i].GetWidth() <= maxWidth || !allowLineBreaks)
 							group.Merge(groups[i]);
 						else {
-							group.GenerateControls(panel, location, rightAlign);
+							group.GenerateControls(this, panel, location, rightAlign);
 							location.Y += TEXT_HEIGHT;
 							group = new DescriptionGroup();
 							group.Merge(groups[i]);
 						}
 					}
-					group.GenerateControls(panel, location, rightAlign);
+					group.GenerateControls(this, panel, location, rightAlign);
 					location.Y += TEXT_HEIGHT;
 
 				}
