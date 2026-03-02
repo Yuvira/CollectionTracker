@@ -139,7 +139,7 @@ namespace CollectionTracker {
 			List<Printing> printList = new List<Printing>();
 
 			//Check search string exists
-			if (string.IsNullOrWhiteSpace(search)) {
+			if (string.IsNullOrWhiteSpace(search) || search.ToLower().Equals("search")) {
 				foreach (Printing print in catalog.Printings)
 					printList.Add(print);
 				return printList;
