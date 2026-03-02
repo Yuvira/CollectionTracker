@@ -61,6 +61,9 @@ namespace CollectionTracker {
 
 		//Color references
 		public static readonly Color COLOR_BACK = SystemColors.ControlDark;
+		public static readonly Color COLOR_BACK_DARK = SystemColors.ControlDarkDark;
+		public static readonly Color COLOR_FAVORITE = Color.Red;
+		public static readonly Color COLOR_FAVORITE_DARK = Color.DarkRed;
 		public static readonly Color COLOR_FRONT = Color.Black;
 		public static readonly Color COLOR_BUTTON = SystemColors.ControlLight;
 		public static readonly Color COLOR_DARK_ORANGE = BlendColours(new List<Color> { Color.Orange, Color.Black });

@@ -73,10 +73,12 @@ namespace CollectionTracker {
 				private void IncrementCount(object sender, EventArgs e) {
 					treatment.Increment();
 					countLabel.Text = treatment.OwnedCount.ToString();
+					parent.UpdateColor();
 				}
 				private void DecrementCount(object sender, EventArgs e) {
 					if (treatment.Decrement())
 						countLabel.Text = treatment.OwnedCount.ToString();
+					parent.UpdateColor();
 				}
 
 			}
@@ -137,17 +139,42 @@ namespace CollectionTracker {
 					rows.Add(new Treatmentrow(this, print, i));
 				panel.ResumeLayout();
 
+				//Color
+				UpdateColor();
+
 				//Return height
 				return panel.Height;
 
+			}
+
+			//Update panel color
+			public void UpdateColor() {
+				if (print == null || print.Card == null) {
+					panel.BackColor = Color.White;
+					return;
+				}
+				if (print.Card.Favorite) {
+					if (print.IsOwned)
+						panel.BackColor = Utils.COLOR_FAVORITE;
+					else
+						panel.BackColor = Utils.COLOR_FAVORITE_DARK;
+				}
+				else {
+					if (print.IsOwned)
+						panel.BackColor = Utils.COLOR_BACK;
+					else
+						panel.BackColor = Utils.COLOR_BACK_DARK;
+				}
 			}
 
 			//Handle click event
 			private void OnClick(object sender, MouseEventArgs e) {
 				if (e.Button == MouseButtons.Left)
 					parent.ShowDetails(print);
-				//else if (e.Button == MouseButtons.Right)
-				//	YGO_ToggleFavorite(print);
+				else if (e.Button == MouseButtons.Right) {
+					print.Card.ToggleFavorite();
+					UpdateColor();
+				}
 			}
 
 		}

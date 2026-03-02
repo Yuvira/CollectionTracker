@@ -241,6 +241,7 @@ namespace CollectionTracker {
 		public Dictionary<string, string> Fields => fields;
 		public List<Dictionary<string, string>> Faces => faces;
 		public bool IsMultiface => faces.Count > 0;
+		public bool Favorite => favorite;
 
 		//Constructor
 		public Card() {
@@ -493,6 +494,9 @@ namespace CollectionTracker {
 		#endregion
 
 		#region Utils
+
+		//Toggle favorite status
+		public void ToggleFavorite() => favorite = !favorite;
 
 		//ToString
 		public override string ToString() => TryGetField("name", out string name) ? name : "MISSING NAME FIELD";
