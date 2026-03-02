@@ -285,8 +285,12 @@ namespace CollectionTracker {
 					if (card.cardTypes.Contains("Planeswalker"))
 						fields.Add("loyalty", card.toughness.ToString());
 				}
-				if (!string.IsNullOrEmpty(card.oracleText))
-					fields.Add("oracle", card.oracleText);
+				if (!string.IsNullOrEmpty(card.oracleText)) {
+					string o = card.oracleText;
+					while (o.Contains("\r\n\r\n"))
+						o = o.Replace("\r\n\r\n", "\r\n");
+					fields.Add("oracle", o);
+				}
 			}
 			else {
 				fields.Add("identity", MTGColorToString(card.identity));
