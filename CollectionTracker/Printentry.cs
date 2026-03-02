@@ -34,16 +34,16 @@ namespace CollectionTracker {
 			listPanel.SuspendLayout();
 
 			//Set
-			Label setLabel = Utils.GenerateLabel(new Rectangle(0, 0, 150, 30), "Set");
-			setBox = Utils.GenerateComboBox(new Rectangle(155, 0, 625, 30), ComboBoxStyle.DropDownList, true);
+			Label setLabel = Utils.GenerateLabel(new Rectangle(0, 0, 100, 30), "Set");
+			setBox = Utils.GenerateComboBox(new Rectangle(105, 0, 675, 30), ComboBoxStyle.DropDownList, true);
 			setBox.Items.AddRange(Catalog.Sets.ToArray());
 			setBox.SelectedItem = printref.Set;
 			listPanel.Controls.Add(setLabel);
 			listPanel.Controls.Add(setBox);
 
 			//Card
-			Label cardLabel = Utils.GenerateLabel(new Rectangle(0, 35, 150, 30), "Card");
-			cardBox = Utils.GenerateComboBox(new Rectangle(155, 35, 625, 30), ComboBoxStyle.DropDownList, true);
+			Label cardLabel = Utils.GenerateLabel(new Rectangle(0, 35, 100, 30), "Card");
+			cardBox = Utils.GenerateComboBox(new Rectangle(105, 35, 675, 30), ComboBoxStyle.DropDownList, true);
 			cardBox.Items.AddRange(Catalog.Cards.ToArray());
 			cardBox.SelectedItem = printref.Card;
 			listPanel.Controls.Add(cardLabel);
