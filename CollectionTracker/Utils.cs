@@ -247,6 +247,14 @@ namespace CollectionTracker {
 			return button;
 		}
 
+		//Toolstrip dropdown button
+		public static ToolStripDropDownButton GenerateTSDDButton(string text, ToolStripDropDown dropDown) {
+			ToolStripDropDownButton button = new ToolStripDropDownButton();
+			button.Text = text;
+			button.DropDown = dropDown;
+			return button;
+		}
+
 		//Toolstrip label
 		public static ToolStripLabel GenerateTSLabel(string text, bool rightAlign = false, int rightPad = 0) {
 			ToolStripLabel label = new ToolStripLabel();

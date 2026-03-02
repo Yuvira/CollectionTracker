@@ -12,6 +12,7 @@ namespace CollectionTracker {
 		//Properties
 		private MenuStrip toolbar;
 		private ToolStripLabel catalogLabel;
+		private ToolStripButton saveButton;
 		private Catalog mtgCatalog;
 		private Catalog ygoCatalog;
 		private Catalog pkmnCatalog;
@@ -35,20 +36,24 @@ namespace CollectionTracker {
 
 			//Generate toolbar and add home button / catalog label
 			toolbar = new MenuStrip();
-			ToolStripButton homeButton = Utils.GenerateTSButton("Home", new EventHandler(OpenHomePage));
-			toolbar.Items.Add(homeButton);
+			ToolStripDropDown dropDown = new ToolStripDropDown();
+			dropDown.Items.Add(Utils.GenerateTSButton("Home", OpenHomePage));
+			saveButton = Utils.GenerateTSButton("Save", SaveCatalog);
+			saveButton.Enabled = false;
+			dropDown.Items.Add(saveButton);
+			toolbar.Items.Add(Utils.GenerateTSDDButton("File", dropDown));
 			catalogLabel = Utils.GenerateTSLabel("", true, 10);
 			toolbar.Items.Add(catalogLabel);
 			Controls.Add(toolbar);
 
 			//Initialize catalogs
-			if (TryLoadCatalogFromFile("resources/mtg/catalog.bin", out MTG_Catalog mtg))
-				mtgCatalog = new Catalog(mtg);
+			//if (TryLoadCatalogFromFile("resources/mtg/catalog.bin", out MTG_Catalog mtg))
+			//	mtgCatalog = new Catalog(mtg);
 			if (TryLoadCatalogFromFile("resources/ygo/catalog.bin", out YGO_Catalog ygo))
 				ygoCatalog = new Catalog(ygo);
 			if (TryLoadCatalogFromFile("resources/pkmn/catalog.bin", out PKMN_Catalog pkmn))
 				pkmnCatalog = new Catalog(pkmn);
-			//mtgCatalog = Catalog.LoadFromFile("resources/mtg/catalog2.bin");
+			mtgCatalog = Catalog.LoadFromFile("resources/mtg/catalog2.bin");
 			//ygoCatalog = Catalog.LoadFromFile("resources/ygo/catalog2.bin");
 			//pkmnCatalog = Catalog.LoadFromFile("resources/pkmn/catalog2.bin");
 
@@ -60,18 +65,28 @@ namespace CollectionTracker {
 		//Open default page
 		public void OpenHomePage(object sender = null, EventArgs e = null) => SetPage(new Homepage(this));
 
+		//Save current catalog
+		public void SaveCatalog(object sender, EventArgs e) {
+			if (!Utils.ResourcePaths.ContainsKey(Catalog.Game))
+				return;
+			Catalog.SaveToFile(Utils.ResourcePaths[Catalog.Game] + "catalog2.bin");
+		}
+
 		//Set current catalog
 		public void SetCatalogMTG() {
 			curCatalog = mtgCatalog;
 			catalogLabel.Text = "Magic";
+			saveButton.Enabled = true;
 		}
 		public void SetCatalogYGO() {
 			curCatalog = ygoCatalog;
 			catalogLabel.Text = "Yu-Gi-Oh!";
+			saveButton.Enabled = true;
 		}
 		public void SetCatalogPKMN() {
 			curCatalog = pkmnCatalog;
 			catalogLabel.Text = "Pokémon";
+			saveButton.Enabled = true;
 		}
 
 		//Replace current page

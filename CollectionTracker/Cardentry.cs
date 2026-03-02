@@ -39,11 +39,11 @@ namespace CollectionTracker {
 
 			//Faces
 			faces = new List<Fieldlist>();
-			foreach (Dictionary<string, string> faceFields in card.Faces) {
-				Fieldlist face = new Fieldlist(this, "Face", faceFields, 0);
-				face.OnListResize += OnFieldsResized;
-				listPanel.Controls.Add(face.Panel);
-				faces.Add(face);
+			foreach (Face face in card.Faces) {
+				Fieldlist fieldList = new Fieldlist(this, "Face", face.Fields, 0);
+				fieldList.OnListResize += OnFieldsResized;
+				listPanel.Controls.Add(fieldList.Panel);
+				faces.Add(fieldList);
 			}
 
 			//Save button

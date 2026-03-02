@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -227,6 +228,39 @@ namespace CollectionTracker {
 
 	#endregion
 
+	#region Faces
+
+	[ProtoContract]
+	public class Face {
+
+		//Serialized properties
+		[ProtoMember(1)] private Dictionary<string, string> fields;
+
+		//Accessors
+		public Dictionary<string, string> Fields => fields;
+
+		//Contructors
+		public Face() => fields = new Dictionary<string, string>();
+		public Face(Face face) => fields = new Dictionary<string, string>(face.fields);
+		public Face(Dictionary<string, string> fields) => this.fields = new Dictionary<string, string>(fields);
+
+		//Copy function
+		public void CopyFields(Dictionary<string, string> fields) => this.fields = new Dictionary<string, string>(fields);
+
+		//Field accessor
+		public bool TryGetField(string field, out string value) {
+			if (fields.ContainsKey(field)) {
+				value = fields[field];
+				return true;
+			}
+			value = "";
+			return false;
+		}
+
+	}
+
+	#endregion
+
 	#region Cards
 
 	[ProtoContract]
@@ -234,19 +268,19 @@ namespace CollectionTracker {
 
 		//Serialized properties
 		[ProtoMember(1)] private Dictionary<string, string> fields;
-		[ProtoMember(2)] private List<Dictionary<string, string>> faces;
+		[ProtoMember(2)] private List<Face> faces;
 		[ProtoMember(3)] private bool favorite;
 
 		//Accessors
 		public Dictionary<string, string> Fields => fields;
-		public List<Dictionary<string, string>> Faces => faces;
+		public List<Face> Faces => faces;
 		public bool IsMultiface => faces.Count > 0;
 		public bool Favorite => favorite;
 
 		//Constructor
 		public Card() {
 			fields = new Dictionary<string, string>();
-			faces = new List<Dictionary<string, string>>();
+			faces = new List<Face>();
 			favorite = false;
 		}
 
@@ -269,7 +303,7 @@ namespace CollectionTracker {
 		}
 		public Card(MTG_Card card) {
 			fields = new Dictionary<string, string>();
-			faces = new List<Dictionary<string, string>>();
+			faces = new List<Face>();
 			if (!card.name.Contains(" // ")) {
 				if (!string.IsNullOrEmpty(card.name))
 					fields.Add("name", card.name);
@@ -295,54 +329,54 @@ namespace CollectionTracker {
 			}
 			else {
 				fields.Add("identity", MTGColorToString(card.identity));
-				Dictionary<string, string> front = new Dictionary<string, string>();
-				Dictionary<string, string> back = new Dictionary<string, string>();
+				Face front = new Face();
+				Face back = new Face();
 				string[] names = Utils.SplitString(card.name, " // ");
 				if (names.Length > 0 && !string.IsNullOrEmpty(names[0]))
-					front.Add("name", names[0]);
+					front.Fields.Add("name", names[0]);
 				if (names.Length > 1 && !string.IsNullOrEmpty(names[1]))
-					back.Add("name", names[1]);
-				front.Add("color", MTGColorToString(card.colour));
+					back.Fields.Add("name", names[1]);
+				front.Fields.Add("color", MTGColorToString(card.colour));
 				if (!string.IsNullOrEmpty(card.cost)) {
 					if (!card.cost.Contains(" // "))
-						front.Add("cost", card.cost);
+						front.Fields.Add("cost", card.cost);
 					else {
 						string[] costs = Utils.SplitString(card.cost, " // ");
 						if (costs.Length > 0 && !string.IsNullOrEmpty(costs[0]))
-							front.Add("cost", costs[0]);
+							front.Fields.Add("cost", costs[0]);
 						if (costs.Length > 1 && !string.IsNullOrEmpty(costs[1]))
-							back.Add("cost", costs[1]);
+							back.Fields.Add("cost", costs[1]);
 					}
 				}
 				if (!string.IsNullOrEmpty(card.cardTypes)) {
 					if (!card.cardTypes.Contains(" // ")) {
-						front.Add("type", card.cardTypes);
+						front.Fields.Add("type", card.cardTypes);
 						if (card.cardTypes.Contains("Creature") || card.cardTypes.Contains("Vehicle")) {
-							front.Add("power", card.power.ToString());
-							front.Add("toughness", card.toughness.ToString());
+							front.Fields.Add("power", card.power.ToString());
+							front.Fields.Add("toughness", card.toughness.ToString());
 						}
 						if (card.cardTypes.Contains("Planeswalker"))
-							front.Add("loyalty", card.toughness.ToString());
+							front.Fields.Add("loyalty", card.toughness.ToString());
 					}
 					else {
 						string[] types = Utils.SplitString(card.cardTypes, " // ");
 						if (types.Length > 0 && !string.IsNullOrEmpty(types[0])) {
-							front.Add("type", types[0]);
+							front.Fields.Add("type", types[0]);
 							if (types[0].Contains("Creature") || types[0].Contains("Vehicle")) {
-								front.Add("power", card.power.ToString());
-								front.Add("toughness", card.toughness.ToString());
+								front.Fields.Add("power", card.power.ToString());
+								front.Fields.Add("toughness", card.toughness.ToString());
 							}
 							if (types[0].Contains("Planeswalker"))
-								front.Add("loyalty", card.toughness.ToString());
+								front.Fields.Add("loyalty", card.toughness.ToString());
 						}
 						if (types.Length > 1 && !string.IsNullOrEmpty(types[1])) {
-							back.Add("type", types[1]);
+							back.Fields.Add("type", types[1]);
 							if (types[1].Contains("Creature") || types[1].Contains("Vehicle")) {
-								back.Add("power", card.power2.ToString());
-								back.Add("toughness", card.toughness2.ToString());
+								back.Fields.Add("power", card.power2.ToString());
+								back.Fields.Add("toughness", card.toughness2.ToString());
 							}
 							if (types[1].Contains("Planeswalker"))
-								back.Add("loyalty", card.toughness2.ToString());
+								back.Fields.Add("loyalty", card.toughness2.ToString());
 						}
 					}
 				}
@@ -351,7 +385,7 @@ namespace CollectionTracker {
 						string o = card.oracleText;
 						while (o.Contains("\r\n\r\n"))
 							o = o.Replace("\r\n\r\n", "\r\n");
-						front.Add("oracle", o);
+						front.Fields.Add("oracle", o);
 					}
 					else {
 						string[] texts = Utils.SplitString(card.oracleText, "\r\n//\r\n");
@@ -360,13 +394,13 @@ namespace CollectionTracker {
 							o = texts[0];
 							while (o.Contains("\r\n\r\n"))
 								o = o.Replace("\r\n\r\n", "\r\n");
-							front.Add("oracle", o);
+							front.Fields.Add("oracle", o);
 						}
 						if (texts.Length > 1 && !string.IsNullOrEmpty(texts[1])) {
 							o = texts[1];
 							while (o.Contains("\r\n\r\n"))
 								o = o.Replace("\r\n\r\n", "\r\n");
-							back.Add("oracle", o);
+							back.Fields.Add("oracle", o);
 						}
 					}
 				}
@@ -377,7 +411,7 @@ namespace CollectionTracker {
 		}
 		public Card(YGO_Card card) {
 			fields = new Dictionary<string, string>();
-			faces = new List<Dictionary<string, string>>();
+			faces = new List<Face>();
 			if (!string.IsNullOrEmpty(card.name))
 				fields.Add("name", card.name);
 			if (!string.IsNullOrEmpty(card.cardType))
@@ -398,13 +432,13 @@ namespace CollectionTracker {
 				if (!card.oracleText.Contains("\r\n\r\n//\r\n\r\n"))
 					fields.Add("oracle", card.oracleText);
 				else {
-					Dictionary<string, string> front = new Dictionary<string, string>();
-					Dictionary<string, string> back = new Dictionary<string, string>();
+					Face front = new Face();
+					Face back = new Face();
 					string[] texts = Utils.SplitString(card.oracleText, "\r\n\r\n//\r\n\r\n");
 					if (texts.Length > 0 && !string.IsNullOrEmpty(texts[0]))
-						front.Add("oracle", texts[0]);
+						front.Fields.Add("oracle", texts[0]);
 					if (texts.Length > 1 && !string.IsNullOrEmpty(texts[1]))
-						back.Add("oracle", texts[1]);
+						back.Fields.Add("oracle", texts[1]);
 					faces.Add(front);
 					faces.Add(back);
 				}
@@ -413,7 +447,7 @@ namespace CollectionTracker {
 		}
 		public Card(PKMN_Card card) {
 			fields = new Dictionary<string, string>();
-			faces = new List<Dictionary<string, string>>();
+			faces = new List<Face>();
 			if (!string.IsNullOrEmpty(card.name))
 				fields.Add("name", card.name);
 			if (!string.IsNullOrEmpty(card.energyType))
@@ -442,16 +476,16 @@ namespace CollectionTracker {
 		//Copy function
 		public void Copy(Card card) {
 			fields = new Dictionary<string, string>(card.fields);
-			faces = new List<Dictionary<string, string>>();
-			foreach (Dictionary<string, string> face in card.faces)
-				faces.Add(new Dictionary<string, string>(face));
+			faces = new List<Face>();
+			foreach (Face face in card.faces)
+				faces.Add(new Face(face));
 			favorite = card.favorite;
 		}
 		public void CopyFields(Dictionary<string, string> fields, List<Dictionary<string, string>> faces) {
 			this.fields = new Dictionary<string, string>(fields);
-			this.faces = new List<Dictionary<string, string>>();
+			this.faces = new List<Face>();
 			foreach (Dictionary<string, string> face in faces)
-				this.faces.Add(new Dictionary<string, string>(face));
+				this.faces.Add(new Face(face));
 		}
 
 		#endregion
@@ -465,12 +499,12 @@ namespace CollectionTracker {
 				return true;
 			}
 			value = "";
-			foreach (Dictionary<string, string> face in faces) {
-				if (face.ContainsKey(field)) {
+			foreach (Face face in faces) {
+				if (face.TryGetField(field, out string faceValue)) {
 					if (string.IsNullOrEmpty(value))
-						value = face[field];
+						value = faceValue;
 					else
-						value += " // " + face[field];
+						value += " // " + faceValue;
 				}
 			}
 			return !string.IsNullOrEmpty(value);
@@ -478,10 +512,8 @@ namespace CollectionTracker {
 
 		//Get field from specific face
 		public bool TryGetField(string field, int face, out string value) {
-			if (face >= 0 && face < faces.Count && faces[face].ContainsKey(field)) {
-				value = faces[face][field];
+			if (face >= 0 && face < faces.Count && faces[face].TryGetField(field, out value))
 				return true;
-			}
 			if (face == 0 && fields.ContainsKey(field)) {
 				value = fields[field];
 				return true;
@@ -517,7 +549,7 @@ namespace CollectionTracker {
 		[ProtoMember(2)] private int cardIndex;
 		[ProtoMember(3)] private List<Treatment> treatments;
 		[ProtoMember(4)] private Dictionary<string, string> fields;
-		[ProtoMember(4)] private List<string> imagePaths;
+		[ProtoMember(5)] private List<string> imagePaths;
 
 		//Private properties
 		private Set set;
