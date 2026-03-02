@@ -9,6 +9,9 @@ namespace CollectionTracker {
 	//Form class
 	public partial class TrackerForm : Form {
 
+		//Load legacy catalogs
+		private const bool LOAD_LEGACY_CATALOGS = false;
+
 		//Properties
 		private MenuStrip toolbar;
 		private ToolStripLabel catalogLabel;
@@ -47,15 +50,19 @@ namespace CollectionTracker {
 			Controls.Add(toolbar);
 
 			//Initialize catalogs
-			//if (TryLoadCatalogFromFile("resources/mtg/catalog.bin", out MTG_Catalog mtg))
-			//	mtgCatalog = new Catalog(mtg);
-			if (TryLoadCatalogFromFile("resources/ygo/catalog.bin", out YGO_Catalog ygo))
-				ygoCatalog = new Catalog(ygo);
-			if (TryLoadCatalogFromFile("resources/pkmn/catalog.bin", out PKMN_Catalog pkmn))
-				pkmnCatalog = new Catalog(pkmn);
-			mtgCatalog = Catalog.LoadFromFile("resources/mtg/catalog2.bin");
-			//ygoCatalog = Catalog.LoadFromFile("resources/ygo/catalog2.bin");
-			//pkmnCatalog = Catalog.LoadFromFile("resources/pkmn/catalog2.bin");
+			if (LOAD_LEGACY_CATALOGS) {
+				if (TryLoadCatalogFromFile("resources/mtg/catalog.bin", out MTG_Catalog mtg))
+					mtgCatalog = new Catalog(mtg);
+				if (TryLoadCatalogFromFile("resources/ygo/catalog.bin", out YGO_Catalog ygo))
+					ygoCatalog = new Catalog(ygo);
+				if (TryLoadCatalogFromFile("resources/pkmn/catalog.bin", out PKMN_Catalog pkmn))
+					pkmnCatalog = new Catalog(pkmn);
+			}
+			else {
+				mtgCatalog = Catalog.LoadFromFile("resources/mtg/catalog2.bin");
+				ygoCatalog = Catalog.LoadFromFile("resources/ygo/catalog2.bin");
+				pkmnCatalog = Catalog.LoadFromFile("resources/pkmn/catalog2.bin");
+			}
 
 			//Open homepage
 			OpenHomePage();

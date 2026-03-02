@@ -605,7 +605,7 @@ namespace CollectionTracker {
 			foreach (YGO_Rarity treatment in print.rarities)
 				treatments.Add(new Treatment(treatment));
 			fields = new Dictionary<string, string>();
-			fields.Add("cn", print.cardNumber.ToString());
+			fields.Add("cn", print.cardNumber.ToString().PadLeft(3, '0'));
 			if (!string.IsNullOrEmpty(print.printID))
 				fields.Add("printid", print.printID);
 			imagePaths = new List<string>();
@@ -621,7 +621,7 @@ namespace CollectionTracker {
 			foreach (PKMN_Treatment treatment in print.treatments)
 				treatments.Add(new Treatment(treatment));
 			fields = new Dictionary<string, string>();
-			fields.Add("cn", print.cardNumber.ToString());
+			fields.Add("cn", print.cardNumber.ToString().PadLeft(3, '0'));
 			if (!string.IsNullOrEmpty(print.rarity))
 				fields.Add("rarity", print.rarity);
 			if (!string.IsNullOrEmpty(print.flavorText))

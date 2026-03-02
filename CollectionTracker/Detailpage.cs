@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -174,6 +175,10 @@ namespace CollectionTracker {
 			//Card data
 			if (Catalog.Game == Game.MTG)
 				LayoutDataMTG();
+			else if (Catalog.Game == Game.YGO)
+				LayoutDataYGO();
+			else if (Catalog.Game == Game.PKMN)
+				LayoutDataPKMN();
 
 			//Add to panel
 			panel.Controls.Add(contentPanel);
@@ -186,95 +191,16 @@ namespace CollectionTracker {
 
 		#region MTG Layout
 
+		#region Panel Coloring
+
 		//Color dictionary
 		private static readonly Dictionary<char, Color> MTGTypeColors = new Dictionary<char, Color> {
-			{ 'w', Color.White },
-			{ 'u', Color.Blue  },
-			{ 'b', Color.Black },
-			{ 'r', Color.Red   },
-			{ 'g', Color.Green },
+			{ 'w' , Color.White },
+			{ 'u' , Color.Blue  },
+			{ 'b' , Color.Black },
+			{ 'r' , Color.Red   },
+			{ 'g' , Color.Green },
 		};
-
-		//Data layout
-		private void LayoutDataMTG() {
-
-			//Y Position
-			int yPos;
-			int yPosPanel = 5;
-
-			//Print faces
-			for (int i = 0; i < Math.Max(printing.Card.Faces.Count, 1); ++i) {
-
-				//Panel
-				TrackerPanel facePanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
-
-				//Position
-				yPos = TOP_PAD;
-
-				//Name and cost
-				bool hasName = printing.Card.TryGetField("name", i, out string name);
-				bool hasCost = printing.Card.TryGetField("cost", i, out string cost);
-				if (hasName)
-					GenerateDescription($"<b>{name}", facePanel, new Point(LEFT_PAD, yPos), false);
-				if (hasCost)
-					GenerateDescription(cost, facePanel, new Point(facePanel.Width - LEFT_PAD, yPos), false, true);
-				if (hasName || hasCost)
-					yPos += TEXT_HEIGHT;
-
-				//Type line
-				if (printing.Card.TryGetField("type", i, out string type)) {
-					yPos += BLOCK_SPACING;
-					yPos += GenerateDescription($"<b>{type}", facePanel, new Point(LEFT_PAD, yPos), false);
-				}
-
-				//Oracle text
-				if (printing.Card.TryGetField("oracle", i, out string oracle)) {
-					yPos += BLOCK_SPACING;
-					yPos += GenerateDescription(oracle, facePanel, new Point(LEFT_PAD, yPos));
-				}
-
-				//Power and toughness
-				bool hasPower = printing.Card.TryGetField("power", i, out string power);
-				bool hasToughness = printing.Card.TryGetField("toughness", i, out string toughness);
-				bool hasLoyalty = printing.Card.TryGetField("loyalty", i, out string loyalty);
-				string pt = "";
-				if (hasPower && hasToughness)
-					pt = $"{power} / {toughness}";
-				else if (hasPower)
-					pt = $"{power} Power";
-				else if (hasToughness)
-					pt = $"{toughness} Toughness";
-				if (hasLoyalty && (hasPower || hasToughness))
-					pt = $"{loyalty} Loyalty, {pt}";
-				else if (hasLoyalty)
-					pt = $"{loyalty} Loyalty";
-				if (hasPower || hasToughness || hasLoyalty) {
-					yPos += BLOCK_SPACING;
-					yPos += GenerateDescription($"<b>{pt}", facePanel, new Point(facePanel.Width - LEFT_PAD, yPos), false, true);
-				}
-
-				//Panel height
-				facePanel.Height = yPos + BOTTOM_PAD;
-				yPosPanel += yPos + BOTTOM_PAD + 5;
-
-				//Panel colors
-				if (printing.Card.TryGetField("color", i, out string color))
-					SetPanelColorsMTG(facePanel, color);
-				else
-					facePanel.AddBorder(Utils.COLOR_FRONT, 1);
-
-				//Add to content
-				contentPanel.Controls.Add(facePanel);
-
-			}
-
-			//Colour panels
-			if (printing.Card.TryGetField("color", 0, out string color2))
-				SetPanelColorsMTG(printPanel, color2);
-			else
-				printPanel.AddBorder(Utils.COLOR_FRONT, 1);
-
-		}
 
 		//Set panel color
 		private void SetPanelColorsMTG(TrackerPanel panel, string color) {
@@ -289,6 +215,269 @@ namespace CollectionTracker {
 				panel.AddBorder(Color.Yellow, 3);
 			else
 				panel.AddBorder(Utils.COLOR_FRONT, 1);
+		}
+
+		#endregion
+
+		//Data layout
+		private void LayoutDataMTG() {
+
+			//Y Position
+			int yPos;
+			int yPosPanel = 5;
+
+			//Color
+			string color;
+
+			//Print faces
+			for (int i = 0; i < Math.Max(printing.Card.Faces.Count, 1); ++i) {
+
+				//Position
+				yPos = TOP_PAD;
+
+				//Panel
+				TrackerPanel facePanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+
+				//Name and cost
+				int titleHeight = 0;
+				if (printing.Card.TryGetField("name", i, out string name))
+					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{name}", facePanel, new Point(LEFT_PAD, yPos), false));
+				if (printing.Card.TryGetField("cost", i, out string cost))
+					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(cost, facePanel, new Point(facePanel.Width - LEFT_PAD, yPos), false, true));
+				yPos += titleHeight;
+
+				//Type line
+				if (printing.Card.TryGetField("type", i, out string type))
+					yPos += LINE_SPACING + GenerateDescription($"<b>{type}", facePanel, new Point(LEFT_PAD, yPos), false);
+
+				//Oracle text
+				if (printing.Card.TryGetField("oracle", i, out string oracle))
+					yPos += LINE_SPACING + GenerateDescription(oracle, facePanel, new Point(LEFT_PAD, yPos));
+
+				//Power and toughness
+				bool hasPower = printing.Card.TryGetField("power", i, out string power);
+				bool hasToughness = printing.Card.TryGetField("toughness", i, out string toughness);
+				bool hasLoyalty = printing.Card.TryGetField("loyalty", i, out string loyalty);
+				if (hasPower || hasToughness || hasLoyalty) {
+					string pt = "";
+					if (hasPower && hasToughness)
+						pt = $"{power} / {toughness}";
+					else if (hasPower)
+						pt = $"{power} Power";
+					else if (hasToughness)
+						pt = $"{toughness} Toughness";
+					if (hasLoyalty && (hasPower || hasToughness))
+						pt = $"{loyalty} Loyalty, {pt}";
+					else if (hasLoyalty)
+						pt = $"{loyalty} Loyalty";
+					yPos += LINE_SPACING + GenerateDescription($"<b>{pt}", facePanel, new Point(facePanel.Width - LEFT_PAD, yPos), false, true);
+				}
+
+				//Panel height
+				facePanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
+				yPosPanel += facePanel.Height + 5;
+
+				//Panel colors
+				if (printing.Card.TryGetField("color", i, out color))
+					SetPanelColorsMTG(facePanel, color);
+				else
+					facePanel.AddBorder(Utils.COLOR_FRONT, 1);
+
+				//Add to content
+				contentPanel.Controls.Add(facePanel);
+
+			}
+
+			//Color print panel
+			if (printing.Card.TryGetField("color", 0, out color))
+				SetPanelColorsMTG(printPanel, color);
+			else
+				printPanel.AddBorder(Utils.COLOR_FRONT, 1);
+
+		}
+
+		#endregion
+
+		#region YGO Layout
+
+		//Data layout
+		private void LayoutDataYGO() {
+
+			//Y Position
+			int yPos = TOP_PAD;
+			int yPosPanel = 5;
+
+			//Header
+			TrackerPanel headerPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+			if (printing.Card.TryGetField("name", out string name))
+				yPos += LINE_SPACING + GenerateDescription($"<b>{name}", headerPanel, new Point(LEFT_PAD, yPos), false);
+			if (printing.Card.TryGetField("cardtype", out string cardtype)) {
+				if (printing.Card.TryGetField("attribute", out string attribute))
+					cardtype = $"{attribute} {cardtype}";
+				if (printing.Card.TryGetField("property", out string property))
+					cardtype = $"{property} {cardtype}";
+				yPos += LINE_SPACING + GenerateDescription(cardtype, headerPanel, new Point(LEFT_PAD, yPos), false);
+			}
+			if (printing.Card.TryGetField("level", out string level)) {
+				if (printing.GetField("type").ToLower().Contains("xyz"))
+					yPos += LINE_SPACING + GenerateDescription($"Rank {level}", headerPanel, new Point(LEFT_PAD, yPos), false);
+				else if (printing.GetField("type").ToLower().Contains("link"))
+					yPos += LINE_SPACING + GenerateDescription($"Link-{level}", headerPanel, new Point(LEFT_PAD, yPos), false);
+				else
+					yPos += LINE_SPACING + GenerateDescription($"Level {level}", headerPanel, new Point(LEFT_PAD, yPos), false);
+			}
+			headerPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
+			headerPanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
+			yPosPanel += headerPanel.Height + 5;
+			yPos = TOP_PAD;
+			contentPanel.Controls.Add(headerPanel);
+
+			//Pendulum text
+			string oracle;
+			if (printing.Card.IsMultiface) {
+				TrackerPanel pendulumPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+				if (printing.Card.TryGetField("pendulum", out string pendulum))
+					yPos += LINE_SPACING + GenerateDescription($"<b>Scale {pendulum}", pendulumPanel, new Point(LEFT_PAD, yPos), false);
+				if (printing.Card.TryGetField("oracle", 0, out oracle))
+					yPos += LINE_SPACING + GenerateDescription(oracle, pendulumPanel, new Point(LEFT_PAD, yPos));
+				pendulumPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
+				pendulumPanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
+				yPosPanel += pendulumPanel.Height + 5;
+				yPos = TOP_PAD;
+				contentPanel.Controls.Add(pendulumPanel);
+			}
+
+			//Oracle text
+			TrackerPanel oraclePanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+			if (printing.Card.TryGetField("type", out string type))
+				yPos += LINE_SPACING + GenerateDescription($"<b>{type}", oraclePanel, new Point(LEFT_PAD, yPos), false);
+			if ((printing.Card.IsMultiface && printing.Card.TryGetField("oracle", 1, out oracle)) || printing.Card.TryGetField("oracle", out oracle))
+				yPos += LINE_SPACING + GenerateDescription(oracle, oraclePanel, new Point(LEFT_PAD, yPos));
+			bool hasAtk = printing.Card.TryGetField("attack", out string atk);
+			bool hasDef = printing.Card.TryGetField("defense", out string def);
+			if (hasAtk && hasDef)
+				yPos += LINE_SPACING + GenerateDescription($"<b>{atk} ATK / {def} DEF", oraclePanel, new Point(oraclePanel.Width - LEFT_PAD, yPos), false, true);
+			else if (hasAtk)
+				yPos += LINE_SPACING + GenerateDescription($"<b>{atk} ATK", oraclePanel, new Point(oraclePanel.Width - LEFT_PAD, yPos), false, true);
+			else if (hasDef)
+				yPos += LINE_SPACING + GenerateDescription($"<b>{def} DEF", oraclePanel, new Point(oraclePanel.Width - LEFT_PAD, yPos), false, true);
+			oraclePanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
+			oraclePanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
+			contentPanel.Controls.Add(oraclePanel);
+
+			//Print panel border
+			printPanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
+
+		}
+
+		#endregion
+
+		#region PKMN Layout
+
+		#region Panel Coloring
+
+		//Color dictionary
+		private static readonly Dictionary<char, Color> PKMNTypeColors = new Dictionary<char, Color> {
+			{ 'c' , Color.White             },
+			{ 'd' , Color.Black             },
+			{ 'f' , Color.Brown             },
+			{ 'g' , Color.Green             },
+			{ 'l' , Color.Yellow            },
+			{ 'm' , Color.Gray              },
+			{ 'n' , Utils.COLOR_DARK_ORANGE },
+			{ 'p' , Color.DarkMagenta       },
+			{ 'r' , Color.Red               },
+			{ 'w' , Color.SlateBlue         },
+			{ 'y' , Color.DeepPink          },
+		};
+
+		//Set panel color
+		private void SetPanelColorsPKMN(TrackerPanel panel, string color) {
+			color = color.ToLower().Replace("{", "").Replace("}", "");
+			if (color.Length == 0)
+				panel.AddBorder(SystemColors.ControlDarkDark, 3);
+			else if (color.Length == 1 && PKMNTypeColors.ContainsKey(color[0]))
+				panel.AddBorder(PKMNTypeColors[color[0]], 3);
+			else if (color.Length == 2 && PKMNTypeColors.ContainsKey(color[0]) && PKMNTypeColors.ContainsKey(color[1]))
+				panel.AddDoubleBorder(PKMNTypeColors[color[0]], PKMNTypeColors[color[1]], 3);
+			else if (color.Length > 2)
+				panel.AddBorder(Color.Yellow, 3);
+			else
+				panel.AddBorder(Utils.COLOR_FRONT, 1);
+		}
+
+		#endregion
+
+		//Data layout
+		private void LayoutDataPKMN() {
+
+			//Y Position
+			int yPos = TOP_PAD;
+			int yPosPanel = 5;
+
+			//Header box
+			TrackerPanel headerPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+			int titleHeight = 0;
+			if (printing.Card.TryGetField("name", out string name))
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{name}", headerPanel, new Point(LEFT_PAD, yPos), false));
+			bool hasEnergyType = printing.Card.TryGetField("energy", out string energy);
+			bool hasHP = printing.Card.TryGetField("hp", out string hp);
+			if (hasEnergyType && hasHP)
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{hp} HP {energy}", headerPanel, new Point(headerPanel.Width - LEFT_PAD, yPos), false, true));
+			else if (hasEnergyType)
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(energy, headerPanel, new Point(headerPanel.Width - LEFT_PAD, yPos), false, true));
+			else if (hasHP)
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{hp} HP", headerPanel, new Point(headerPanel.Width - LEFT_PAD, yPos), false, true));
+			yPos += titleHeight;
+			if (printing.Card.TryGetField("type", out string type))
+				yPos += LINE_SPACING + GenerateDescription(type, headerPanel, new Point(LEFT_PAD, yPos));
+			if (printing.Card.TryGetField("stage", out string stage))
+				yPos += LINE_SPACING + GenerateDescription(stage, headerPanel, new Point(LEFT_PAD, yPos));
+			headerPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
+			SetPanelColorsPKMN(headerPanel, printing.GetField("energy"));
+			yPosPanel += headerPanel.Height + 5;
+			yPos = TOP_PAD;
+			contentPanel.Controls.Add(headerPanel);
+
+			//Oracle text
+			if (printing.Card.TryGetField("oracle", out string oracle)) {
+				TrackerPanel oraclePanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+				oraclePanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription(oracle, oraclePanel, new Point(LEFT_PAD, TOP_PAD), true, false, true);
+				SetPanelColorsPKMN(oraclePanel, printing.GetField("energy"));
+				yPosPanel += oraclePanel.Height + 5;
+				contentPanel.Controls.Add(oraclePanel);
+			}
+
+			//Footer
+			bool hasWeakness = printing.Card.TryGetField("weak", out string weak);
+			bool hasResistance = printing.Card.TryGetField("resist", out string resist);
+			bool hasRetreatCost = printing.Card.TryGetField("retreat", out string retreat);
+			if (hasWeakness || hasResistance || hasRetreatCost) {
+				TrackerPanel footerPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+				if (hasWeakness)
+					yPos += LINE_SPACING + GenerateDescription($"Weakness: {weak}", footerPanel, new Point(LEFT_PAD, yPos));
+				if (hasResistance)
+					yPos += LINE_SPACING + GenerateDescription($"Resistance: {resist}", footerPanel, new Point(LEFT_PAD, yPos));
+				if (hasRetreatCost)
+					yPos += LINE_SPACING + GenerateDescription($"Retreat: {retreat}", footerPanel, new Point(LEFT_PAD, yPos));
+				footerPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
+				SetPanelColorsPKMN(footerPanel, printing.GetField("energy"));
+				yPosPanel += footerPanel.Height + 5;
+				yPos = TOP_PAD;
+				contentPanel.Controls.Add(footerPanel);
+			}
+
+			//Flavor
+			if (printing.TryGetField("flavor", out string flavor)) {
+				TrackerPanel flavorPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+				flavorPanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription($"<i>{flavor}", flavorPanel, new Point(LEFT_PAD, TOP_PAD));
+				SetPanelColorsPKMN(flavorPanel, printing.GetField("energy"));
+				contentPanel.Controls.Add(flavorPanel);
+			}
+
+			//Color print panel
+			SetPanelColorsPKMN(printPanel, printing.GetField("energy"));
+
 		}
 
 		#endregion
@@ -560,7 +749,7 @@ namespace CollectionTracker {
 		}
 
 		//Generate description text in panel at location. Returns total height of the description field
-		private int GenerateDescription(string description, Panel panel, Point location, bool allowLineBreaks = true, bool rightAlign = false) {
+		private int GenerateDescription(string description, Panel panel, Point location, bool allowLineBreaks = true, bool rightAlign = false, bool reduceLineSpacing = false) {
 
 			//Remove line breaks
 			if (!allowLineBreaks)
@@ -590,7 +779,7 @@ namespace CollectionTracker {
 					firstBlock = false;
 				else {
 					firstLine = true;
-					location.Y += BLOCK_SPACING;
+					location.Y += reduceLineSpacing ? LINE_SPACING : BLOCK_SPACING;
 				}
 
 				//Loop lines
@@ -611,7 +800,7 @@ namespace CollectionTracker {
 					if (firstLine)
 						firstLine = false;
 					else
-						location.Y += LINE_SPACING;
+						location.Y += reduceLineSpacing ? 0 : LINE_SPACING;
 
 					//Break line into words
 					curIdx = 0;
