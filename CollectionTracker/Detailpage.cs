@@ -102,6 +102,7 @@ namespace CollectionTracker {
 
 		//Properties
 		private Printing printing;
+		private int imgIndex;
 		private List<DetailTreatmentPanel> treatmentPanels;
 		private List<DetailPrintrow> printRows;
 		private List<Tooltip> tooltips;
@@ -149,6 +150,7 @@ namespace CollectionTracker {
 
 			//Image box
 			imgBox = Utils.GeneratePictureBox(new Rectangle(5, 5, 400, 540));
+			imgBox.Click += IncrementImgIndex;
 			contentPanel.Controls.Add(imgBox);
 
 			//Edit card
@@ -192,6 +194,7 @@ namespace CollectionTracker {
 			this.printing = printing;
 
 			//Image
+			imgIndex = 0;
 			if (this.printing.ImagePaths.Count > 0)
 				Utils.TryLoadCardImage(imgBox, this.printing.ImagePaths[0], Catalog.Game);
 
@@ -268,6 +271,14 @@ namespace CollectionTracker {
 			else
 				LayoutOwnedPrintings();
 
+		}
+
+		//Increment image index
+		private void IncrementImgIndex(object sender, EventArgs e) {
+			if (printing.ImagePaths.Count == 0)
+				return;
+			imgIndex = (imgIndex + 1) % printing.ImagePaths.Count;
+			Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], Catalog.Game);
 		}
 
 		//Modify card data
