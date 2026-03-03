@@ -274,7 +274,7 @@ namespace CollectionTracker {
 		}
 
 		//Update entries
-		private void UpdateEntries() {
+		public void UpdateEntries() {
 
 			//Paging
 			int maxPage = 0;
@@ -332,7 +332,7 @@ namespace CollectionTracker {
 		}
 
 		//Details
-		public void ShowDetails(Printing print) => parent.SetPage(new Detailpage(parent, print));
+		public void ShowDetails(Printing print) => parent.ShowDetails(this, new Detailpage(parent, print));
 
 	}
 

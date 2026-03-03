@@ -13,15 +13,19 @@ namespace CollectionTracker {
 		private const bool LOAD_LEGACY_CATALOGS = false;
 
 		//Properties
-		private MenuStrip toolbar;
-		private ToolStripLabel catalogLabel;
-		private ToolStripButton saveButton;
-		private ToolStripButton setButton;
 		private Catalog mtgCatalog;
 		private Catalog ygoCatalog;
 		private Catalog pkmnCatalog;
 		private Catalog curCatalog = null;
 		private TrackerPage page = null;
+		private Printlist savedPrintlist = null;
+
+		//Controls
+		private MenuStrip toolbar;
+		private ToolStripLabel catalogLabel;
+		private ToolStripButton saveButton;
+		private ToolStripButton setButton;
+		private ToolStripButton printListButton;
 
 		//Accessors
 		public Catalog Catalog => curCatalog;
@@ -48,6 +52,7 @@ namespace CollectionTracker {
 			setButton = Utils.GenerateTSButton("Sets", OpenSetentries);
 			setButton.Enabled = false;
 			dropDown.Items.Add(setButton);
+			printListButton = Utils.GenerateTSButton("Prints", ShowPrintlist);
 			toolbar.Items.Add(Utils.GenerateTSDDButton("File", dropDown));
 			catalogLabel = Utils.GenerateTSLabel("", true, 10);
 			toolbar.Items.Add(catalogLabel);
@@ -107,12 +112,37 @@ namespace CollectionTracker {
 
 		//Replace current page
 		public void SetPage(TrackerPage page) {
+			if (savedPrintlist != null && !(page is Detailpage dp || page is Cardentry ce || page is Printentry pe)) {
+				toolbar.Items.Remove(printListButton);
+				savedPrintlist.Dispose();
+				savedPrintlist = null;
+			}
 			if (this.page != null) {
-				this.page.Dispose();
 				Controls.Remove(this.page.Panel);
+				this.page.Dispose();
 			}
 			Controls.Add(page.Panel);
 			this.page = page;
+		}
+
+		//Save printlist and load detail page
+		public void ShowDetails(Printlist pl, Detailpage dp) {
+			if (page != pl)
+				return;
+			toolbar.Items.Add(printListButton);
+			Controls.Remove(pl.Panel);
+			Controls.Add(dp.Panel);
+			savedPrintlist = pl;
+			page = dp;
+		}
+		public void ShowPrintlist(object sender, EventArgs e) {
+			toolbar.Items.Remove(printListButton);
+			Controls.Remove(page.Panel);
+			page.Dispose();
+			Controls.Add(savedPrintlist.Panel);
+			savedPrintlist.UpdateEntries();
+			page = savedPrintlist;
+			savedPrintlist = null;
 		}
 
 		//Catalog loaders
