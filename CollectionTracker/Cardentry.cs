@@ -75,10 +75,13 @@ namespace CollectionTracker {
 		//Save
 		private void SaveCard(object sender, EventArgs e) {
 			if (cardref != null) {
+				string name = printref.GetField("name");
 				List<Dictionary<string, string>> faceDicts = new List<Dictionary<string, string>>();
 				foreach (Fieldlist face in faces)
 					faceDicts.Add(face.GetFieldDict());
 				cardref.CopyFields(fields.GetFieldDict(), faceDicts);
+				if (!printref.GetField("name").Equals(name))
+					Printentry.CardsAltered = true;
 			}
 			if (printref != null)
 				parent.SetPage(new Detailpage(parent, printref));

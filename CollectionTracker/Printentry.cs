@@ -19,64 +19,105 @@ namespace CollectionTracker {
 		private ComboBox cardBox;
 		private Button saveButton;
 
+		//Static modified field identifiers
+		public static bool SetsAltered = true;
+		public static bool CardsAltered = true;
+
 		//Constructor
 		public Printentry(TrackerForm form, Printing print) : base(form) {
-
-			//References
-			printref = print;
 
 			//Panel
 			listPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(800, panel.Height - 25), panel.Size, new Point(0, 0)));
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 
-			//Suspend
-			listPanel.SuspendLayout();
-
 			//Set
 			Label setLabel = Utils.GenerateLabel(new Rectangle(0, 0, 100, 30), "Set");
 			setBox = Utils.GenerateComboBox(new Rectangle(105, 0, 675, 30), ComboBoxStyle.DropDownList, true);
-			setBox.Items.AddRange(Catalog.Sets.ToArray());
-			setBox.SelectedItem = printref.Set;
 			listPanel.Controls.Add(setLabel);
 			listPanel.Controls.Add(setBox);
 
 			//Card
 			Label cardLabel = Utils.GenerateLabel(new Rectangle(0, 35, 100, 30), "Card");
 			cardBox = Utils.GenerateComboBox(new Rectangle(105, 35, 675, 30), ComboBoxStyle.DropDownList, true);
-			cardBox.Items.AddRange(Catalog.Cards.ToArray());
-			cardBox.SelectedItem = printref.Card;
 			listPanel.Controls.Add(cardLabel);
 			listPanel.Controls.Add(cardBox);
 
-			//Treatments
-			treatments = new Treatmentlist(this, "Treatments", printref.Treatments.Select(t => t.Name).ToList(), 70);
-			treatments.OnListResize += OnFieldsResized;
-			listPanel.Controls.Add(treatments.Panel);
-
-			//Fields
-			fields = new Fieldlist(this, "Fields", print.Fields, 70);
-			fields.OnListResize += OnFieldsResized;
-			listPanel.Controls.Add(fields.Panel);
-
-			//Images
-			images = new Imagelist(this, "Images", print.ImagePaths, 70);
-			images.OnListResize += OnFieldsResized;
-			listPanel.Controls.Add(images.Panel);
+			//Field lists
+			treatments = null;
+			fields = null;
+			images = null;
 
 			//Save button
 			saveButton = Utils.GenerateButton(new Rectangle(0, 70, 100, BUTTON_HEIGHT), "Save");
 			saveButton.Click += SavePrinting;
 			listPanel.Controls.Add(saveButton);
 
+			//Load
+			LoadPrinting(print);
+
+			//Add to panel
+			panel.Controls.Add(listPanel);
+
+		}
+
+		//Load printing
+		public void LoadPrinting(Printing print) {
+
+			//References
+			printref = print;
+
+			//Suspend
+			listPanel.SuspendLayout();
+
+			//Sets
+			if (SetsAltered) {
+				setBox.Items.Clear();
+				setBox.Items.AddRange(Catalog.Sets.ToArray());
+				SetsAltered = false;
+			}
+			setBox.SelectedItem = printref.Set;
+
+			//Cards
+			if (CardsAltered) {
+				cardBox.Items.Clear();
+				cardBox.Items.AddRange(Catalog.Cards.ToArray());
+				CardsAltered = false;
+			}
+			cardBox.SelectedItem = printref.Card;
+
+			//Treatments
+			if (treatments != null) {
+				listPanel.Controls.Remove(treatments.Panel);
+				treatments.Panel.Dispose();
+			}
+			treatments = new Treatmentlist(this, "Treatments", printref.Treatments.Select(t => t.Name).ToList(), 70);
+			treatments.OnListResize += OnFieldsResized;
+			listPanel.Controls.Add(treatments.Panel);
+
+			//Fields
+			if (fields != null) {
+				listPanel.Controls.Remove(fields.Panel);
+				fields.Panel.Dispose();
+			}
+			fields = new Fieldlist(this, "Fields", printref.Fields, 70);
+			fields.OnListResize += OnFieldsResized;
+			listPanel.Controls.Add(fields.Panel);
+
+			//Images
+			if (images != null) {
+				listPanel.Controls.Remove(images.Panel);
+				images.Panel.Dispose();
+			}
+			images = new Imagelist(this, "Images", printref.ImagePaths, 70);
+			images.OnListResize += OnFieldsResized;
+			listPanel.Controls.Add(images.Panel);
+
 			//Resize
 			OnFieldsResized();
 
 			//Resume
 			listPanel.ResumeLayout();
-
-			//Add to panel
-			panel.Controls.Add(listPanel);
 
 		}
 

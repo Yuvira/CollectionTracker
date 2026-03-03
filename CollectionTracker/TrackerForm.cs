@@ -19,6 +19,7 @@ namespace CollectionTracker {
 		private Catalog curCatalog = null;
 		private TrackerPage page = null;
 		private Printlist savedPrintlist = null;
+		private Printentry savedPrintentry = null;
 
 		//Controls
 		private MenuStrip toolbar;
@@ -79,16 +80,7 @@ namespace CollectionTracker {
 
 		}
 
-		//Open pages
-		public void OpenHomePage(object sender = null, EventArgs e = null) => SetPage(new Homepage(this));
-		public void OpenSetentries(object sender = null, EventArgs e = null) => SetPage(new Setentrylist(this));
-
-		//Save current catalog
-		public void SaveCatalog(object sender, EventArgs e) {
-			if (!Utils.ResourcePaths.ContainsKey(Catalog.Game))
-				return;
-			Catalog.SaveToFile(Utils.ResourcePaths[Catalog.Game] + "catalog2.bin");
-		}
+		#region Catalog Setters
 
 		//Set current catalog
 		public void SetCatalogMTG() {
@@ -111,6 +103,14 @@ namespace CollectionTracker {
 			setButton.Enabled = true;
 		}
 
+		#endregion
+
+		#region Page Setters
+
+		//Open pages
+		public void OpenHomePage(object sender = null, EventArgs e = null) => SetPage(new Homepage(this));
+		public void OpenSetentries(object sender = null, EventArgs e = null) => SetPage(new Setentrylist(this));
+
 		//Replace current page
 		public void SetPage(TrackerPage page) {
 			if (savedPrintlist != null && !(page is Detailpage dp || page is Cardentry ce || page is Printentry pe)) {
@@ -118,7 +118,9 @@ namespace CollectionTracker {
 				savedPrintlist.Dispose();
 				savedPrintlist = null;
 			}
-			if (this.page != null) {
+			if (this.page != null && this.page == savedPrintentry)
+				savedPrintentry.Panel.Hide();
+			else if (this.page != null) {
 				Controls.Remove(this.page.Panel);
 				this.page.Dispose();
 			}
@@ -147,6 +149,34 @@ namespace CollectionTracker {
 			savedPrintlist = null;
 		}
 
+		//Save printentry
+		public void ShowPrintentry(Printing printing) {
+			if (page != null) {
+				Controls.Remove(page.Panel);
+				page.Dispose();
+			}
+			if (savedPrintentry == null) {
+				savedPrintentry = new Printentry(this, printing);
+				Controls.Add(savedPrintentry.Panel);
+			}
+			else {
+				savedPrintentry.LoadPrinting(printing);
+				savedPrintentry.Panel.Show();
+			}
+			page = savedPrintentry;
+		}
+
+		#endregion
+
+		#region I/O
+
+		//Save current catalog
+		public void SaveCatalog(object sender, EventArgs e) {
+			if (!Utils.ResourcePaths.ContainsKey(Catalog.Game))
+				return;
+			Catalog.SaveToFile(Utils.ResourcePaths[Catalog.Game] + "catalog2.bin");
+		}
+
 		//Catalog loaders
 		public static bool TryLoadCatalogFromFile<T>(string path, out T catalog) {
 			try {
@@ -160,6 +190,8 @@ namespace CollectionTracker {
 				return false;
 			}
 		}
+
+		#endregion
 
 	}
 

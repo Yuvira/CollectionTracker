@@ -97,6 +97,8 @@ namespace CollectionTracker {
 
 			//Save entry fields
 			private void SaveEntry(object sender, EventArgs e) {
+				if (!set.Name.Equals(nameBox.Text))
+					Printentry.SetsAltered = true;
 				set.Copy(new Set(
 					nameBox.Text,
 					codeBox.Text,
@@ -180,6 +182,7 @@ namespace CollectionTracker {
 			listPanel.Controls.Remove(entry.Panel);
 			entry.Panel.Dispose();
 			Catalog.Sets.Remove(set);
+			Printentry.SetsAltered = true;
 			Update();
 		}
 
@@ -190,6 +193,7 @@ namespace CollectionTracker {
 			Setentry entry = new Setentry(this, set);
 			entries.Insert(0, entry);
 			listPanel.Controls.Add(entry.Panel);
+			Printentry.SetsAltered = true;
 			Update();
 		}
 

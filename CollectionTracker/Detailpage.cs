@@ -293,7 +293,7 @@ namespace CollectionTracker {
 
 		//Modify card data
 		private void EditCard(object sender, EventArgs e) => parent.SetPage(new Cardentry(parent, printing.Card, printing));
-		private void EditPrint(object sender, EventArgs e) => parent.SetPage(new Printentry(parent, printing));
+		private void EditPrint(object sender, EventArgs e) => parent.ShowPrintentry(printing);
 
 		#region Views
 
