@@ -16,6 +16,7 @@ namespace CollectionTracker {
 		//Controls
 		private TrackerPanel listPanel;
 		private Button saveButton;
+		private Button returnButton;
 
 		//Constructor
 		public Cardentry(TrackerForm form, Card card, Printing print = null) : base(form) {
@@ -51,6 +52,11 @@ namespace CollectionTracker {
 			saveButton.Click += SaveCard;
 			listPanel.Controls.Add(saveButton);
 
+			//Return button
+			returnButton = Utils.GenerateButton(new Rectangle(105, 0, 100, BUTTON_HEIGHT), "Return");
+			returnButton.Click += ReturnToDetails;
+			listPanel.Controls.Add(returnButton);
+
 			//Resize
 			OnFieldsResized();
 
@@ -70,6 +76,7 @@ namespace CollectionTracker {
 				yPos += face.Panel.Height + 5;
 			}
 			saveButton.Location = new Point(0, yPos);
+			returnButton.Location = new Point(105, yPos);
 		}
 
 		//Save
@@ -83,6 +90,10 @@ namespace CollectionTracker {
 				if (!printref.GetField("name").Equals(name))
 					Printentry.CardsAltered = true;
 			}
+			if (printref != null)
+				parent.SetPage(new Detailpage(parent, printref));
+		}
+		private void ReturnToDetails(object sender, EventArgs e) {
 			if (printref != null)
 				parent.SetPage(new Detailpage(parent, printref));
 		}

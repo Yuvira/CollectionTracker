@@ -18,6 +18,7 @@ namespace CollectionTracker {
 		private ComboBox setBox;
 		private ComboBox cardBox;
 		private Button saveButton;
+		private Button returnButton;
 
 		//Static modified field identifiers
 		public static bool SetsAltered = true;
@@ -52,6 +53,11 @@ namespace CollectionTracker {
 			saveButton = Utils.GenerateButton(new Rectangle(0, 70, 100, BUTTON_HEIGHT), "Save");
 			saveButton.Click += SavePrinting;
 			listPanel.Controls.Add(saveButton);
+
+			//Return button
+			returnButton = Utils.GenerateButton(new Rectangle(105, 70, 100, BUTTON_HEIGHT), "Return");
+			returnButton.Click += ReturnToDetails;
+			listPanel.Controls.Add(returnButton);
 
 			//Load
 			LoadPrinting(print);
@@ -134,6 +140,7 @@ namespace CollectionTracker {
 			images.Panel.Location = new Point(0, yPos);
 			yPos += images.Panel.Height + 5;
 			saveButton.Location = new Point(0, yPos);
+			returnButton.Location = new Point(105, yPos);
 		}
 
 		//Save
@@ -148,6 +155,12 @@ namespace CollectionTracker {
 				printref.CopyImgPaths(images.GetPathList());
 				parent.SetPage(new Detailpage(parent, printref));
 			}
+		}
+
+		//Return
+		private void ReturnToDetails(object sender, EventArgs e) {
+			if (printref != null)
+				parent.SetPage(new Detailpage(parent, printref));
 		}
 
 	}
