@@ -102,11 +102,14 @@ namespace CollectionTracker {
 
 		//Properties
 		private Printing printing;
+		private List<DetailPrintrow> printRows;
 		private List<Tooltip> tooltips;
 		private List<Cardtip> cardtips;
 
 		//Controls
 		private Panel contentPanel;
+		private List<TrackerPanel> dataPanels;
+		private PictureBox imgBox;
 		private TrackerPanel printPanel;
 		private Panel tooltipPanel;
 		private PictureBox cardtipBox;
@@ -118,8 +121,9 @@ namespace CollectionTracker {
 		//Constructor
 		public Detailpage(TrackerForm form, Printing printing) : base(form) {
 
-			//Set print reference
-			this.printing = printing;
+			//Lists
+			dataPanels = new List<TrackerPanel>();
+			printRows = new List<DetailPrintrow>();
 
 			//Generate content panel
 			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1290, panel.Height - 10), panel.Size));
@@ -137,9 +141,7 @@ namespace CollectionTracker {
 			contentPanel.Controls.Add(cardtipBox);
 
 			//Image box
-			PictureBox imgBox = Utils.GeneratePictureBox(new Rectangle(5, 5, 400, 540));
-			if (this.printing.ImagePaths.Count > 0)
-				Utils.TryLoadCardImage(imgBox, this.printing.ImagePaths[0], Catalog.Game);
+			imgBox = Utils.GeneratePictureBox(new Rectangle(5, 5, 400, 540));
 			contentPanel.Controls.Add(imgBox);
 
 			//Edit card
@@ -154,6 +156,40 @@ namespace CollectionTracker {
 
 			//Print panel
 			printPanel = Utils.GenerateTrackerPanel(new Rectangle(865, 5, 400, TEXT_HEIGHT));
+			contentPanel.Controls.Add(printPanel);
+
+			//Add to panel
+			panel.Controls.Add(contentPanel);
+
+			//Set printing
+			SetPrinting(printing);
+
+		}
+
+		//Set printing
+		private void SetPrinting(Printing printing) {
+
+			//Set print reference
+			this.printing = printing;
+
+			//Clear previous data
+			foreach (DetailPrintrow row in printRows) {
+				printPanel.Controls.Remove(row.Label);
+				row.Label.Dispose();
+			}
+			printRows.Clear();
+			foreach (TrackerPanel panel in dataPanels) {
+				contentPanel.Controls.Remove(panel);
+				panel.Dispose();
+			}
+			dataPanels.Clear();
+			printPanel.ClearBorders();
+
+			//Image
+			if (this.printing.ImagePaths.Count > 0)
+				Utils.TryLoadCardImage(imgBox, this.printing.ImagePaths[0], Catalog.Game);
+
+			//Prints
 			if (!printing.GetField("name").Equals("_") && !printing.GetField("name").Equals("")) {
 				List<Printing> prints = Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
 				prints.Sort(new PrintComparerInverseNewest().Compare);
@@ -166,11 +202,11 @@ namespace CollectionTracker {
 						printPanel.Width - 10,
 						prints[i] == printing
 					);
+					printRows.Add(row);
 					printPanel.Controls.Add(row.Label);
 				}
 				printPanel.Height = TOP_PAD + BOTTOM_PAD + (prints.Count * TEXT_HEIGHT);
 			}
-			contentPanel.Controls.Add(printPanel);
 
 			//Card data
 			if (Catalog.Game == Game.MTG)
@@ -179,9 +215,6 @@ namespace CollectionTracker {
 				LayoutDataYGO();
 			else if (Catalog.Game == Game.PKMN)
 				LayoutDataPKMN();
-
-			//Add to panel
-			panel.Controls.Add(contentPanel);
 
 		}
 
@@ -284,6 +317,7 @@ namespace CollectionTracker {
 					facePanel.AddBorder(Utils.COLOR_FRONT, 1);
 
 				//Add to content
+				dataPanels.Add(facePanel);
 				contentPanel.Controls.Add(facePanel);
 
 			}
@@ -330,6 +364,7 @@ namespace CollectionTracker {
 			headerPanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
 			yPosPanel += headerPanel.Height + 5;
 			yPos = TOP_PAD;
+			dataPanels.Add(headerPanel);
 			contentPanel.Controls.Add(headerPanel);
 
 			//Pendulum text
@@ -344,6 +379,7 @@ namespace CollectionTracker {
 				pendulumPanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
 				yPosPanel += pendulumPanel.Height + 5;
 				yPos = TOP_PAD;
+				dataPanels.Add(pendulumPanel);
 				contentPanel.Controls.Add(pendulumPanel);
 			}
 
@@ -363,6 +399,7 @@ namespace CollectionTracker {
 				yPos += LINE_SPACING + GenerateDescription($"<b>{def} DEF", oraclePanel, new Point(oraclePanel.Width - LEFT_PAD, yPos), false, true);
 			oraclePanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
 			oraclePanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
+			dataPanels.Add(oraclePanel);
 			contentPanel.Controls.Add(oraclePanel);
 
 			//Print panel border
@@ -437,6 +474,7 @@ namespace CollectionTracker {
 			SetPanelColorsPKMN(headerPanel, printing.GetField("energy"));
 			yPosPanel += headerPanel.Height + 5;
 			yPos = TOP_PAD;
+			dataPanels.Add(headerPanel);
 			contentPanel.Controls.Add(headerPanel);
 
 			//Oracle text
@@ -445,6 +483,7 @@ namespace CollectionTracker {
 				oraclePanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription(oracle, oraclePanel, new Point(LEFT_PAD, TOP_PAD), true, false, true);
 				SetPanelColorsPKMN(oraclePanel, printing.GetField("energy"));
 				yPosPanel += oraclePanel.Height + 5;
+				dataPanels.Add(oraclePanel);
 				contentPanel.Controls.Add(oraclePanel);
 			}
 
@@ -464,6 +503,7 @@ namespace CollectionTracker {
 				SetPanelColorsPKMN(footerPanel, printing.GetField("energy"));
 				yPosPanel += footerPanel.Height + 5;
 				yPos = TOP_PAD;
+				dataPanels.Add(footerPanel);
 				contentPanel.Controls.Add(footerPanel);
 			}
 
@@ -472,6 +512,7 @@ namespace CollectionTracker {
 				TrackerPanel flavorPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
 				flavorPanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription($"<i>{flavor}", flavorPanel, new Point(LEFT_PAD, TOP_PAD));
 				SetPanelColorsPKMN(flavorPanel, printing.GetField("energy"));
+				dataPanels.Add(flavorPanel);
 				contentPanel.Controls.Add(flavorPanel);
 			}
 
@@ -543,7 +584,7 @@ namespace CollectionTracker {
 		public void LoadCardtip(string printid) {
 			Printing print = Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(printid));
 			if (print != null)
-				parent.SetPage(new Detailpage(parent, print));
+				SetPrinting(print);
 		}
 
 		//Hide
