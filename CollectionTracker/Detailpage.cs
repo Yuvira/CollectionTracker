@@ -324,6 +324,10 @@ namespace CollectionTracker {
 			borderPanels.Clear();
 			borderPanels.Add(viewPanel);
 			borderPanels.Add(printPanel);
+			contentPanel.Controls.Remove(viewPanel);
+			contentPanel.Controls.Remove(printPanel);
+			contentPanel.Controls.Add(viewPanel);
+			contentPanel.Controls.Add(printPanel);
 
 			//Clear data panels
 			foreach (TrackerPanel panel in dataPanels) {
