@@ -412,7 +412,7 @@ namespace CollectionTracker {
 				if (printing.Card.TryGetField("name", i, out string name))
 					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{name}", facePanel, new Point(LEFT_PAD, yPos), false));
 				if (printing.Card.TryGetField("cost", i, out string cost))
-					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(cost, facePanel, new Point(facePanel.Width - LEFT_PAD, yPos), false, true));
+					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(cost, facePanel, new Point(LEFT_PAD, yPos), false, true));
 				yPos += titleHeight;
 
 				//Type line
@@ -439,7 +439,7 @@ namespace CollectionTracker {
 						pt = $"{loyalty} Loyalty, {pt}";
 					else if (hasLoyalty)
 						pt = $"{loyalty} Loyalty";
-					yPos += LINE_SPACING + GenerateDescription($"<b>{pt}", facePanel, new Point(facePanel.Width - LEFT_PAD, yPos), false, true);
+					yPos += LINE_SPACING + GenerateDescription($"<b>{pt}", facePanel, new Point(LEFT_PAD, yPos), false, true);
 				}
 
 				//Panel height
@@ -538,11 +538,11 @@ namespace CollectionTracker {
 			bool hasAtk = printing.Card.TryGetField("attack", out string atk);
 			bool hasDef = printing.Card.TryGetField("defense", out string def);
 			if (hasAtk && hasDef)
-				yPos += LINE_SPACING + GenerateDescription($"<b>{atk} ATK / {def} DEF", oraclePanel, new Point(oraclePanel.Width - LEFT_PAD, yPos), false, true);
+				yPos += LINE_SPACING + GenerateDescription($"<b>{atk} ATK / {def} DEF", oraclePanel, new Point(LEFT_PAD, yPos), false, true);
 			else if (hasAtk)
-				yPos += LINE_SPACING + GenerateDescription($"<b>{atk} ATK", oraclePanel, new Point(oraclePanel.Width - LEFT_PAD, yPos), false, true);
+				yPos += LINE_SPACING + GenerateDescription($"<b>{atk} ATK", oraclePanel, new Point(LEFT_PAD, yPos), false, true);
 			else if (hasDef)
-				yPos += LINE_SPACING + GenerateDescription($"<b>{def} DEF", oraclePanel, new Point(oraclePanel.Width - LEFT_PAD, yPos), false, true);
+				yPos += LINE_SPACING + GenerateDescription($"<b>{def} DEF", oraclePanel, new Point(LEFT_PAD, yPos), false, true);
 			oraclePanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
 			yPosPanel += oraclePanel.Height + 5;
 			borderPanels.Add(oraclePanel);
@@ -612,11 +612,11 @@ namespace CollectionTracker {
 			bool hasEnergyType = printing.Card.TryGetField("energy", out string energy);
 			bool hasHP = printing.Card.TryGetField("hp", out string hp);
 			if (hasEnergyType && hasHP)
-				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{hp} HP {energy}", headerPanel, new Point(headerPanel.Width - LEFT_PAD, yPos), false, true));
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{hp} HP {energy}", headerPanel, new Point(LEFT_PAD, yPos), false, true));
 			else if (hasEnergyType)
-				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(energy, headerPanel, new Point(headerPanel.Width - LEFT_PAD, yPos), false, true));
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(energy, headerPanel, new Point(LEFT_PAD, yPos), false, true));
 			else if (hasHP)
-				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{hp} HP", headerPanel, new Point(headerPanel.Width - LEFT_PAD, yPos), false, true));
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{hp} HP", headerPanel, new Point(LEFT_PAD, yPos), false, true));
 			yPos += titleHeight;
 			if (printing.Card.TryGetField("type", out string type))
 				yPos += LINE_SPACING + GenerateDescription(type, headerPanel, new Point(LEFT_PAD, yPos));
@@ -1129,9 +1129,11 @@ namespace CollectionTracker {
 				if (!rightAlign)
 					foreach (DescriptionObject obj in objects)
 						location = obj.GenerateControl(parent, panel, location);
-				else
+				else {
+					location.X = panel.Width - location.X;
 					for (int i = objects.Count - 1; i >= 0; --i)
 						location = objects[i].GenerateControl(parent, panel, location, rightAlign);
+				}
 			}
 
 		}
