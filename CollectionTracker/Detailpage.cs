@@ -102,14 +102,18 @@ namespace CollectionTracker {
 
 		//Properties
 		private Printing printing;
+		private List<DetailTreatmentPanel> treatmentPanels;
 		private List<DetailPrintrow> printRows;
 		private List<Tooltip> tooltips;
 		private List<Cardtip> cardtips;
 
 		//Controls
-		private Panel contentPanel;
-		private List<TrackerPanel> dataPanels;
 		private PictureBox imgBox;
+		private Panel contentPanel;
+		private ComboBox moveToBox;
+		private List<TrackerPanel> dataPanels;
+		private List<TrackerPanel> borderPanels;
+		private TrackerPanel viewPanel;
 		private TrackerPanel printPanel;
 		private Panel tooltipPanel;
 		private PictureBox cardtipBox;
@@ -121,9 +125,12 @@ namespace CollectionTracker {
 		//Constructor
 		public Detailpage(TrackerForm form, Printing printing) : base(form) {
 
-			//Lists
+			//Initial values
 			dataPanels = new List<TrackerPanel>();
+			borderPanels = new List<TrackerPanel>();
+			treatmentPanels = new List<DetailTreatmentPanel>();
 			printRows = new List<DetailPrintrow>();
+			moveToBox = null;
 
 			//Generate content panel
 			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1290, panel.Height - 10), panel.Size));
@@ -154,6 +161,17 @@ namespace CollectionTracker {
 			editPrintButton.Click += EditPrint;
 			contentPanel.Controls.Add(editPrintButton);
 
+			//Views
+			viewPanel = Utils.GenerateTrackerPanel(new Rectangle(410, 5, 450, BUTTON_HEIGHT + 10));
+			RadioButton cardViewButton = Utils.GenerateRadioButton(new Rectangle(5, 5, 217, BUTTON_HEIGHT), "Card Data");
+			cardViewButton.Checked = true;
+			cardViewButton.CheckedChanged += SetViewCardData;
+			viewPanel.Controls.Add(cardViewButton);
+			RadioButton printViewButton = Utils.GenerateRadioButton(new Rectangle(228, 5, 217, BUTTON_HEIGHT), "Owned Printings");
+			printViewButton.CheckedChanged += SetViewOwnedPrintings;
+			viewPanel.Controls.Add(printViewButton);
+			contentPanel.Controls.Add(viewPanel);
+
 			//Print panel
 			printPanel = Utils.GenerateTrackerPanel(new Rectangle(865, 5, 400, TEXT_HEIGHT));
 			contentPanel.Controls.Add(printPanel);
@@ -163,6 +181,7 @@ namespace CollectionTracker {
 
 			//Set printing
 			SetPrinting(printing);
+			SetViewCardData();
 
 		}
 
@@ -172,24 +191,16 @@ namespace CollectionTracker {
 			//Set print reference
 			this.printing = printing;
 
-			//Clear previous data
-			foreach (DetailPrintrow row in printRows) {
-				printPanel.Controls.Remove(row.Label);
-				row.Label.Dispose();
-			}
-			printRows.Clear();
-			foreach (TrackerPanel panel in dataPanels) {
-				contentPanel.Controls.Remove(panel);
-				panel.Dispose();
-			}
-			dataPanels.Clear();
-			printPanel.ClearBorders();
-
 			//Image
 			if (this.printing.ImagePaths.Count > 0)
 				Utils.TryLoadCardImage(imgBox, this.printing.ImagePaths[0], Catalog.Game);
 
 			//Prints
+			foreach (DetailPrintrow row in printRows) {
+				printPanel.Controls.Remove(row.Label);
+				row.Label.Dispose();
+			}
+			printRows.Clear();
 			if (!printing.GetField("name").Equals("_") && !printing.GetField("name").Equals("")) {
 				List<Printing> prints = Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
 				prints.Sort(new PrintComparerInverseNewest().Compare);
@@ -208,13 +219,54 @@ namespace CollectionTracker {
 				printPanel.Height = TOP_PAD + BOTTOM_PAD + (prints.Count * TEXT_HEIGHT);
 			}
 
+		}
+
+		//Views
+		private void SetViewCardData(object sender = null, EventArgs e = null) {
+			if (sender != null && sender is RadioButton rb && !rb.Checked)
+				return;
+			SetView(true);
+		}
+		private void SetViewOwnedPrintings(object sender = null, EventArgs e = null) {
+			if (sender != null && sender is RadioButton rb && !rb.Checked)
+				return;
+			SetView(false);
+		}
+
+		//Clear data panels and set new view
+		private void SetView(bool cardData) {
+
+			//Locations
+			moveToBox = null;
+			treatmentPanels.Clear();
+
+			//Clear borders
+			foreach (TrackerPanel panel in borderPanels)
+				panel.ClearBorders();
+			borderPanels.Clear();
+			borderPanels.Add(viewPanel);
+			borderPanels.Add(printPanel);
+
+			//Clear data panels
+			foreach (TrackerPanel panel in dataPanels) {
+				contentPanel.Controls.Remove(panel);
+				panel.Dispose();
+			}
+			dataPanels.Clear();
+
 			//Card data
-			if (Catalog.Game == Game.MTG)
-				LayoutDataMTG();
-			else if (Catalog.Game == Game.YGO)
-				LayoutDataYGO();
-			else if (Catalog.Game == Game.PKMN)
-				LayoutDataPKMN();
+			if (cardData) {
+				if (Catalog.Game == Game.MTG)
+					LayoutDataMTG();
+				else if (Catalog.Game == Game.YGO)
+					LayoutDataYGO();
+				else if (Catalog.Game == Game.PKMN)
+					LayoutDataPKMN();
+			}
+
+			//Owned locations
+			else
+				LayoutOwnedPrintings();
 
 		}
 
@@ -236,18 +288,25 @@ namespace CollectionTracker {
 		};
 
 		//Set panel color
-		private void SetPanelColorsMTG(TrackerPanel panel, string color) {
+		private void SetPanelColorsMTG(List<TrackerPanel> panels, string color = null) {
+			bool hasColor = color != null;
+			if (!hasColor)
+				hasColor = printing.Card.TryGetField("color", 0, out color);
 			color = color.ToLower();
-			if (color.Length == 0)
-				panel.AddBorder(SystemColors.ControlDarkDark, 3);
-			else if (color.Length == 1 && MTGTypeColors.ContainsKey(color[0]))
-				panel.AddBorder(MTGTypeColors[color[0]], 3);
-			else if (color.Length == 2 && MTGTypeColors.ContainsKey(color[0]) && MTGTypeColors.ContainsKey(color[1]))
-				panel.AddDoubleBorder(MTGTypeColors[color[0]], MTGTypeColors[color[1]], 3);
-			else if (color.Length > 2)
-				panel.AddBorder(Color.Yellow, 3);
-			else
-				panel.AddBorder(Utils.COLOR_FRONT, 1);
+			foreach (TrackerPanel panel in panels) {
+				if (!hasColor)
+					panel.AddBorder(Utils.COLOR_FRONT, 1);
+				else if (color.Length == 0)
+					panel.AddBorder(SystemColors.ControlDarkDark, 3);
+				else if (color.Length == 1 && MTGTypeColors.ContainsKey(color[0]))
+					panel.AddBorder(MTGTypeColors[color[0]], 3);
+				else if (color.Length == 2 && MTGTypeColors.ContainsKey(color[0]) && MTGTypeColors.ContainsKey(color[1]))
+					panel.AddDoubleBorder(MTGTypeColors[color[0]], MTGTypeColors[color[1]], 3);
+				else if (color.Length > 2)
+					panel.AddBorder(Color.Yellow, 3);
+				else
+					panel.AddBorder(Utils.COLOR_FRONT, 1);
+			}
 		}
 
 		#endregion
@@ -258,9 +317,6 @@ namespace CollectionTracker {
 			//Y Position
 			int yPos;
 			int yPosPanel = 5;
-
-			//Color
-			string color;
 
 			//Print faces
 			for (int i = 0; i < Math.Max(printing.Card.Faces.Count, 1); ++i) {
@@ -310,11 +366,11 @@ namespace CollectionTracker {
 				facePanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
 				yPosPanel += facePanel.Height + 5;
 
-				//Panel colors
-				if (printing.Card.TryGetField("color", i, out color))
-					SetPanelColorsMTG(facePanel, color);
+				//Color face panel
+				if (printing.Card.TryGetField("color", i, out string color))
+					SetPanelColorsMTG(new List<TrackerPanel> { facePanel }, color);
 				else
-					facePanel.AddBorder(Utils.COLOR_FRONT, 1);
+					borderPanels.Add(facePanel);
 
 				//Add to content
 				dataPanels.Add(facePanel);
@@ -322,17 +378,27 @@ namespace CollectionTracker {
 
 			}
 
-			//Color print panel
-			if (printing.Card.TryGetField("color", 0, out color))
-				SetPanelColorsMTG(printPanel, color);
-			else
-				printPanel.AddBorder(Utils.COLOR_FRONT, 1);
+			//View panel
+			viewPanel.Location = new Point(viewPanel.Location.X, yPosPanel);
+
+			//Color panels
+			SetPanelColorsMTG(borderPanels);
 
 		}
 
 		#endregion
 
 		#region YGO Layout
+
+		#region Panel Coloring
+
+		//Set panel color
+		private void SetPanelColorsYGO(List<TrackerPanel> panels) {
+			foreach (TrackerPanel panel in panels)
+				panel.AddBorder(Utils.COLOR_BACK_DARK, 3);
+		}
+
+		#endregion
 
 		//Data layout
 		private void LayoutDataYGO() {
@@ -361,9 +427,9 @@ namespace CollectionTracker {
 					yPos += LINE_SPACING + GenerateDescription($"Level {level}", headerPanel, new Point(LEFT_PAD, yPos), false);
 			}
 			headerPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-			headerPanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
 			yPosPanel += headerPanel.Height + 5;
 			yPos = TOP_PAD;
+			borderPanels.Add(headerPanel);
 			dataPanels.Add(headerPanel);
 			contentPanel.Controls.Add(headerPanel);
 
@@ -376,9 +442,9 @@ namespace CollectionTracker {
 				if (printing.Card.TryGetField("oracle", 0, out oracle))
 					yPos += LINE_SPACING + GenerateDescription(oracle, pendulumPanel, new Point(LEFT_PAD, yPos));
 				pendulumPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-				pendulumPanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
 				yPosPanel += pendulumPanel.Height + 5;
 				yPos = TOP_PAD;
+				borderPanels.Add(pendulumPanel);
 				dataPanels.Add(pendulumPanel);
 				contentPanel.Controls.Add(pendulumPanel);
 			}
@@ -398,12 +464,16 @@ namespace CollectionTracker {
 			else if (hasDef)
 				yPos += LINE_SPACING + GenerateDescription($"<b>{def} DEF", oraclePanel, new Point(oraclePanel.Width - LEFT_PAD, yPos), false, true);
 			oraclePanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-			oraclePanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
+			yPosPanel += oraclePanel.Height + 5;
+			borderPanels.Add(oraclePanel);
 			dataPanels.Add(oraclePanel);
 			contentPanel.Controls.Add(oraclePanel);
 
-			//Print panel border
-			printPanel.AddBorder(Utils.COLOR_BACK_DARK, 3);
+			//View panel
+			viewPanel.Location = new Point(viewPanel.Location.X, yPosPanel);
+
+			//Color panels
+			SetPanelColorsYGO(borderPanels);
 
 		}
 
@@ -429,18 +499,20 @@ namespace CollectionTracker {
 		};
 
 		//Set panel color
-		private void SetPanelColorsPKMN(TrackerPanel panel, string color) {
-			color = color.ToLower().Replace("{", "").Replace("}", "");
-			if (color.Length == 0)
-				panel.AddBorder(SystemColors.ControlDarkDark, 3);
-			else if (color.Length == 1 && PKMNTypeColors.ContainsKey(color[0]))
-				panel.AddBorder(PKMNTypeColors[color[0]], 3);
-			else if (color.Length == 2 && PKMNTypeColors.ContainsKey(color[0]) && PKMNTypeColors.ContainsKey(color[1]))
-				panel.AddDoubleBorder(PKMNTypeColors[color[0]], PKMNTypeColors[color[1]], 3);
-			else if (color.Length > 2)
-				panel.AddBorder(Color.Yellow, 3);
-			else
-				panel.AddBorder(Utils.COLOR_FRONT, 1);
+		private void SetPanelColorsPKMN(List<TrackerPanel> panels) {
+			string color = printing.GetField("energy").ToLower().Replace("{", "").Replace("}", "");
+			foreach (TrackerPanel panel in panels) {
+				if (color.Length == 0)
+					panel.AddBorder(SystemColors.ControlDarkDark, 3);
+				else if (color.Length == 1 && PKMNTypeColors.ContainsKey(color[0]))
+					panel.AddBorder(PKMNTypeColors[color[0]], 3);
+				else if (color.Length == 2 && PKMNTypeColors.ContainsKey(color[0]) && PKMNTypeColors.ContainsKey(color[1]))
+					panel.AddDoubleBorder(PKMNTypeColors[color[0]], PKMNTypeColors[color[1]], 3);
+				else if (color.Length > 2)
+					panel.AddBorder(Color.Yellow, 3);
+				else
+					panel.AddBorder(Utils.COLOR_FRONT, 1);
+			}
 		}
 
 		#endregion
@@ -471,9 +543,9 @@ namespace CollectionTracker {
 			if (printing.Card.TryGetField("stage", out string stage))
 				yPos += LINE_SPACING + GenerateDescription(stage, headerPanel, new Point(LEFT_PAD, yPos));
 			headerPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-			SetPanelColorsPKMN(headerPanel, printing.GetField("energy"));
 			yPosPanel += headerPanel.Height + 5;
 			yPos = TOP_PAD;
+			borderPanels.Add(headerPanel);
 			dataPanels.Add(headerPanel);
 			contentPanel.Controls.Add(headerPanel);
 
@@ -481,8 +553,8 @@ namespace CollectionTracker {
 			if (printing.Card.TryGetField("oracle", out string oracle)) {
 				TrackerPanel oraclePanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
 				oraclePanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription(oracle, oraclePanel, new Point(LEFT_PAD, TOP_PAD), true, false, true);
-				SetPanelColorsPKMN(oraclePanel, printing.GetField("energy"));
 				yPosPanel += oraclePanel.Height + 5;
+				borderPanels.Add(oraclePanel);
 				dataPanels.Add(oraclePanel);
 				contentPanel.Controls.Add(oraclePanel);
 			}
@@ -500,9 +572,8 @@ namespace CollectionTracker {
 				if (hasRetreatCost)
 					yPos += LINE_SPACING + GenerateDescription($"Retreat: {retreat}", footerPanel, new Point(LEFT_PAD, yPos));
 				footerPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-				SetPanelColorsPKMN(footerPanel, printing.GetField("energy"));
 				yPosPanel += footerPanel.Height + 5;
-				yPos = TOP_PAD;
+				borderPanels.Add(footerPanel);
 				dataPanels.Add(footerPanel);
 				contentPanel.Controls.Add(footerPanel);
 			}
@@ -511,14 +582,251 @@ namespace CollectionTracker {
 			if (printing.TryGetField("flavor", out string flavor)) {
 				TrackerPanel flavorPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
 				flavorPanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription($"<i>{flavor}", flavorPanel, new Point(LEFT_PAD, TOP_PAD));
-				SetPanelColorsPKMN(flavorPanel, printing.GetField("energy"));
+				yPosPanel += flavorPanel.Height + 5;
+				borderPanels.Add(flavorPanel);
 				dataPanels.Add(flavorPanel);
 				contentPanel.Controls.Add(flavorPanel);
 			}
 
-			//Color print panel
-			SetPanelColorsPKMN(printPanel, printing.GetField("energy"));
+			//View panel
+			viewPanel.Location = new Point(viewPanel.Location.X, yPosPanel);
 
+			//Color print panel
+			SetPanelColorsPKMN(borderPanels);
+
+		}
+
+		#endregion
+
+		#region Owned Printing Layout
+
+		#region Treatment Panel
+
+		//Treatment panel
+		private class DetailTreatmentPanel {
+
+			#region Treatment Row
+
+			//Treatment row
+			private class DetailTreatmentRow {
+
+				//Properties
+				private DetailTreatmentPanel parent;
+				private Location location;
+				private Panel panel;
+				private Label nameLabel;
+				private Label countLabel;
+
+				//Accessors
+				public Location Location => location;
+				public Panel Panel => panel;
+
+				//Constructor
+				public DetailTreatmentRow(DetailTreatmentPanel parent, Location location) {
+
+					//Panel header
+					this.parent = parent;
+					this.location = location;
+					panel = Utils.GeneratePanel(new Rectangle(5, 0, 440, 40));
+					nameLabel = Utils.GenerateLabel(new Rectangle(5, 10, 270, TEXT_HEIGHT), location.Name);
+					panel.Controls.Add(nameLabel);
+					countLabel = Utils.GenerateLabel(new Rectangle(280, 10, 50, TEXT_HEIGHT), location.Count.ToString());
+					countLabel.TextAlign = ContentAlignment.MiddleRight;
+					panel.Controls.Add(countLabel);
+
+					//Buttons
+					Button incButton = Utils.GenerateButton(new Rectangle(335, 5, 30, 30), "+");
+					incButton.Click += Increment;
+					panel.Controls.Add(incButton);
+					Button decButton = Utils.GenerateButton(new Rectangle(370, 5, 30, 30), "-");
+					decButton.Click += Decrement;
+					panel.Controls.Add(decButton);
+					Button moveButton = Utils.GenerateButton(new Rectangle(405, 5, 30, 30), "M");
+					moveButton.Click += MoveOne;
+					panel.Controls.Add(moveButton);
+
+				}
+
+				//Update count
+				public void Update() {
+					nameLabel.Text = location.Name;
+					countLabel.Text = location.Count.ToString();
+				}
+
+				//Count modifiers
+				private void Increment(object sender, EventArgs e) => parent.IncrementLocation(location.Name);
+				private void Decrement(object sender, EventArgs e) => parent.DecrementLocation(location.Name);
+				private void MoveOne(object sender, EventArgs e) => parent.MoveOne(location.Name);
+
+			}
+
+			#endregion
+
+			//Properties
+			private Detailpage parent;
+			private Treatment treatment;
+			private TrackerPanel panel;
+			private List<DetailTreatmentRow> rows;
+
+			//Accessors
+			public Treatment Treatment => treatment;
+			public TrackerPanel Panel => panel;
+
+			//Constructor
+			public DetailTreatmentPanel(Detailpage parent, Treatment treatment) {
+
+				//Panel header
+				this.parent = parent;
+				this.treatment = treatment;
+				panel = Utils.GenerateTrackerPanel(new Rectangle(410, 0, 450, 0));
+				panel.Controls.Add(Utils.GenerateLabel(new Rectangle(5, 10, 350, TEXT_HEIGHT), this.treatment.Name));
+				Button addButton = Utils.GenerateButton(new Rectangle(450 - (BUTTON_HEIGHT + 5), 5, BUTTON_HEIGHT, BUTTON_HEIGHT), "+");
+				addButton.Click += AddToTreatment;
+				panel.Controls.Add(addButton);
+
+				//Rows
+				int yPosRow = BUTTON_HEIGHT + 10;
+				rows = new List<DetailTreatmentRow>();
+				foreach (Location location in this.treatment.Locations) {
+					DetailTreatmentRow row = new DetailTreatmentRow(this, location);
+					row.Panel.Location = new Point(5, yPosRow);
+					yPosRow += row.Panel.Height + 5;
+					rows.Add(row);
+					panel.Controls.Add(row.Panel);
+				}
+
+				//Panel height
+				panel.Height = yPosRow;
+
+			}
+
+			//Update content
+			public void Update() {
+
+				//Remove locations that no longer exist
+				for (int i = 0; i < rows.Count; ++i) {
+					if (!treatment.Locations.Contains(rows[i].Location)) {
+						rows[i].Panel.Dispose();
+						rows.RemoveAt(i);
+					}
+				}
+
+				//Update order
+				for (int i = 0; i < treatment.Locations.Count; ++i) {
+					if (i == rows.Count || !rows.Select(r => r.Location).Contains(treatment.Locations[i])) {
+						rows.Insert(i, new DetailTreatmentRow(this, treatment.Locations[i]));
+						panel.Controls.Add(rows[i].Panel);
+					}
+					else if (rows[i].Location != treatment.Locations[i]) {
+						int index = rows.Select(r => r.Location).ToList().IndexOf(treatment.Locations[i]);
+						DetailTreatmentRow row = rows[i];
+						rows[i] = rows[index];
+						rows[index] = row;
+					}
+				}
+
+				//Positions
+				int yPosRow = BUTTON_HEIGHT + 10;
+				foreach (DetailTreatmentRow row in rows) {
+					row.Update();
+					row.Panel.Location = new Point(5, yPosRow);
+					yPosRow += row.Panel.Height + 5;
+				}
+				panel.Height = yPosRow;
+
+			}
+
+			//Count modifiers
+			private void AddToTreatment(object sender, EventArgs e) => parent.AddToTreatment(treatment);
+			public void IncrementLocation(string location) => parent.IncrementLocation(treatment, location);
+			public void DecrementLocation(string location) => parent.DecrementLocation(treatment, location);
+			public void MoveOne(string fromLocation) => parent.MoveOne(treatment, fromLocation);
+
+		}
+
+		#endregion
+
+		#region Count Modifiers
+
+		//Count modifiers
+		public void AddToTreatment(Treatment treatment) {
+			if (string.IsNullOrEmpty(moveToBox.Text))
+				return;
+			treatment.Increment(moveToBox.Text);
+			UpdateOwnedPrintings();
+		}
+		public void IncrementLocation(Treatment treatment, string location) {
+			treatment.Increment(location);
+			UpdateOwnedPrintings();
+		}
+		public void DecrementLocation(Treatment treatment, string location) {
+			if (treatment.Decrement(location))
+				UpdateOwnedPrintings();
+		}
+		public void MoveOne(Treatment treatment, string fromLocation) {
+			if (!string.IsNullOrEmpty(moveToBox.Text) && treatment.MoveOne(fromLocation, moveToBox.Text))
+				UpdateOwnedPrintings();
+		}
+
+		#endregion
+
+		//Owned prints
+		private void LayoutOwnedPrintings() {
+
+			//Position
+			int yPos = 5;
+
+			//Move to
+			TrackerPanel moveToPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPos, 450, BUTTON_HEIGHT + 10));
+			int width = Utils.MeasureWidth("Move to");
+			moveToPanel.Controls.Add(Utils.GenerateLabel(new Rectangle(5, 10, width, TEXT_HEIGHT), "Move to"));
+			moveToBox = Utils.GenerateComboBox(new Rectangle(width + 10, 5, 450 - (width + 15), BUTTON_HEIGHT), ComboBoxStyle.DropDown, true);
+			moveToBox.Items.AddRange(Catalog.Printings.SelectMany(p => p.Treatments).SelectMany(t => t.Locations).Select(l => l.Name).Distinct().ToArray());
+			moveToPanel.Controls.Add(moveToBox);
+			yPos += moveToPanel.Height + 5;
+			borderPanels.Add(moveToPanel);
+			dataPanels.Add(moveToPanel);
+			contentPanel.Controls.Add(moveToPanel);
+
+			//Loop treatments
+			foreach (Treatment treatment in printing.Treatments) {
+				DetailTreatmentPanel panel = new DetailTreatmentPanel(this, treatment);
+				panel.Panel.Location = new Point(410, yPos);
+				yPos += panel.Panel.Height + 5;
+				treatmentPanels.Add(panel);
+				borderPanels.Add(panel.Panel);
+				dataPanels.Add(panel.Panel);
+				contentPanel.Controls.Add(panel.Panel);
+			}
+
+			//View panel
+			viewPanel.Location = new Point(viewPanel.Location.X, yPos);
+
+			//Panel colors
+			if (Catalog.Game == Game.MTG)
+				SetPanelColorsMTG(borderPanels);
+			else if (Catalog.Game == Game.YGO)
+				SetPanelColorsYGO(borderPanels);
+			else if (Catalog.Game == Game.PKMN)
+				SetPanelColorsPKMN(borderPanels);
+
+		}
+
+		//Update panel positions
+		private void UpdateOwnedPrintings() {
+			if (treatmentPanels.Count == 0)
+				return;
+			int yPos = treatmentPanels[0].Panel.Location.Y;
+			foreach (DetailTreatmentPanel panel in treatmentPanels) {
+				panel.Update();
+				panel.Panel.Location = new Point(viewPanel.Location.X, yPos);
+				yPos += panel.Panel.Height + 5;
+			}
+			viewPanel.Location = new Point(viewPanel.Location.X, yPos);
+			string location = moveToBox.Text;
+			moveToBox.Items.Clear();
+			moveToBox.Items.AddRange(Catalog.Printings.SelectMany(p => p.Treatments).SelectMany(t => t.Locations).Select(l => l.Name).Distinct().ToArray());
+			moveToBox.Text = location;
 		}
 
 		#endregion

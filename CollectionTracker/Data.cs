@@ -719,9 +719,11 @@ namespace CollectionTracker {
 				return treatment.Decrement(locationName);
 			return false;
 		}
-		public void MoveOne(string treatmentName, string fromLocation, string toLocation) {
-			if (Decrement(treatmentName, fromLocation))
-				Increment(treatmentName, toLocation);
+		public bool MoveOne(string treatmentName, string fromLocation, string toLocation) {
+			Treatment treatment = treatments.FirstOrDefault(t => t.Name.Equals(treatmentName));
+			if (treatment != null)
+				return treatment.MoveOne(fromLocation, toLocation);
+			return false;
 		}
 
 		#endregion
@@ -826,6 +828,13 @@ namespace CollectionTracker {
 			if (locations[index].Count <= 0)
 				locations.RemoveAt(index);
 			return true;
+		}
+		public bool MoveOne(string from, string to) {
+			if (Decrement(from)) {
+				Increment(to);
+				return true;
+			}
+			return false;
 		}
 
 		#endregion
