@@ -31,6 +31,7 @@ namespace CollectionTracker {
 		public Catalog Catalog => curCatalog;
 		public TrackerPage Page => page;
 		public int ToolbarHeight => toolbar.Height;
+		public Printlist Printlist => savedPrintlist;
 
 		//Constructor
 		public TrackerForm() {
@@ -134,6 +135,7 @@ namespace CollectionTracker {
 			Controls.Add(dp.Panel);
 			savedPrintlist = pl;
 			page = dp;
+			dp.UpdateNavButtons();
 		}
 		public void ShowPrintlist(object sender, EventArgs e) {
 			toolbar.Items.Remove(printListButton);

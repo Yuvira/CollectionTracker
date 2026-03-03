@@ -199,6 +199,7 @@ namespace CollectionTracker {
 
 		//Accessors
 		public int EntriesPerPage => rowsPerPage * entriesPerRow;
+		public List<Printing> FilteredPrints => filteredPrints;
 
 		//Constructor
 		public Printlist(TrackerForm form, string searchTerms) : base(form) {

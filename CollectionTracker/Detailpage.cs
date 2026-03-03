@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -102,6 +103,8 @@ namespace CollectionTracker {
 
 		//Properties
 		private Printing printing;
+		private Printing prevPrint;
+		private Printing nextPrint;
 		private int imgIndex;
 		private bool viewData;
 		private List<DetailTreatmentPanel> treatmentPanels;
@@ -110,6 +113,8 @@ namespace CollectionTracker {
 		private List<Cardtip> cardtips;
 
 		//Controls
+		private Button navButtonLeft;
+		private Button navButtonRight;
 		private PictureBox imgBox;
 		private Panel contentPanel;
 		private ComboBox moveToBox;
@@ -135,9 +140,17 @@ namespace CollectionTracker {
 			moveToBox = null;
 
 			//Generate content panel
-			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1290, panel.Height - 10), panel.Size));
+			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1290, panel.Height - 40), panel.Size, new Point(0, -20)));
 			contentPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			contentPanel.AutoScroll = true;
+
+			//Nav buttons
+			navButtonLeft = Utils.GenerateButton(new Rectangle(contentPanel.Location.X, 5, 200, BUTTON_HEIGHT), "");
+			navButtonLeft.Anchor = AnchorStyles.Top;
+			navButtonLeft.Click += NavLeft;
+			navButtonRight = Utils.GenerateButton(new Rectangle(contentPanel.Location.X + contentPanel.Width - 200, 5, 200, BUTTON_HEIGHT), "");
+			navButtonRight.Anchor = AnchorStyles.Top;
+			navButtonRight.Click += NavRight;
 
 			//Tooltips
 			tooltips = new List<Tooltip>();
@@ -151,7 +164,7 @@ namespace CollectionTracker {
 
 			//Image box
 			imgBox = Utils.GeneratePictureBox(new Rectangle(5, 5, 400, 540));
-			imgBox.Click += IncrementImgIndex;
+			imgBox.MouseClick += OnClickImage;
 			contentPanel.Controls.Add(imgBox);
 
 			//Edit card
@@ -180,6 +193,8 @@ namespace CollectionTracker {
 			contentPanel.Controls.Add(printPanel);
 
 			//Add to panel
+			panel.Controls.Add(navButtonLeft);
+			panel.Controls.Add(navButtonRight);
 			panel.Controls.Add(contentPanel);
 
 			//Set printing
@@ -223,10 +238,64 @@ namespace CollectionTracker {
 				printPanel.Height = TOP_PAD + BOTTOM_PAD + (prints.Count * TEXT_HEIGHT);
 			}
 
+			//Nav buttons
+			UpdateNavButtons();
+
 			//View
 			UpdateView();
 
 		}
+
+		//Update navigation
+		public void UpdateNavButtons() {
+			if (parent.Printlist != null && parent.Printlist.FilteredPrints != null && parent.Printlist.FilteredPrints.Contains(printing)) {
+				int idx = parent.Printlist.FilteredPrints.IndexOf(printing);
+				prevPrint = parent.Printlist.FilteredPrints[idx == 0 ? parent.Printlist.FilteredPrints.Count - 1 : idx - 1];
+				nextPrint = parent.Printlist.FilteredPrints[(idx + 1) % parent.Printlist.FilteredPrints.Count];
+				navButtonLeft.Text = prevPrint.GetField("name");
+				navButtonRight.Text = nextPrint.GetField("name");
+				navButtonLeft.Show();
+				navButtonRight.Show();
+			}
+			else {
+				prevPrint = null;
+				nextPrint = null;
+				navButtonLeft.Hide();
+				navButtonRight.Hide();
+			}
+		}
+
+		//Increment image index
+		private void OnClickImage(object sender, MouseEventArgs e) {
+			if (e.Button == MouseButtons.Left) {
+				if (printing.ImagePaths.Count == 0)
+					return;
+				imgIndex = (imgIndex + 1) % printing.ImagePaths.Count;
+				Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], Catalog.Game);
+			}
+			else if (e.Button == MouseButtons.Right && printing.TryGetField("printid", out string printid)) {
+				if (char.IsLetter(printid[printid.Length - 1]))
+					printid = printid.Substring(0, printid.Length - 1);
+				if (Utils.CardURLs.ContainsKey(Catalog.Game))
+					Process.Start(Utils.CardURLs[Catalog.Game] + printid);
+			}
+		}
+
+		//Navigate
+		private void NavLeft(object sender, EventArgs e) {
+			if (prevPrint != null)
+				SetPrinting(prevPrint);
+		}
+		private void NavRight(object sender, EventArgs e) {
+			if (nextPrint != null)
+				SetPrinting(nextPrint);
+		}
+
+		//Modify card data
+		private void EditCard(object sender, EventArgs e) => parent.SetPage(new Cardentry(parent, printing.Card, printing));
+		private void EditPrint(object sender, EventArgs e) => parent.SetPage(new Printentry(parent, printing));
+
+		#region Views
 
 		//Views
 		private void SetViewCardData(object sender = null, EventArgs e = null) {
@@ -279,17 +348,7 @@ namespace CollectionTracker {
 
 		}
 
-		//Increment image index
-		private void IncrementImgIndex(object sender, EventArgs e) {
-			if (printing.ImagePaths.Count == 0)
-				return;
-			imgIndex = (imgIndex + 1) % printing.ImagePaths.Count;
-			Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], Catalog.Game);
-		}
-
-		//Modify card data
-		private void EditCard(object sender, EventArgs e) => parent.SetPage(new Cardentry(parent, printing.Card, printing));
-		private void EditPrint(object sender, EventArgs e) => parent.SetPage(new Printentry(parent, printing));
+		#endregion
 
 		#region MTG Layout
 

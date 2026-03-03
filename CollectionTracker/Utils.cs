@@ -84,6 +84,12 @@ namespace CollectionTracker {
 			{ Game.YGO , "https://yugipedia.com/wiki/" },
 		};
 
+		//Card URL paths
+		public static readonly Dictionary<Game, string> CardURLs = new Dictionary<Game, string> {
+			{ Game.MTG , "https://scryfall.com/card/"  },
+			{ Game.YGO , "https://yugipedia.com/wiki/" },
+		};
+
 		//Default card back imagepaths
 		public static readonly Dictionary<Game, string> CardBackPaths = new Dictionary<Game, string> {
 			{ Game.MTG  , "resources/mtg/back.png"  },
