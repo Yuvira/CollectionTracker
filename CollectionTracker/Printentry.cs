@@ -72,16 +72,20 @@ namespace CollectionTracker {
 
 			//Sets
 			if (SetsAltered) {
+				setBox.SuspendLayout();
 				setBox.Items.Clear();
 				setBox.Items.AddRange(Catalog.Sets.ToArray());
+				setBox.ResumeLayout();
 				SetsAltered = false;
 			}
 			setBox.SelectedItem = printref.Set;
 
 			//Cards
 			if (CardsAltered) {
+				cardBox.SuspendLayout();
 				cardBox.Items.Clear();
 				cardBox.Items.AddRange(Catalog.Cards.ToArray());
+				cardBox.ResumeLayout();
 				CardsAltered = false;
 			}
 			cardBox.SelectedItem = printref.Card;
