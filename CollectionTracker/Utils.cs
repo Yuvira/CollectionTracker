@@ -313,7 +313,7 @@ namespace CollectionTracker {
 		}
 
 		#endregion
-
+		
 		#region Misc. Utilities
 
 		//Center rect of given size within width
@@ -364,6 +364,29 @@ namespace CollectionTracker {
 					label.Text = "Failed!";
 				return false;
 			}
+		}
+
+		#endregion
+
+	}
+
+	//Extensions
+	public static class Extensions {
+
+		#region Point Extensions
+
+		//Add co-ordinates
+		public static Point Add(this ref Point point, int x, int y) {
+			point.X += x;
+			point.Y += y;
+			return point;
+		}
+
+		//Add point
+		public static Point Add(this ref Point point, Point add) {
+			point.X += add.X;
+			point.Y += add.Y;
+			return point;
 		}
 
 		#endregion

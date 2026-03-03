@@ -32,7 +32,7 @@ namespace CollectionTracker {
 			public Panel Panel => panel;
 
 			//Generator
-			public Setrow(Setlist parent, Set set, int idx) {
+			public Setrow(Setlist parent, Set set) {
 
 				//Initial values
 				this.parent = parent;
@@ -45,7 +45,7 @@ namespace CollectionTracker {
 				bool missingCardref = setPrints.Count(print => !print.TryGetField("name", out string value) || value.Equals("_")) > 0;
 
 				//Panel
-				panel = Utils.GeneratePanel(new Rectangle(5, 5 + (idx * 65), 820, 60));
+				panel = Utils.GeneratePanel(new Rectangle(5, 5, 820, 60));
 
 				//Filter button
 				filter = Utils.GenerateButton(new Rectangle(5, 5, 350, 50), set.Name, set.ImgPath);
@@ -119,11 +119,15 @@ namespace CollectionTracker {
 			listPanel.AutoScroll = true;
 
 			//Loop sets
-			listPanel.SuspendLayout();
+			Point pos = new Point(5, 5);
 			rows = new List<Setrow>();
-			for (int i = 0; i < sets.Count; ++i) {
-				rows.Add(new Setrow(this, sets[i], i));
-				listPanel.Controls.Add(rows[rows.Count - 1].Panel);
+			listPanel.SuspendLayout();
+			foreach (Set set in sets) {
+				Setrow row = new Setrow(this, set);
+				row.Panel.Location = pos;
+				pos.Add(0, row.Panel.Height + 5);
+				rows.Add(row);
+				listPanel.Controls.Add(row.Panel);
 			}
 			listPanel.ResumeLayout();
 
