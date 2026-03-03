@@ -133,14 +133,14 @@ namespace CollectionTracker {
 
 		//On resize
 		private void OnFieldsResized() {
-			int yPos = 70;
-			yPos += treatments.Panel.Height + 5;
-			fields.Panel.Location = new Point(0, yPos);
-			yPos += fields.Panel.Height + 5;
-			images.Panel.Location = new Point(0, yPos);
-			yPos += images.Panel.Height + 5;
-			saveButton.Location = new Point(0, yPos);
-			returnButton.Location = new Point(105, yPos);
+			Point pos = new Point(0, 70);
+			pos.Y += treatments.Panel.Height + 5;
+			fields.Panel.Location = pos;
+			pos.Y += fields.Panel.Height + 5;
+			images.Panel.Location = pos;
+			pos.Y += images.Panel.Height + 5;
+			saveButton.Location = pos;
+			returnButton.Location = new Point(105, pos.Y);
 		}
 
 		//Save

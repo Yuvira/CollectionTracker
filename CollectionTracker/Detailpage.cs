@@ -395,33 +395,34 @@ namespace CollectionTracker {
 		private void LayoutDataMTG() {
 
 			//Y Position
-			int yPos;
-			int yPosPanel = 5;
+			Point textPos;
+			Point panelPos = new Point(410, 5);
+			Size panelSize = new Size(450, 0);
 
 			//Print faces
 			for (int i = 0; i < Math.Max(printing.Card.Faces.Count, 1); ++i) {
 
 				//Position
-				yPos = TOP_PAD;
+				textPos = new Point(LEFT_PAD, TOP_PAD);
 
 				//Panel
-				TrackerPanel facePanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+				TrackerPanel facePanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 
 				//Name and cost
 				int titleHeight = 0;
 				if (printing.Card.TryGetField("name", i, out string name))
-					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{name}", facePanel, new Point(LEFT_PAD, yPos), false));
+					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{name}", facePanel, textPos, false));
 				if (printing.Card.TryGetField("cost", i, out string cost))
-					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(cost, facePanel, new Point(LEFT_PAD, yPos), false, true));
-				yPos += titleHeight;
+					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(cost, facePanel, textPos, false, true));
+				textPos.Y += titleHeight;
 
 				//Type line
 				if (printing.Card.TryGetField("type", i, out string type))
-					yPos += LINE_SPACING + GenerateDescription($"<b>{type}", facePanel, new Point(LEFT_PAD, yPos), false);
+					textPos.Y += LINE_SPACING + GenerateDescription($"<b>{type}", facePanel, textPos, false);
 
 				//Oracle text
 				if (printing.Card.TryGetField("oracle", i, out string oracle))
-					yPos += LINE_SPACING + GenerateDescription(oracle, facePanel, new Point(LEFT_PAD, yPos));
+					textPos.Y += LINE_SPACING + GenerateDescription(oracle, facePanel, textPos);
 
 				//Power and toughness
 				bool hasPower = printing.Card.TryGetField("power", i, out string power);
@@ -439,12 +440,12 @@ namespace CollectionTracker {
 						pt = $"{loyalty} Loyalty, {pt}";
 					else if (hasLoyalty)
 						pt = $"{loyalty} Loyalty";
-					yPos += LINE_SPACING + GenerateDescription($"<b>{pt}", facePanel, new Point(LEFT_PAD, yPos), false, true);
+					textPos.Y += LINE_SPACING + GenerateDescription($"<b>{pt}", facePanel, textPos, false, true);
 				}
 
 				//Panel height
-				facePanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-				yPosPanel += facePanel.Height + 5;
+				facePanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
+				panelPos.Y += facePanel.Height + 5;
 
 				//Color face panel
 				if (printing.Card.TryGetField("color", i, out string color))
@@ -459,7 +460,7 @@ namespace CollectionTracker {
 			}
 
 			//View panel
-			viewPanel.Location = new Point(viewPanel.Location.X, yPosPanel);
+			viewPanel.Location = panelPos;
 
 			//Color panels
 			SetPanelColorsMTG(borderPanels);
@@ -484,31 +485,32 @@ namespace CollectionTracker {
 		private void LayoutDataYGO() {
 
 			//Y Position
-			int yPos = TOP_PAD;
-			int yPosPanel = 5;
+			Point textPos = new Point(LEFT_PAD, TOP_PAD);
+			Point panelPos = new Point(410, 5);
+			Size panelSize = new Size(450, 0);
 
 			//Header
-			TrackerPanel headerPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+			TrackerPanel headerPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 			if (printing.Card.TryGetField("name", out string name))
-				yPos += LINE_SPACING + GenerateDescription($"<b>{name}", headerPanel, new Point(LEFT_PAD, yPos), false);
+				textPos.Y += GenerateDescription($"<b>{name}", headerPanel, textPos, false);
 			if (printing.Card.TryGetField("cardtype", out string cardtype)) {
 				if (printing.Card.TryGetField("attribute", out string attribute))
 					cardtype = $"{attribute} {cardtype}";
 				if (printing.Card.TryGetField("property", out string property))
 					cardtype = $"{property} {cardtype}";
-				yPos += LINE_SPACING + GenerateDescription(cardtype, headerPanel, new Point(LEFT_PAD, yPos), false);
+				textPos.Y += LINE_SPACING + GenerateDescription(cardtype, headerPanel, textPos, false);
 			}
 			if (printing.Card.TryGetField("level", out string level)) {
 				if (printing.GetField("type").ToLower().Contains("xyz"))
-					yPos += LINE_SPACING + GenerateDescription($"Rank {level}", headerPanel, new Point(LEFT_PAD, yPos), false);
+					textPos.Y += LINE_SPACING + GenerateDescription($"Rank {level}", headerPanel, textPos, false);
 				else if (printing.GetField("type").ToLower().Contains("link"))
-					yPos += LINE_SPACING + GenerateDescription($"Link-{level}", headerPanel, new Point(LEFT_PAD, yPos), false);
+					textPos.Y += LINE_SPACING + GenerateDescription($"Link-{level}", headerPanel, textPos, false);
 				else
-					yPos += LINE_SPACING + GenerateDescription($"Level {level}", headerPanel, new Point(LEFT_PAD, yPos), false);
+					textPos.Y += LINE_SPACING + GenerateDescription($"Level {level}", headerPanel, textPos, false);
 			}
-			headerPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-			yPosPanel += headerPanel.Height + 5;
-			yPos = TOP_PAD;
+			headerPanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
+			panelPos.Y += headerPanel.Height + 5;
+			textPos.Y = TOP_PAD;
 			borderPanels.Add(headerPanel);
 			dataPanels.Add(headerPanel);
 			contentPanel.Controls.Add(headerPanel);
@@ -516,41 +518,41 @@ namespace CollectionTracker {
 			//Pendulum text
 			string oracle;
 			if (printing.Card.IsMultiface) {
-				TrackerPanel pendulumPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+				TrackerPanel pendulumPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 				if (printing.Card.TryGetField("pendulum", out string pendulum))
-					yPos += LINE_SPACING + GenerateDescription($"<b>Scale {pendulum}", pendulumPanel, new Point(LEFT_PAD, yPos), false);
+					textPos.Y += LINE_SPACING + GenerateDescription($"<b>Scale {pendulum}", pendulumPanel, textPos, false);
 				if (printing.Card.TryGetField("oracle", 0, out oracle))
-					yPos += LINE_SPACING + GenerateDescription(oracle, pendulumPanel, new Point(LEFT_PAD, yPos));
-				pendulumPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-				yPosPanel += pendulumPanel.Height + 5;
-				yPos = TOP_PAD;
+					textPos.Y += LINE_SPACING + GenerateDescription(oracle, pendulumPanel, textPos);
+				pendulumPanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
+				panelPos.Y += pendulumPanel.Height + 5;
+				textPos.Y = TOP_PAD;
 				borderPanels.Add(pendulumPanel);
 				dataPanels.Add(pendulumPanel);
 				contentPanel.Controls.Add(pendulumPanel);
 			}
 
 			//Oracle text
-			TrackerPanel oraclePanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+			TrackerPanel oraclePanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 			if (printing.Card.TryGetField("type", out string type))
-				yPos += LINE_SPACING + GenerateDescription($"<b>{type}", oraclePanel, new Point(LEFT_PAD, yPos), false);
+				textPos.Y += LINE_SPACING + GenerateDescription($"<b>{type}", oraclePanel, textPos, false);
 			if ((printing.Card.IsMultiface && printing.Card.TryGetField("oracle", 1, out oracle)) || printing.Card.TryGetField("oracle", out oracle))
-				yPos += LINE_SPACING + GenerateDescription(oracle, oraclePanel, new Point(LEFT_PAD, yPos));
+				textPos.Y += LINE_SPACING + GenerateDescription(oracle, oraclePanel, textPos);
 			bool hasAtk = printing.Card.TryGetField("attack", out string atk);
 			bool hasDef = printing.Card.TryGetField("defense", out string def);
 			if (hasAtk && hasDef)
-				yPos += LINE_SPACING + GenerateDescription($"<b>{atk} ATK / {def} DEF", oraclePanel, new Point(LEFT_PAD, yPos), false, true);
+				textPos.Y += LINE_SPACING + GenerateDescription($"<b>{atk} ATK / {def} DEF", oraclePanel, textPos, false, true);
 			else if (hasAtk)
-				yPos += LINE_SPACING + GenerateDescription($"<b>{atk} ATK", oraclePanel, new Point(LEFT_PAD, yPos), false, true);
+				textPos.Y += LINE_SPACING + GenerateDescription($"<b>{atk} ATK", oraclePanel, textPos, false, true);
 			else if (hasDef)
-				yPos += LINE_SPACING + GenerateDescription($"<b>{def} DEF", oraclePanel, new Point(LEFT_PAD, yPos), false, true);
-			oraclePanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-			yPosPanel += oraclePanel.Height + 5;
+				textPos.Y += LINE_SPACING + GenerateDescription($"<b>{def} DEF", oraclePanel, textPos, false, true);
+			oraclePanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
+			panelPos.Y += oraclePanel.Height + 5;
 			borderPanels.Add(oraclePanel);
 			dataPanels.Add(oraclePanel);
 			contentPanel.Controls.Add(oraclePanel);
 
 			//View panel
-			viewPanel.Location = new Point(viewPanel.Location.X, yPosPanel);
+			viewPanel.Location = panelPos;
 
 			//Color panels
 			SetPanelColorsYGO(borderPanels);
@@ -601,39 +603,40 @@ namespace CollectionTracker {
 		private void LayoutDataPKMN() {
 
 			//Y Position
-			int yPos = TOP_PAD;
-			int yPosPanel = 5;
+			Point textPos = new Point(LEFT_PAD, TOP_PAD);
+			Point panelPos = new Point(410, 5);
+			Size panelSize = new Size(450, 0);
 
 			//Header box
-			TrackerPanel headerPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+			TrackerPanel headerPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 			int titleHeight = 0;
 			if (printing.Card.TryGetField("name", out string name))
-				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{name}", headerPanel, new Point(LEFT_PAD, yPos), false));
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{name}", headerPanel, textPos, false));
 			bool hasEnergyType = printing.Card.TryGetField("energy", out string energy);
 			bool hasHP = printing.Card.TryGetField("hp", out string hp);
 			if (hasEnergyType && hasHP)
-				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{hp} HP {energy}", headerPanel, new Point(LEFT_PAD, yPos), false, true));
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{hp} HP {energy}", headerPanel, textPos, false, true));
 			else if (hasEnergyType)
-				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(energy, headerPanel, new Point(LEFT_PAD, yPos), false, true));
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(energy, headerPanel, textPos, false, true));
 			else if (hasHP)
-				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{hp} HP", headerPanel, new Point(LEFT_PAD, yPos), false, true));
-			yPos += titleHeight;
+				titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{hp} HP", headerPanel, textPos, false, true));
+			textPos.Y += titleHeight;
 			if (printing.Card.TryGetField("type", out string type))
-				yPos += LINE_SPACING + GenerateDescription(type, headerPanel, new Point(LEFT_PAD, yPos));
+				textPos.Y += LINE_SPACING + GenerateDescription(type, headerPanel, textPos);
 			if (printing.Card.TryGetField("stage", out string stage))
-				yPos += LINE_SPACING + GenerateDescription(stage, headerPanel, new Point(LEFT_PAD, yPos));
-			headerPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-			yPosPanel += headerPanel.Height + 5;
-			yPos = TOP_PAD;
+				textPos.Y += LINE_SPACING + GenerateDescription(stage, headerPanel, textPos);
+			headerPanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
+			panelPos.Y += headerPanel.Height + 5;
+			textPos.Y = TOP_PAD;
 			borderPanels.Add(headerPanel);
 			dataPanels.Add(headerPanel);
 			contentPanel.Controls.Add(headerPanel);
 
 			//Oracle text
 			if (printing.Card.TryGetField("oracle", out string oracle)) {
-				TrackerPanel oraclePanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
-				oraclePanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription(oracle, oraclePanel, new Point(LEFT_PAD, TOP_PAD), true, false, true);
-				yPosPanel += oraclePanel.Height + 5;
+				TrackerPanel oraclePanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
+				oraclePanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription(oracle, oraclePanel, textPos, true, false, true);
+				panelPos.Y += oraclePanel.Height + 5;
 				borderPanels.Add(oraclePanel);
 				dataPanels.Add(oraclePanel);
 				contentPanel.Controls.Add(oraclePanel);
@@ -644,15 +647,16 @@ namespace CollectionTracker {
 			bool hasResistance = printing.Card.TryGetField("resist", out string resist);
 			bool hasRetreatCost = printing.Card.TryGetField("retreat", out string retreat);
 			if (hasWeakness || hasResistance || hasRetreatCost) {
-				TrackerPanel footerPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
+				TrackerPanel footerPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 				if (hasWeakness)
-					yPos += LINE_SPACING + GenerateDescription($"Weakness: {weak}", footerPanel, new Point(LEFT_PAD, yPos));
+					textPos.Y += LINE_SPACING + GenerateDescription($"Weakness: {weak}", footerPanel, textPos);
 				if (hasResistance)
-					yPos += LINE_SPACING + GenerateDescription($"Resistance: {resist}", footerPanel, new Point(LEFT_PAD, yPos));
+					textPos.Y += LINE_SPACING + GenerateDescription($"Resistance: {resist}", footerPanel, textPos);
 				if (hasRetreatCost)
-					yPos += LINE_SPACING + GenerateDescription($"Retreat: {retreat}", footerPanel, new Point(LEFT_PAD, yPos));
-				footerPanel.Height = yPos + BOTTOM_PAD - LINE_SPACING;
-				yPosPanel += footerPanel.Height + 5;
+					textPos.Y += LINE_SPACING + GenerateDescription($"Retreat: {retreat}", footerPanel, textPos);
+				footerPanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
+				panelPos.Y += footerPanel.Height + 5;
+				textPos.Y = TOP_PAD;
 				borderPanels.Add(footerPanel);
 				dataPanels.Add(footerPanel);
 				contentPanel.Controls.Add(footerPanel);
@@ -660,16 +664,16 @@ namespace CollectionTracker {
 
 			//Flavor
 			if (printing.TryGetField("flavor", out string flavor)) {
-				TrackerPanel flavorPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPosPanel, 450, 0));
-				flavorPanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription($"<i>{flavor}", flavorPanel, new Point(LEFT_PAD, TOP_PAD));
-				yPosPanel += flavorPanel.Height + 5;
+				TrackerPanel flavorPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
+				flavorPanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription($"<i>{flavor}", flavorPanel, textPos);
+				panelPos.Y += flavorPanel.Height + 5;
 				borderPanels.Add(flavorPanel);
 				dataPanels.Add(flavorPanel);
 				contentPanel.Controls.Add(flavorPanel);
 			}
 
 			//View panel
-			viewPanel.Location = new Point(viewPanel.Location.X, yPosPanel);
+			viewPanel.Location = panelPos;
 
 			//Color print panel
 			SetPanelColorsPKMN(borderPanels);
@@ -1011,8 +1015,10 @@ namespace CollectionTracker {
 				this.settings = settings;
 			}
 
-			//Overrides
+			//Measure text
 			public override int GetWidth() => Utils.MeasureWidth(text, new Font(Utils.FONT_DEFAULT, settings.style));
+
+			//Generate
 			public override Point GenerateControl(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
 				int width = Utils.MeasureWidth(text, new Font(Utils.FONT_DEFAULT, settings.style));
 				if (rightAlign)
@@ -1033,7 +1039,8 @@ namespace CollectionTracker {
 				panel.Controls.Add(label);
 				if (rightAlign)
 					return location;
-				return new Point(location.X + width, location.Y);
+				location.X += width;
+				return location;
 			}
 
 		}
@@ -1047,12 +1054,14 @@ namespace CollectionTracker {
 				symbol = catalog.Symbols.FirstOrDefault(s => s.Text.Equals(text));
 			}
 
-			//Overrides
+			//Symbol width
 			public override int GetWidth() {
 				if (symbol == null)
 					return 0;
 				return (int)(symbol.Aspect * TEXT_HEIGHT);
 			}
+
+			//Generate
 			public override Point GenerateControl(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
 				int width = (int)(symbol.Aspect * TEXT_HEIGHT);
 				if (rightAlign)
@@ -1062,7 +1071,8 @@ namespace CollectionTracker {
 				panel.Controls.Add(imgBox);
 				if (rightAlign)
 					return location;
-				return new Point(location.X + width, location.Y);
+				location.X += width;
+				return location;
 			}
 
 		}
@@ -1086,12 +1096,16 @@ namespace CollectionTracker {
 					}
 				}
 			}
+
+			//Get combined width of objects
 			public int GetWidth() {
 				int width = 0;
 				foreach (DescriptionObject obj in objects)
 					width += obj.GetWidth();
 				return width;
 			}
+
+			//Merge another group into this one, clearing whitespace at group start and merging strings with the same settings
 			public void Merge(DescriptionGroup group) {
 				if (group.objects.Count == 0)
 					return;
@@ -1125,6 +1139,8 @@ namespace CollectionTracker {
 					}
 				}
 			}
+
+			//Generate all controls
 			public void GenerateControls(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
 				if (!rightAlign)
 					foreach (DescriptionObject obj in objects)

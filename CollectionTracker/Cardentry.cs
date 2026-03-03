@@ -70,13 +70,13 @@ namespace CollectionTracker {
 
 		//On resize
 		private void OnFieldsResized() {
-			int yPos = fields.Panel.Height + 5;
+			Point pos = new Point(0, fields.Panel.Height + 5);
 			foreach (Fieldlist face in faces) {
-				face.Panel.Location = new Point(0, yPos);
-				yPos += face.Panel.Height + 5;
+				face.Panel.Location = pos;
+				pos.Y += face.Panel.Height + 5;
 			}
-			saveButton.Location = new Point(0, yPos);
-			returnButton.Location = new Point(105, yPos);
+			saveButton.Location = pos;
+			returnButton.Location = new Point(105, pos.Y);
 		}
 
 		//Save

@@ -137,13 +137,13 @@ namespace CollectionTracker {
 			listPanel.AutoScroll = true;
 
 			//Generate sets
-			int yPos = 5;
+			Point pos = new Point(5, 5);
 			entries = new List<Setentry>();
 			listPanel.SuspendLayout();
 			foreach (Set set in sets) {
 				Setentry entry = new Setentry(this, set);
-				entry.Panel.Location = new Point(5, yPos);
-				yPos += entry.Panel.Height + 5;
+				entry.Panel.Location = pos;
+				pos.Y += entry.Panel.Height + 5;
 				entries.Add(entry);
 				listPanel.Controls.Add(entry.Panel);
 			}
@@ -163,11 +163,11 @@ namespace CollectionTracker {
 		private void Update() {
 			listPanel.AutoScrollPosition = Point.Empty;
 			entries.Sort(Setentry.SortNewest);
-			int yPos = 5;
+			Point pos = new Point(5, 5);
 			listPanel.SuspendLayout();
 			foreach (Setentry entry in entries) {
-				entry.Panel.Location = new Point(5, yPos);
-				yPos += entry.Panel.Height + 5;
+				entry.Panel.Location = pos;
+				pos.Y += entry.Panel.Height + 5;
 			}
 		}
 
