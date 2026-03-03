@@ -206,7 +206,7 @@ namespace CollectionTracker {
 			//Get print list
 			printings = SearchUtils.SearchPrintings(Catalog, searchTerms);
 			filteredPrints = new List<Printing>(printings);
-			filteredPrints.Sort(new PrintComparerNewest().Compare);
+			filteredPrints.Sort(Printing.SortNewest);
 
 			//Header
 			headerLabel = Utils.GenerateLabel(new Rectangle(((panel.Width - 1245) / 2) + 130, 10, 0, TEXT_HEIGHT), "");
@@ -262,14 +262,14 @@ namespace CollectionTracker {
 		private void FilterChanged(object sender, EventArgs e) {
 			filteredPrints = new List<Printing>(printings);
 			if (filterBox.SelectedItem.ToString().ToLower().Equals("newest")) {
-				filteredPrints.Sort(new PrintComparerNewest().Compare);
+				filteredPrints.Sort(Printing.SortNewest);
 				filteredPrints = filteredPrints.GroupBy(p => p.Card).Select(g => g.First()).ToList();
 			}
 			else if (filterBox.SelectedItem.ToString().ToLower().Equals("oldest")) {
-				filteredPrints.Sort(new PrintComparerOldest().Compare);
+				filteredPrints.Sort(Printing.SortOldest);
 				filteredPrints = filteredPrints.GroupBy(p => p.Card).Select(g => g.First()).ToList();
 			}
-			filteredPrints.Sort(new PrintComparerNewest().Compare);
+			filteredPrints.Sort(Printing.SortNewest);
 			UpdateEntries();
 		}
 

@@ -207,7 +207,7 @@ namespace CollectionTracker {
 			printRows.Clear();
 			if (!printing.GetField("name").Equals("_") && !printing.GetField("name").Equals("")) {
 				List<Printing> prints = Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
-				prints.Sort(new PrintComparerInverseNewest().Compare);
+				prints.Sort(Printing.SortInverseNewest);
 				for (int i = 0; i < prints.Count; ++i) {
 					DetailPrintrow row = new DetailPrintrow(
 						this,

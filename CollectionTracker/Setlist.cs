@@ -106,7 +106,7 @@ namespace CollectionTracker {
 
 			//Sets
 			List<Set> sets = new List<Set>(Catalog.Sets);
-			sets.Sort(new SetComparer().Compare);
+			sets.Sort(Set.SortNewest);
 
 			//Header
 			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";

@@ -31,7 +31,6 @@ namespace CollectionTracker {
 
 			//Accessors
 			public Panel Panel => panel;
-			public Set Set => set;
 
 			//Constructor
 			public Setentry(Setentrylist parent, Set set) {
@@ -109,13 +108,10 @@ namespace CollectionTracker {
 				));
 			}
 
-		}
+			//Compare
+			public static int SortNewest(Setentry entry1, Setentry entry2) =>
+				Set.SortNewest(entry1.set, entry2.set);
 
-		//Newest set
-		private class SetentryComparer : IComparer<Setentry> {
-			public int Compare(Setentry set1, Setentry set2) {
-				return new SetComparer().Compare(set1.Set, set2.Set);
-			}
 		}
 
 		#endregion
@@ -131,7 +127,7 @@ namespace CollectionTracker {
 
 			//Set list
 			List<Set> sets = new List<Set>(Catalog.Sets);
-			sets.Sort(new SetComparer().Compare);
+			sets.Sort(Set.SortNewest);
 
 			//Panel
 			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(545, panel.Height - 25), panel.Size));
@@ -163,7 +159,7 @@ namespace CollectionTracker {
 
 		//Update layout
 		private void Update() {
-			entries.Sort(new SetentryComparer().Compare);
+			entries.Sort(Setentry.SortNewest);
 			int yPos = 5;
 			listPanel.SuspendLayout();
 			foreach (Setentry entry in entries) {
