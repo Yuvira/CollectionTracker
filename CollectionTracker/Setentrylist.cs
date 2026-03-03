@@ -159,6 +159,7 @@ namespace CollectionTracker {
 
 		//Update layout
 		private void Update() {
+			listPanel.AutoScrollPosition = Point.Empty;
 			entries.Sort(Setentry.SortNewest);
 			int yPos = 5;
 			listPanel.SuspendLayout();
