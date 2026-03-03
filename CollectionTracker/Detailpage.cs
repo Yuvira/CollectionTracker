@@ -103,6 +103,7 @@ namespace CollectionTracker {
 		//Properties
 		private Printing printing;
 		private int imgIndex;
+		private bool viewData;
 		private List<DetailTreatmentPanel> treatmentPanels;
 		private List<DetailPrintrow> printRows;
 		private List<Tooltip> tooltips;
@@ -182,8 +183,8 @@ namespace CollectionTracker {
 			panel.Controls.Add(contentPanel);
 
 			//Set printing
+			viewData = true;
 			SetPrinting(printing);
-			SetViewCardData();
 
 		}
 
@@ -222,22 +223,27 @@ namespace CollectionTracker {
 				printPanel.Height = TOP_PAD + BOTTOM_PAD + (prints.Count * TEXT_HEIGHT);
 			}
 
+			//View
+			UpdateView();
+
 		}
 
 		//Views
 		private void SetViewCardData(object sender = null, EventArgs e = null) {
 			if (sender != null && sender is RadioButton rb && !rb.Checked)
 				return;
-			SetView(true);
+			viewData = true;
+			UpdateView();
 		}
 		private void SetViewOwnedPrintings(object sender = null, EventArgs e = null) {
 			if (sender != null && sender is RadioButton rb && !rb.Checked)
 				return;
-			SetView(false);
+			viewData = false;
+			UpdateView();
 		}
 
 		//Clear data panels and set new view
-		private void SetView(bool cardData) {
+		private void UpdateView() {
 
 			//Locations
 			moveToBox = null;
@@ -258,7 +264,7 @@ namespace CollectionTracker {
 			dataPanels.Clear();
 
 			//Card data
-			if (cardData) {
+			if (viewData) {
 				if (Catalog.Game == Game.MTG)
 					LayoutDataMTG();
 				else if (Catalog.Game == Game.YGO)
