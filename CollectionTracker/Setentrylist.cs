@@ -1,0 +1,201 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace CollectionTracker {
+
+	public class Setentrylist : TrackerPage {
+
+		#region Set Entry
+
+		//Set entry
+		private class Setentry {
+
+			//Properties
+			private Setentrylist parent;
+			private Set set;
+
+			//Controls
+			private Panel panel;
+			private TextBox nameBox;
+			private TextBox codeBox;
+			private TextBox typeBox;
+			private TextBox dateBox;
+			private TextBox prefixBox;
+			private NumericUpDown mainCount;
+			private Label pathLabel;
+			private PictureBox iconBox;
+
+			//Accessors
+			public Panel Panel => panel;
+			public Set Set => set;
+
+			//Constructor
+			public Setentry(Setentrylist parent, Set set) {
+
+				//Parent
+				this.parent = parent;
+				this.set = set;
+
+				//Fields
+				panel = Utils.GeneratePanel(new Rectangle(5, 5, 515, 145));
+				nameBox = Utils.GenerateTextBox(new Rectangle(5, 5, 400, 30), this.set.Name);
+				panel.Controls.Add(nameBox);
+				codeBox = Utils.GenerateTextBox(new Rectangle(5, 40, 120, 30), this.set.Code);
+				panel.Controls.Add(codeBox);
+				typeBox = Utils.GenerateTextBox(new Rectangle(130, 40, 275, 30), this.set.Type);
+				panel.Controls.Add(typeBox);
+				dateBox = Utils.GenerateTextBox(new Rectangle(5, 75, 120, 30), this.set.Date);
+				panel.Controls.Add(dateBox);
+				prefixBox = Utils.GenerateTextBox(new Rectangle(130, 75, 135, 30), this.set.PrefixOrder);
+				panel.Controls.Add(prefixBox);
+				mainCount = Utils.GenerateNumericUpDown(new Rectangle(270, 75, 135, 30), this.set.MainCount);
+				panel.Controls.Add(mainCount);
+				pathLabel = Utils.GenerateLabel(new Rectangle(135, 110, 375, TEXT_HEIGHT), this.set.ImgPath);
+				panel.Controls.Add(pathLabel);
+				iconBox = Utils.GeneratePictureBox(new Rectangle(410, 5, 100, 100));
+				if (this.set.ImgPath.Length > 0)
+					Utils.TryLoadImage(iconBox, this.set.ImgPath);
+				iconBox.Cursor = Cursors.Hand;
+				iconBox.Click += SearchIcon;
+				panel.Controls.Add(iconBox);
+
+				//Buttons
+				Button deleteButton = Utils.GenerateButton(new Rectangle(5, 110, 30, 30), "-");
+				deleteButton.Click += DeleteEntry;
+				panel.Controls.Add(deleteButton);
+				Button saveButton = Utils.GenerateButton(new Rectangle(40, 110, 90, 30), "Save");
+				saveButton.Click += SaveEntry;
+				panel.Controls.Add(saveButton);
+
+			}
+
+			//Search for image
+			private void SearchIcon(object sender, EventArgs e) {
+				OpenFileDialog dialog = new OpenFileDialog();
+				dialog.Title = "Select Image";
+				dialog.Filter = "All files(*.*) | *.*";
+				if (dialog.ShowDialog() == DialogResult.OK) {
+					string curDir = Directory.GetCurrentDirectory();
+					string filePath = dialog.FileName;
+					if (!filePath.Contains(curDir))
+						return;
+					filePath = filePath.Remove(filePath.IndexOf(curDir), curDir.Length + 1);
+					pathLabel.Text = filePath;
+					Utils.TryLoadImage(iconBox, filePath);
+				}
+				else {
+					pathLabel.Text = "";
+					iconBox.Image = null;
+				}
+			}
+
+			//Delete entry
+			private void DeleteEntry(object sender, EventArgs e) => parent.DeleteEntry(this, set);
+
+			//Save entry fields
+			private void SaveEntry(object sender, EventArgs e) {
+				set.Copy(new Set(
+					nameBox.Text,
+					codeBox.Text,
+					typeBox.Text,
+					dateBox.Text,
+					pathLabel.Text,
+					(int)mainCount.Value,
+					prefixBox.Text
+				));
+			}
+
+		}
+
+		//Newest set
+		private class SetentryComparer : IComparer<Setentry> {
+			public int Compare(Setentry set1, Setentry set2) {
+				return new SetComparer().Compare(set1.Set, set2.Set);
+			}
+		}
+
+		#endregion
+
+		//Properties
+		private List<Setentry> entries;
+
+		//Controls
+		private Panel listPanel;
+
+		//Constructor
+		public Setentrylist(TrackerForm form) : base(form) {
+
+			//Set list
+			List<Set> sets = new List<Set>(Catalog.Sets);
+			sets.Sort(new SetComparer().Compare);
+
+			//Panel
+			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(545, panel.Height - 25), panel.Size));
+			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+			listPanel.AutoScroll = true;
+
+			//Generate sets
+			int yPos = 5;
+			entries = new List<Setentry>();
+			listPanel.SuspendLayout();
+			foreach (Set set in sets) {
+				Setentry entry = new Setentry(this, set);
+				entry.Panel.Location = new Point(5, yPos);
+				yPos += entry.Panel.Height + 5;
+				entries.Add(entry);
+				listPanel.Controls.Add(entry.Panel);
+			}
+			listPanel.ResumeLayout();
+
+			//Add button
+			Button addButton = Utils.GenerateButton(new Rectangle(listPanel.Location.X + listPanel.Width + 5, 5, 30, 30), "+");
+			addButton.Click += AddSet;
+			panel.Controls.Add(addButton);
+
+			//Add to panel
+			panel.Controls.Add(listPanel);
+
+		}
+
+		//Update layout
+		private void Update() {
+			entries.Sort(new SetentryComparer().Compare);
+			int yPos = 5;
+			listPanel.SuspendLayout();
+			foreach (Setentry entry in entries) {
+				entry.Panel.Location = new Point(5, yPos);
+				yPos += entry.Panel.Height + 5;
+			}
+		}
+
+		//Delete set entry
+		private void DeleteEntry(Setentry entry, Set set) {
+			List<Printing> prints = Catalog.Printings.Where(p => p.Set == set).ToList();
+			if (prints.Count > 0) {
+				MessageBox.Show($"Can't remove set, {prints.Count} prints still rely on it");
+				return;
+			}
+			entries.Remove(entry);
+			listPanel.Controls.Remove(entry.Panel);
+			entry.Panel.Dispose();
+			Catalog.Sets.Remove(set);
+			Update();
+		}
+
+		//Add new set
+		private void AddSet(object sender, EventArgs e) {
+			Set set = new Set();
+			Catalog.Sets.Add(set);
+			Setentry entry = new Setentry(this, set);
+			entries.Insert(0, entry);
+			listPanel.Controls.Add(entry.Panel);
+			Update();
+		}
+
+	}
+
+}

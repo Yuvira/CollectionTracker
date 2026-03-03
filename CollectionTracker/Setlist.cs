@@ -32,14 +32,14 @@ namespace CollectionTracker {
 			public Panel Panel => panel;
 
 			//Generator
-			public Setrow(Setlist parent, Catalog catalog, int idx) {
+			public Setrow(Setlist parent, Set set, int idx) {
 
 				//Initial values
 				this.parent = parent;
-				set = catalog.Sets[idx];
-				if (Utils.SetURLs.ContainsKey(catalog.Game))
-					setURL = Utils.SetURLs[catalog.Game] + set.Code;
-				List<Printing> setPrints = catalog.Printings.Where(print => print.Set == set).ToList();
+				this.set = set;
+				if (Utils.SetURLs.ContainsKey(parent.Catalog.Game))
+					setURL = Utils.SetURLs[parent.Catalog.Game] + set.Code;
+				List<Printing> setPrints = parent.Catalog.Printings.Where(print => print.Set == set).ToList();
 				int setCount = setPrints.Count;
 				int setOwned = setPrints.Count(print => print.IsOwned);
 				bool missingCardref = setPrints.Count(print => !print.TryGetField("name", out string value) || value.Equals("_")) > 0;
@@ -71,7 +71,7 @@ namespace CollectionTracker {
 				}
 
 				//No cards logged but folder exists
-				else if (setPrints.Count == 0 && Utils.ResourcePaths.ContainsKey(catalog.Game) && Directory.Exists(Utils.ResourcePaths[catalog.Game] + set.Code)) {
+				else if (setPrints.Count == 0 && Utils.ResourcePaths.ContainsKey(parent.Catalog.Game) && Directory.Exists(Utils.ResourcePaths[parent.Catalog.Game] + set.Code)) {
 					cardRefLabel = Utils.GenerateLabel(new Rectangle(780, 20, 35, TEXT_HEIGHT), "&");
 					cardRefLabel.TextAlign = ContentAlignment.MiddleCenter;
 					panel.Controls.Add(cardRefLabel);
@@ -104,6 +104,10 @@ namespace CollectionTracker {
 			//Width
 			lastWidth = panel.Width;
 
+			//Sets
+			List<Set> sets = new List<Set>(Catalog.Sets);
+			sets.Sort(new SetComparer().Compare);
+
 			//Header
 			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";
 			headerLabel = Utils.GenerateLabel(new Rectangle(Math.Max((panel.Width - 850) / 2, 5), 5, Utils.MeasureWidth(str), TEXT_HEIGHT), str);
@@ -117,8 +121,8 @@ namespace CollectionTracker {
 			//Loop sets
 			listPanel.SuspendLayout();
 			rows = new List<Setrow>();
-			for (int i = 0; i < Catalog.Sets.Count; ++i) {
-				rows.Add(new Setrow(this, Catalog, i));
+			for (int i = 0; i < sets.Count; ++i) {
+				rows.Add(new Setrow(this, sets[i], i));
 				listPanel.Controls.Add(rows[rows.Count - 1].Panel);
 			}
 			listPanel.ResumeLayout();

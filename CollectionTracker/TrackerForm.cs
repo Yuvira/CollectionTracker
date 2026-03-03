@@ -16,6 +16,7 @@ namespace CollectionTracker {
 		private MenuStrip toolbar;
 		private ToolStripLabel catalogLabel;
 		private ToolStripButton saveButton;
+		private ToolStripButton setButton;
 		private Catalog mtgCatalog;
 		private Catalog ygoCatalog;
 		private Catalog pkmnCatalog;
@@ -44,6 +45,9 @@ namespace CollectionTracker {
 			saveButton = Utils.GenerateTSButton("Save", SaveCatalog);
 			saveButton.Enabled = false;
 			dropDown.Items.Add(saveButton);
+			setButton = Utils.GenerateTSButton("Sets", OpenSetentries);
+			setButton.Enabled = false;
+			dropDown.Items.Add(setButton);
 			toolbar.Items.Add(Utils.GenerateTSDDButton("File", dropDown));
 			catalogLabel = Utils.GenerateTSLabel("", true, 10);
 			toolbar.Items.Add(catalogLabel);
@@ -69,8 +73,9 @@ namespace CollectionTracker {
 
 		}
 
-		//Open default page
+		//Open pages
 		public void OpenHomePage(object sender = null, EventArgs e = null) => SetPage(new Homepage(this));
+		public void OpenSetentries(object sender = null, EventArgs e = null) => SetPage(new Setentrylist(this));
 
 		//Save current catalog
 		public void SaveCatalog(object sender, EventArgs e) {
@@ -83,17 +88,21 @@ namespace CollectionTracker {
 		public void SetCatalogMTG() {
 			curCatalog = mtgCatalog;
 			catalogLabel.Text = "Magic";
-			saveButton.Enabled = true;
+			EnableCatalogButtons();
 		}
 		public void SetCatalogYGO() {
 			curCatalog = ygoCatalog;
 			catalogLabel.Text = "Yu-Gi-Oh!";
-			saveButton.Enabled = true;
+			EnableCatalogButtons();
 		}
 		public void SetCatalogPKMN() {
 			curCatalog = pkmnCatalog;
 			catalogLabel.Text = "Pokémon";
+			EnableCatalogButtons();
+		}
+		private void EnableCatalogButtons() {
 			saveButton.Enabled = true;
+			setButton.Enabled = true;
 		}
 
 		//Replace current page

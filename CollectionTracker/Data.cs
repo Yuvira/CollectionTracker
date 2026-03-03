@@ -152,13 +152,15 @@ namespace CollectionTracker {
 		//Accessors
 		public string Name => name;
 		public string Code => code;
-		public string ImgPath => imgPath;
+		public string Type => type;
 		public string Date => date;
 		public DateTime DateTime => DateTime.ParseExact(date, "yyyy-MM-dd", null);
+		public string ImgPath => imgPath;
+		public int MainCount => mainCount;
 		public string PrefixOrder => prefixOrder;
 
 		//Constructor
-		public Set() : this("", "", "", DateTime.Now.ToString("yyyy-MM-dd"), "", 0, "") { }
+		public Set() : this("Name", "Code", "Type", DateTime.Now.ToString("yyyy-MM-dd"), "", 0, "") { }
 		public Set(string name, string code, string type, string date, string imgPath, int mainCount, string prefixOrder) {
 			this.name = name;
 			this.code = code;
@@ -958,7 +960,10 @@ namespace CollectionTracker {
 	//Newest set
 	public class SetComparer : IComparer<Set> {
 		public int Compare(Set set1, Set set2) {
-			return set1.Date.CompareTo(set2.Date);
+			int compare = set1.Date.CompareTo(set2.Date);
+			if (compare != 0)
+				return -compare;
+			return set1.Name.CompareTo(set2.Name);
 		}
 	}
 
