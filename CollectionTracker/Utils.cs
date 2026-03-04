@@ -119,6 +119,12 @@ namespace CollectionTracker {
 		};
 
 		//String-defined colors
+		public static readonly List<string> ListableFields = new List<string> {
+			"rarity",
+			"artist",
+		};
+
+		//String-defined colors
 		public static readonly Dictionary<string, Color> ColorDefinitions = new Dictionary<string, Color> {
 			{ "red"   , Color.Red   },
 			{ "green" , Color.Green },

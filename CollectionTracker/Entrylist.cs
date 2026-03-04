@@ -161,7 +161,8 @@ namespace CollectionTracker {
 
 		//Controls
 		private ComboBox field;
-		private TextBox value;
+		private TextBox textValue;
+		private ComboBox listValue;
 
 		//Constructor
 		public FieldEntry() : this("", "") { }
@@ -171,10 +172,33 @@ namespace CollectionTracker {
 				field.Items.AddRange(TrackerForm.Catalog.Cards.SelectMany(c => c.Fields.Keys).Distinct().ToArray());
 			else if (TrackerForm.FieldContext == FieldContext.PRINT)
 				field.Items.AddRange(TrackerForm.Catalog.Printings.SelectMany(p => p.Fields.Keys).Distinct().ToArray());
+			field.TextChanged += OnFieldChanged;
+			textValue = Utils.GenerateTextBox(new Rectangle(210, 0, 570, 30), valueString);
+			listValue = Utils.GenerateComboBox(new Rectangle(210, 0, 570, 30), ComboBoxStyle.DropDown, true);
+			listValue.Text = valueString;
+			listValue.Hide();
 			field.Text = fieldString;
-			value = Utils.GenerateTextBox(new Rectangle(210, 0, 570, 30), valueString);
 			panel.Controls.Add(field);
-			panel.Controls.Add(value);
+			panel.Controls.Add(textValue);
+			panel.Controls.Add(listValue);
+		}
+
+		//Detect if value field needs to be modified
+		private void OnFieldChanged(object sender = null, EventArgs e = null) {
+			if (Utils.ListableFields.Contains(field.Text)) {
+				listValue.Items.Clear();
+				listValue.Items.AddRange(TrackerForm.Catalog.Printings.Select(p => p.GetField(field.Text)).Distinct().ToArray());
+				if (!listValue.Visible) {
+					listValue.Text = textValue.Text;
+					textValue.Hide();
+					listValue.Show();
+				}
+			}
+			else if (!textValue.Visible) {
+				textValue.Text = listValue.Text;
+				listValue.Hide();
+				textValue.Show();
+			}
 		}
 
 		//List generator
@@ -192,7 +216,7 @@ namespace CollectionTracker {
 				if (dict.ContainsKey(entry.field.Text))
 					MessageBox.Show($"Duplicate field [{entry.field.Text}]");
 				else
-					dict.Add(entry.field.Text, entry.value.Text);
+					dict.Add(entry.field.Text, entry.textValue.Visible ? entry.textValue.Text : entry.listValue.Text);
 			}
 			return dict;
 		}
