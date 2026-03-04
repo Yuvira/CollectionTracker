@@ -114,6 +114,8 @@ namespace CollectionTracker {
 		private void EnableCatalogButtons() {
 			saveButton.Enabled = true;
 			entryDDButton.Enabled = true;
+			Printentry.SetsAltered = true;
+			Printentry.CardsAltered = true;
 		}
 
 		#endregion
