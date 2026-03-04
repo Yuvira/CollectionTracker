@@ -107,7 +107,14 @@ namespace CollectionTracker {
 				listPanel.Controls.Remove(treatments.Panel);
 				treatments.Panel.Dispose();
 			}
-			treatments = new Entrylist<TreatmentEntry>(this, "Treatments", printref == null ? new List<TreatmentEntry>() : TreatmentEntry.GenerateEntries(printref.Treatments.Select(t => t.Name).ToList()));
+			List<string> treatmentList;
+			if (printref != null)
+				treatmentList = printref.Treatments.Select(t => t.Name).ToList();
+			else if (Utils.DefaultTreatments.ContainsKey(TrackerForm.Catalog.Game))
+				treatmentList = Utils.DefaultCardFields[TrackerForm.Catalog.Game];
+			else
+				treatmentList = new List<string>();
+			treatments = new Entrylist<TreatmentEntry>(this, "Treatments", TreatmentEntry.GenerateEntries(treatmentList));
 			treatments.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(treatments.Panel);
 
@@ -116,7 +123,17 @@ namespace CollectionTracker {
 				listPanel.Controls.Remove(fields.Panel);
 				fields.Panel.Dispose();
 			}
-			fields = new Entrylist<FieldEntry>(this, "Fields", printref == null ? new List<FieldEntry>() : FieldEntry.GenerateEntries(printref.Fields));
+			Dictionary<string, string> fieldDict;
+			if (printref != null)
+				fieldDict = printref.Fields;
+			else {
+				fieldDict = new Dictionary<string, string>();
+				if (Utils.DefaultPrintFields.ContainsKey(TrackerForm.Catalog.Game)) {
+					foreach (string fieldName in Utils.DefaultPrintFields[TrackerForm.Catalog.Game])
+						fieldDict.Add(fieldName, "");
+				}
+			}
+			fields = new Entrylist<FieldEntry>(this, "Fields", FieldEntry.GenerateEntries(fieldDict));
 			fields.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(fields.Panel);
 

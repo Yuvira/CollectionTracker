@@ -37,14 +37,24 @@ namespace CollectionTracker {
 			listPanel.SuspendLayout();
 
 			//Fields
-			fields = new Entrylist<FieldEntry>(this, "Fields", card == null ? new List<FieldEntry>() : FieldEntry.GenerateEntries(card.Fields));
+			Dictionary<string, string> fieldDict;
+			if (cardref != null)
+				fieldDict = cardref.Fields;
+			else {
+				fieldDict = new Dictionary<string, string>();
+				if (Utils.DefaultCardFields.ContainsKey(TrackerForm.Catalog.Game)) {
+					foreach (string fieldName in Utils.DefaultCardFields[TrackerForm.Catalog.Game])
+						fieldDict.Add(fieldName, "");
+				}
+			}
+			fields = new Entrylist<FieldEntry>(this, "Fields", FieldEntry.GenerateEntries(fieldDict));
 			fields.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(fields.Panel);
 
 			//Faces
 			faces = new List<Entrylist<FieldEntry>>();
-			if (card != null) {
-				foreach (Face face in card.Faces) {
+			if (cardref != null) {
+				foreach (Face face in cardref.Faces) {
 					Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(face.Fields));
 					fieldList.OnListResize += OnFieldsResized;
 					listPanel.Controls.Add(fieldList.Panel);

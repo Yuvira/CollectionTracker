@@ -97,6 +97,27 @@ namespace CollectionTracker {
 			{ Game.PKMN , "resources/pkmn/back.png" },
 		};
 
+		//Default treatments
+		public static readonly Dictionary<Game, List<string>> DefaultTreatments = new Dictionary<Game, List<string>> {
+			{ Game.MTG  , new List<string> { "Normal", "Foil" } },
+			{ Game.YGO  , new List<string> { "Common" } },
+			{ Game.PKMN , new List<string> { "Normal", "Reverse Holo" } },
+		};
+
+		//Default card fields
+		public static readonly Dictionary<Game, List<string>> DefaultCardFields = new Dictionary<Game, List<string>> {
+			{ Game.MTG  , new List<string> { "name", "identity", "color", "cost", "type", "oracle", "power", "toughness" } },
+			{ Game.YGO  , new List<string> { "name", "cardtype", "attribute", "property", "type", "oracle", "level", "attack", "defense" } },
+			{ Game.PKMN , new List<string> { "name", "energy", "type", "stage", "hp", "oracle", "weak", "resist", "retreat" } },
+		};
+
+		//Default print fields
+		public static readonly Dictionary<Game, List<string>> DefaultPrintFields = new Dictionary<Game, List<string>> {
+			{ Game.MTG  , new List<string> { "cn", "printid", "rarity", "artist" } },
+			{ Game.YGO  , new List<string> { "cn", "printid" } },
+			{ Game.PKMN , new List<string> { "cn", "printid", "rarity", "regulation", "artist", "flavor" } },
+		};
+
 		//String-defined colors
 		public static readonly Dictionary<string, Color> ColorDefinitions = new Dictionary<string, Color> {
 			{ "red"   , Color.Red   },
