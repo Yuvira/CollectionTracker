@@ -126,7 +126,7 @@ namespace CollectionTracker {
 		public void OpenHomePage(object sender = null, EventArgs e = null) => SetPage(new Homepage(this));
 		public void OpenSetentries(object sender = null, EventArgs e = null) => SetPage(new Setentrylist(this));
 		public void OpenCardEntry(object sender = null, EventArgs e = null) => SetPage(new Cardentry(this));
-		public void OpenPrintEntry(object sender = null, EventArgs e = null) => SetPage(new Printentry(this));
+		public void OpenPrintEntry(object sender = null, EventArgs e = null) => ShowPrintentry(null);
 
 		//Replace current page
 		public void SetPage(TrackerPage page) {
