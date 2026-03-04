@@ -133,14 +133,14 @@ namespace CollectionTracker {
 		}
 
 		//Return list of printings from catalog for search string
-		public static List<Printing> SearchPrintings(Catalog catalog, string search) {
+		public static List<Printing> SearchPrintings(string search) {
 
 			//Default list
 			List<Printing> printList = new List<Printing>();
 
 			//Check search string exists
 			if (string.IsNullOrWhiteSpace(search) || search.ToLower().Equals("search")) {
-				foreach (Printing print in catalog.Printings)
+				foreach (Printing print in TrackerForm.Catalog.Printings)
 					printList.Add(print);
 				return printList;
 			}
@@ -170,7 +170,7 @@ namespace CollectionTracker {
 
 			//Search printings
 			string evaluate;
-			foreach (Printing print in catalog.Printings) {
+			foreach (Printing print in TrackerForm.Catalog.Printings) {
 				evaluate = string.Copy(search);
 				for (int i = 0; i < expressions.Count; ++i)
 					evaluate = evaluate.Replace(i.ToString(), EvaluateExpression(expressions[i], print) ? "t" : "f");

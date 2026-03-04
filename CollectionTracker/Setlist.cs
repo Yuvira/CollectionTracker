@@ -37,9 +37,9 @@ namespace CollectionTracker {
 				//Initial values
 				this.parent = parent;
 				this.set = set;
-				if (Utils.SetURLs.ContainsKey(parent.Catalog.Game))
-					setURL = Utils.SetURLs[parent.Catalog.Game] + set.Code;
-				List<Printing> setPrints = parent.Catalog.Printings.Where(print => print.Set == set).ToList();
+				if (Utils.SetURLs.ContainsKey(TrackerForm.Catalog.Game))
+					setURL = Utils.SetURLs[TrackerForm.Catalog.Game] + set.Code;
+				List<Printing> setPrints = TrackerForm.Catalog.Printings.Where(print => print.Set == set).ToList();
 				int setCount = setPrints.Count;
 				int setOwned = setPrints.Count(print => print.IsOwned);
 				bool missingCardref = setPrints.Count(print => !print.TryGetField("name", out string value) || value.Equals("_")) > 0;
@@ -71,7 +71,7 @@ namespace CollectionTracker {
 				}
 
 				//No cards logged but folder exists
-				else if (setPrints.Count == 0 && Utils.ResourcePaths.ContainsKey(parent.Catalog.Game) && Directory.Exists(Utils.ResourcePaths[parent.Catalog.Game] + set.Code)) {
+				else if (setPrints.Count == 0 && Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game) && Directory.Exists(Utils.ResourcePaths[TrackerForm.Catalog.Game] + set.Code)) {
 					cardRefLabel = Utils.GenerateLabel(new Rectangle(780, 20, 35, TEXT_HEIGHT), "&");
 					cardRefLabel.TextAlign = ContentAlignment.MiddleCenter;
 					panel.Controls.Add(cardRefLabel);
@@ -105,11 +105,11 @@ namespace CollectionTracker {
 			lastWidth = panel.Width;
 
 			//Sets
-			List<Set> sets = new List<Set>(Catalog.Sets);
+			List<Set> sets = new List<Set>(TrackerForm.Catalog.Sets);
 			sets.Sort(Set.SortNewest);
 
 			//Header
-			string str = $"Setlist: {Catalog.Sets.Count} | {Catalog.Cards.Count} | {Catalog.Printings.Count} | {Catalog.Symbols.Count}";
+			string str = $"Setlist: {TrackerForm.Catalog.Sets.Count} | {TrackerForm.Catalog.Cards.Count} | {TrackerForm.Catalog.Printings.Count} | {TrackerForm.Catalog.Symbols.Count}";
 			headerLabel = Utils.GenerateLabel(new Rectangle(Math.Max((panel.Width - 850) / 2, 5), 5, Utils.MeasureWidth(str), TEXT_HEIGHT), str);
 			headerLabel.Anchor = AnchorStyles.Top;
 

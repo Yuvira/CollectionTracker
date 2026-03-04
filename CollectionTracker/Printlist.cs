@@ -128,7 +128,7 @@ namespace CollectionTracker {
 
 				//Load image
 				if (print.ImagePaths.Count > 0)
-					Utils.TryLoadCardImage(imgBox, print.ImagePaths[0], parent.Catalog.Game);
+					Utils.TryLoadCardImage(imgBox, print.ImagePaths[0], TrackerForm.Catalog.Game);
 
 				//Add treatments
 				panel.SuspendLayout();
@@ -205,7 +205,7 @@ namespace CollectionTracker {
 		public Printlist(TrackerForm form, string searchTerms) : base(form) {
 
 			//Get print list
-			printings = SearchUtils.SearchPrintings(Catalog, searchTerms);
+			printings = SearchUtils.SearchPrintings(searchTerms);
 			filteredPrints = new List<Printing>(printings);
 			filteredPrints.Sort(Printing.SortNewest);
 

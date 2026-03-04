@@ -16,8 +16,6 @@ namespace CollectionTracker {
 		private Catalog mtgCatalog;
 		private Catalog ygoCatalog;
 		private Catalog pkmnCatalog;
-		private Catalog curCatalog = null;
-		private TrackerPage page = null;
 		private Printlist savedPrintlist = null;
 		private Printentry savedPrintentry = null;
 
@@ -29,13 +27,13 @@ namespace CollectionTracker {
 		private ToolStripButton printListButton;
 
 		//Accessors
-		public Catalog Catalog => curCatalog;
-		public TrackerPage Page => page;
 		public int ToolbarHeight => toolbar.Height;
 		public Printlist Printlist => savedPrintlist;
 
 		//Static
-		public static Catalog StaticCatalog = null;
+		public static Catalog Catalog = null;
+		public static TrackerPage Page = null;
+		public static FieldContext FieldContext = FieldContext.NONE;
 
 		//Constructor
 		public TrackerForm() {
@@ -87,22 +85,21 @@ namespace CollectionTracker {
 
 		//Set current catalog
 		public void SetCatalogMTG() {
-			curCatalog = mtgCatalog;
+			Catalog = mtgCatalog;
 			catalogLabel.Text = "Magic";
 			EnableCatalogButtons();
 		}
 		public void SetCatalogYGO() {
-			curCatalog = ygoCatalog;
+			Catalog = ygoCatalog;
 			catalogLabel.Text = "Yu-Gi-Oh!";
 			EnableCatalogButtons();
 		}
 		public void SetCatalogPKMN() {
-			curCatalog = pkmnCatalog;
+			Catalog = pkmnCatalog;
 			catalogLabel.Text = "Pokémon";
 			EnableCatalogButtons();
 		}
 		private void EnableCatalogButtons() {
-			StaticCatalog = curCatalog;
 			saveButton.Enabled = true;
 			setButton.Enabled = true;
 		}
@@ -117,47 +114,47 @@ namespace CollectionTracker {
 
 		//Replace current page
 		public void SetPage(TrackerPage page) {
-			if (savedPrintlist != null && !(page is Detailpage dp || page is Cardentry ce || page is Printentry pe)) {
+			if (savedPrintlist != null && !(page is Detailpage || page is Cardentry || page is Printentry)) {
 				toolbar.Items.Remove(printListButton);
 				savedPrintlist.Dispose();
 				savedPrintlist = null;
 			}
-			if (this.page != null && this.page == savedPrintentry)
+			if (Page != null && Page == savedPrintentry)
 				savedPrintentry.Panel.Hide();
-			else if (this.page != null) {
-				Controls.Remove(this.page.Panel);
-				this.page.Dispose();
+			else if (Page != null) {
+				Controls.Remove(Page.Panel);
+				Page.Dispose();
 			}
 			Controls.Add(page.Panel);
-			this.page = page;
+			Page = page;
 		}
 
 		//Save printlist and load detail page
 		public void ShowDetails(Printlist pl, Detailpage dp) {
-			if (page != pl)
+			if (Page != pl)
 				return;
 			toolbar.Items.Add(printListButton);
 			Controls.Remove(pl.Panel);
 			Controls.Add(dp.Panel);
 			savedPrintlist = pl;
-			page = dp;
+			Page = dp;
 			dp.UpdateNavButtons();
 		}
 		public void ShowPrintlist(object sender, EventArgs e) {
 			toolbar.Items.Remove(printListButton);
-			Controls.Remove(page.Panel);
-			page.Dispose();
+			Controls.Remove(Page.Panel);
+			Page.Dispose();
 			Controls.Add(savedPrintlist.Panel);
 			savedPrintlist.UpdateEntries();
-			page = savedPrintlist;
+			Page = savedPrintlist;
 			savedPrintlist = null;
 		}
 
 		//Save printentry
 		public void ShowPrintentry(Printing printing) {
-			if (page != null) {
-				Controls.Remove(page.Panel);
-				page.Dispose();
+			if (Page != null) {
+				Controls.Remove(Page.Panel);
+				Page.Dispose();
 			}
 			if (savedPrintentry == null) {
 				savedPrintentry = new Printentry(this, printing);
@@ -167,7 +164,7 @@ namespace CollectionTracker {
 				savedPrintentry.LoadPrinting(printing);
 				savedPrintentry.Panel.Show();
 			}
-			page = savedPrintentry;
+			Page = savedPrintentry;
 		}
 
 		#endregion

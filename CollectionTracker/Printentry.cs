@@ -73,6 +73,9 @@ namespace CollectionTracker {
 			//References
 			printref = print;
 
+			//Context
+			TrackerForm.FieldContext = FieldContext.PRINT;
+
 			//Suspend
 			listPanel.SuspendLayout();
 
@@ -80,7 +83,7 @@ namespace CollectionTracker {
 			if (SetsAltered) {
 				setBox.SuspendLayout();
 				setBox.Items.Clear();
-				setBox.Items.AddRange(Catalog.Sets.ToArray());
+				setBox.Items.AddRange(TrackerForm.Catalog.Sets.ToArray());
 				setBox.ResumeLayout();
 				SetsAltered = false;
 			}
@@ -90,7 +93,7 @@ namespace CollectionTracker {
 			if (CardsAltered) {
 				cardBox.SuspendLayout();
 				cardBox.Items.Clear();
-				cardBox.Items.AddRange(Catalog.Cards.ToArray());
+				cardBox.Items.AddRange(TrackerForm.Catalog.Cards.ToArray());
 				cardBox.ResumeLayout();
 				CardsAltered = false;
 			}

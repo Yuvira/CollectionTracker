@@ -23,7 +23,6 @@ namespace CollectionTracker {
 
 		//Accessors
 		public TrackerPanel Panel => panel;
-		public Catalog Catalog => parent.Catalog;
 
 		//Constructor
 		public TrackerPage(TrackerForm form) {

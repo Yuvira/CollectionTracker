@@ -212,7 +212,7 @@ namespace CollectionTracker {
 			//Image
 			imgIndex = 0;
 			if (this.printing.ImagePaths.Count > 0)
-				Utils.TryLoadCardImage(imgBox, this.printing.ImagePaths[0], Catalog.Game);
+				Utils.TryLoadCardImage(imgBox, this.printing.ImagePaths[0], TrackerForm.Catalog.Game);
 
 			//Prints
 			foreach (DetailPrintrow row in printRows) {
@@ -221,7 +221,7 @@ namespace CollectionTracker {
 			}
 			printRows.Clear();
 			if (!printing.GetField("name").Equals("_") && !printing.GetField("name").Equals("")) {
-				List<Printing> prints = Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
+				List<Printing> prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
 				prints.Sort(Printing.SortInverseNewest);
 				for (int i = 0; i < prints.Count; ++i) {
 					DetailPrintrow row = new DetailPrintrow(
@@ -271,13 +271,13 @@ namespace CollectionTracker {
 				if (printing.ImagePaths.Count == 0)
 					return;
 				imgIndex = (imgIndex + 1) % printing.ImagePaths.Count;
-				Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], Catalog.Game);
+				Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], TrackerForm.Catalog.Game);
 			}
 			else if (e.Button == MouseButtons.Right && printing.TryGetField("printid", out string printid)) {
 				if (char.IsLetter(printid[printid.Length - 1]))
 					printid = printid.Substring(0, printid.Length - 1);
-				if (Utils.CardURLs.ContainsKey(Catalog.Game))
-					Process.Start(Utils.CardURLs[Catalog.Game] + printid);
+				if (Utils.CardURLs.ContainsKey(TrackerForm.Catalog.Game))
+					Process.Start(Utils.CardURLs[TrackerForm.Catalog.Game] + printid);
 			}
 		}
 
@@ -338,11 +338,11 @@ namespace CollectionTracker {
 
 			//Card data
 			if (viewData) {
-				if (Catalog.Game == Game.MTG)
+				if (TrackerForm.Catalog.Game == Game.MTG)
 					LayoutDataMTG();
-				else if (Catalog.Game == Game.YGO)
+				else if (TrackerForm.Catalog.Game == Game.YGO)
 					LayoutDataYGO();
-				else if (Catalog.Game == Game.PKMN)
+				else if (TrackerForm.Catalog.Game == Game.PKMN)
 					LayoutDataPKMN();
 			}
 
@@ -865,7 +865,7 @@ namespace CollectionTracker {
 			int width = Utils.MeasureWidth("Move to");
 			moveToPanel.Controls.Add(Utils.GenerateLabel(new Rectangle(5, 10, width, TEXT_HEIGHT), "Move to"));
 			moveToBox = Utils.GenerateComboBox(new Rectangle(width + 10, 5, 450 - (width + 15), BUTTON_HEIGHT), ComboBoxStyle.DropDown, true);
-			moveToBox.Items.AddRange(Catalog.Printings.SelectMany(p => p.Treatments).SelectMany(t => t.Locations).Select(l => l.Name).Distinct().ToArray());
+			moveToBox.Items.AddRange(TrackerForm.Catalog.Printings.SelectMany(p => p.Treatments).SelectMany(t => t.Locations).Select(l => l.Name).Distinct().ToArray());
 			moveToPanel.Controls.Add(moveToBox);
 			yPos += moveToPanel.Height + 5;
 			borderPanels.Add(moveToPanel);
@@ -887,11 +887,11 @@ namespace CollectionTracker {
 			viewPanel.Location = new Point(viewPanel.Location.X, yPos);
 
 			//Panel colors
-			if (Catalog.Game == Game.MTG)
+			if (TrackerForm.Catalog.Game == Game.MTG)
 				SetPanelColorsMTG(borderPanels);
-			else if (Catalog.Game == Game.YGO)
+			else if (TrackerForm.Catalog.Game == Game.YGO)
 				SetPanelColorsYGO(borderPanels);
-			else if (Catalog.Game == Game.PKMN)
+			else if (TrackerForm.Catalog.Game == Game.PKMN)
 				SetPanelColorsPKMN(borderPanels);
 
 		}
@@ -909,7 +909,7 @@ namespace CollectionTracker {
 			viewPanel.Location = new Point(viewPanel.Location.X, yPos);
 			string location = moveToBox.Text;
 			moveToBox.Items.Clear();
-			moveToBox.Items.AddRange(Catalog.Printings.SelectMany(p => p.Treatments).SelectMany(t => t.Locations).Select(l => l.Name).Distinct().ToArray());
+			moveToBox.Items.AddRange(TrackerForm.Catalog.Printings.SelectMany(p => p.Treatments).SelectMany(t => t.Locations).Select(l => l.Name).Distinct().ToArray());
 			moveToBox.Text = location;
 		}
 
@@ -940,7 +940,7 @@ namespace CollectionTracker {
 			}
 
 			//Load printing
-			Printing print = Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(printid));
+			Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(printid));
 			if (print != null) {
 
 				//Sideways cards
@@ -959,7 +959,7 @@ namespace CollectionTracker {
 				cardtipBox.Location = new Point(posX, posY);
 
 				//Load image
-				Utils.TryLoadCardImage(cardtipBox, print.GetImagePath(mod == 'b' ? 1 : 0), Catalog.Game);
+				Utils.TryLoadCardImage(cardtipBox, print.GetImagePath(mod == 'b' ? 1 : 0), TrackerForm.Catalog.Game);
 
 				//Rotation
 				Image image = cardtipBox.Image;
@@ -974,7 +974,7 @@ namespace CollectionTracker {
 
 		//Show tooltip window relative to given control with given text
 		public void LoadCardtip(string printid) {
-			Printing print = Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(printid));
+			Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(printid));
 			if (print != null)
 				SetPrinting(print);
 		}
@@ -1050,9 +1050,8 @@ namespace CollectionTracker {
 
 			//Properties
 			public Symbol symbol;
-			public DescriptionSymbol(Catalog catalog, string text) {
-				symbol = catalog.Symbols.FirstOrDefault(s => s.Text.Equals(text));
-			}
+			public DescriptionSymbol(string text) =>
+				symbol = TrackerForm.Catalog.Symbols.FirstOrDefault(s => s.Text.Equals(text));
 
 			//Symbol width
 			public override int GetWidth() {
@@ -1261,7 +1260,7 @@ namespace CollectionTracker {
 							objectFound = true;
 							searchIdx = text.IndexOf('}', curIdx);
 							if (searchIdx >= 0) {
-								group.Add(new DescriptionSymbol(Catalog, text.Substring(curIdx, searchIdx + 1 - curIdx)));
+								group.Add(new DescriptionSymbol(text.Substring(curIdx, searchIdx + 1 - curIdx)));
 								curIdx = searchIdx + 1;
 							}
 							else

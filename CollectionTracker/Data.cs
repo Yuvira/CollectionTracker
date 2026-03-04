@@ -17,6 +17,13 @@ namespace CollectionTracker {
 		PKMN
 	}
 
+	//Field context
+	public enum FieldContext {
+		NONE,
+		CARD,
+		PRINT
+	}
+
 	#endregion
 
 	#region Catalog

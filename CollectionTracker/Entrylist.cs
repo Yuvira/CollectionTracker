@@ -200,7 +200,7 @@ namespace CollectionTracker {
 		public TreatmentEntry() : this("") { }
 		public TreatmentEntry(string treatmentString) : base() {
 			treatment = Utils.GenerateComboBox(new Rectangle(105, 0, 675, 30), ComboBoxStyle.DropDown, true);
-			treatment.Items.AddRange(TrackerForm.StaticCatalog.Printings.SelectMany(p => p.Treatments).Select(t => t.Name).Distinct().ToArray());
+			treatment.Items.AddRange(TrackerForm.Catalog.Printings.SelectMany(p => p.Treatments).Select(t => t.Name).Distinct().ToArray());
 			treatment.Text = treatmentString;
 			panel.Controls.Add(treatment);
 		}

@@ -25,6 +25,9 @@ namespace CollectionTracker {
 			cardref = card;
 			printref = print;
 
+			//Context
+			TrackerForm.FieldContext = FieldContext.CARD;
+
 			//Panel
 			listPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(800, panel.Height - 25), panel.Size, new Point(0, 0)));
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;

@@ -128,7 +128,7 @@ namespace CollectionTracker {
 		public Setentrylist(TrackerForm form) : base(form) {
 
 			//Set list
-			List<Set> sets = new List<Set>(Catalog.Sets);
+			List<Set> sets = new List<Set>(TrackerForm.Catalog.Sets);
 			sets.Sort(Set.SortNewest);
 
 			//Panel
@@ -173,7 +173,7 @@ namespace CollectionTracker {
 
 		//Delete set entry
 		private void DeleteEntry(Setentry entry, Set set) {
-			List<Printing> prints = Catalog.Printings.Where(p => p.Set == set).ToList();
+			List<Printing> prints = TrackerForm.Catalog.Printings.Where(p => p.Set == set).ToList();
 			if (prints.Count > 0) {
 				MessageBox.Show($"Can't remove set, {prints.Count} prints still rely on it");
 				return;
@@ -181,7 +181,7 @@ namespace CollectionTracker {
 			entries.Remove(entry);
 			listPanel.Controls.Remove(entry.Panel);
 			entry.Panel.Dispose();
-			Catalog.Sets.Remove(set);
+			TrackerForm.Catalog.Sets.Remove(set);
 			Printentry.SetsAltered = true;
 			Update();
 		}
@@ -189,7 +189,7 @@ namespace CollectionTracker {
 		//Add new set
 		private void AddSet(object sender, EventArgs e) {
 			Set set = new Set();
-			Catalog.Sets.Add(set);
+			TrackerForm.Catalog.Sets.Add(set);
 			Setentry entry = new Setentry(this, set);
 			entries.Insert(0, entry);
 			listPanel.Controls.Add(entry.Panel);
