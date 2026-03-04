@@ -27,6 +27,7 @@ namespace CollectionTracker {
 
 		//Events
 		public Action OnListResize;
+		public Action<Entrylist<T>> OnListEmpty;
 
 		//Constructor
 		public Entrylist(TrackerPage parent, string headerText, List<T> entries) {
@@ -92,6 +93,8 @@ namespace CollectionTracker {
 			entries.Remove(entryT);
 			panel.Controls.Remove(entryT.Panel);
 			entryT.Panel.Dispose();
+			if (entries.Count == 0)
+				OnListEmpty?.Invoke(this);
 			OnListResize?.Invoke();
 		}
 

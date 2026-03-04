@@ -15,6 +15,7 @@ namespace CollectionTracker {
 
 		//Controls
 		private TrackerPanel listPanel;
+		private Button addButton;
 		private Button saveButton;
 		private Button returnButton;
 
@@ -57,18 +58,23 @@ namespace CollectionTracker {
 				foreach (Face face in cardref.Faces) {
 					Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(face.Fields));
 					fieldList.OnListResize += OnFieldsResized;
-					listPanel.Controls.Add(fieldList.Panel);
 					faces.Add(fieldList);
+					listPanel.Controls.Add(fieldList.Panel);
 				}
 			}
 
+			//Add face button
+			addButton = Utils.GenerateButton(new Rectangle(0, 0, 30, 30), "+");
+			addButton.Click += AddFace;
+			listPanel.Controls.Add(addButton);
+
 			//Save button
-			saveButton = Utils.GenerateButton(new Rectangle(0, 0, 100, BUTTON_HEIGHT), "Save");
+			saveButton = Utils.GenerateButton(new Rectangle(35, 0, 100, 30), "Save");
 			saveButton.Click += SaveCard;
 			listPanel.Controls.Add(saveButton);
 
 			//Return button
-			returnButton = Utils.GenerateButton(new Rectangle(105, 0, 100, BUTTON_HEIGHT), "Return");
+			returnButton = Utils.GenerateButton(new Rectangle(140, 0, 100, 30), "Return");
 			returnButton.Click += ReturnToDetails;
 			listPanel.Controls.Add(returnButton);
 
@@ -83,6 +89,30 @@ namespace CollectionTracker {
 
 		}
 
+		//Add face
+		private void AddFace(object sender, EventArgs e) {
+			Dictionary<string, string> fieldDict = new Dictionary<string, string>();
+			if (Utils.DefaultCardFields.ContainsKey(TrackerForm.Catalog.Game)) {
+				foreach (string fieldName in Utils.DefaultCardFields[TrackerForm.Catalog.Game])
+					fieldDict.Add(fieldName, "");
+			}
+			Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(fieldDict));
+			fieldList.OnListEmpty += OnFaceEmpty;
+			fieldList.OnListResize += OnFieldsResized;
+			faces.Add(fieldList);
+			listPanel.Controls.Add(fieldList.Panel);
+			OnFieldsResized();
+		}
+
+		//On empty
+		private void OnFaceEmpty(Entrylist<FieldEntry> list) {
+			if (!faces.Contains(list))
+				return;
+			faces.Remove(list);
+			listPanel.Controls.Remove(list.Panel);
+			list.Panel.Dispose();
+		}
+
 		//On resize
 		private void OnFieldsResized() {
 			Point pos = new Point(0, 0);
@@ -92,8 +122,9 @@ namespace CollectionTracker {
 				face.Panel.Location = pos;
 				pos.Y += face.Panel.Height + 5;
 			}
-			saveButton.Location = pos;
-			returnButton.Location = new Point(105, pos.Y);
+			addButton.Location = pos;
+			saveButton.Location = new Point(35, pos.Y);
+			returnButton.Location = new Point(140, pos.Y);
 		}
 
 		//Save
