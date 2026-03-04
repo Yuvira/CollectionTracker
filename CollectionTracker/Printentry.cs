@@ -175,6 +175,7 @@ namespace CollectionTracker {
 				print.CopyTreatments(TreatmentEntry.GetEntryList(treatments.Entries));
 				print.CopyFields(FieldEntry.GetEntryDict(fields.Entries));
 				print.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
+				TrackerForm.Catalog.Printings.Add(print);
 				LoadPrinting(null);
 			}
 
