@@ -196,6 +196,9 @@ namespace CollectionTracker {
 				LoadPrinting(null);
 			}
 
+			//Reset card reference
+			cardBox.SelectedIndex = -1;
+
 		}
 
 		//Return
