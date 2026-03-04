@@ -547,7 +547,18 @@ namespace CollectionTracker {
 		public void ToggleFavorite() => favorite = !favorite;
 
 		//ToString
-		public override string ToString() => TryGetField("name", out string name) ? name : "MISSING NAME FIELD";
+		public override string ToString() {
+			if (TryGetField("name", out string name)) {
+				if (TryGetField("type", out string type)) {
+					if (type.Contains("Token"))
+						return "Token: " + name;
+					if (type.Contains("Art Card"))
+						return "Art Card: " + name;
+				}
+				return name;
+			}
+			return "MISSING NAME FIELD";
+		}
 
 		#endregion
 
