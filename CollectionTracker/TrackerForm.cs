@@ -34,6 +34,9 @@ namespace CollectionTracker {
 		public int ToolbarHeight => toolbar.Height;
 		public Printlist Printlist => savedPrintlist;
 
+		//Static
+		public static Catalog StaticCatalog = null;
+
 		//Constructor
 		public TrackerForm() {
 
@@ -99,6 +102,7 @@ namespace CollectionTracker {
 			EnableCatalogButtons();
 		}
 		private void EnableCatalogButtons() {
+			StaticCatalog = curCatalog;
 			saveButton.Enabled = true;
 			setButton.Enabled = true;
 		}

@@ -10,8 +10,8 @@ namespace CollectionTracker {
 		//Properties
 		private Card cardref;
 		private Printing printref;
-		private Fieldlist fields;
-		private List<Fieldlist> faces;
+		private Entrylist<FieldEntry> fields;
+		private List<Entrylist<FieldEntry>> faces;
 
 		//Controls
 		private TrackerPanel listPanel;
@@ -34,14 +34,14 @@ namespace CollectionTracker {
 			listPanel.SuspendLayout();
 
 			//Fields
-			fields = new Fieldlist(this, "Fields", card.Fields, 0);
+			fields = new Entrylist<FieldEntry>(this, "Fields", FieldEntry.GenerateEntries(card.Fields));
 			fields.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(fields.Panel);
 
 			//Faces
-			faces = new List<Fieldlist>();
+			faces = new List<Entrylist<FieldEntry>>();
 			foreach (Face face in card.Faces) {
-				Fieldlist fieldList = new Fieldlist(this, "Face", face.Fields, 0);
+				Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(face.Fields));
 				fieldList.OnListResize += OnFieldsResized;
 				listPanel.Controls.Add(fieldList.Panel);
 				faces.Add(fieldList);
@@ -70,8 +70,10 @@ namespace CollectionTracker {
 
 		//On resize
 		private void OnFieldsResized() {
-			Point pos = new Point(0, fields.Panel.Height + 5);
-			foreach (Fieldlist face in faces) {
+			Point pos = new Point(0, 0);
+			fields.Panel.Location = pos;
+			pos.Y += fields.Panel.Height + 5;
+			foreach (Entrylist<FieldEntry> face in faces) {
 				face.Panel.Location = pos;
 				pos.Y += face.Panel.Height + 5;
 			}
@@ -84,9 +86,9 @@ namespace CollectionTracker {
 			if (cardref != null) {
 				string name = printref.GetField("name");
 				List<Dictionary<string, string>> faceDicts = new List<Dictionary<string, string>>();
-				foreach (Fieldlist face in faces)
-					faceDicts.Add(face.GetFieldDict());
-				cardref.CopyFields(fields.GetFieldDict(), faceDicts);
+				foreach (Entrylist<FieldEntry> face in faces)
+					faceDicts.Add(FieldEntry.GetEntryDict(face.Entries));
+				cardref.CopyFields(FieldEntry.GetEntryDict(fields.Entries), faceDicts);
 				if (!printref.GetField("name").Equals(name))
 					Printentry.CardsAltered = true;
 			}

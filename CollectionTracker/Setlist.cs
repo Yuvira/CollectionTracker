@@ -125,7 +125,7 @@ namespace CollectionTracker {
 			foreach (Set set in sets) {
 				Setrow row = new Setrow(this, set);
 				row.Panel.Location = pos;
-				pos.Add(0, row.Panel.Height + 5);
+				pos.Y += row.Panel.Height + 5;
 				rows.Add(row);
 				listPanel.Controls.Add(row.Panel);
 			}

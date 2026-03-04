@@ -9,9 +9,9 @@ namespace CollectionTracker {
 
 		//Properties
 		private Printing printref;
-		private Treatmentlist treatments;
-		private Fieldlist fields;
-		private Imagelist images;
+		private Entrylist<TreatmentEntry> treatments;
+		private Entrylist<FieldEntry> fields;
+		private Entrylist<ImageEntry> images;
 
 		//Controls
 		private TrackerPanel listPanel;
@@ -101,7 +101,7 @@ namespace CollectionTracker {
 				listPanel.Controls.Remove(treatments.Panel);
 				treatments.Panel.Dispose();
 			}
-			treatments = new Treatmentlist(this, "Treatments", printref.Treatments.Select(t => t.Name).ToList(), 70);
+			treatments = new Entrylist<TreatmentEntry>(this, "Treatments", TreatmentEntry.GenerateEntries(printref.Treatments.Select(t => t.Name).ToList()));
 			treatments.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(treatments.Panel);
 
@@ -110,7 +110,7 @@ namespace CollectionTracker {
 				listPanel.Controls.Remove(fields.Panel);
 				fields.Panel.Dispose();
 			}
-			fields = new Fieldlist(this, "Fields", printref.Fields, 70);
+			fields = new Entrylist<FieldEntry>(this, "Fields", FieldEntry.GenerateEntries(printref.Fields));
 			fields.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(fields.Panel);
 
@@ -119,7 +119,7 @@ namespace CollectionTracker {
 				listPanel.Controls.Remove(images.Panel);
 				images.Panel.Dispose();
 			}
-			images = new Imagelist(this, "Images", printref.ImagePaths, 70);
+			images = new Entrylist<ImageEntry>(this, "Images", ImageEntry.GenerateEntries(printref.ImagePaths));
 			images.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(images.Panel);
 
@@ -134,6 +134,7 @@ namespace CollectionTracker {
 		//On resize
 		private void OnFieldsResized() {
 			Point pos = new Point(0, 70);
+			treatments.Panel.Location = pos;
 			pos.Y += treatments.Panel.Height + 5;
 			fields.Panel.Location = pos;
 			pos.Y += fields.Panel.Height + 5;
@@ -150,9 +151,9 @@ namespace CollectionTracker {
 					printref.CopySet(set);
 				if (cardBox.SelectedItem != null && cardBox.SelectedItem is Card card)
 					printref.CopyCard(card);
-				printref.CopyTreatments(treatments.GetTreatmentList());
-				printref.CopyFields(fields.GetFieldDict());
-				printref.CopyImgPaths(images.GetPathList());
+				printref.CopyTreatments(TreatmentEntry.GetEntryList(treatments.Entries));
+				printref.CopyFields(FieldEntry.GetEntryDict(fields.Entries));
+				printref.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
 				parent.SetPage(new Detailpage(parent, printref));
 			}
 		}

@@ -661,18 +661,15 @@ namespace CollectionTracker {
 		public void CopySet(Set set) => this.set = set;
 		public void CopyCard(Card card) => this.card = card;
 		public void CopyTreatments(List<string> names) {
+			List<Treatment> treatments = new List<Treatment>();
 			foreach (string name in names) {
-				if (treatments.Select(t => t.Name).Contains(name))
-					continue;
+				Treatment treatment = this.treatments.FirstOrDefault(t => t.Name.Equals(name));
+				if (treatment != null)
+					treatments.Add(treatment);
 				else
 					treatments.Add(new Treatment(name));
 			}
-			for (int i = 0; i < treatments.Count; ++i) {
-				if (!names.Contains(treatments[i].Name)) {
-					treatments.RemoveAt(i);
-					--i;
-				}
-			}
+			this.treatments = new List<Treatment>(treatments);
 		}
 		public void CopyFields(Dictionary<string, string> fields) => this.fields = new Dictionary<string, string>(fields);
 		public void CopyImgPaths(List<string> paths) => this.imagePaths = new List<string>(paths);

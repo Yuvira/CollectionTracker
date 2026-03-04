@@ -376,14 +376,14 @@ namespace CollectionTracker {
 		#region Point Extensions
 
 		//Add co-ordinates
-		public static Point Add(this ref Point point, int x, int y) {
+		public static Point Add(this Point point, int x, int y) {
 			point.X += x;
 			point.Y += y;
 			return point;
 		}
 
 		//Add point
-		public static Point Add(this ref Point point, Point add) {
+		public static Point Add(this Point point, Point add) {
 			point.X += add.X;
 			point.Y += add.Y;
 			return point;
