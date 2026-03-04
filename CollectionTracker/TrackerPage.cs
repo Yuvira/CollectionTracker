@@ -18,23 +18,28 @@ namespace CollectionTracker {
 		public const int BUTTON_HEIGHT = 30;
 
 		//Properties
-		protected TrackerForm parent;
 		protected TrackerPanel panel;
 
 		//Accessors
 		public TrackerPanel Panel => panel;
 
 		//Constructor
-		public TrackerPage(TrackerForm form) {
-			parent = form;
-			panel = Utils.GenerateTrackerPanel(new Rectangle(0, parent.ToolbarHeight, form.ClientSize.Width, form.ClientSize.Height - parent.ToolbarHeight));
+		public TrackerPage() {
+			panel = Utils.GenerateTrackerPanel(
+				new Rectangle(
+					0,
+					TrackerForm.Instance.ToolbarHeight,
+					TrackerForm.Instance.ClientSize.Width,
+					TrackerForm.Instance.ClientSize.Height - TrackerForm.Instance.ToolbarHeight
+				)
+			);
 			panel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			parent.Resize += OnFormResize;
+			TrackerForm.Instance.Resize += OnFormResize;
 		}
 
 		//Dispose
 		public virtual void Dispose() {
-			parent.Resize -= OnFormResize;
+			TrackerForm.Instance.Resize -= OnFormResize;
 			panel.Dispose();
 		}
 

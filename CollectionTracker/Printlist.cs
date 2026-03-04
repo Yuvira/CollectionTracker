@@ -202,7 +202,7 @@ namespace CollectionTracker {
 		public List<Printing> FilteredPrints => filteredPrints;
 
 		//Constructor
-		public Printlist(TrackerForm form, string searchTerms) : base(form) {
+		public Printlist(string searchTerms) : base() {
 
 			//Get print list
 			printings = SearchUtils.SearchPrintings(searchTerms);
@@ -333,7 +333,7 @@ namespace CollectionTracker {
 		}
 
 		//Details
-		public void ShowDetails(Printing print) => parent.ShowDetails(this, new Detailpage(parent, print));
+		public void ShowDetails(Printing print) => TrackerForm.Instance.SetPage<Detailpage>(printref: print);
 
 	}
 

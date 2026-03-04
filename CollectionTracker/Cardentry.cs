@@ -20,7 +20,7 @@ namespace CollectionTracker {
 		private Button returnButton;
 
 		//Constructor
-		public Cardentry(TrackerForm form, Card card = null, Printing print = null) : base(form) {
+		public Cardentry(Card card, Printing print) : base() {
 
 			//References
 			cardref = card;
@@ -157,14 +157,14 @@ namespace CollectionTracker {
 
 			//Generate new
 			else
-				parent.SetPage(new Cardentry(parent));
+				TrackerForm.Instance.SetPage<Cardentry>();
 
 		}
 
 		//Return to details
 		private void ReturnToDetails(object sender = null, EventArgs e = null) {
 			if (printref != null)
-				parent.SetPage(new Detailpage(parent, printref));
+				TrackerForm.Instance.SetPage<Detailpage>(printref: printref);
 		}
 
 	}

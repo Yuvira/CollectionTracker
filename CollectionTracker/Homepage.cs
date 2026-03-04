@@ -12,7 +12,7 @@ namespace CollectionTracker {
 		TextBox searchBox;
 
 		//Constructor
-		public Homepage(TrackerForm form) : base(form) {
+		public Homepage() : base() {
 
 			//Catalog selectors
 			TrackerPanel catalogPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(382, 42), panel.Size, new Point(0, 32)));
@@ -72,9 +72,9 @@ namespace CollectionTracker {
 		}
 
 		//Set current catalog
-		private void SetCatalogMTG(object sender, EventArgs e) => SetCatalog(sender, parent.SetCatalogMTG);
-		private void SetCatalogYGO(object sender, EventArgs e) => SetCatalog(sender, parent.SetCatalogYGO);
-		private void SetCatalogPKMN(object sender, EventArgs e) => SetCatalog(sender, parent.SetCatalogPKMN);
+		private void SetCatalogMTG(object sender, EventArgs e) => SetCatalog(sender, TrackerForm.Instance.SetCatalogMTG);
+		private void SetCatalogYGO(object sender, EventArgs e) => SetCatalog(sender, TrackerForm.Instance.SetCatalogYGO);
+		private void SetCatalogPKMN(object sender, EventArgs e) => SetCatalog(sender, TrackerForm.Instance.SetCatalogPKMN);
 		private void SetCatalog(object sender, Action action) {
 			if (sender is RadioButton rb && rb.Checked) {
 				action.Invoke();
@@ -84,7 +84,7 @@ namespace CollectionTracker {
 		}
 
 		//Show setlist
-		private void OpenSetlist(object sender, EventArgs e) => parent.SetPage(new Setlist(parent));
+		private void OpenSetlist(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Setlist>();
 
 		//Search event handlers
 		private void SearchBoxClicked(object sender, EventArgs e) {
@@ -96,7 +96,7 @@ namespace CollectionTracker {
 			if (e.KeyChar == (char)Keys.Return)
 				Search();
 		}
-		private void Search() => parent.SetPage(new Printlist(parent, searchBox.Text));
+		private void Search() => TrackerForm.Instance.SetPage<Printlist>(searchTerms: searchBox.Text);
 
 	}
 

@@ -26,7 +26,7 @@ namespace CollectionTracker {
 		public static bool CardsAltered = true;
 
 		//Constructor
-		public Printentry(TrackerForm form, Printing print = null) : base(form) {
+		public Printentry(Printing print) : base() {
 
 			//Panel
 			listPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(800, panel.Height - 25), panel.Size, new Point(0, 0)));
@@ -204,7 +204,7 @@ namespace CollectionTracker {
 		//Return
 		private void ReturnToDetails(object sender = null, EventArgs e = null) {
 			if (printref != null)
-				parent.SetPage(new Detailpage(parent, printref));
+				TrackerForm.Instance.SetPage<Detailpage>(printref: printref);
 		}
 
 	}

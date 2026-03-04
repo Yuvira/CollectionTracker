@@ -130,7 +130,7 @@ namespace CollectionTracker {
 		public List<Cardtip> Cardtips => cardtips;
 
 		//Constructor
-		public Detailpage(TrackerForm form, Printing printing) : base(form) {
+		public Detailpage(Printing printing) : base() {
 
 			//Initial values
 			dataPanels = new List<TrackerPanel>();
@@ -248,10 +248,10 @@ namespace CollectionTracker {
 
 		//Update navigation
 		public void UpdateNavButtons() {
-			if (parent.Printlist != null && parent.Printlist.FilteredPrints != null && parent.Printlist.FilteredPrints.Contains(printing)) {
-				int idx = parent.Printlist.FilteredPrints.IndexOf(printing);
-				prevPrint = parent.Printlist.FilteredPrints[idx == 0 ? parent.Printlist.FilteredPrints.Count - 1 : idx - 1];
-				nextPrint = parent.Printlist.FilteredPrints[(idx + 1) % parent.Printlist.FilteredPrints.Count];
+			if (TrackerForm.Instance.FilteredPrints != null && TrackerForm.Instance.FilteredPrints.Contains(printing)) {
+				int idx = TrackerForm.Instance.FilteredPrints.IndexOf(printing);
+				prevPrint = TrackerForm.Instance.FilteredPrints[idx == 0 ? TrackerForm.Instance.FilteredPrints.Count - 1 : idx - 1];
+				nextPrint = TrackerForm.Instance.FilteredPrints[(idx + 1) % TrackerForm.Instance.FilteredPrints.Count];
 				navButtonLeft.Text = prevPrint.GetField("name");
 				navButtonRight.Text = nextPrint.GetField("name");
 				navButtonLeft.Show();
@@ -292,8 +292,8 @@ namespace CollectionTracker {
 		}
 
 		//Modify card data
-		private void EditCard(object sender, EventArgs e) => parent.SetPage(new Cardentry(parent, printing.Card, printing));
-		private void EditPrint(object sender, EventArgs e) => parent.ShowPrintentry(printing);
+		private void EditCard(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Cardentry>(cardref: printing.Card, printref: printing);
+		private void EditPrint(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Printentry>(printref: printing);
 
 		#region Views
 

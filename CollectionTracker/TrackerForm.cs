@@ -1,5 +1,6 @@
 ﻿using ProtoBuf;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -16,8 +17,6 @@ namespace CollectionTracker {
 		private Catalog mtgCatalog;
 		private Catalog ygoCatalog;
 		private Catalog pkmnCatalog;
-		private Printlist savedPrintlist = null;
-		private Printentry savedPrintentry = null;
 
 		//Controls
 		private MenuStrip toolbar;
@@ -26,11 +25,16 @@ namespace CollectionTracker {
 		private ToolStripButton saveButton;
 		private ToolStripButton printListButton;
 
+		//Saved pages
+		private Printlist savedPrintlist = null;
+		private Printentry savedPrintentry = null;
+
 		//Accessors
 		public int ToolbarHeight => toolbar.Height;
-		public Printlist Printlist => savedPrintlist;
+		public List<Printing> FilteredPrints => savedPrintlist?.FilteredPrints;
 
 		//Static
+		public static TrackerForm Instance = null;
 		public static Catalog Catalog = null;
 		public static TrackerPage Page = null;
 		public static FieldContext FieldContext = FieldContext.NONE;
@@ -44,6 +48,7 @@ namespace CollectionTracker {
 			Font = Utils.FONT_DEFAULT;
 			Text = "Collection Tracker";
 			KeyPreview = true;
+			Instance = this;
 
 			//Toolbar
 			toolbar = new MenuStrip();
@@ -64,7 +69,7 @@ namespace CollectionTracker {
 			toolbar.Items.Add(entryDDButton);
 
 			//Print list ref
-			printListButton = Utils.GenerateTSButton("Prints", ShowPrintlist);
+			printListButton = Utils.GenerateTSButton("Prints", OpenPrintlist);
 
 			//Label
 			catalogLabel = Utils.GenerateTSLabel("", true, 10);
@@ -89,7 +94,7 @@ namespace CollectionTracker {
 			}
 
 			//Open homepage
-			OpenHomePage();
+			SetPage<Homepage>();
 
 		}
 
@@ -123,64 +128,87 @@ namespace CollectionTracker {
 		#region Page Setters
 
 		//Open pages
-		public void OpenHomePage(object sender = null, EventArgs e = null) => SetPage(new Homepage(this));
-		public void OpenSetentries(object sender = null, EventArgs e = null) => SetPage(new Setentrylist(this));
-		public void OpenCardEntry(object sender = null, EventArgs e = null) => SetPage(new Cardentry(this));
-		public void OpenPrintEntry(object sender = null, EventArgs e = null) => ShowPrintentry(null);
+		public void OpenHomePage(object sender, EventArgs e) => SetPage<Homepage>();
+		public void OpenPrintlist(object sender, EventArgs e) => SetPage<Printlist>();
+		public void OpenSetentries(object sender, EventArgs e) => SetPage<Setentrylist>();
+		public void OpenCardEntry(object sender, EventArgs e) => SetPage<Cardentry>();
+		public void OpenPrintEntry(object sender, EventArgs e) => SetPage<Printentry>();
 
-		//Replace current page
-		public void SetPage(TrackerPage page) {
-			if (savedPrintlist != null && !(page is Detailpage || page is Cardentry || page is Printentry)) {
+		//Set new page
+		public void SetPage<T>(Card cardref = null, Printing printref = null, string searchTerms = "") where T : TrackerPage {
+
+			//Clear print list if moving to unsupported page
+			bool TKeepsPrintlist = typeof(T) == typeof(Printlist) || typeof(T) == typeof(Detailpage) || typeof(T) == typeof(Cardentry) || typeof(T) == typeof(Printentry);
+			if (savedPrintlist != null && !TKeepsPrintlist) {
 				toolbar.Items.Remove(printListButton);
-				savedPrintlist.Dispose();
+				if (Page != savedPrintlist)
+					savedPrintlist.Dispose();
 				savedPrintlist = null;
 			}
-			if (Page != null && Page == savedPrintentry)
-				savedPrintentry.Panel.Hide();
-			else if (Page != null) {
-				Controls.Remove(Page.Panel);
-				Page.Dispose();
-			}
-			Controls.Add(page.Panel);
-			Page = page;
-		}
 
-		//Save printlist and load detail page
-		public void ShowDetails(Printlist pl, Detailpage dp) {
-			if (Page != pl)
-				return;
-			toolbar.Items.Add(printListButton);
-			Controls.Remove(pl.Panel);
-			Controls.Add(dp.Panel);
-			savedPrintlist = pl;
-			Page = dp;
-			dp.UpdateNavButtons();
-		}
-		public void ShowPrintlist(object sender, EventArgs e) {
-			toolbar.Items.Remove(printListButton);
-			Controls.Remove(Page.Panel);
-			Page.Dispose();
-			Controls.Add(savedPrintlist.Panel);
-			savedPrintlist.UpdateEntries();
-			Page = savedPrintlist;
-			savedPrintlist = null;
-		}
-
-		//Save printentry
-		public void ShowPrintentry(Printing printing) {
+			//Clear current page
 			if (Page != null) {
-				Controls.Remove(Page.Panel);
-				Page.Dispose();
+				if (Page is Printlist pl && TKeepsPrintlist) {
+					toolbar.Items.Add(printListButton);
+					savedPrintlist = pl;
+					Page.Panel.Hide();
+				}
+				else if (Page is Printentry pe) {
+					savedPrintentry = pe;
+					Page.Panel.Hide();
+				}
+				else if (Page != null) {
+					Controls.Remove(Page.Panel);
+					Page.Dispose();
+				}
 			}
-			if (savedPrintentry == null) {
-				savedPrintentry = new Printentry(this, printing);
-				Controls.Add(savedPrintentry.Panel);
+
+			//Show saved page
+			if (typeof(T) == typeof(Printlist) && savedPrintlist != null) {
+				toolbar.Items.Remove(printListButton);
+				savedPrintlist.Panel.Show();
+				savedPrintlist.UpdateEntries();
+				Page = savedPrintlist;
+				savedPrintlist = null;
 			}
-			else {
-				savedPrintentry.LoadPrinting(printing);
+			else if (typeof(T) == typeof(Printentry) && savedPrintentry != null) {
 				savedPrintentry.Panel.Show();
+				savedPrintentry.LoadPrinting(printref);
+				Page = savedPrintentry;
 			}
-			Page = savedPrintentry;
+
+			//Generate new page
+			else {
+				if (typeof(T) == typeof(Homepage))
+					Page = new Homepage();
+				else if (typeof(T) == typeof(Setlist))
+					Page = new Setlist();
+				else if (typeof(T) == typeof(Printlist))
+					Page = new Printlist(searchTerms);
+				else if (typeof(T) == typeof(Detailpage)) {
+					if (printref != null) {
+						Detailpage dp = new Detailpage(printref);
+						dp.UpdateNavButtons();
+						Page = dp;
+					}
+					else
+						InvokePageChangeError("Detailpage printing can't be null!");
+				}
+				else if (typeof(T) == typeof(Cardentry))
+					Page = new Cardentry(cardref, printref);
+				else if (typeof(T) == typeof(Printentry))
+					Page = new Printentry(printref);
+				else if (typeof(T) == typeof(Setentrylist))
+					Page = new Setentrylist();
+				Controls.Add(Page.Panel);
+			}
+
+		}
+
+		//Default to homepage if invalid parameters provided
+		private void InvokePageChangeError(string error) {
+			MessageBox.Show(error);
+			Page = new Homepage();
 		}
 
 		#endregion

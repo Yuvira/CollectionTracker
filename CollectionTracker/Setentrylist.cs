@@ -127,7 +127,7 @@ namespace CollectionTracker {
 		private Panel listPanel;
 
 		//Constructor
-		public Setentrylist(TrackerForm form) : base(form) {
+		public Setentrylist() : base() {
 
 			//Set list
 			List<Set> sets = new List<Set>(TrackerForm.Catalog.Sets);

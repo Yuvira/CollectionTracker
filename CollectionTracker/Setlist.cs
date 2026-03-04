@@ -99,7 +99,7 @@ namespace CollectionTracker {
 		private int lastWidth;
 
 		//Constructor
-		public Setlist(TrackerForm form) : base(form) {
+		public Setlist() : base() {
 
 			//Width
 			lastWidth = panel.Width;
@@ -138,7 +138,7 @@ namespace CollectionTracker {
 		}
 
 		//Filter catalog by set ID
-		private void FilterBySet(Set set) => parent.SetPage(new Printlist(parent, $"s={set.Code}"));
+		private void FilterBySet(Set set) => TrackerForm.Instance.SetPage<Printlist>(searchTerms: $"s={set.Code}");
 
 		//Resize event
 		protected override void OnFormResize(object sender, EventArgs e) {
