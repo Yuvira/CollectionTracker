@@ -111,7 +111,7 @@ namespace CollectionTracker {
 			if (printref != null)
 				treatmentList = printref.Treatments.Select(t => t.Name).ToList();
 			else if (Utils.DefaultTreatments.ContainsKey(TrackerForm.Catalog.Game))
-				treatmentList = Utils.DefaultCardFields[TrackerForm.Catalog.Game];
+				treatmentList = Utils.DefaultTreatments[TrackerForm.Catalog.Game];
 			else
 				treatmentList = new List<string>();
 			treatments = new Entrylist<TreatmentEntry>(this, "Treatments", TreatmentEntry.GenerateEntries(treatmentList));
