@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -118,10 +119,17 @@ namespace CollectionTracker {
 			{ Game.PKMN , new List<string> { "cn", "printid", "rarity", "regulation", "artist", "flavor" } },
 		};
 
-		//String-defined colors
+		//Fields that can list all values
 		public static readonly List<string> ListableFields = new List<string> {
 			"rarity",
 			"artist",
+		};
+
+		//Fields that can be kept on list regeneration
+		public static readonly List<string> KeepableFields = new List<string> {
+			"cn",
+			"printid",
+			"rarity",
 		};
 
 		//String-defined colors
@@ -393,6 +401,20 @@ namespace CollectionTracker {
 					label.Text = "Failed!";
 				return false;
 			}
+		}
+
+		//Check if image exists at path
+		public static bool ImageExistsAtPath(string path, out string newPath) {
+			newPath = path;
+			if (File.Exists(path + ".png")) {
+				newPath += ".png";
+				return true;
+			}
+			else if (File.Exists(path + ".jpg")) {
+				newPath += ".jpg";
+				return true;
+			}
+			return false;
 		}
 
 		#endregion

@@ -70,8 +70,8 @@ namespace CollectionTracker {
 		}
 
 		//Add row
-		private void AddRow(object sender, EventArgs e) {
-			T entry = new T();
+		private void AddRow(object sender, EventArgs e) => AddRow(new T());
+		public void AddRow(T entry) {
 			entry.Panel.Location = add.Location;
 			add.Location = add.Location.Add(0, entry.Panel.Height + 5);
 			entries.Add(entry);
@@ -95,6 +95,19 @@ namespace CollectionTracker {
 			entryT.Panel.Dispose();
 			if (entries.Count == 0)
 				OnListEmpty?.Invoke(this);
+			OnListResize?.Invoke();
+		}
+
+		//Clear all rows
+		public void ClearRows() {
+			foreach (T entry in entries) {
+				add.Location = add.Location.Add(0, -(entry.Panel.Height + 5));
+				panel.Height -= entry.Panel.Height + 5;
+				panel.Controls.Remove(entry.Panel);
+				entry.Panel.Dispose();
+			}
+			entries.Clear();
+			OnListEmpty?.Invoke(this);
 			OnListResize?.Invoke();
 		}
 
@@ -164,6 +177,10 @@ namespace CollectionTracker {
 		private TextBox textValue;
 		private ComboBox listValue;
 
+		//Accessors
+		public string Field => field.Text;
+		public string Value => textValue.Visible ? textValue.Text : listValue.Text;
+
 		//Constructor
 		public FieldEntry() : this("", "") { }
 		public FieldEntry(string fieldString, string valueString) : base() {
@@ -184,7 +201,7 @@ namespace CollectionTracker {
 		}
 
 		//Detect if value field needs to be modified
-		private void OnFieldChanged(object sender = null, EventArgs e = null) {
+		public void OnFieldChanged(object sender = null, EventArgs e = null) {
 			if (Utils.ListableFields.Contains(field.Text)) {
 				listValue.Items.Clear();
 				listValue.Items.AddRange(TrackerForm.Catalog.Printings.Select(p => p.GetField(field.Text)).Distinct().ToArray());
@@ -201,6 +218,12 @@ namespace CollectionTracker {
 			}
 		}
 
+		//Clear value
+		public void SetValue(string value = "") {
+			textValue.Text = value;
+			listValue.Text = value;
+		}
+
 		//List generator
 		public static List<FieldEntry> GenerateEntries(Dictionary<string, string> fields) {
 			List<FieldEntry> entries = new List<FieldEntry>();
@@ -213,10 +236,10 @@ namespace CollectionTracker {
 		public static Dictionary<string, string> GetEntryDict(List<FieldEntry> entries) {
 			Dictionary<string, string> dict = new Dictionary<string, string>();
 			foreach (FieldEntry entry in entries) {
-				if (dict.ContainsKey(entry.field.Text))
-					MessageBox.Show($"Duplicate field [{entry.field.Text}]");
+				if (dict.ContainsKey(entry.Field))
+					MessageBox.Show($"Duplicate field [{entry.Field}]");
 				else
-					dict.Add(entry.field.Text, entry.textValue.Visible ? entry.textValue.Text : entry.listValue.Text);
+					dict.Add(entry.Field, entry.Value);
 			}
 			return dict;
 		}

@@ -184,6 +184,8 @@ namespace CollectionTracker {
 
 			//Generate new printing
 			else {
+
+				//Generate printing and add to catalog
 				Printing print = new Printing();
 				if (setBox.SelectedItem != null && setBox.SelectedItem is Set set)
 					print.CopySet(set);
@@ -193,11 +195,52 @@ namespace CollectionTracker {
 				print.CopyFields(FieldEntry.GetEntryDict(fields.Entries));
 				print.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
 				TrackerForm.Catalog.Printings.Add(print);
-				LoadPrinting(null);
-			}
 
-			//Reset card reference
-			cardBox.SelectedIndex = -1;
+				//Autofill next fields
+				printref = null;
+				string cn = fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.Value;
+				if (!string.IsNullOrWhiteSpace(cn)) {
+					string prefix = "";
+					int width = 3;
+					while (cn.Length > 0 && !char.IsNumber(cn[0])) {
+						prefix += cn[0];
+						cn = cn.Substring(1);
+					}
+					while (cn.Length > 0 && !char.IsNumber(cn[cn.Length - 1]))
+						cn = cn.Substring(0, cn.Length - 1);
+					width = cn.Length;
+					while (cn.Length > 0 && cn[0] == '0')
+						cn = cn.Substring(1);
+					if (!string.IsNullOrWhiteSpace(cn) && int.TryParse(cn, out int value)) {
+						++value;
+						cn = prefix + value.ToString().PadLeft(width, '0');
+						fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.SetValue(cn);
+						images.ClearRows();
+						if (setBox.SelectedItem != null && setBox.SelectedItem is Set set_) {
+							fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(set_.Code.ToLower() + '/' + value.ToString());
+							if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
+								string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + set_.Code + '/' + cn;
+								if (Utils.ImageExistsAtPath(path, out path))
+									images.AddRow(new ImageEntry(path));
+								else {
+									char suffix = 'a';
+									while (Utils.ImageExistsAtPath(path + suffix, out string newPath)) {
+										images.AddRow(new ImageEntry(newPath));
+										++suffix;
+									}
+								}
+							}
+						}
+					}
+				}
+				foreach (FieldEntry entry in fields.Entries) {
+					if (!Utils.KeepableFields.Contains(entry.Field))
+						entry.SetValue();
+					entry.OnFieldChanged();
+				}
+				cardBox.SelectedIndex = -1;
+
+			}
 
 		}
 
