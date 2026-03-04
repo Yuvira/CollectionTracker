@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -243,9 +244,29 @@ namespace CollectionTracker {
 		public ImageEntry() : this("") { }
 		public ImageEntry(string imagePath) : base() {
 			search = Utils.GenerateButton(new Rectangle(105, 0, 100, 30), "Search");
+			search.Click += SearchImage;
 			path = Utils.GenerateLabel(new Rectangle(210, 0, 670, 30), imagePath);
 			panel.Controls.Add(search);
 			panel.Controls.Add(path);
+		}
+
+		//Search
+		private void SearchImage(object sender, EventArgs e) {
+			OpenFileDialog dialog = new OpenFileDialog();
+			dialog.Title = "Select Image";
+			dialog.Filter = "All files(*.*) | *.*";
+			if (dialog.ShowDialog() == DialogResult.OK) {
+				string curDir = Directory.GetCurrentDirectory();
+				string filePath = dialog.FileName;
+				if (!filePath.Contains(curDir)) {
+					MessageBox.Show("Not a local path!");
+					return;
+				}
+				filePath = filePath.Remove(filePath.IndexOf(curDir), curDir.Length + 1);
+				path.Text = filePath;
+			}
+			else
+				path.Text = "";
 		}
 
 		//List generator

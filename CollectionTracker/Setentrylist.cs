@@ -80,8 +80,10 @@ namespace CollectionTracker {
 				if (dialog.ShowDialog() == DialogResult.OK) {
 					string curDir = Directory.GetCurrentDirectory();
 					string filePath = dialog.FileName;
-					if (!filePath.Contains(curDir))
+					if (!filePath.Contains(curDir)) {
+						MessageBox.Show("Not a local path!");
 						return;
+					}
 					filePath = filePath.Remove(filePath.IndexOf(curDir), curDir.Length + 1);
 					pathLabel.Text = filePath;
 					Utils.TryLoadImage(iconBox, filePath);
