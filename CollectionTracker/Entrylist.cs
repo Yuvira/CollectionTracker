@@ -156,13 +156,18 @@ namespace CollectionTracker {
 	public class FieldEntry : ItemEntry {
 
 		//Controls
-		private TextBox field;
+		private ComboBox field;
 		private TextBox value;
 
 		//Constructor
 		public FieldEntry() : this("", "") { }
 		public FieldEntry(string fieldString, string valueString) : base() {
-			field = Utils.GenerateTextBox(new Rectangle(105, 0, 100, 30), fieldString);
+			field = Utils.GenerateComboBox(new Rectangle(105, 0, 100, 30), ComboBoxStyle.DropDown, true);
+			if (TrackerForm.FieldContext == FieldContext.CARD)
+				field.Items.AddRange(TrackerForm.Catalog.Cards.SelectMany(c => c.Fields.Keys).Distinct().ToArray());
+			else if (TrackerForm.FieldContext == FieldContext.PRINT)
+				field.Items.AddRange(TrackerForm.Catalog.Printings.SelectMany(p => p.Fields.Keys).Distinct().ToArray());
+			field.Text = fieldString;
 			value = Utils.GenerateTextBox(new Rectangle(210, 0, 570, 30), valueString);
 			panel.Controls.Add(field);
 			panel.Controls.Add(value);
