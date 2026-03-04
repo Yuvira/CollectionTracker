@@ -582,11 +582,11 @@ namespace CollectionTracker {
 		public List<string> ImagePaths => imagePaths;
 
 		//Constructor
-		public Printing() : this(null, null, new List<Treatment>()) { }
-		public Printing(Set set, Card card, List<Treatment> treatments) {
+		public Printing() : this(null, null) { }
+		public Printing(Set set, Card card) {
 			this.set = set;
 			this.card = card;
-			this.treatments = new List<Treatment>(treatments);
+			treatments = new List<Treatment>();
 			fields = new Dictionary<string, string>();
 			imagePaths = new List<string>();
 		}

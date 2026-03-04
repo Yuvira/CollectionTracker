@@ -22,8 +22,8 @@ namespace CollectionTracker {
 		//Controls
 		private MenuStrip toolbar;
 		private ToolStripLabel catalogLabel;
+		private ToolStripDropDownButton entryDDButton;
 		private ToolStripButton saveButton;
-		private ToolStripButton setButton;
 		private ToolStripButton printListButton;
 
 		//Accessors
@@ -45,20 +45,32 @@ namespace CollectionTracker {
 			Text = "Collection Tracker";
 			KeyPreview = true;
 
-			//Generate toolbar and add home button / catalog label
+			//Toolbar
 			toolbar = new MenuStrip();
-			ToolStripDropDown dropDown = new ToolStripDropDown();
-			dropDown.Items.Add(Utils.GenerateTSButton("Home", OpenHomePage));
-			saveButton = Utils.GenerateTSButton("Save", SaveCatalog);
-			saveButton.Enabled = false;
-			dropDown.Items.Add(saveButton);
-			setButton = Utils.GenerateTSButton("Sets", OpenSetentries);
-			setButton.Enabled = false;
-			dropDown.Items.Add(setButton);
+
+			//File - Home / Save
+			ToolStripDropDown fileDropDown = new ToolStripDropDown();
+			fileDropDown.Items.Add(Utils.GenerateTSButton("Home", OpenHomePage));
+			saveButton = Utils.GenerateTSButton("Save", SaveCatalog, false);
+			fileDropDown.Items.Add(saveButton);
+			toolbar.Items.Add(Utils.GenerateTSDDButton("File", fileDropDown));
+
+			//Entries - Sets / Card / Printing
+			ToolStripDropDown entryDropDown = new ToolStripDropDown();
+			entryDropDown.Items.Add(Utils.GenerateTSButton("Sets", OpenSetentries));
+			entryDropDown.Items.Add(Utils.GenerateTSButton("Card", OpenCardEntry));
+			entryDropDown.Items.Add(Utils.GenerateTSButton("Printing", OpenPrintEntry));
+			entryDDButton = Utils.GenerateTSDDButton("Entries", entryDropDown, false);
+			toolbar.Items.Add(entryDDButton);
+
+			//Print list ref
 			printListButton = Utils.GenerateTSButton("Prints", ShowPrintlist);
-			toolbar.Items.Add(Utils.GenerateTSDDButton("File", dropDown));
+
+			//Label
 			catalogLabel = Utils.GenerateTSLabel("", true, 10);
 			toolbar.Items.Add(catalogLabel);
+
+			//Add
 			Controls.Add(toolbar);
 
 			//Initialize catalogs
@@ -101,7 +113,7 @@ namespace CollectionTracker {
 		}
 		private void EnableCatalogButtons() {
 			saveButton.Enabled = true;
-			setButton.Enabled = true;
+			entryDDButton.Enabled = true;
 		}
 
 		#endregion
@@ -111,6 +123,8 @@ namespace CollectionTracker {
 		//Open pages
 		public void OpenHomePage(object sender = null, EventArgs e = null) => SetPage(new Homepage(this));
 		public void OpenSetentries(object sender = null, EventArgs e = null) => SetPage(new Setentrylist(this));
+		public void OpenCardEntry(object sender = null, EventArgs e = null) => SetPage(new Cardentry(this));
+		public void OpenPrintEntry(object sender = null, EventArgs e = null) => SetPage(new Printentry(this));
 
 		//Replace current page
 		public void SetPage(TrackerPage page) {

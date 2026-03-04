@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -25,7 +26,7 @@ namespace CollectionTracker {
 		public static bool CardsAltered = true;
 
 		//Constructor
-		public Printentry(TrackerForm form, Printing print) : base(form) {
+		public Printentry(TrackerForm form, Printing print = null) : base(form) {
 
 			//Panel
 			listPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(800, panel.Height - 25), panel.Size, new Point(0, 0)));
@@ -68,7 +69,7 @@ namespace CollectionTracker {
 		}
 
 		//Load printing
-		public void LoadPrinting(Printing print) {
+		public void LoadPrinting(Printing print = null) {
 
 			//References
 			printref = print;
@@ -87,7 +88,8 @@ namespace CollectionTracker {
 				setBox.ResumeLayout();
 				SetsAltered = false;
 			}
-			setBox.SelectedItem = printref.Set;
+			if (printref  != null)
+				setBox.SelectedItem = printref.Set;
 
 			//Cards
 			if (CardsAltered) {
@@ -97,14 +99,15 @@ namespace CollectionTracker {
 				cardBox.ResumeLayout();
 				CardsAltered = false;
 			}
-			cardBox.SelectedItem = printref.Card;
+			if (printref != null)
+				cardBox.SelectedItem = printref.Card;
 
 			//Treatments
 			if (treatments != null) {
 				listPanel.Controls.Remove(treatments.Panel);
 				treatments.Panel.Dispose();
 			}
-			treatments = new Entrylist<TreatmentEntry>(this, "Treatments", TreatmentEntry.GenerateEntries(printref.Treatments.Select(t => t.Name).ToList()));
+			treatments = new Entrylist<TreatmentEntry>(this, "Treatments", printref == null ? new List<TreatmentEntry>() : TreatmentEntry.GenerateEntries(printref.Treatments.Select(t => t.Name).ToList()));
 			treatments.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(treatments.Panel);
 
@@ -113,7 +116,7 @@ namespace CollectionTracker {
 				listPanel.Controls.Remove(fields.Panel);
 				fields.Panel.Dispose();
 			}
-			fields = new Entrylist<FieldEntry>(this, "Fields", FieldEntry.GenerateEntries(printref.Fields));
+			fields = new Entrylist<FieldEntry>(this, "Fields", printref == null ? new List<FieldEntry>() : FieldEntry.GenerateEntries(printref.Fields));
 			fields.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(fields.Panel);
 
@@ -122,7 +125,7 @@ namespace CollectionTracker {
 				listPanel.Controls.Remove(images.Panel);
 				images.Panel.Dispose();
 			}
-			images = new Entrylist<ImageEntry>(this, "Images", ImageEntry.GenerateEntries(printref.ImagePaths));
+			images = new Entrylist<ImageEntry>(this, "Images", printref == null ? new List<ImageEntry>() : ImageEntry.GenerateEntries(printref.ImagePaths));
 			images.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(images.Panel);
 
@@ -149,6 +152,8 @@ namespace CollectionTracker {
 
 		//Save
 		private void SavePrinting(object sender, EventArgs e) {
+
+			//Copy to existing print ref
 			if (printref != null) {
 				if (setBox.SelectedItem != null && setBox.SelectedItem is Set set)
 					printref.CopySet(set);
@@ -157,12 +162,26 @@ namespace CollectionTracker {
 				printref.CopyTreatments(TreatmentEntry.GetEntryList(treatments.Entries));
 				printref.CopyFields(FieldEntry.GetEntryDict(fields.Entries));
 				printref.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
-				parent.SetPage(new Detailpage(parent, printref));
+				ReturnToDetails();
 			}
+
+			//Generate new printing
+			else {
+				Printing print = new Printing();
+				if (setBox.SelectedItem != null && setBox.SelectedItem is Set set)
+					print.CopySet(set);
+				if (cardBox.SelectedItem != null && cardBox.SelectedItem is Card card)
+					print.CopyCard(card);
+				print.CopyTreatments(TreatmentEntry.GetEntryList(treatments.Entries));
+				print.CopyFields(FieldEntry.GetEntryDict(fields.Entries));
+				print.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
+				LoadPrinting(null);
+			}
+
 		}
 
 		//Return
-		private void ReturnToDetails(object sender, EventArgs e) {
+		private void ReturnToDetails(object sender = null, EventArgs e = null) {
 			if (printref != null)
 				parent.SetPage(new Detailpage(parent, printref));
 		}

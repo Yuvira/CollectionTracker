@@ -246,18 +246,20 @@ namespace CollectionTracker {
 		}
 
 		//Toolstrip button
-		public static ToolStripButton GenerateTSButton(string text, EventHandler eventHandler) {
+		public static ToolStripButton GenerateTSButton(string text, EventHandler eventHandler, bool enabled = true) {
 			ToolStripButton button = new ToolStripButton();
 			button.Text = text;
 			button.Click += eventHandler;
+			button.Enabled = enabled;
 			return button;
 		}
 
 		//Toolstrip dropdown button
-		public static ToolStripDropDownButton GenerateTSDDButton(string text, ToolStripDropDown dropDown) {
+		public static ToolStripDropDownButton GenerateTSDDButton(string text, ToolStripDropDown dropDown, bool enabled = true) {
 			ToolStripDropDownButton button = new ToolStripDropDownButton();
 			button.Text = text;
 			button.DropDown = dropDown;
+			button.Enabled = enabled;
 			return button;
 		}
 

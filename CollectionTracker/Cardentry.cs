@@ -19,7 +19,7 @@ namespace CollectionTracker {
 		private Button returnButton;
 
 		//Constructor
-		public Cardentry(TrackerForm form, Card card, Printing print = null) : base(form) {
+		public Cardentry(TrackerForm form, Card card = null, Printing print = null) : base(form) {
 
 			//References
 			cardref = card;
@@ -37,17 +37,19 @@ namespace CollectionTracker {
 			listPanel.SuspendLayout();
 
 			//Fields
-			fields = new Entrylist<FieldEntry>(this, "Fields", FieldEntry.GenerateEntries(card.Fields));
+			fields = new Entrylist<FieldEntry>(this, "Fields", card == null ? new List<FieldEntry>() : FieldEntry.GenerateEntries(card.Fields));
 			fields.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(fields.Panel);
 
 			//Faces
 			faces = new List<Entrylist<FieldEntry>>();
-			foreach (Face face in card.Faces) {
-				Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(face.Fields));
-				fieldList.OnListResize += OnFieldsResized;
-				listPanel.Controls.Add(fieldList.Panel);
-				faces.Add(fieldList);
+			if (card != null) {
+				foreach (Face face in card.Faces) {
+					Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(face.Fields));
+					fieldList.OnListResize += OnFieldsResized;
+					listPanel.Controls.Add(fieldList.Panel);
+					faces.Add(fieldList);
+				}
 			}
 
 			//Save button
@@ -86,19 +88,40 @@ namespace CollectionTracker {
 
 		//Save
 		private void SaveCard(object sender, EventArgs e) {
+
+			//Faces
+			List<Dictionary<string, string>> faceDicts = new List<Dictionary<string, string>>();
+			foreach (Entrylist<FieldEntry> face in faces)
+				faceDicts.Add(FieldEntry.GetEntryDict(face.Entries));
+
+			//Copy to existing card ref
 			if (cardref != null) {
 				string name = printref.GetField("name");
-				List<Dictionary<string, string>> faceDicts = new List<Dictionary<string, string>>();
-				foreach (Entrylist<FieldEntry> face in faces)
-					faceDicts.Add(FieldEntry.GetEntryDict(face.Entries));
 				cardref.CopyFields(FieldEntry.GetEntryDict(fields.Entries), faceDicts);
 				if (!printref.GetField("name").Equals(name))
 					Printentry.CardsAltered = true;
 			}
+
+			//Generate new card
+			else {
+				Card card = new Card();
+				card.CopyFields(FieldEntry.GetEntryDict(fields.Entries), faceDicts);
+				TrackerForm.Catalog.Cards.Add(card);
+				Printentry.CardsAltered = true;
+			}
+
+			//Return to details
 			if (printref != null)
-				parent.SetPage(new Detailpage(parent, printref));
+				ReturnToDetails();
+
+			//Generate new
+			else
+				parent.SetPage(new Cardentry(parent));
+
 		}
-		private void ReturnToDetails(object sender, EventArgs e) {
+
+		//Return to details
+		private void ReturnToDetails(object sender = null, EventArgs e = null) {
 			if (printref != null)
 				parent.SetPage(new Detailpage(parent, printref));
 		}
