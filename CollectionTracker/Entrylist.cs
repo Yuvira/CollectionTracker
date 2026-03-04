@@ -239,6 +239,7 @@ namespace CollectionTracker {
 		//Controls
 		private Button search;
 		private Label path;
+		private static PictureBox cardtip;
 
 		//Constructor
 		public ImageEntry() : this("") { }
@@ -246,6 +247,12 @@ namespace CollectionTracker {
 			search = Utils.GenerateButton(new Rectangle(105, 0, 100, 30), "Search");
 			search.Click += SearchImage;
 			path = Utils.GenerateLabel(new Rectangle(210, 0, 670, 30), imagePath);
+			path.MouseEnter += ShowCardtip;
+			path.MouseLeave += HideCardtip;
+			if (cardtip == null) {
+				cardtip = Utils.GeneratePictureBox(new Rectangle(0, 0, 250, 350));
+				cardtip.Hide();
+			}
 			panel.Controls.Add(search);
 			panel.Controls.Add(path);
 		}
@@ -268,6 +275,20 @@ namespace CollectionTracker {
 			else
 				path.Text = "";
 		}
+
+		//Show cardtip relative to given control
+		private void ShowCardtip(object sender, EventArgs e) {
+			if (cardtip.Parent == null)
+				panel.Parent.Parent.Controls.Add(cardtip);
+			Utils.TryLoadCardImage(cardtip, path.Text, TrackerForm.Catalog.Game);
+			Point pos = panel.Parent.Location.Add(panel.Location).Add(path.Location);
+			pos.X += (Utils.MeasureWidth(path.Text) / 2) - (cardtip.Width / 2);
+			pos.Y += TrackerPage.TEXT_HEIGHT;
+			cardtip.Show();
+			cardtip.BringToFront();
+			cardtip.Location = pos;
+		}
+		private void HideCardtip(object sender, EventArgs e) => cardtip.Hide();
 
 		//List generator
 		public static List<ImageEntry> GenerateEntries(List<string> paths) {
