@@ -22,6 +22,8 @@ namespace CollectionTracker {
 		private MenuStrip toolbar;
 		private ToolStripLabel catalogLabel;
 		private ToolStripDropDownButton entryDDButton;
+		private ToolStripDropDownButton keywordDDButton;
+		private ToolStripDropDownMenu keywordDropDown;
 		private ToolStripButton saveButton;
 		private ToolStripButton printListButton;
 
@@ -65,6 +67,7 @@ namespace CollectionTracker {
 			entryDropDown.Items.Add(Utils.GenerateTSButton("Sets", OpenSetentries));
 			entryDropDown.Items.Add(Utils.GenerateTSButton("Card", OpenCardEntry));
 			entryDropDown.Items.Add(Utils.GenerateTSButton("Printing", OpenPrintEntry));
+			entryDropDown.Items.Add(Utils.GenerateTSButton("Keywords", OpenKeywordentries));
 			entryDDButton = Utils.GenerateTSDDButton("Entries", entryDropDown, false);
 			toolbar.Items.Add(entryDDButton);
 
@@ -74,6 +77,15 @@ namespace CollectionTracker {
 			//Label
 			catalogLabel = Utils.GenerateTSLabel("", true, 10);
 			toolbar.Items.Add(catalogLabel);
+
+			//Keywords
+			keywordDropDown = new ToolStripDropDownMenu();
+			keywordDropDown.ShowCheckMargin = false;
+			keywordDropDown.ShowImageMargin = false;
+			keywordDropDown.MaximumSize = new Size(keywordDropDown.MaximumSize.Width, 900);
+			keywordDDButton = Utils.GenerateTSDDButton("Keywords", keywordDropDown, false);
+			keywordDDButton.Alignment = ToolStripItemAlignment.Right;
+			toolbar.Items.Add(keywordDDButton);
 
 			//Add
 			Controls.Add(toolbar);
@@ -119,8 +131,10 @@ namespace CollectionTracker {
 		private void EnableCatalogButtons() {
 			saveButton.Enabled = true;
 			entryDDButton.Enabled = true;
+			keywordDDButton.Enabled = true;
 			Printentry.SetsAltered = true;
 			Printentry.CardsAltered = true;
+			UpdateKeywords();
 		}
 
 		#endregion
@@ -133,6 +147,7 @@ namespace CollectionTracker {
 		public void OpenSetentries(object sender, EventArgs e) => SetPage<Setentrylist>();
 		public void OpenCardEntry(object sender, EventArgs e) => SetPage<Cardentry>();
 		public void OpenPrintEntry(object sender, EventArgs e) => SetPage<Printentry>();
+		public void OpenKeywordentries(object sender, EventArgs e) => SetPage<Keywordentrylist>();
 
 		//Set new page
 		public void SetPage<T>(Card cardref = null, Printing printref = null, string searchTerms = "") where T : TrackerPage {
@@ -200,6 +215,8 @@ namespace CollectionTracker {
 					Page = new Printentry(printref);
 				else if (typeof(T) == typeof(Setentrylist))
 					Page = new Setentrylist();
+				else if (typeof(T) == typeof(Keywordentrylist))
+					Page = new Keywordentrylist();
 				Controls.Add(Page.Panel);
 			}
 
@@ -209,6 +226,19 @@ namespace CollectionTracker {
 		private void InvokePageChangeError(string error) {
 			MessageBox.Show(error);
 			Page = new Homepage();
+		}
+
+		#endregion
+
+		#region Utils
+
+		//Update keyword dropdown
+		public void UpdateKeywords() {
+			foreach (ToolStripButton button in keywordDropDown.Items)
+				button.Dispose();
+			keywordDropDown.Items.Clear();
+			foreach(string keyword in Catalog.Keywords.Keys)
+				keywordDropDown.Items.Add(Utils.GenerateTSButton(keyword, (s, e) => Clipboard.SetText(Catalog.Keywords[keyword])));
 		}
 
 		#endregion

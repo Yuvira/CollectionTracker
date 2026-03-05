@@ -36,6 +36,7 @@ namespace CollectionTracker {
 		[ProtoMember(2)] private List<Card> cards;
 		[ProtoMember(3)] private List<Printing> printings;
 		[ProtoMember(4)] private List<Symbol> symbols;
+		[ProtoMember(6)] private Dictionary<string, string> keywords;
 		[ProtoMember(5)] private Game game;
 
 		//Accessors
@@ -43,6 +44,7 @@ namespace CollectionTracker {
 		public List<Card> Cards => cards;
 		public List<Printing> Printings => printings;
 		public List<Symbol> Symbols => symbols;
+		public Dictionary<string, string> Keywords => keywords;
 		public Game Game => game;
 
 		//Constructor
@@ -51,6 +53,7 @@ namespace CollectionTracker {
 			cards = new List<Card>();
 			printings = new List<Printing>();
 			symbols = new List<Symbol>();
+			keywords = new Dictionary<string, string>();
 			game = Game.NONE;
 		}
 
@@ -106,6 +109,14 @@ namespace CollectionTracker {
 				print.LoadRefs(this);
 			game = Game.PKMN;
 		}
+
+		#endregion
+
+		#region Field Copy
+
+		//Copy keywords
+		public void CopyKeywords(Dictionary<string, string> keywords) =>
+			this.keywords = new Dictionary<string, string>(keywords);
 
 		#endregion
 

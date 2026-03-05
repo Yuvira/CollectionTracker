@@ -82,6 +82,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Homepage.cs" />
+    <Compile Include="Keywordentrylist.cs" />
     <Compile Include="MTG.cs" />
     <Compile Include="MTG_Form.cs">
       <SubType>Form</SubType>
