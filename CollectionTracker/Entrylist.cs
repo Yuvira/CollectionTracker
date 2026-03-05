@@ -67,6 +67,7 @@ namespace CollectionTracker {
 			entry.OnClickRemove += RemoveRow;
 			entry.OnClickUp += MoveRow;
 			entry.OnClickDown += MoveRow;
+			entry.OnResize += ResizeRows;
 		}
 
 		//Add row
@@ -125,6 +126,17 @@ namespace CollectionTracker {
 			entryT2.Panel.Location = entryT2.Panel.Location.Add(0, (entryT.Panel.Height + 5) * -move);
 		}
 
+		//Resize rows
+		private void ResizeRows(ItemEntry entry, int delta) {
+			if (!(entry is T entryT) || !entries.Contains(entryT))
+				return;
+			for (int i = entries.IndexOf(entryT) + 1; i < entries.Count; ++i)
+				entries[i].Panel.Location = entries[i].Panel.Location.Add(0, delta);
+			add.Location = add.Location.Add(0, delta);
+			panel.Height += delta;
+			OnListResize?.Invoke();
+		}
+
 	}
 
 	#endregion
@@ -147,6 +159,7 @@ namespace CollectionTracker {
 		public Action<ItemEntry> OnClickRemove;
 		public Action<ItemEntry, int> OnClickUp;
 		public Action<ItemEntry, int> OnClickDown;
+		public Action<ItemEntry, int> OnResize;
 
 		//Constructor
 		public ItemEntry() {
@@ -215,6 +228,22 @@ namespace CollectionTracker {
 				textValue.Text = listValue.Text;
 				listValue.Hide();
 				textValue.Show();
+			}
+			if (Utils.MultilineFields.Contains(field.Text)) {
+				if (!textValue.Multiline) {
+					textValue.Multiline = true;
+					textValue.ScrollBars = ScrollBars.Both;
+					textValue.Height = 120;
+					panel.Height = 120;
+					OnResize?.Invoke(this, 90);
+				}
+			}
+			else if (textValue.Multiline) {
+				textValue.Multiline = false;
+				textValue.ScrollBars = ScrollBars.None;
+				textValue.Height = 30;
+				panel.Height = 30;
+				OnResize?.Invoke(this, -90);
 			}
 		}
 
