@@ -132,6 +132,12 @@ namespace CollectionTracker {
 			"rarity",
 		};
 
+		//Fields that contain multiline text
+		public static readonly List<string> MultilineFields = new List<string> {
+			"oracle",
+			"flavor",
+		};
+
 		//String-defined colors
 		public static readonly Dictionary<string, Color> ColorDefinitions = new Dictionary<string, Color> {
 			{ "red"   , Color.Red   },
