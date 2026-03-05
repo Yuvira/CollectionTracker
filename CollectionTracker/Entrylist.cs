@@ -167,6 +167,9 @@ namespace CollectionTracker {
 			remove = Utils.GenerateButton(new Rectangle(0, 0, 30, 30), "-");
 			up = Utils.GenerateButton(new Rectangle(35, 0, 30, 30), "↑");
 			down = Utils.GenerateButton(new Rectangle(70, 0, 30, 30), "↓");
+			remove.TabStop = false;
+			up.TabStop = false;
+			down.TabStop = false;
 			remove.Click += Remove;
 			up.Click += Up;
 			down.Click += Down;
