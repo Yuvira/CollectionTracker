@@ -234,8 +234,8 @@ namespace CollectionTracker {
 
 		//Update keyword dropdown
 		public void UpdateKeywords() {
-			foreach (ToolStripButton button in keywordDropDown.Items)
-				button.Dispose();
+			for (int i = 0; i < keywordDropDown.Items.Count; ++i)
+				keywordDropDown.Items[i].Dispose();
 			keywordDropDown.Items.Clear();
 			foreach(string keyword in Catalog.Keywords.Keys)
 				keywordDropDown.Items.Add(Utils.GenerateTSButton(keyword, (s, e) => Clipboard.SetText(Catalog.Keywords[keyword])));
