@@ -170,12 +170,20 @@ namespace CollectionTracker {
 		//Save
 		private void SavePrinting(object sender, EventArgs e) {
 
+			//Skip if invalid references
+			if (setBox.SelectedItem == null || !(setBox.SelectedItem is Set set)) {
+				MessageBox.Show("Invalid set reference!");
+				return;
+			}
+			if (cardBox.SelectedItem == null || !(cardBox.SelectedItem is Card card)) {
+				MessageBox.Show("Invalid card reference!");
+				return;
+			}
+
 			//Copy to existing print ref
 			if (printref != null) {
-				if (setBox.SelectedItem != null && setBox.SelectedItem is Set set)
-					printref.CopySet(set);
-				if (cardBox.SelectedItem != null && cardBox.SelectedItem is Card card)
-					printref.CopyCard(card);
+				printref.CopySet(set);
+				printref.CopyCard(card);
 				printref.CopyTreatments(TreatmentEntry.GetEntryList(treatments.Entries));
 				printref.CopyFields(FieldEntry.GetEntryDict(fields.Entries));
 				printref.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
@@ -187,10 +195,8 @@ namespace CollectionTracker {
 
 				//Generate printing and add to catalog
 				Printing print = new Printing();
-				if (setBox.SelectedItem != null && setBox.SelectedItem is Set set)
-					print.CopySet(set);
-				if (cardBox.SelectedItem != null && cardBox.SelectedItem is Card card)
-					print.CopyCard(card);
+				print.CopySet(set);
+				print.CopyCard(card);
 				print.CopyTreatments(TreatmentEntry.GetEntryList(treatments.Entries));
 				print.CopyFields(FieldEntry.GetEntryDict(fields.Entries));
 				print.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
@@ -216,18 +222,16 @@ namespace CollectionTracker {
 						cn = prefix + value.ToString().PadLeft(width, '0');
 						fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.SetValue(cn);
 						images.ClearRows();
-						if (setBox.SelectedItem != null && setBox.SelectedItem is Set set_) {
-							fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(set_.Code.ToLower() + '/' + value.ToString());
-							if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
-								string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + set_.Code + '/' + cn;
-								if (Utils.ImageExistsAtPath(path, out path))
-									images.AddRow(new ImageEntry(path));
-								else {
-									char suffix = 'a';
-									while (Utils.ImageExistsAtPath(path + suffix, out string newPath)) {
-										images.AddRow(new ImageEntry(newPath));
-										++suffix;
-									}
+						fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(set.Code.ToLower() + '/' + value.ToString());
+						if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
+							string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + set.Code + '/' + cn;
+							if (Utils.ImageExistsAtPath(path, out path))
+								images.AddRow(new ImageEntry(path));
+							else {
+								char suffix = 'a';
+								while (Utils.ImageExistsAtPath(path + suffix, out string newPath)) {
+									images.AddRow(new ImageEntry(newPath));
+									++suffix;
 								}
 							}
 						}
@@ -238,7 +242,8 @@ namespace CollectionTracker {
 						entry.SetValue();
 					entry.OnFieldChanged();
 				}
-				cardBox.SelectedIndex = -1;
+				if (card.TryGetField("name", out string name) && !name.Equals("_"))
+					cardBox.SelectedIndex = -1;
 
 			}
 
