@@ -443,6 +443,12 @@ namespace CollectionTracker {
 					textPos.Y += LINE_SPACING + GenerateDescription($"<b>{pt}", facePanel, textPos, false, true);
 				}
 
+				//Delete panel if no content
+				if (textPos.Y == TOP_PAD) {
+					facePanel.Dispose();
+					continue;
+				}
+
 				//Panel height
 				facePanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
 				panelPos.Y += facePanel.Height + 5;
