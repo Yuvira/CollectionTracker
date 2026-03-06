@@ -296,8 +296,8 @@ namespace CollectionTracker {
 						entry.SetValue();
 					entry.OnFieldChanged();
 				}
-				foreach (Entrylist<FieldEntry> face in faces)
-					face.ClearRows();
+				while (faces.Count > 0)
+					faces[0].ClearRows();
 				if (card.TryGetField("name", out string name) && !name.Equals("_"))
 					cardBox.SelectedIndex = -1;
 
