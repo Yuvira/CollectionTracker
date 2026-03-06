@@ -48,6 +48,7 @@ namespace CollectionTracker {
 		//On resize
 		private void OnFieldsResized() {
 			Point pos = new Point(0, 0);
+			listPanel.AutoScrollPosition = pos;
 			keywords.Panel.Location = pos;
 			pos.Y += keywords.Panel.Height + 5;
 			saveButton.Location = pos;
