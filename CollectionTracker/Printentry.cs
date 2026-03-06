@@ -154,6 +154,7 @@ namespace CollectionTracker {
 			if (printref != null) {
 				foreach (Face face in printref.Faces) {
 					Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(face.Fields));
+					fieldList.OnListEmpty += OnFaceEmpty;
 					fieldList.OnListResize += OnFieldsResized;
 					faces.Add(fieldList);
 					listPanel.Controls.Add(fieldList.Panel);
@@ -295,6 +296,8 @@ namespace CollectionTracker {
 						entry.SetValue();
 					entry.OnFieldChanged();
 				}
+				foreach (Entrylist<FieldEntry> face in faces)
+					face.ClearRows();
 				if (card.TryGetField("name", out string name) && !name.Equals("_"))
 					cardBox.SelectedIndex = -1;
 
