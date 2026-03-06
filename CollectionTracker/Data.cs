@@ -519,13 +519,40 @@ namespace CollectionTracker {
 
 		#region Field Accessors
 
-		//Get field
-		public bool TryGetField(string field, out string value) {
+		//Get field from base card
+		public bool TryGetBaseField(string field, out string value) {
 			if (fields.ContainsKey(field)) {
 				value = fields[field];
 				return true;
 			}
 			value = "";
+			return false;
+		}
+
+		//Get field from specific face
+		public bool TryGetFaceField(string field, int face, out string value) {
+			if (face < 0)
+				return TryGetBaseField(field, out value);
+			if (face >= 0 && face < faces.Count && faces[face].TryGetField(field, out value))
+				return true;
+			value = "";
+			return false;
+		}
+
+		//Get first instance of field
+		public bool TryGetFirstField(string field, out string value) {
+			for (int i = -1; i < faces.Count; ++i)
+				if (TryGetFaceField(field, i, out value))
+					return true;
+			value = "";
+			return false;
+		}
+
+		//Get field from all faces
+		public bool TryGetField(string field, out string value) {
+			value = "";
+			if (fields.ContainsKey(field))
+				value = fields[field];
 			foreach (Face face in faces) {
 				if (face.TryGetField(field, out string faceValue)) {
 					if (string.IsNullOrEmpty(value))
@@ -534,21 +561,8 @@ namespace CollectionTracker {
 						value += " // " + faceValue;
 				}
 			}
-			return !string.IsNullOrEmpty(value);
+			return !string.IsNullOrWhiteSpace(value);
 		}
-
-		//Get field from specific face
-		public bool TryGetField(string field, int face, out string value) {
-			if (face >= 0 && face < faces.Count && faces[face].TryGetField(field, out value))
-				return true;
-			if (face == 0 && fields.ContainsKey(field)) {
-				value = fields[field];
-				return true;
-			}
-			value = "";
-			return false;
-		}
-
 
 		#endregion
 

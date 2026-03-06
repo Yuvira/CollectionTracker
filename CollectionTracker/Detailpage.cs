@@ -369,12 +369,12 @@ namespace CollectionTracker {
 
 		//Set panel color
 		private void SetPanelColorsMTG(List<TrackerPanel> panels, string color = null) {
-			bool hasColor = color != null;
-			if (!hasColor)
-				hasColor = printing.Card.TryGetField("color", 0, out color);
-			color = color.ToLower();
+			if (color == null && printing.Card.TryGetFirstField("color", out string newColor))
+				color = newColor;
+			if (color != null)
+				color = color.ToLower();
 			foreach (TrackerPanel panel in panels) {
-				if (!hasColor)
+				if (color == null)
 					panel.AddBorder(Utils.COLOR_FRONT, 1);
 				else if (color.Length == 0)
 					panel.AddBorder(SystemColors.ControlDarkDark, 3);
@@ -400,7 +400,7 @@ namespace CollectionTracker {
 			Size panelSize = new Size(450, 0);
 
 			//Print faces
-			for (int i = 0; i < Math.Max(printing.Card.Faces.Count, 1); ++i) {
+			for (int i = -1; i < printing.Card.Faces.Count; ++i) {
 
 				//Position
 				textPos = new Point(LEFT_PAD, TOP_PAD);
@@ -410,24 +410,24 @@ namespace CollectionTracker {
 
 				//Name and cost
 				int titleHeight = 0;
-				if (printing.Card.TryGetField("name", i, out string name))
+				if (printing.Card.TryGetFaceField("name", i, out string name))
 					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription($"<b>{name}", facePanel, textPos, false));
-				if (printing.Card.TryGetField("cost", i, out string cost))
+				if (printing.Card.TryGetFaceField("cost", i, out string cost))
 					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(cost, facePanel, textPos, false, true));
 				textPos.Y += titleHeight;
 
 				//Type line
-				if (printing.Card.TryGetField("type", i, out string type))
+				if (printing.Card.TryGetFaceField("type", i, out string type))
 					textPos.Y += LINE_SPACING + GenerateDescription($"<b>{type}", facePanel, textPos, false);
 
 				//Oracle text
-				if (printing.Card.TryGetField("oracle", i, out string oracle))
+				if (printing.Card.TryGetFaceField("oracle", i, out string oracle))
 					textPos.Y += LINE_SPACING + GenerateDescription(oracle, facePanel, textPos);
 
 				//Power and toughness
-				bool hasPower = printing.Card.TryGetField("power", i, out string power);
-				bool hasToughness = printing.Card.TryGetField("toughness", i, out string toughness);
-				bool hasLoyalty = printing.Card.TryGetField("loyalty", i, out string loyalty);
+				bool hasPower = printing.Card.TryGetFaceField("power", i, out string power);
+				bool hasToughness = printing.Card.TryGetFaceField("toughness", i, out string toughness);
+				bool hasLoyalty = printing.Card.TryGetFaceField("loyalty", i, out string loyalty);
 				if (hasPower || hasToughness || hasLoyalty) {
 					string pt = "";
 					if (hasPower && hasToughness)
@@ -448,7 +448,7 @@ namespace CollectionTracker {
 				panelPos.Y += facePanel.Height + 5;
 
 				//Color face panel
-				if (printing.Card.TryGetField("color", i, out string color))
+				if (printing.Card.TryGetFaceField("color", i, out string color))
 					SetPanelColorsMTG(new List<TrackerPanel> { facePanel }, color);
 				else
 					borderPanels.Add(facePanel);
@@ -457,6 +457,28 @@ namespace CollectionTracker {
 				dataPanels.Add(facePanel);
 				contentPanel.Controls.Add(facePanel);
 
+			}
+
+			//Print footer
+			bool hasFlavor = printing.TryGetField("flavor", out string flavor);
+			bool hasArtist = printing.TryGetField("artist", out string artist);
+			bool hasRarity = printing.TryGetField("rarity", out string rarity);
+			if (hasRarity || hasFlavor || hasArtist) {
+				textPos = new Point(LEFT_PAD, TOP_PAD);
+				TrackerPanel footerPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
+				if (hasFlavor)
+					textPos.Y += LINE_SPACING + GenerateDescription($"<i>{flavor}", footerPanel, textPos);
+				int footerHeight = 0;
+				if (hasArtist)
+					footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription($"🖌 {artist}", footerPanel, textPos, false));
+				if (hasRarity)
+					footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription(rarity, footerPanel, textPos, false, true));
+				textPos.Y += footerHeight;
+				footerPanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
+				panelPos.Y += footerPanel.Height + 5;
+				borderPanels.Add(footerPanel);
+				dataPanels.Add(footerPanel);
+				contentPanel.Controls.Add(footerPanel);
 			}
 
 			//View panel
@@ -521,7 +543,7 @@ namespace CollectionTracker {
 				TrackerPanel pendulumPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 				if (printing.Card.TryGetField("pendulum", out string pendulum))
 					textPos.Y += LINE_SPACING + GenerateDescription($"<b>Scale {pendulum}", pendulumPanel, textPos, false);
-				if (printing.Card.TryGetField("oracle", 0, out oracle))
+				if (printing.Card.TryGetFaceField("oracle", 0, out oracle))
 					textPos.Y += LINE_SPACING + GenerateDescription(oracle, pendulumPanel, textPos);
 				pendulumPanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
 				panelPos.Y += pendulumPanel.Height + 5;
@@ -535,7 +557,7 @@ namespace CollectionTracker {
 			TrackerPanel oraclePanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 			if (printing.Card.TryGetField("type", out string type))
 				textPos.Y += LINE_SPACING + GenerateDescription($"<b>{type}", oraclePanel, textPos, false);
-			if ((printing.Card.IsMultiface && printing.Card.TryGetField("oracle", 1, out oracle)) || printing.Card.TryGetField("oracle", out oracle))
+			if ((printing.Card.IsMultiface && printing.Card.TryGetFaceField("oracle", 1, out oracle)) || printing.Card.TryGetField("oracle", out oracle))
 				textPos.Y += LINE_SPACING + GenerateDescription(oracle, oraclePanel, textPos);
 			bool hasAtk = printing.Card.TryGetField("attack", out string atk);
 			bool hasDef = printing.Card.TryGetField("defense", out string def);
