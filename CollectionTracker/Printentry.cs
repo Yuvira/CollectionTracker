@@ -12,12 +12,14 @@ namespace CollectionTracker {
 		private Printing printref;
 		private Entrylist<TreatmentEntry> treatments;
 		private Entrylist<FieldEntry> fields;
+		private List<Entrylist<FieldEntry>> faces;
 		private Entrylist<ImageEntry> images;
 
 		//Controls
 		private TrackerPanel listPanel;
 		private ComboBox setBox;
 		private ComboBox cardBox;
+		private Button addFaceButton;
 		private Button saveButton;
 		private Button returnButton;
 
@@ -49,14 +51,20 @@ namespace CollectionTracker {
 			treatments = null;
 			fields = null;
 			images = null;
+			faces = new List<Entrylist<FieldEntry>>();
+
+			//Add face button
+			addFaceButton = Utils.GenerateButton(new Rectangle(0, 70, 30, 30), "+");
+			addFaceButton.Click += AddFace;
+			listPanel.Controls.Add(addFaceButton);
 
 			//Save button
-			saveButton = Utils.GenerateButton(new Rectangle(0, 70, 100, BUTTON_HEIGHT), "Save");
+			saveButton = Utils.GenerateButton(new Rectangle(35, 70, 100, 30), "Save");
 			saveButton.Click += SavePrinting;
 			listPanel.Controls.Add(saveButton);
 
 			//Return button
-			returnButton = Utils.GenerateButton(new Rectangle(105, 70, 100, BUTTON_HEIGHT), "Return");
+			returnButton = Utils.GenerateButton(new Rectangle(140, 70, 100, 30), "Return");
 			returnButton.Click += ReturnToDetails;
 			listPanel.Controls.Add(returnButton);
 
@@ -137,6 +145,21 @@ namespace CollectionTracker {
 			fields.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(fields.Panel);
 
+			//Faces
+			for (int i = 0; i < faces.Count; ++i) {
+				listPanel.Controls.Remove(faces[i].Panel);
+				faces[i].Panel.Dispose();
+			}
+			faces.Clear();
+			if (printref != null) {
+				foreach (Face face in printref.Faces) {
+					Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(face.Fields));
+					fieldList.OnListResize += OnFieldsResized;
+					faces.Add(fieldList);
+					listPanel.Controls.Add(fieldList.Panel);
+				}
+			}
+
 			//Images
 			if (images != null) {
 				listPanel.Controls.Remove(images.Panel);
@@ -154,6 +177,25 @@ namespace CollectionTracker {
 
 		}
 
+		//Add face
+		private void AddFace(object sender, EventArgs e) {
+			Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(new Dictionary<string, string>()));
+			fieldList.OnListEmpty += OnFaceEmpty;
+			fieldList.OnListResize += OnFieldsResized;
+			faces.Add(fieldList);
+			listPanel.Controls.Add(fieldList.Panel);
+			OnFieldsResized();
+		}
+
+		//On empty
+		private void OnFaceEmpty(Entrylist<FieldEntry> list) {
+			if (!faces.Contains(list))
+				return;
+			faces.Remove(list);
+			listPanel.Controls.Remove(list.Panel);
+			list.Panel.Dispose();
+		}
+
 		//On resize
 		private void OnFieldsResized() {
 			Point pos = new Point(0, 70);
@@ -161,10 +203,16 @@ namespace CollectionTracker {
 			pos.Y += treatments.Panel.Height + 5;
 			fields.Panel.Location = pos;
 			pos.Y += fields.Panel.Height + 5;
+			foreach (Entrylist<FieldEntry> face in faces) {
+				face.Panel.Location = pos;
+				pos.Y += face.Panel.Height + 5;
+			}
+			addFaceButton.Location = pos;
+			pos.Y += 35;
 			images.Panel.Location = pos;
 			pos.Y += images.Panel.Height + 5;
 			saveButton.Location = pos;
-			returnButton.Location = new Point(105, pos.Y);
+			returnButton.Location = pos.Add(105, 0);
 		}
 
 		//Save
@@ -180,12 +228,17 @@ namespace CollectionTracker {
 				return;
 			}
 
+			//Faces
+			List<Dictionary<string, string>> faceDicts = new List<Dictionary<string, string>>();
+			foreach (Entrylist<FieldEntry> face in faces)
+				faceDicts.Add(FieldEntry.GetEntryDict(face.Entries));
+
 			//Copy to existing print ref
 			if (printref != null) {
 				printref.CopySet(set);
 				printref.CopyCard(card);
 				printref.CopyTreatments(TreatmentEntry.GetEntryList(treatments.Entries));
-				printref.CopyFields(FieldEntry.GetEntryDict(fields.Entries));
+				printref.CopyFields(FieldEntry.GetEntryDict(fields.Entries), faceDicts);
 				printref.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
 				ReturnToDetails();
 			}
@@ -198,7 +251,7 @@ namespace CollectionTracker {
 				print.CopySet(set);
 				print.CopyCard(card);
 				print.CopyTreatments(TreatmentEntry.GetEntryList(treatments.Entries));
-				print.CopyFields(FieldEntry.GetEntryDict(fields.Entries));
+				print.CopyFields(FieldEntry.GetEntryDict(fields.Entries), faceDicts);
 				print.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
 				TrackerForm.Catalog.Printings.Add(print);
 

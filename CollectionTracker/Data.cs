@@ -601,6 +601,7 @@ namespace CollectionTracker {
 		[ProtoMember(2)] private int cardIndex;
 		[ProtoMember(3)] private List<Treatment> treatments;
 		[ProtoMember(4)] private Dictionary<string, string> fields;
+		[ProtoMember(6)] private List<Face> faces;
 		[ProtoMember(5)] private List<string> imagePaths;
 
 		//Private properties
@@ -612,6 +613,7 @@ namespace CollectionTracker {
 		public Card Card => card;
 		public List<Treatment> Treatments => treatments;
 		public Dictionary<string, string> Fields => fields;
+		public List<Face> Faces => faces;
 		public string Date => TryGetField("date", out string value) ? value : Set.Date;
 		public bool IsOwned => OwnedCount > 0;
 		public int OwnedCount => treatments.Sum(t => t.OwnedCount);
@@ -624,6 +626,7 @@ namespace CollectionTracker {
 			this.card = card;
 			treatments = new List<Treatment>();
 			fields = new Dictionary<string, string>();
+			faces = new List<Face>();
 			imagePaths = new List<string>();
 		}
 
@@ -714,12 +717,37 @@ namespace CollectionTracker {
 			}
 			this.treatments = new List<Treatment>(treatments);
 		}
-		public void CopyFields(Dictionary<string, string> fields) => this.fields = new Dictionary<string, string>(fields);
+		public void CopyFields(Dictionary<string, string> fields, List<Dictionary<string, string>> faces) {
+			this.fields = new Dictionary<string, string>(fields);
+			this.faces = new List<Face>();
+			foreach (Dictionary<string, string> face in faces)
+				this.faces.Add(new Face(face));
+		}
 		public void CopyImgPaths(List<string> paths) => this.imagePaths = new List<string>(paths);
 
 		#endregion
 
 		#region Field Accessors
+
+		//Get field from base printing
+		public bool TryGetBaseField(string field, out string value) {
+			if (fields.ContainsKey(field)) {
+				value = fields[field];
+				return true;
+			}
+			value = "";
+			return false;
+		}
+
+		//Get field from specific face
+		public bool TryGetFaceField(string field, int face, out string value) {
+			if (face < 0)
+				return TryGetBaseField(field, out value);
+			if (face >= 0 && face < faces.Count && faces[face].TryGetField(field, out value))
+				return true;
+			value = "";
+			return false;
+		}
 
 		//Get field
 		public bool TryGetField(string field, out string value) {

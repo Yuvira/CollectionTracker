@@ -395,7 +395,7 @@ namespace CollectionTracker {
 		private void LayoutDataMTG() {
 
 			//Y Position
-			Point textPos;
+			Point textPos = new Point(LEFT_PAD, TOP_PAD);
 			Point panelPos = new Point(410, 5);
 			Size panelSize = new Size(450, 0);
 
@@ -403,7 +403,7 @@ namespace CollectionTracker {
 			for (int i = -1; i < printing.Card.Faces.Count; ++i) {
 
 				//Position
-				textPos = new Point(LEFT_PAD, TOP_PAD);
+				textPos.Y = TOP_PAD;
 
 				//Panel
 				TrackerPanel facePanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
@@ -463,12 +463,36 @@ namespace CollectionTracker {
 				dataPanels.Add(facePanel);
 				contentPanel.Controls.Add(facePanel);
 
+				//Flavor footer
+				if (i >= 0) {
+					bool faceHasFlavor = printing.TryGetFaceField("flavor", i, out string faceFlavor);
+					bool faceHasArtist = printing.TryGetFaceField("artist", i, out string faceArtist);
+					bool faceHasRarity = printing.TryGetFaceField("rarity", i, out string faceRarity);
+					if (faceHasRarity || faceHasFlavor || faceHasArtist) {
+						textPos.Y = TOP_PAD;
+						TrackerPanel footerPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
+						if (faceHasFlavor)
+							textPos.Y += LINE_SPACING + GenerateDescription($"<i>{faceFlavor}", footerPanel, textPos);
+						int footerHeight = 0;
+						if (faceHasArtist)
+							footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription($"🖌 {faceArtist}", footerPanel, textPos, false));
+						if (faceHasRarity)
+							footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription(faceRarity, footerPanel, textPos, false, true));
+						textPos.Y += footerHeight;
+						footerPanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
+						panelPos.Y += footerPanel.Height + 5;
+						borderPanels.Add(footerPanel);
+						dataPanels.Add(footerPanel);
+						contentPanel.Controls.Add(footerPanel);
+					}
+				}
+
 			}
 
 			//Print footer
-			bool hasFlavor = printing.TryGetField("flavor", out string flavor);
-			bool hasArtist = printing.TryGetField("artist", out string artist);
-			bool hasRarity = printing.TryGetField("rarity", out string rarity);
+			bool hasFlavor = printing.TryGetBaseField("flavor", out string flavor);
+			bool hasArtist = printing.TryGetBaseField("artist", out string artist);
+			bool hasRarity = printing.TryGetBaseField("rarity", out string rarity);
 			if (hasRarity || hasFlavor || hasArtist) {
 				textPos = new Point(LEFT_PAD, TOP_PAD);
 				TrackerPanel footerPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
