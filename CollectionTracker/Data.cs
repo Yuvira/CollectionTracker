@@ -576,9 +576,9 @@ namespace CollectionTracker {
 			if (TryGetField("name", out string name)) {
 				if (TryGetField("type", out string type)) {
 					if (type.Contains("Token"))
-						return "Token: " + name;
+						return name + " (Token)";
 					if (type.Contains("Art Card"))
-						return "Art Card: " + name;
+						return name + " (Art Card)";
 				}
 				return name;
 			}
