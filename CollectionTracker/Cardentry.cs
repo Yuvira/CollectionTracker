@@ -57,6 +57,7 @@ namespace CollectionTracker {
 			if (cardref != null) {
 				foreach (Face face in cardref.Faces) {
 					Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(face.Fields));
+					fieldList.OnListEmpty += OnFaceEmpty;
 					fieldList.OnListResize += OnFieldsResized;
 					faces.Add(fieldList);
 					listPanel.Controls.Add(fieldList.Panel);
