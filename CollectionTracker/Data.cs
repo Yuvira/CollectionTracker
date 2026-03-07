@@ -579,6 +579,8 @@ namespace CollectionTracker {
 						return name + " (Token)";
 					if (type.Contains("Art Card"))
 						return name + " (Art Card)";
+					if (type.Contains("Emblem"))
+						return name + " (Emblem)";
 				}
 				return name;
 			}
