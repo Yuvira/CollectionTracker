@@ -366,15 +366,13 @@ namespace CollectionTracker {
 		};
 
 		//Set panel color
-		private void SetPanelColorsMTG(List<TrackerPanel> panels, string color = null) {
-			if (color == null && printing.Card.TryGetFirstField("color", out string newColor))
-				color = newColor;
-			if (color != null)
-				color = color.ToLower();
+		private void SetPanelColorsMTG(List<TrackerPanel> panels) {
+			string color = "";
+			if (!printing.Card.TryGetFirstField("identity", out color) || string.IsNullOrWhiteSpace(color))
+				printing.Card.TryGetFirstField("color", out color);
+			color = color.ToLower();
 			foreach (TrackerPanel panel in panels) {
-				if (color == null)
-					panel.AddBorder(Utils.COLOR_FRONT, 1);
-				else if (color.Length == 0)
+				if (color.Length == 0)
 					panel.AddBorder(SystemColors.ControlDarkDark, 3);
 				else if (color.Length == 1 && MTGTypeColors.ContainsKey(color[0]))
 					panel.AddBorder(MTGTypeColors[color[0]], 3);
@@ -451,13 +449,8 @@ namespace CollectionTracker {
 				facePanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
 				panelPos.Y += facePanel.Height + 5;
 
-				//Color face panel
-				if (printing.Card.TryGetFaceField("color", i, out string color))
-					SetPanelColorsMTG(new List<TrackerPanel> { facePanel }, color);
-				else
-					borderPanels.Add(facePanel);
-
 				//Add to content
+				borderPanels.Add(facePanel);
 				dataPanels.Add(facePanel);
 				contentPanel.Controls.Add(facePanel);
 
