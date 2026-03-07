@@ -215,11 +215,13 @@ namespace CollectionTracker {
 
 			//Filter
 			filterBox = Utils.GenerateComboBox(new Rectangle(((panel.Width + 1245) / 2) - 250, 5, 120, BUTTON_HEIGHT), ComboBoxStyle.DropDownList, false);
+			filterBox.Anchor = AnchorStyles.Top;
 			filterBox.Items.AddRange(new string[] { "None", "Newest", "Oldest" });
 			filterBox.SelectedIndex = 0;
 			filterBox.SelectedValueChanged += FilterChanged;
 			int width = Utils.MeasureWidth("Filter");
 			Label filterLabel = Utils.GenerateLabel(new Rectangle(((panel.Width + 1245) / 2) - (260 + width), 10, width, TEXT_HEIGHT), "Filter");
+			filterLabel.Anchor = AnchorStyles.Top;
 
 			//Page buttons
 			prevPageButton = Utils.GenerateButton(new Rectangle((panel.Width - 1245) / 2, 5, 120, BUTTON_HEIGHT), "<");
