@@ -1128,6 +1128,23 @@ namespace CollectionTracker {
 
 		}
 
+		//Description symbol
+		private class DescriptionDivider {
+
+			//Properties
+			public int width;
+			public DescriptionDivider(int width) => this.width = width;
+
+			//Generate
+			public TrackerPanel GenerateControl(Detailpage parent, Panel panel, Point location) {
+				location.X = (panel.Width / 2) - (width / 2);
+				TrackerPanel divider = Utils.GenerateTrackerPanel(new Rectangle(location, new Size(width, 2)));
+				panel.Controls.Add(divider);
+				return divider;
+			}
+
+		}
+
 		//Description group
 		private class DescriptionGroup {
 
@@ -1299,6 +1316,13 @@ namespace CollectionTracker {
 						firstLine = false;
 					else
 						location.Y += reduceLineSpacing ? 0 : LINE_SPACING;
+
+					//Detect dividers
+					if (text.Equals("——")) {
+						DescriptionDivider divider = new DescriptionDivider(panel.Width - (LEFT_PAD * 2));
+						borderPanels.Add(divider.GenerateControl(this, panel, location));
+						continue;
+					}
 
 					//Break line into words
 					curIdx = 0;
