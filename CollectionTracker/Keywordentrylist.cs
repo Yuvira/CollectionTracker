@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -25,7 +27,12 @@ namespace CollectionTracker {
 			listPanel.SuspendLayout();
 
 			//Fields
-			keywords = new Entrylist<FieldEntry>(this, "Keywords", FieldEntry.GenerateEntries(TrackerForm.Catalog.Keywords));
+			List<string> sortedKeys = TrackerForm.Catalog.Keywords.Keys.ToList();
+			sortedKeys.Sort();
+			Dictionary<string, string> sortedDict = new Dictionary<string, string>();
+			foreach (string key in sortedKeys)
+				sortedDict.Add(key, TrackerForm.Catalog.Keywords[key]);
+			keywords = new Entrylist<FieldEntry>(this, "Keywords", FieldEntry.GenerateEntries(sortedDict));
 			keywords.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(keywords.Panel);
 
