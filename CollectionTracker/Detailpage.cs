@@ -274,8 +274,6 @@ namespace CollectionTracker {
 				Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], TrackerForm.Catalog.Game);
 			}
 			else if (e.Button == MouseButtons.Right && printing.TryGetField("printid", out string printid)) {
-				if (char.IsLetter(printid[printid.Length - 1]))
-					printid = printid.Substring(0, printid.Length - 1);
 				if (Utils.CardURLs.ContainsKey(TrackerForm.Catalog.Game))
 					Process.Start(Utils.CardURLs[TrackerForm.Catalog.Game] + printid);
 			}
