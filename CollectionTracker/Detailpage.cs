@@ -1054,6 +1054,8 @@ namespace CollectionTracker {
 
 		//Show tooltip window relative to given control with given text
 		public void LoadCardtip(string printid) {
+			if (printid[printid.Length - 2] == '-')
+				printid = printid.Substring(0, printid.Length - 2);
 			Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(printid));
 			if (print == null)
 				return;
