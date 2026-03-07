@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -103,8 +102,10 @@ namespace CollectionTracker {
 
 		//Properties
 		private Printing printing;
-		private Printing prevPrint;
-		private Printing nextPrint;
+		private Printing prevListPrint;
+		private Printing nextListPrint;
+		private List<Printing> refPrints;
+		private int refIndex;
 		private int imgIndex;
 		private bool viewData;
 		private List<DetailTreatmentPanel> treatmentPanels;
@@ -115,6 +116,8 @@ namespace CollectionTracker {
 		//Controls
 		private Button navButtonLeft;
 		private Button navButtonRight;
+		private Button refButtonBack;
+		private Button refButtonForward;
 		private PictureBox imgBox;
 		private Panel contentPanel;
 		private ComboBox moveToBox;
@@ -133,6 +136,8 @@ namespace CollectionTracker {
 		public Detailpage(Printing printing) : base() {
 
 			//Initial values
+			refIndex = 0;
+			refPrints = new List<Printing> { printing };
 			dataPanels = new List<TrackerPanel>();
 			borderPanels = new List<TrackerPanel>();
 			treatmentPanels = new List<DetailTreatmentPanel>();
@@ -145,12 +150,20 @@ namespace CollectionTracker {
 			contentPanel.AutoScroll = true;
 
 			//Nav buttons
-			navButtonLeft = Utils.GenerateButton(new Rectangle(contentPanel.Location.X, 5, 200, BUTTON_HEIGHT), "");
+			navButtonLeft = Utils.GenerateButton(new Rectangle(contentPanel.Location.X, 5, 200, 30), "");
 			navButtonLeft.Anchor = AnchorStyles.Top;
 			navButtonLeft.Click += NavLeft;
-			navButtonRight = Utils.GenerateButton(new Rectangle(contentPanel.Location.X + contentPanel.Width - 200, 5, 200, BUTTON_HEIGHT), "");
+			navButtonRight = Utils.GenerateButton(new Rectangle(contentPanel.Location.X + contentPanel.Width - 200, 5, 200, 30), "");
 			navButtonRight.Anchor = AnchorStyles.Top;
 			navButtonRight.Click += NavRight;
+
+			//Ref buttons
+			refButtonBack = Utils.GenerateButton(new Rectangle(contentPanel.Location.X + 205, 5, 30, 30), "<");
+			refButtonBack.Anchor = AnchorStyles.Top;
+			refButtonBack.Click += RefBack;
+			refButtonForward = Utils.GenerateButton(new Rectangle(contentPanel.Location.X + 240, 5, 30, 30), ">");
+			refButtonForward.Anchor = AnchorStyles.Top;
+			refButtonForward.Click += RefForward;
 
 			//Tooltips
 			tooltips = new List<Tooltip>();
@@ -195,6 +208,8 @@ namespace CollectionTracker {
 			//Add to panel
 			panel.Controls.Add(navButtonLeft);
 			panel.Controls.Add(navButtonRight);
+			panel.Controls.Add(refButtonBack);
+			panel.Controls.Add(refButtonForward);
 			panel.Controls.Add(contentPanel);
 
 			//Set printing
@@ -213,6 +228,10 @@ namespace CollectionTracker {
 			imgIndex = 0;
 			if (this.printing.ImagePaths.Count > 0)
 				Utils.TryLoadCardImage(imgBox, this.printing.ImagePaths[0], TrackerForm.Catalog.Game);
+
+			//Hide tool/cardtips
+			HideTooltip();
+			HideCardtip();
 
 			//Prints
 			foreach (DetailPrintrow row in printRows) {
@@ -250,19 +269,21 @@ namespace CollectionTracker {
 		public void UpdateNavButtons() {
 			if (TrackerForm.Instance.FilteredPrints != null && TrackerForm.Instance.FilteredPrints.Contains(printing)) {
 				int idx = TrackerForm.Instance.FilteredPrints.IndexOf(printing);
-				prevPrint = TrackerForm.Instance.FilteredPrints[idx == 0 ? TrackerForm.Instance.FilteredPrints.Count - 1 : idx - 1];
-				nextPrint = TrackerForm.Instance.FilteredPrints[(idx + 1) % TrackerForm.Instance.FilteredPrints.Count];
-				navButtonLeft.Text = prevPrint.GetField("name");
-				navButtonRight.Text = nextPrint.GetField("name");
+				prevListPrint = TrackerForm.Instance.FilteredPrints[idx == 0 ? TrackerForm.Instance.FilteredPrints.Count - 1 : idx - 1];
+				nextListPrint = TrackerForm.Instance.FilteredPrints[(idx + 1) % TrackerForm.Instance.FilteredPrints.Count];
+				navButtonLeft.Text = prevListPrint.GetField("name");
+				navButtonRight.Text = nextListPrint.GetField("name");
 				navButtonLeft.Show();
 				navButtonRight.Show();
 			}
 			else {
-				prevPrint = null;
-				nextPrint = null;
+				prevListPrint = null;
+				nextListPrint = null;
 				navButtonLeft.Hide();
 				navButtonRight.Hide();
 			}
+			refButtonBack.Visible = refIndex - 1 >= 0;
+			refButtonForward.Visible = refIndex + 1 < refPrints.Count;
 		}
 
 		//Increment image index
@@ -281,12 +302,28 @@ namespace CollectionTracker {
 
 		//Navigate
 		private void NavLeft(object sender, EventArgs e) {
-			if (prevPrint != null)
-				SetPrinting(prevPrint);
+			if (prevListPrint != null)
+				SetPrinting(prevListPrint);
 		}
 		private void NavRight(object sender, EventArgs e) {
-			if (nextPrint != null)
-				SetPrinting(nextPrint);
+			if (nextListPrint != null)
+				SetPrinting(nextListPrint);
+		}
+
+		//References
+		private void RefBack(object sender, EventArgs e) {
+			if (refIndex - 1 < 0)
+				return;
+			refPrints[refIndex] = printing;
+			--refIndex;
+			SetPrinting(refPrints[refIndex]);
+		}
+		private void RefForward(object sender, EventArgs e) {
+			if (refIndex + 1 >= refPrints.Count)
+				return;
+			refPrints[refIndex] = printing;
+			++refIndex;
+			SetPrinting(refPrints[refIndex]);
 		}
 
 		//Modify card data
@@ -1018,8 +1055,16 @@ namespace CollectionTracker {
 		//Show tooltip window relative to given control with given text
 		public void LoadCardtip(string printid) {
 			Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(printid));
-			if (print != null)
-				SetPrinting(print);
+			if (print == null)
+				return;
+			for (int i = refIndex + 1; i < refPrints.Count; ++i) {
+				refPrints.RemoveAt(i);
+				--i;
+			}
+			refPrints[refIndex] = printing;
+			refPrints.Add(print);
+			++refIndex;
+			SetPrinting(print);
 		}
 
 		//Hide
