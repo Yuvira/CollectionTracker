@@ -224,15 +224,15 @@ namespace CollectionTracker {
 		}
 		private static bool ParseOperand() {
 			bool left = ParseValue();
-			if (index >= evalString.Length)
-				return left;
-			if (evalString[index] == '&') {
-				++index;
-				return left && ParseValue();
-			}
-			if (evalString[index] == '|') {
-				++index;
-				return left || ParseValue();
+			while (index < evalString.Length && (evalString[index] == '&' || evalString[index] == '|')) {
+				if (evalString[index] == '&') {
+					++index;
+					left = left && ParseValue();
+				}
+				else if (evalString[index] == '|') {
+					++index;
+					left = left || ParseValue();
+				}
 			}
 			return left;
 		}
