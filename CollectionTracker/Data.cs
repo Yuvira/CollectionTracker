@@ -550,18 +550,20 @@ namespace CollectionTracker {
 
 		//Get field from all faces
 		public bool TryGetField(string field, out string value) {
-			value = "";
-			if (fields.ContainsKey(field))
-				value = fields[field];
-			foreach (Face face in faces) {
-				if (face.TryGetField(field, out string faceValue)) {
+			value = null;
+			for (int i = -1; i < faces.Count; ++i) {
+				if (TryGetFaceField(field, i, out string faceValue)) {
 					if (string.IsNullOrEmpty(value))
 						value = faceValue;
 					else
 						value += " // " + faceValue;
 				}
 			}
-			return !string.IsNullOrWhiteSpace(value);
+			if (value == null) {
+				value = "";
+				return false;
+			}
+			return true;
 		}
 
 		#endregion
