@@ -575,8 +575,18 @@ namespace CollectionTracker {
 		public override string ToString() {
 			if (TryGetField("name", out string name)) {
 				if (TryGetField("type", out string type)) {
-					if (type.Contains("Token"))
-						return name + " (Token)";
+					if (type.Contains("Token")) {
+						name += " (Token";
+						if (TryGetField("power", out string power))
+							name += " | " + power;
+						if (TryGetField("toughness", out string toughness))
+							name += " / " + toughness;
+						if (TryGetField("color", out string color))
+							name += " | " + color;
+						if (TryGetField("oracle", out string oracle))
+							name += " | " + oracle.Replace("\r\n", " / ").CleanFormatMarkers();
+						return name + ")";
+					}
 					if (type.Contains("Art Card"))
 						return name + " (Art Card)";
 					if (type.Contains("Emblem"))
