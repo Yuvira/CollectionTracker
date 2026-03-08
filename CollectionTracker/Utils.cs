@@ -430,6 +430,25 @@ namespace CollectionTracker {
 	//Extensions
 	public static class Extensions {
 
+		#region String Extensions
+
+		//Clean formatting tags from a string
+		public static string CleanFormatMarkers(this string str) {
+			int idx = str.IndexOf('<');
+			int idx2;
+			while (idx != -1) {
+				idx2 = str.IndexOf('>', idx);
+				if (idx2 != -1)
+					str = str.Remove(idx, idx2 + 1 - idx);
+				else
+					str = str.Remove(idx, 1);
+				idx = str.IndexOf('<');
+			}
+			return str;
+		}
+
+		#endregion
+
 		#region Point Extensions
 
 		//Add co-ordinates
