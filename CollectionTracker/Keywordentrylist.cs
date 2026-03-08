@@ -41,11 +41,11 @@ namespace CollectionTracker {
 			saveButton.Click += SaveKeywords;
 			listPanel.Controls.Add(saveButton);
 
-			//Resize
-			OnFieldsResized();
-
 			//Resume
 			listPanel.ResumeLayout();
+
+			//Resize
+			OnFieldsResized();
 
 			//Add to panel
 			panel.Controls.Add(listPanel);
@@ -54,11 +54,13 @@ namespace CollectionTracker {
 
 		//On resize
 		private void OnFieldsResized() {
+			listPanel.SuspendLayout();
 			Point pos = new Point(0, 0);
 			listPanel.AutoScrollPosition = pos;
 			keywords.Panel.Location = pos;
 			pos.Y += keywords.Panel.Height + 5;
 			saveButton.Location = pos;
+			listPanel.ResumeLayout();
 		}
 
 		//Save

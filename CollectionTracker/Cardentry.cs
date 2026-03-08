@@ -79,11 +79,11 @@ namespace CollectionTracker {
 			returnButton.Click += ReturnToDetails;
 			listPanel.Controls.Add(returnButton);
 
-			//Resize
-			OnFieldsResized();
-
 			//Resume
 			listPanel.ResumeLayout();
+
+			//Resize
+			OnFieldsResized();
 
 			//Add to panel
 			panel.Controls.Add(listPanel);
@@ -92,6 +92,7 @@ namespace CollectionTracker {
 
 		//Add face
 		private void AddFace(object sender, EventArgs e) {
+			listPanel.SuspendLayout();
 			Dictionary<string, string> fieldDict = new Dictionary<string, string>();
 			if (Utils.DefaultCardFields.ContainsKey(TrackerForm.Catalog.Game)) {
 				foreach (string fieldName in Utils.DefaultCardFields[TrackerForm.Catalog.Game])
@@ -102,6 +103,7 @@ namespace CollectionTracker {
 			fieldList.OnListResize += OnFieldsResized;
 			faces.Add(fieldList);
 			listPanel.Controls.Add(fieldList.Panel);
+			listPanel.ResumeLayout();
 			OnFieldsResized();
 		}
 
@@ -116,6 +118,7 @@ namespace CollectionTracker {
 
 		//On resize
 		private void OnFieldsResized() {
+			listPanel.SuspendLayout();
 			Point pos = new Point(0, 0);
 			fields.Panel.Location = pos;
 			pos.Y += fields.Panel.Height + 5;
@@ -126,6 +129,7 @@ namespace CollectionTracker {
 			addButton.Location = pos;
 			saveButton.Location = new Point(35, pos.Y);
 			returnButton.Location = new Point(140, pos.Y);
+			listPanel.ResumeLayout();
 		}
 
 		//Save

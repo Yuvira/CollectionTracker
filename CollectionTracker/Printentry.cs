@@ -35,6 +35,9 @@ namespace CollectionTracker {
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 
+			//Suspend
+			listPanel.SuspendLayout();
+
 			//Set
 			Label setLabel = Utils.GenerateLabel(new Rectangle(0, 0, 100, 30), "Set");
 			setBox = Utils.GenerateComboBox(new Rectangle(105, 0, 675, 30), ComboBoxStyle.DropDownList, true);
@@ -67,6 +70,9 @@ namespace CollectionTracker {
 			returnButton = Utils.GenerateButton(new Rectangle(140, 70, 100, 30), "Return");
 			returnButton.Click += ReturnToDetails;
 			listPanel.Controls.Add(returnButton);
+
+			//Resume
+			listPanel.ResumeLayout();
 
 			//Load
 			LoadPrinting(print);
@@ -170,11 +176,11 @@ namespace CollectionTracker {
 			images.OnListResize += OnFieldsResized;
 			listPanel.Controls.Add(images.Panel);
 
-			//Resize
-			OnFieldsResized();
-
 			//Resume
 			listPanel.ResumeLayout();
+
+			//Resize
+			OnFieldsResized();
 
 		}
 
@@ -199,6 +205,7 @@ namespace CollectionTracker {
 
 		//On resize
 		private void OnFieldsResized() {
+			listPanel.SuspendLayout();
 			Point pos = new Point(0, 70);
 			treatments.Panel.Location = pos;
 			pos.Y += treatments.Panel.Height + 5;
@@ -214,6 +221,7 @@ namespace CollectionTracker {
 			pos.Y += images.Panel.Height + 5;
 			saveButton.Location = pos;
 			returnButton.Location = pos.Add(105, 0);
+			listPanel.ResumeLayout();
 		}
 
 		//Save

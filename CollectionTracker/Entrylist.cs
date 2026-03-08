@@ -39,6 +39,9 @@ namespace CollectionTracker {
 			//Panel
 			panel = Utils.GenerateTrackerPanel(new Rectangle(0, 0, 780, 0));
 
+			//Suspend
+			panel.SuspendLayout();
+
 			//Header label
 			Label header = Utils.GenerateLabel(new Rectangle(0, 0, 780, TrackerPage.TEXT_HEIGHT), headerText);
 			panel.Controls.Add(header);
@@ -60,6 +63,9 @@ namespace CollectionTracker {
 			//Panel size
 			panel.Height = pos.Y + 30;
 
+			//Resume
+			panel.ResumeLayout();
+
 		}
 
 		//Add event handlers
@@ -76,8 +82,10 @@ namespace CollectionTracker {
 			entry.Panel.Location = add.Location;
 			add.Location = add.Location.Add(0, entry.Panel.Height + 5);
 			entries.Add(entry);
+			panel.SuspendLayout();
 			panel.Controls.Add(entry.Panel);
 			panel.Height += entry.Panel.Height + 5;
+			panel.ResumeLayout();
 			AddEventHandlers(entry);
 			OnListResize?.Invoke();
 		}
@@ -86,6 +94,7 @@ namespace CollectionTracker {
 		private void RemoveRow(ItemEntry entry) {
 			if (!(entry is T entryT) || !entries.Contains(entryT))
 				return;
+			panel.SuspendLayout();
 			int height = entryT.Panel.Height + 5;
 			for (int i = entries.IndexOf(entryT) + 1; i < entries.Count; ++i)
 				entries[i].Panel.Location = entries[i].Panel.Location.Add(0, -height);
@@ -94,6 +103,7 @@ namespace CollectionTracker {
 			entries.Remove(entryT);
 			panel.Controls.Remove(entryT.Panel);
 			entryT.Panel.Dispose();
+			panel.ResumeLayout();
 			if (entries.Count == 0)
 				OnListEmpty?.Invoke(this);
 			OnListResize?.Invoke();
@@ -101,12 +111,14 @@ namespace CollectionTracker {
 
 		//Clear all rows
 		public void ClearRows() {
+			panel.SuspendLayout();
 			foreach (T entry in entries) {
 				add.Location = add.Location.Add(0, -(entry.Panel.Height + 5));
 				panel.Height -= entry.Panel.Height + 5;
 				panel.Controls.Remove(entry.Panel);
 				entry.Panel.Dispose();
 			}
+			panel.ResumeLayout();
 			entries.Clear();
 			OnListEmpty?.Invoke(this);
 			OnListResize?.Invoke();
@@ -130,10 +142,12 @@ namespace CollectionTracker {
 		private void ResizeRows(ItemEntry entry, int delta) {
 			if (!(entry is T entryT) || !entries.Contains(entryT))
 				return;
+			panel.SuspendLayout();
 			for (int i = entries.IndexOf(entryT) + 1; i < entries.Count; ++i)
 				entries[i].Panel.Location = entries[i].Panel.Location.Add(0, delta);
 			add.Location = add.Location.Add(0, delta);
 			panel.Height += delta;
+			panel.ResumeLayout();
 			OnListResize?.Invoke();
 		}
 
@@ -141,7 +155,7 @@ namespace CollectionTracker {
 
 	#endregion
 
-	#region Entries
+	#region Base Item Entry
 
 	//Item entry
 	public abstract class ItemEntry {
@@ -184,6 +198,10 @@ namespace CollectionTracker {
 		private void Down(object sender, EventArgs e) => OnClickDown?.Invoke(this, 1);
 
 	}
+
+	#endregion
+
+	#region Field Entry
 
 	//Field entry
 	public class FieldEntry : ItemEntry {
@@ -281,6 +299,10 @@ namespace CollectionTracker {
 
 	}
 
+	#endregion
+
+	#region Treatment Entry
+
 	//Treatment entry
 	public class TreatmentEntry : ItemEntry {
 
@@ -317,6 +339,10 @@ namespace CollectionTracker {
 		}
 
 	}
+
+	#endregion
+
+	#region Image Entry
 
 	//Image path entry
 	public class ImageEntry : ItemEntry {
