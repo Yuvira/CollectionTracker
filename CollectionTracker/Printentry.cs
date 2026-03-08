@@ -276,7 +276,7 @@ namespace CollectionTracker {
 						cn = prefix + value.ToString().PadLeft(width, '0');
 						fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.SetValue(cn);
 						images.ClearRows();
-						fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(set.Code.ToLower() + '/' + value.ToString());
+						fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(prefix.ToLower() + set.Code.ToLower() + '/' + value.ToString());
 						if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
 							string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + set.Code + '/' + cn;
 							if (Utils.ImageExistsAtPath(path, out path))
