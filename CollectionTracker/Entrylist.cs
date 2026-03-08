@@ -236,17 +236,20 @@ namespace CollectionTracker {
 				if (!textValue.Multiline) {
 					textValue.Multiline = true;
 					textValue.ScrollBars = ScrollBars.Both;
-					textValue.Height = 120;
-					panel.Height = 120;
-					OnResize?.Invoke(this, 90);
+					int newHeight = field.Text.Equals("oracle") ? 210 : 120;
+					int delta = newHeight - textValue.Height;
+					textValue.Height = newHeight;
+					panel.Height = newHeight;
+					OnResize?.Invoke(this, delta);
 				}
 			}
 			else if (textValue.Multiline) {
 				textValue.Multiline = false;
 				textValue.ScrollBars = ScrollBars.None;
+				int delta = 30 - textValue.Height;
 				textValue.Height = 30;
 				panel.Height = 30;
-				OnResize?.Invoke(this, -90);
+				OnResize?.Invoke(this, delta);
 			}
 		}
 
