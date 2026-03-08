@@ -225,6 +225,7 @@ namespace CollectionTracker {
 				field.Items.AddRange(TrackerForm.Catalog.Printings.SelectMany(p => p.Fields.Keys).Distinct().ToArray());
 			field.TextChanged += OnFieldChanged;
 			textValue = Utils.GenerateTextBox(new Rectangle(210, 0, 570, 30), valueString);
+			textValue.KeyUp += TextKeyPressed;
 			listValue = Utils.GenerateComboBox(new Rectangle(210, 0, 570, 30), ComboBoxStyle.DropDown, true);
 			listValue.Text = valueString;
 			listValue.Hide();
@@ -269,6 +270,28 @@ namespace CollectionTracker {
 				panel.Height = 30;
 				OnResize?.Invoke(this, delta);
 			}
+		}
+
+		//Tag shortcuts
+		private void TextKeyPressed(object sender, KeyEventArgs e) {
+			if (!e.Control || !e.Shift || string.IsNullOrEmpty(textValue.SelectedText))
+				return;
+			string code = "";
+			if (e.KeyCode == Keys.L)
+				code = "i";
+			else if (e.KeyCode == Keys.B)
+				code = "b";
+			else if (e.KeyCode == Keys.U)
+				code = "u";
+			else if (e.KeyCode == Keys.R)
+				code = "ct";
+			else if (e.KeyCode == Keys.T)
+				code = "tt";
+			if (string.IsNullOrWhiteSpace(code))
+				return;
+			int index = textValue.SelectionStart;
+			textValue.Text = textValue.Text.Insert(index + textValue.SelectionLength, "</" + code + ">");
+			textValue.Text = textValue.Text.Insert(index, "<" + code + (code.Length == 2 ? "|>" : ">"));
 		}
 
 		//Clear value
