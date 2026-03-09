@@ -1155,7 +1155,7 @@ namespace CollectionTracker {
 				int width = (int)(symbol.Aspect * TEXT_HEIGHT);
 				if (rightAlign)
 					location.X -= width;
-				PictureBox imgBox = Utils.GeneratePictureBox(new Rectangle(location, new Size(width, TEXT_HEIGHT)));
+				PictureBox imgBox = Utils.GeneratePictureBox(new Rectangle(location.Add(new Point(1, 1)), new Size(width - 2, TEXT_HEIGHT - 2)));
 				Utils.TryLoadImage(imgBox, symbol.ImgPath);
 				panel.Controls.Add(imgBox);
 				if (rightAlign)
