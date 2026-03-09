@@ -6,6 +6,36 @@ using System.Windows.Forms;
 
 namespace CollectionTracker {
 
+	#region Themes
+
+	//Color references
+	public class Theme {
+		public readonly Color BackColor;
+		public readonly Color ForeColor;
+		public readonly Color Button;
+		public readonly Color ButtonText;
+		public readonly Color CardOwned;
+		public readonly Color CardUnowned;
+		public readonly Color CardOwnedFavorite;
+		public readonly Color CardUnownedFavorite;
+		public readonly Color TextTooltip;
+		public readonly Color TextCardtip;
+		public Theme(Color backColor, Color foreColor, Color button, Color buttonText, Color cardOwned, Color cardUnowned, Color cardOwnedFavorite, Color cardUnownedFavorite, Color textTooltip, Color textCardtip) {
+			BackColor = backColor;
+			ForeColor = foreColor;
+			Button = button;
+			ButtonText = buttonText;
+			CardOwned = cardOwned;
+			CardUnowned = cardUnowned;
+			CardOwnedFavorite = cardOwnedFavorite;
+			CardUnownedFavorite = cardUnownedFavorite;
+			TextTooltip = textTooltip;
+			TextCardtip = textCardtip;
+		}
+	}
+
+	#endregion
+
 	#region Custom Controls
 
 	//Custom panel class
@@ -51,6 +81,33 @@ namespace CollectionTracker {
 
 		#region Static References
 
+		//Themes
+		public static readonly Theme THEME_DEFAULT = new Theme(
+			backColor:           SystemColors.ControlDark,
+			foreColor:           SystemColors.ControlText,
+			button:              SystemColors.ControlLight,
+			buttonText:          SystemColors.ControlText,
+			cardOwned:           SystemColors.ControlDark,
+			cardUnowned:         SystemColors.ControlDarkDark,
+			cardOwnedFavorite:   Color.Red,
+			cardUnownedFavorite: Color.DarkRed,
+			textTooltip:         Color.Blue,
+			textCardtip:         Color.Green
+		);
+		public static readonly Theme THEME_DARK = new Theme(
+			backColor:           Color.Black,
+			foreColor:           Color.White,
+			button:              SystemColors.ControlLight,
+			buttonText:          SystemColors.ControlText,
+			cardOwned:           SystemColors.ControlDark,
+			cardUnowned:         SystemColors.ControlDarkDark,
+			cardOwnedFavorite:   Color.Red,
+			cardUnownedFavorite: Color.DarkRed,
+			textTooltip:         BlendColours(Color.White, Color.Blue),
+			textCardtip:         Color.LightGreen
+		);
+		public static readonly Theme THEME = THEME_DARK;
+
 		//Font style references
 		public static readonly Font FONT_DEFAULT = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
 		public static readonly Font FONT_BOLD = new Font(FONT_DEFAULT, FontStyle.Bold);
@@ -58,16 +115,10 @@ namespace CollectionTracker {
 		public static readonly Font FONT_UNDERLINE = new Font(FONT_DEFAULT, FontStyle.Underline);
 
 		//Brush references
-		public static readonly SolidBrush BRUSH_BACK = new SolidBrush(COLOR_BACK);
+		public static readonly SolidBrush BRUSH_BACK = new SolidBrush(THEME.BackColor);
 
 		//Color references
-		public static readonly Color COLOR_BACK = SystemColors.ControlDark;
-		public static readonly Color COLOR_BACK_DARK = SystemColors.ControlDarkDark;
-		public static readonly Color COLOR_FAVORITE = Color.Red;
-		public static readonly Color COLOR_FAVORITE_DARK = Color.DarkRed;
-		public static readonly Color COLOR_FRONT = Color.Black;
-		public static readonly Color COLOR_BUTTON = SystemColors.ControlLight;
-		public static readonly Color COLOR_DARK_ORANGE = BlendColours(new List<Color> { Color.Orange, Color.Black });
+		public static readonly Color COLOR_DARK_ORANGE = BlendColours(Color.Orange, Color.Black);
 
 		//Formatting characters
 		public static readonly char[] FORMAT_CHARS = { '{', '<' };
@@ -165,7 +216,7 @@ namespace CollectionTracker {
 			panel.Location = rect.Location;
 			panel.Size = rect.Size;
 			if (useDefaultBorder)
-				panel.AddBorder(COLOR_FRONT, 1);
+				panel.AddBorder(THEME.ForeColor, 1);
 			return panel;
 		}
 
@@ -181,6 +232,7 @@ namespace CollectionTracker {
 				button.TextImageRelation = TextImageRelation.ImageBeforeText;
 				button.ImageAlign = ContentAlignment.MiddleRight;
 			}
+			button.ForeColor = SystemColors.ControlText;
 			button.UseVisualStyleBackColor = true;
 			return button;
 		}
@@ -194,7 +246,8 @@ namespace CollectionTracker {
 			button.TextAlign = ContentAlignment.MiddleCenter;
 			button.Appearance = Appearance.Button;
 			button.FlatStyle = FlatStyle.Popup;
-			button.BackColor = COLOR_BUTTON;
+			button.BackColor = THEME.Button;
+			button.ForeColor = SystemColors.ControlText;
 			return button;
 		}
 
@@ -217,7 +270,7 @@ namespace CollectionTracker {
 			label.Size = rect.Size;
 			label.Text = text.Replace("&", "&&");
 			label.Font = font != null ? font : FONT_DEFAULT;
-			label.ForeColor = color ?? SystemColors.ControlText;
+			label.ForeColor = color ?? THEME.ForeColor;
 			label.TextAlign = ContentAlignment.MiddleLeft;
 			label.FlatStyle = FlatStyle.System;
 			return label;
@@ -292,6 +345,7 @@ namespace CollectionTracker {
 			button.Text = text;
 			button.Click += eventHandler;
 			button.Enabled = enabled;
+			button.ForeColor = SystemColors.ControlText;
 			return button;
 		}
 
@@ -301,6 +355,7 @@ namespace CollectionTracker {
 			button.Text = text;
 			button.DropDown = dropDown;
 			button.Enabled = enabled;
+			button.ForeColor = SystemColors.ControlText;
 			return button;
 		}
 
@@ -312,6 +367,7 @@ namespace CollectionTracker {
 				label.Alignment = ToolStripItemAlignment.Right;
 			if (rightPad > 0)
 				label.Padding = new Padding(0, 0, rightPad, 0);
+			label.ForeColor = SystemColors.ControlText;
 			return label;
 		}
 
@@ -370,6 +426,8 @@ namespace CollectionTracker {
 		}
 
 		//Blend list of colours
+		public static Color BlendColours(Color col1, Color col2) =>
+			Color.FromArgb((col1.A + col2.A) / 2, (col1.R + col2.R) / 2, (col1.G + col2.G) / 2, (col1.B + col2.B) / 2);
 		public static Color BlendColours(List<Color> cols) {
 			int A = 0, R = 0, G = 0, B = 0;
 			foreach (Color c in cols) {

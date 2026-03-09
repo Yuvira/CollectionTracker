@@ -45,7 +45,8 @@ namespace CollectionTracker {
 		public TrackerForm() {
 
 			//Initialize form
-			BackColor = Utils.COLOR_BACK;
+			BackColor = Utils.THEME.BackColor;
+			ForeColor = Utils.THEME.ForeColor;
 			ClientSize = new Size(1600, 900);
 			Font = Utils.FONT_DEFAULT;
 			Text = "Collection Tracker";

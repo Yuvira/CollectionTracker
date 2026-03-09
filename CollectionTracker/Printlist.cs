@@ -155,15 +155,15 @@ namespace CollectionTracker {
 				}
 				if (print.Card.Favorite) {
 					if (print.IsOwned)
-						panel.BackColor = Utils.COLOR_FAVORITE;
+						panel.BackColor = Utils.THEME.CardOwnedFavorite;
 					else
-						panel.BackColor = Utils.COLOR_FAVORITE_DARK;
+						panel.BackColor = Utils.THEME.CardUnownedFavorite;
 				}
 				else {
 					if (print.IsOwned)
-						panel.BackColor = Utils.COLOR_BACK;
+						panel.BackColor = Utils.THEME.CardOwned;
 					else
-						panel.BackColor = Utils.COLOR_BACK_DARK;
+						panel.BackColor = Utils.THEME.CardUnowned;
 				}
 			}
 

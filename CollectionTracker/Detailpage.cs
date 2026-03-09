@@ -418,7 +418,7 @@ namespace CollectionTracker {
 				else if (color.Length > 2)
 					panel.AddBorder(Color.Yellow, 3);
 				else
-					panel.AddBorder(Utils.COLOR_FRONT, 1);
+					panel.AddBorder(Utils.THEME.ForeColor, 1);
 			}
 		}
 
@@ -556,7 +556,7 @@ namespace CollectionTracker {
 		//Set panel color
 		private void SetPanelColorsYGO(List<TrackerPanel> panels) {
 			foreach (TrackerPanel panel in panels)
-				panel.AddBorder(Utils.COLOR_BACK_DARK, 3);
+				panel.AddBorder(SystemColors.ControlDarkDark, 3);
 		}
 
 		#endregion
@@ -673,7 +673,7 @@ namespace CollectionTracker {
 				else if (color.Length > 2)
 					panel.AddBorder(Color.Yellow, 3);
 				else
-					panel.AddBorder(Utils.COLOR_FRONT, 1);
+					panel.AddBorder(Utils.THEME.ForeColor, 1);
 			}
 		}
 
@@ -1116,11 +1116,11 @@ namespace CollectionTracker {
 				if (settings.tooltip != null || settings.printid != null)
 					settings.style |= FontStyle.Underline;
 				if (settings.tooltip != null && settings.printid != null)
-					settings.color = Color.Teal;
+					settings.color = Utils.BlendColours(Utils.THEME.TextTooltip, Utils.THEME.TextCardtip);
 				else if (settings.tooltip != null)
-					settings.color = Color.Blue;
+					settings.color = Utils.THEME.TextTooltip;
 				else if (settings.printid != null)
-					settings.color = Color.Green;
+					settings.color = Utils.THEME.TextCardtip;
 				Label label = Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), text, new Font(Utils.FONT_DEFAULT, settings.style), settings.color);
 				if (settings.tooltip != null)
 					parent.Tooltips.Add(new Tooltip(parent, label, settings.tooltip));
