@@ -95,7 +95,7 @@ namespace CollectionTracker {
 			textCardtip:         Color.Green
 		);
 		public static readonly Theme THEME_DARK = new Theme(
-			backColor:           Color.Black,
+			backColor:           BlendColours(Color.Black, Color.DarkSlateGray),
 			foreColor:           Color.White,
 			button:              SystemColors.ControlLight,
 			buttonText:          SystemColors.ControlText,
