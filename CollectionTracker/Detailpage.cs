@@ -265,6 +265,26 @@ namespace CollectionTracker {
 
 		}
 
+		//Increment image index
+		private void OnClickImage(object sender, MouseEventArgs e) {
+			if (e.Button == MouseButtons.Left) {
+				if (printing.ImagePaths.Count == 0)
+					return;
+				imgIndex = (imgIndex + 1) % printing.ImagePaths.Count;
+				Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], TrackerForm.Catalog.Game);
+			}
+			else if (e.Button == MouseButtons.Right && printing.TryGetField("printid", out string printid)) {
+				if (Utils.CardURLs.ContainsKey(TrackerForm.Catalog.Game))
+					Process.Start(Utils.CardURLs[TrackerForm.Catalog.Game] + printid);
+			}
+		}
+
+		//Modify card data
+		private void EditCard(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Cardentry>(cardref: printing.Card, printref: printing);
+		private void EditPrint(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Printentry>(printref: printing);
+
+		#region Navigation
+
 		//Update navigation
 		public void UpdateNavButtons() {
 			if (TrackerForm.Instance.FilteredPrints != null && TrackerForm.Instance.FilteredPrints.Contains(printing)) {
@@ -284,20 +304,6 @@ namespace CollectionTracker {
 			}
 			refButtonBack.Visible = refIndex - 1 >= 0;
 			refButtonForward.Visible = refIndex + 1 < refPrints.Count;
-		}
-
-		//Increment image index
-		private void OnClickImage(object sender, MouseEventArgs e) {
-			if (e.Button == MouseButtons.Left) {
-				if (printing.ImagePaths.Count == 0)
-					return;
-				imgIndex = (imgIndex + 1) % printing.ImagePaths.Count;
-				Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], TrackerForm.Catalog.Game);
-			}
-			else if (e.Button == MouseButtons.Right && printing.TryGetField("printid", out string printid)) {
-				if (Utils.CardURLs.ContainsKey(TrackerForm.Catalog.Game))
-					Process.Start(Utils.CardURLs[TrackerForm.Catalog.Game] + printid);
-			}
 		}
 
 		//Navigate
@@ -326,9 +332,7 @@ namespace CollectionTracker {
 			SetPrinting(refPrints[refIndex]);
 		}
 
-		//Modify card data
-		private void EditCard(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Cardentry>(cardref: printing.Card, printref: printing);
-		private void EditPrint(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Printentry>(printref: printing);
+		#endregion
 
 		#region Views
 
