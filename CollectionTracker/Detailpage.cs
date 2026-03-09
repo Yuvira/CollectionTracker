@@ -31,7 +31,7 @@ namespace CollectionTracker {
 					new Rectangle(LEFT_PAD, yPos, width, TEXT_HEIGHT),
 					printid.ToUpper() + " - " + setname,
 					Utils.FONT_UNDERLINE,
-					isCurrent ? default : Color.Blue
+					isCurrent ? Utils.THEME.ForeColor : Utils.THEME.TextTooltip
 				);
 				label.MouseEnter += ShowCardtip;
 				label.MouseLeave += HideCardtip;
