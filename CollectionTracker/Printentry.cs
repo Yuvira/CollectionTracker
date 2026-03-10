@@ -22,7 +22,6 @@ namespace CollectionTracker {
 		private Button addFaceButton;
 		private Button saveButton;
 		private Button returnButton;
-		private Button refreshButton;
 
 		//Static modified field identifiers
 		public static bool SetsAltered = true;
@@ -71,11 +70,6 @@ namespace CollectionTracker {
 			returnButton = Utils.GenerateButton(new Rectangle(140, 70, 100, 30), "Return");
 			returnButton.Click += ReturnToDetails;
 			listPanel.Controls.Add(returnButton);
-
-			//Refresh button
-			refreshButton = Utils.GenerateButton(new Rectangle(675, 70, 100, 30), "Refresh");
-			refreshButton.Click += RefreshLists;
-			listPanel.Controls.Add(refreshButton);
 
 			//Resume
 			listPanel.ResumeLayout();
@@ -190,15 +184,6 @@ namespace CollectionTracker {
 
 		}
 
-		//Refresh list items
-		private void RefreshLists(object sender, EventArgs e) {
-			foreach (FieldEntry entry in fields.Entries)
-				entry.RefreshListItems();
-			foreach (Entrylist<FieldEntry> face in faces)
-				foreach (FieldEntry entry in face.Entries)
-					entry.RefreshListItems();
-		}
-
 		//Add face
 		private void AddFace(object sender, EventArgs e) {
 			Entrylist<FieldEntry> fieldList = new Entrylist<FieldEntry>(this, "Face", FieldEntry.GenerateEntries(new Dictionary<string, string>()));
@@ -236,7 +221,6 @@ namespace CollectionTracker {
 			pos.Y += images.Panel.Height + 5;
 			saveButton.Location = pos;
 			returnButton.Location = pos.Add(105, 0);
-			refreshButton.Location = pos.Add(675, 0);
 			listPanel.ResumeLayout();
 		}
 
@@ -318,6 +302,7 @@ namespace CollectionTracker {
 				foreach (FieldEntry entry in fields.Entries) {
 					if (!Utils.KeepableFields.Contains(entry.Field))
 						entry.SetValue();
+					entry.OnFieldChanged();
 				}
 				while (faces.Count > 0)
 					faces[0].ClearRows();
