@@ -225,6 +225,7 @@ namespace CollectionTracker {
 				field.Items.AddRange(TrackerForm.Catalog.Printings.SelectMany(p => p.Fields.Keys).Distinct().ToArray());
 			field.TextChanged += OnFieldChanged;
 			textValue = Utils.GenerateTextBox(new Rectangle(210, 0, 570, 30), valueString);
+			textValue.KeyDown += HandleControlInput;
 			textValue.KeyUp += TextKeyPressed;
 			listValue = Utils.GenerateComboBox(new Rectangle(210, 0, 570, 30), ComboBoxStyle.DropDown, true);
 			listValue.Text = valueString;
@@ -269,6 +270,22 @@ namespace CollectionTracker {
 				panel.Height = 30;
 				OnResize?.Invoke(this, delta);
 			}
+		}
+
+		//Update list items
+		public void RefreshListItems() {
+			if (Utils.ListableFields.Contains(field.Text)) {
+				listValue.Items.Clear();
+				listValue.Items.AddRange(TrackerForm.Catalog.Printings.Select(p => p.GetField(field.Text)).Distinct().ToArray());
+			}
+		}
+
+		//Tag shortcuts
+		private void HandleControlInput(object sender, KeyEventArgs e) {
+			if (!e.Control || !e.Shift || string.IsNullOrEmpty(textValue.SelectedText))
+				return;
+			if (e.KeyCode == Keys.L || e.KeyCode == Keys.B || e.KeyCode == Keys.U || e.KeyCode == Keys.R || e.KeyCode == Keys.T)
+				e.SuppressKeyPress = true;
 		}
 
 		//Tag shortcuts
