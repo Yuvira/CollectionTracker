@@ -239,7 +239,6 @@ namespace CollectionTracker {
 		public void OnFieldChanged(object sender = null, EventArgs e = null) {
 			if (Utils.ListableFields.Contains(field.Text)) {
 				listValue.Items.Clear();
-				listValue.Items.AddRange(TrackerForm.Catalog.Printings.Select(p => p.GetField(field.Text)).Distinct().ToArray());
 				if (!listValue.Visible) {
 					listValue.Text = textValue.Text;
 					textValue.Hide();
