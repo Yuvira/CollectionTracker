@@ -591,6 +591,8 @@ namespace CollectionTracker {
 					}
 					if (type.Contains("Art Card"))
 						return name + " (Art Card)";
+					if (type.Contains("Front Card"))
+						return name + " (Front Card)";
 					if (type.Contains("Emblem"))
 						return name + " (Emblem)";
 				}
