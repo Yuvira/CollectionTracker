@@ -453,6 +453,12 @@ namespace CollectionTracker {
 					titleHeight = Math.Max(titleHeight, LINE_SPACING + GenerateDescription(cost, facePanel, textPos, false, true));
 				textPos.Y += titleHeight;
 
+				//Flavor name
+				if (printing.TryGetFaceField("name", i, out string flavorName)) {
+					textPos.Y -= LINE_SPACING;
+					textPos.Y += LINE_SPACING + GenerateDescription($"<i>{flavorName}", facePanel, textPos, false);
+				}
+
 				//Type line
 				if (printing.Card.TryGetFaceField("type", i, out string type))
 					textPos.Y += LINE_SPACING + GenerateDescription($"<b>{type}", facePanel, textPos, false);
