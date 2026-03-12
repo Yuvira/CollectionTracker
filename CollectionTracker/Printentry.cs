@@ -286,7 +286,7 @@ namespace CollectionTracker {
 						images.ClearRows();
 						fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(prefix.ToLower() + set.Code.ToLower() + '/' + value.ToString());
 						if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
-							string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + set.Code + '/' + cn;
+							string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code + '/' + cn;
 							if (Utils.ImageExistsAtPath(path, out path))
 								images.AddRow(new ImageEntry(path));
 							else {
