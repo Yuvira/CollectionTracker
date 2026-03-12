@@ -49,8 +49,6 @@ namespace CollectionTracker {
 		public string Name => name;
 		public Game Game => game;
 
-		public void SetName(string name) => this.name = name;
-
 		//Constructor
 		public Catalog() {
 			sets = new List<Set>();
