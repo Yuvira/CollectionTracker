@@ -110,6 +110,7 @@ namespace CollectionTracker {
 		private bool viewData;
 		private List<DetailTreatmentPanel> treatmentPanels;
 		private List<DetailPrintrow> printRows;
+		private List<DetailPrintrow> printCopyRows;
 		private List<Tooltip> tooltips;
 		private List<Cardtip> cardtips;
 
@@ -125,6 +126,7 @@ namespace CollectionTracker {
 		private List<TrackerPanel> borderPanels;
 		private TrackerPanel viewPanel;
 		private TrackerPanel printPanel;
+		private TrackerPanel printCopyPanel;
 		private Panel tooltipPanel;
 		private PictureBox cardtipBox;
 
@@ -142,6 +144,7 @@ namespace CollectionTracker {
 			borderPanels = new List<TrackerPanel>();
 			treatmentPanels = new List<DetailTreatmentPanel>();
 			printRows = new List<DetailPrintrow>();
+			printCopyRows = new List<DetailPrintrow>();
 			moveToBox = null;
 
 			//Generate content panel
@@ -201,9 +204,14 @@ namespace CollectionTracker {
 			viewPanel.Controls.Add(printViewButton);
 			contentPanel.Controls.Add(viewPanel);
 
-			//Print panel
-			printPanel = Utils.GenerateTrackerPanel(new Rectangle(865, 5, 400, TEXT_HEIGHT));
+			//Print panels
+			printPanel = Utils.GenerateTrackerPanel(new Rectangle(865, 5, 400, TOP_PAD + TEXT_HEIGHT + BOTTOM_PAD));
+			printPanel.Controls.Add(Utils.GenerateLabel(new Rectangle(LEFT_PAD, TOP_PAD, printPanel.Width - (LEFT_PAD * 2), TEXT_HEIGHT), "Printings"));
 			contentPanel.Controls.Add(printPanel);
+			printCopyPanel = Utils.GenerateTrackerPanel(new Rectangle(865, 5, 400, TOP_PAD + TEXT_HEIGHT + BOTTOM_PAD));
+			printCopyPanel.Controls.Add(Utils.GenerateLabel(new Rectangle(LEFT_PAD, TOP_PAD, printPanel.Width - (LEFT_PAD * 2), TEXT_HEIGHT), "Identical Prints"));
+			contentPanel.Controls.Add(printCopyPanel);
+			printCopyPanel.Hide();
 
 			//Add to panel
 			panel.Controls.Add(navButtonLeft);
@@ -233,29 +241,8 @@ namespace CollectionTracker {
 			HideTooltip();
 			HideCardtip();
 
-			//Prints
-			foreach (DetailPrintrow row in printRows) {
-				printPanel.Controls.Remove(row.Label);
-				row.Label.Dispose();
-			}
-			printRows.Clear();
-			if (!printing.GetField("name").Equals("_") && !printing.GetField("name").Equals("")) {
-				List<Printing> prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
-				prints.Sort(Printing.SortInverseNewest);
-				for (int i = 0; i < prints.Count; ++i) {
-					DetailPrintrow row = new DetailPrintrow(
-						this,
-						prints[i].GetField("printid"),
-						prints[i].Set.Name,
-						TOP_PAD + (i * TEXT_HEIGHT),
-						printPanel.Width - 10,
-						prints[i] == printing
-					);
-					printRows.Add(row);
-					printPanel.Controls.Add(row.Label);
-				}
-				printPanel.Height = TOP_PAD + BOTTOM_PAD + (prints.Count * TEXT_HEIGHT);
-			}
+			//Print list
+			UpdatePrintList();
 
 			//Nav buttons
 			UpdateNavButtons();
@@ -282,6 +269,84 @@ namespace CollectionTracker {
 		//Modify card data
 		private void EditCard(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Cardentry>(cardref: printing.Card, printref: printing);
 		private void EditPrint(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Printentry>(printref: printing);
+
+		#region Print List
+
+		//Print list
+		private void UpdatePrintList() {
+
+			//Clear rows
+			foreach (DetailPrintrow row in printRows) {
+				printPanel.Controls.Remove(row.Label);
+				row.Label.Dispose();
+			}
+			foreach (DetailPrintrow row in printCopyRows) {
+				printCopyPanel.Controls.Remove(row.Label);
+				row.Label.Dispose();
+			}
+			printRows.Clear();
+			printCopyRows.Clear();
+
+			//Get identical prints
+			Point pos = printCopyPanel.Location;
+			Printing basePrint = printing;
+			if (printing.TryGetBaseField("printcopy", out string printcopy)) {
+				basePrint = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.TryGetBaseField("printid", out string printid_) && printid_.Equals(printcopy));
+				if (basePrint == null)
+					basePrint = printing;
+			}
+			if (basePrint.TryGetBaseField("printid", out string printid)) {
+				List<Printing> identicalPrints = TrackerForm.Catalog.Printings.Where(p => p.TryGetBaseField("printcopy", out printcopy) && printid.Equals(printcopy)).ToList();
+				if (!identicalPrints.Contains(printing))
+					identicalPrints.Add(printing);
+				if (!identicalPrints.Contains(basePrint))
+					identicalPrints.Add(basePrint);
+				if (identicalPrints.Count > 1) {
+					identicalPrints.Sort(Printing.SortInverseNewest);
+					for (int i = 0; i < identicalPrints.Count; ++i) {
+						DetailPrintrow row = new DetailPrintrow(
+							this,
+							identicalPrints[i].GetField("printid"),
+							identicalPrints[i].Set.Name,
+							TOP_PAD + ((i + 1) * TEXT_HEIGHT),
+							printCopyPanel.Width - (LEFT_PAD * 2),
+							identicalPrints[i] == printing
+						);
+						printCopyRows.Add(row);
+						printCopyPanel.Controls.Add(row.Label);
+					}
+					printCopyPanel.Height = TOP_PAD + ((identicalPrints.Count + 1) * TEXT_HEIGHT) + BOTTOM_PAD;
+				}
+				printCopyPanel.Visible = identicalPrints.Count > 1;
+				if (identicalPrints.Count > 1)
+					pos.Y += printCopyPanel.Height + 5;
+			}
+			else
+				printCopyPanel.Hide();
+
+			//List prints with same cardref
+			if (printing.Card != null && printing.TryGetField("name", out string name) && !name.Equals("_")) {
+				List<Printing> prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _)).ToList();
+				prints.Sort(Printing.SortInverseNewest);
+				for (int i = 0; i < prints.Count; ++i) {
+					DetailPrintrow row = new DetailPrintrow(
+						this,
+						prints[i].GetField("printid"),
+						prints[i].Set.Name,
+						TOP_PAD + ((i + 1) * TEXT_HEIGHT),
+						printPanel.Width - (LEFT_PAD * 2),
+						prints[i] == printing
+					);
+					printRows.Add(row);
+					printPanel.Controls.Add(row.Label);
+				}
+				printPanel.Height = TOP_PAD + ((prints.Count + 1) * TEXT_HEIGHT) + BOTTOM_PAD;
+				printPanel.Location = pos;
+			}
+
+		}
+
+		#endregion
 
 		#region Navigation
 
@@ -363,6 +428,7 @@ namespace CollectionTracker {
 			borderPanels.Clear();
 			borderPanels.Add(viewPanel);
 			borderPanels.Add(printPanel);
+			borderPanels.Add(printCopyPanel);
 			contentPanel.Controls.Remove(viewPanel);
 			contentPanel.Controls.Remove(printPanel);
 			contentPanel.Controls.Add(viewPanel);
