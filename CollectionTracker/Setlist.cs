@@ -30,6 +30,7 @@ namespace CollectionTracker {
 
 			//Accessors
 			public Panel Panel => panel;
+			public Set Set => set;
 
 			//Generator
 			public Setrow(Setlist parent, Set set) {
@@ -92,29 +93,38 @@ namespace CollectionTracker {
 
 		#endregion
 
+		//Constants
+		private const int MAX_WIDTH = 860;
+		private const int FILTER_WIDTH = 200;
+
 		//Properties
 		private List<Setrow> rows;
 		private Label headerLabel;
+		private Label filterLabel;
+		private TextBox filterBox;
 		private Panel listPanel;
-		private int lastWidth;
 
 		//Constructor
 		public Setlist() : base() {
-
-			//Width
-			lastWidth = panel.Width;
 
 			//Sets
 			List<Set> sets = new List<Set>(TrackerForm.Catalog.Sets);
 			sets.Sort(Set.SortNewest);
 
 			//Header
-			string str = $"Setlist: {TrackerForm.Catalog.Sets.Count} | {TrackerForm.Catalog.Cards.Count} | {TrackerForm.Catalog.Printings.Count} | {TrackerForm.Catalog.Symbols.Count}";
-			headerLabel = Utils.GenerateLabel(new Rectangle(Math.Max((panel.Width - 850) / 2, 5), 5, Utils.MeasureWidth(str), TEXT_HEIGHT), str);
+			headerLabel = Utils.GenerateAutoSizeLabel(new Point(0, PANEL_MARGIN), $"Sets: {TrackerForm.Catalog.Sets.Count} | Cards: {TrackerForm.Catalog.Cards.Count} | Prints: {TrackerForm.Catalog.Printings.Count} | Symbols: {TrackerForm.Catalog.Symbols.Count}");
 			headerLabel.Anchor = AnchorStyles.Top;
 
+			//Filter box
+			filterLabel = Utils.GenerateAutoSizeLabel(new Point(0, PANEL_MARGIN), "Filter");
+			filterLabel.Anchor = AnchorStyles.Top;
+			filterBox = Utils.GenerateTextBox(new Rectangle(0, PANEL_MARGIN, FILTER_WIDTH, BUTTON_HEIGHT), "");
+			filterBox.TextChanged += OnFilterChanged;
+			filterBox.Anchor = AnchorStyles.Top;
+
 			//Panel
-			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(Math.Min(panel.Width - 10, 850), panel.Height - 40), panel.Size, new Point(0, -15)));
+			int yPos = BUTTON_HEIGHT + (PANEL_MARGIN * 2);
+			listPanel = Utils.GeneratePanel(new Rectangle(0, yPos, 0, panel.Height - (yPos + PANEL_MARGIN)));
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 
@@ -133,23 +143,43 @@ namespace CollectionTracker {
 
 			//Add to panel
 			panel.Controls.Add(headerLabel);
+			panel.Controls.Add(filterLabel);
+			panel.Controls.Add(filterBox);
 			panel.Controls.Add(listPanel);
+
+			//Size and position
+			oldWidth = 0;
+			OnFormResizeEnd();
 
 		}
 
 		//Filter catalog by set ID
 		private void FilterBySet(Set set) => TrackerForm.Instance.SetPage<Printlist>(searchTerms: $"s={set.Code}");
 
+		//Set filter changed
+		private void OnFilterChanged(object sender, EventArgs e) {
+			int top = PANEL_MARGIN;
+			listPanel.SuspendLayout();
+			foreach (Setrow row in rows) {
+				row.Panel.Visible = row.Set.Name.ToLower().Contains(filterBox.Text.ToLower());
+				if (row.Panel.Visible) {
+					row.Panel.Top = top;
+					top += row.Panel.Height + PANEL_MARGIN;
+				}
+			}
+			listPanel.ResumeLayout();
+		}
+
 		//Resize event
-		protected override void OnFormResize(object sender, EventArgs e) {
-			base.OnFormResize(sender, e);
-			if (panel.Width >= 860 && lastWidth >= 860)
+		protected override void OnFormResizeEnd(object sender = null, EventArgs e = null) {
+			if (panel.Width >= MAX_WIDTH && oldWidth >= MAX_WIDTH)
 				return;
-			headerLabel.Location = new Point(Math.Max((panel.Width - 850) / 2, 5), 5);
-			Rectangle rect = Utils.CenterRect(new Size(Math.Min(panel.Width - 10, 850), panel.Height - 40), panel.Size, new Point(0, -15));
-			listPanel.Location = rect.Location;
-			listPanel.Size = rect.Size;
-			lastWidth = panel.Width;
+			listPanel.Width = Math.Min(panel.Width - (PANEL_MARGIN * 2), MAX_WIDTH - (PANEL_MARGIN * 2));
+			listPanel.Left = Math.Max((panel.Width - listPanel.Width) / 2, PANEL_MARGIN);
+			headerLabel.Left = listPanel.Left;
+			filterLabel.Left = listPanel.Right - (filterLabel.Width + filterBox.Width + PANEL_MARGIN);
+			filterBox.Left = listPanel.Right - filterBox.Width;
+			oldWidth = panel.Width;
 		}
 
 	}

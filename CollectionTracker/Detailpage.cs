@@ -148,7 +148,7 @@ namespace CollectionTracker {
 			moveToBox = null;
 
 			//Generate content panel
-			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1290, panel.Height - 40), panel.Size, new Point(0, -20)));
+			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1290, panel.Height - 40), panel.Size, new Point(0, 20)));
 			contentPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			contentPanel.AutoScroll = true;
 

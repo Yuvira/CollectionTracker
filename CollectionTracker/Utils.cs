@@ -202,6 +202,7 @@ namespace CollectionTracker {
 		#region Control Generators
 
 		//Panel generator
+		public static Panel GeneratePanel() => GeneratePanel(Rectangle.Empty);
 		public static Panel GeneratePanel(Rectangle rect) {
 			Panel panel = new Panel();
 			panel.Location = rect.Location;
@@ -211,6 +212,7 @@ namespace CollectionTracker {
 		}
 
 		//Custom panel generator
+		public static TrackerPanel GenerateTrackerPanel(bool useDefaultBorder = false) => GenerateTrackerPanel(Rectangle.Empty, useDefaultBorder);
 		public static TrackerPanel GenerateTrackerPanel(Rectangle rect, bool useDefaultBorder = false) {
 			TrackerPanel panel = new TrackerPanel();
 			panel.Location = rect.Location;
@@ -221,6 +223,7 @@ namespace CollectionTracker {
 		}
 
 		//Button generator
+		public static Button GenerateButton(string text, string imgPath = "") => GenerateButton(Rectangle.Empty, text , imgPath);
 		public static Button GenerateButton(Rectangle rect, string text, string imgPath = "") {
 			Button button = new Button();
 			button.Location = rect.Location;
@@ -238,6 +241,7 @@ namespace CollectionTracker {
 		}
 
 		//Button generator
+		public static RadioButton GenerateRadioButton(string text) => GenerateRadioButton(Rectangle.Empty, text);
 		public static RadioButton GenerateRadioButton(Rectangle rect, string text) {
 			RadioButton button = new RadioButton();
 			button.Location = rect.Location;
@@ -252,6 +256,7 @@ namespace CollectionTracker {
 		}
 
 		//ComboBox generator
+		public static ComboBox GenerateComboBox(ComboBoxStyle style, bool sorted) => GenerateComboBox(Rectangle.Empty, style, sorted);
 		public static ComboBox GenerateComboBox(Rectangle rect, ComboBoxStyle style, bool sorted) {
 			ComboBox comboBox = new ComboBox();
 			comboBox.Location = rect.Location;
@@ -264,6 +269,9 @@ namespace CollectionTracker {
 		}
 
 		//Label Generator
+		public static Label GenerateAutoSizeLabel(string text, Font font = null, Color? color = null) => GenerateAutoSizeLabel(Point.Empty, text, font, color);
+		public static Label GenerateAutoSizeLabel(Point pos, string text, Font font = null, Color? color = null) => GenerateLabel(new Rectangle(pos, new Size(MeasureWidth(text, font), TrackerPage.TEXT_HEIGHT)), text, font, color);
+		public static Label GenerateLabel(string text, Font font = null, Color? color = null) => GenerateLabel(Rectangle.Empty, text, font, color);
 		public static Label GenerateLabel(Rectangle rect, string text, Font font = null, Color? color = null) {
 			Label label = new Label();
 			label.Location = rect.Location;
@@ -277,6 +285,7 @@ namespace CollectionTracker {
 		}
 
 		//Progress bar generator
+		public static ProgressBar GenerateProgressBar(int value = 0) => GenerateProgressBar(Rectangle.Empty, value);
 		public static ProgressBar GenerateProgressBar(Rectangle rect, int value = 0) {
 			ProgressBar bar = new ProgressBar();
 			bar.Location = rect.Location;
@@ -286,6 +295,7 @@ namespace CollectionTracker {
 		}
 
 		//Picture box generator
+		public static PictureBox GeneratePictureBox() => GeneratePictureBox(Rectangle.Empty);
 		public static PictureBox GeneratePictureBox(Rectangle rect) {
 			PictureBox box = new PictureBox();
 			box.Location = rect.Location;
@@ -296,6 +306,7 @@ namespace CollectionTracker {
 		}
 
 		//Text box generator
+		public static TextBox GenerateTextBox(string text, bool multiline = false) => GenerateTextBox(Rectangle.Empty, text, multiline);
 		public static TextBox GenerateTextBox(Rectangle rect, string text, bool multiline = false) {
 			TextBox box = new TextBox();
 			box.Location = rect.Location;
@@ -309,6 +320,7 @@ namespace CollectionTracker {
 		}
 
 		//Numeric up down generator
+		public static NumericUpDown GenerateNumericUpDown(decimal value) => GenerateNumericUpDown(Rectangle.Empty, value);
 		public static NumericUpDown GenerateNumericUpDown(Rectangle rect, decimal value) {
 			NumericUpDown nud = new NumericUpDown();
 			nud.Location = rect.Location;
@@ -320,6 +332,7 @@ namespace CollectionTracker {
 		}
 
 		//Checkbox generator
+		public static CheckBox GenerateCheckbox(bool check, string text = "") => GenerateCheckbox(Rectangle.Empty, check, text);
 		public static CheckBox GenerateCheckbox(Rectangle rect, bool check, string text = "") {
 			CheckBox box = new CheckBox();
 			box.Location = rect.Location;
@@ -331,6 +344,7 @@ namespace CollectionTracker {
 		}
 
 		//Date time picker
+		public static DateTimePicker GenerateDateTimePicker(DateTime? value = null) => GenerateDateTimePicker(Rectangle.Empty, value);
 		public static DateTimePicker GenerateDateTimePicker(Rectangle rect, DateTime? value = null) {
 			DateTimePicker dtp = new DateTimePicker();
 			dtp.Location = rect.Location;
@@ -415,14 +429,33 @@ namespace CollectionTracker {
 		
 		#region Misc. Utilities
 
-		//Center rect of given size within width
+		//Center rect of given size within container
 		public static Rectangle CenterRect(Size controlSize, Size containerSize, Point offset = default) {
 			return new Rectangle(
-				((containerSize.Width - controlSize.Width) / 2) - offset.X,
-				((containerSize.Height - controlSize.Height) / 2) - offset.Y,
+				((containerSize.Width - controlSize.Width) / 2) + offset.X,
+				((containerSize.Height - controlSize.Height) / 2) + offset.Y,
 				controlSize.Width,
 				controlSize.Height
 			);
+		}
+
+		//Horizontally center rect of given size within width
+		public static Rectangle CenterRect(Size controlSize, Size containerSize, int yPos) => CenterRect(controlSize.Width, controlSize.Height, containerSize, yPos);
+		public static Rectangle CenterRect(int width, int height, Size containerSize, int yPos) {
+			return new Rectangle(
+				(containerSize.Width - width) / 2,
+				yPos,
+				width,
+				height
+			);
+		}
+
+		//Rectangle from size only
+		public static Rectangle RectFromSize(int width, int height) {
+			Rectangle rect = Rectangle.Empty;
+			rect.Width = width;
+			rect.Height = height;
+			return rect;
 		}
 
 		//Blend list of colours
@@ -515,11 +548,29 @@ namespace CollectionTracker {
 			point.Y += y;
 			return point;
 		}
+		public static Point AddX(this Point point, int x) {
+			point.X += x;
+			return point;
+		}
+		public static Point AddY(this Point point, int y) {
+			point.Y += y;
+			return point;
+		}
 
 		//Add point
 		public static Point Add(this Point point, Point add) {
 			point.X += add.X;
 			point.Y += add.Y;
+			return point;
+		}
+
+		//Center within container
+		public static Point CenterX(this Point point, int controlWidth, int containerWidth) {
+			point.X = (containerWidth - controlWidth) / 2;
+			return point;
+		}
+		public static Point CenterY(this Point point, int controlHeight, int containerHeight) {
+			point.Y = (containerHeight - controlHeight) / 2;
 			return point;
 		}
 

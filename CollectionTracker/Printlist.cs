@@ -232,7 +232,7 @@ namespace CollectionTracker {
 			nextPageButton.Click += NextPage;
 
 			//Panel
-			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1245, panel.Height - 40), panel.Size, new Point(0, -20)));
+			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1245, panel.Height - 40), panel.Size, new Point(0, 20)));
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 

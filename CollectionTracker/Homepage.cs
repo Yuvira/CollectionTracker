@@ -15,7 +15,7 @@ namespace CollectionTracker {
 		public Homepage() : base() {
 
 			//Catalog selectors
-			TrackerPanel catalogPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(382, 42), panel.Size, new Point(0, 32)));
+			TrackerPanel catalogPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(382, 42), panel.Size, new Point(0, -32)));
 			catalogPanel.Anchor = AnchorStyles.None;
 
 			//Magic button
@@ -34,7 +34,7 @@ namespace CollectionTracker {
 			catalogPanel.Controls.Add(pkmnButton);
 
 			//Search tools
-			searchPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(382, 77), panel.Size, new Point(0, -32)));
+			searchPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(382, 77), panel.Size, new Point(0, 32)));
 			searchPanel.Anchor = AnchorStyles.None;
 
 			//Search bar
