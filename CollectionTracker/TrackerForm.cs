@@ -114,22 +114,14 @@ namespace CollectionTracker {
 		#region Catalog Setters
 
 		//Set current catalog
-		public void SetCatalogMTG() {
-			Catalog = mtgCatalog;
-			catalogLabel.Text = "Magic";
-			EnableCatalogButtons();
-		}
-		public void SetCatalogYGO() {
-			Catalog = ygoCatalog;
-			catalogLabel.Text = "Yu-Gi-Oh!";
-			EnableCatalogButtons();
-		}
-		public void SetCatalogPKMN() {
-			Catalog = pkmnCatalog;
-			catalogLabel.Text = "Pokémon";
-			EnableCatalogButtons();
-		}
-		private void EnableCatalogButtons() {
+		public void SetCatalogMTG() => SetCatalog(mtgCatalog);
+		public void SetCatalogYGO() => SetCatalog(ygoCatalog);
+		public void SetCatalogPKMN() => SetCatalog(pkmnCatalog);
+		private void SetCatalog(Catalog catalog) {
+			if (Catalog == catalog)
+				return;
+			Catalog = catalog;
+			catalogLabel.Text = Catalog.Name;
 			saveButton.Enabled = true;
 			entryDDButton.Enabled = true;
 			keywordDDButton.Enabled = true;

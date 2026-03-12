@@ -37,6 +37,7 @@ namespace CollectionTracker {
 		[ProtoMember(3)] private List<Printing> printings;
 		[ProtoMember(4)] private List<Symbol> symbols;
 		[ProtoMember(6)] private Dictionary<string, string> keywords;
+		[ProtoMember(7)] private string name;
 		[ProtoMember(5)] private Game game;
 
 		//Accessors
@@ -45,7 +46,10 @@ namespace CollectionTracker {
 		public List<Printing> Printings => printings;
 		public List<Symbol> Symbols => symbols;
 		public Dictionary<string, string> Keywords => keywords;
+		public string Name => name;
 		public Game Game => game;
+
+		public void SetName(string name) => this.name = name;
 
 		//Constructor
 		public Catalog() {
@@ -54,6 +58,7 @@ namespace CollectionTracker {
 			printings = new List<Printing>();
 			symbols = new List<Symbol>();
 			keywords = new Dictionary<string, string>();
+			name = "";
 			game = Game.NONE;
 		}
 
@@ -75,6 +80,7 @@ namespace CollectionTracker {
 				symbols.Add(new Symbol(catalog.symbols[i]));
 			foreach (Printing print in printings)
 				print.LoadRefs(this);
+			name = "Magic";
 			game = Game.MTG;
 		}
 		public Catalog(YGO_Catalog catalog) {
@@ -90,6 +96,7 @@ namespace CollectionTracker {
 				printings.Add(new Printing(catalog.printings[i]));
 			foreach (Printing print in printings)
 				print.LoadRefs(this);
+			name = "Yu-Gi-Oh!";
 			game = Game.YGO;
 		}
 		public Catalog(PKMN_Catalog catalog) {
@@ -107,6 +114,7 @@ namespace CollectionTracker {
 				symbols.Add(new Symbol(catalog.symbols[i]));
 			foreach (Printing print in printings)
 				print.LoadRefs(this);
+			name = "Pokémon";
 			game = Game.PKMN;
 		}
 
