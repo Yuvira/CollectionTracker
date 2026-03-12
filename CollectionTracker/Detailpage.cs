@@ -475,8 +475,8 @@ namespace CollectionTracker {
 		//Set panel color
 		private void SetPanelColorsMTG(List<TrackerPanel> panels) {
 			string color = "";
-			if (!printing.Card.TryGetFirstField("identity", out color) || string.IsNullOrWhiteSpace(color))
-				printing.Card.TryGetFirstField("color", out color);
+			if (!printing.Card.TryGetFirstField("color", out color) || string.IsNullOrWhiteSpace(color))
+				printing.Card.TryGetFirstField("identity", out color);
 			color = color.ToLower();
 			foreach (TrackerPanel panel in panels) {
 				if (color.Length == 0)
