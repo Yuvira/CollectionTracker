@@ -283,7 +283,7 @@ namespace CollectionTracker {
 
 		//Tag shortcuts
 		private void HandleControlInput(object sender, KeyEventArgs e) {
-			if (!e.Control || !e.Shift || string.IsNullOrEmpty(textValue.SelectedText))
+			if (!e.Control || string.IsNullOrEmpty(textValue.SelectedText))
 				return;
 			if (e.KeyCode == Keys.L || e.KeyCode == Keys.B || e.KeyCode == Keys.U || e.KeyCode == Keys.R || e.KeyCode == Keys.T)
 				e.SuppressKeyPress = true;
@@ -291,7 +291,7 @@ namespace CollectionTracker {
 
 		//Tag shortcuts
 		private void TextKeyPressed(object sender, KeyEventArgs e) {
-			if (!e.Control || !e.Shift || string.IsNullOrEmpty(textValue.SelectedText))
+			if (!e.Control || string.IsNullOrEmpty(textValue.SelectedText))
 				return;
 			string code = "";
 			if (e.KeyCode == Keys.L)
