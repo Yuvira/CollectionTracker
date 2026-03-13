@@ -675,7 +675,7 @@ namespace CollectionTracker {
 						textPos.Y = TOP_PAD;
 						TrackerPanel footerPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 						if (faceHasFlavor)
-							textPos.Y += LINE_SPACING + GenerateDescription($"<i>{faceFlavor}", footerPanel, textPos);
+							textPos.Y += LINE_SPACING + GenerateDescription($"<i>{faceFlavor}", footerPanel, textPos, true, false, true);
 						int footerHeight = 0;
 						if (faceHasArtist)
 							footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription($"🖌 {faceArtist}", footerPanel, textPos, false));
@@ -700,7 +700,7 @@ namespace CollectionTracker {
 				textPos = new Point(LEFT_PAD, TOP_PAD);
 				TrackerPanel footerPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 				if (hasFlavor)
-					textPos.Y += LINE_SPACING + GenerateDescription($"<i>{flavor}", footerPanel, textPos);
+					textPos.Y += LINE_SPACING + GenerateDescription($"<i>{flavor}", footerPanel, textPos, true, false, true);
 				int footerHeight = 0;
 				if (hasArtist)
 					footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription($"🖌 {artist}", footerPanel, textPos, false));
