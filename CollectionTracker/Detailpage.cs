@@ -100,6 +100,12 @@ namespace CollectionTracker {
 
 		#endregion
 
+		//Constants
+		private const string FILTER_ALL = "All";
+		private const string FILTER_PRINTS = "Unique Prints";
+		private const string FILTER_FRAMES = "Unique Frames";
+		private const string FILTER_ART = "Unique Art";
+
 		//Properties
 		private Printing printing;
 		private Printing prevListPrint;
@@ -119,6 +125,7 @@ namespace CollectionTracker {
 		private Button navButtonRight;
 		private Button refButtonBack;
 		private Button refButtonForward;
+		private ComboBox filterBox;
 		private PictureBox imgBox;
 		private Panel contentPanel;
 		private ComboBox moveToBox;
@@ -127,8 +134,12 @@ namespace CollectionTracker {
 		private TrackerPanel viewPanel;
 		private TrackerPanel printPanel;
 		private TrackerPanel printCopyPanel;
+		private Label printCopyHeader;
 		private Panel tooltipPanel;
 		private PictureBox cardtipBox;
+
+		//Filter index
+		private static int FilterIndex = 0;
 
 		//Accessors
 		public List<Tooltip> Tooltips => tooltips;
@@ -148,25 +159,35 @@ namespace CollectionTracker {
 			moveToBox = null;
 
 			//Generate content panel
-			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1290, panel.Height - 40), panel.Size, new Point(0, 20)));
+			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1290, panel.Height - 45), panel.Size, new Point(0, 20)));
 			contentPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			contentPanel.AutoScroll = true;
 
 			//Nav buttons
-			navButtonLeft = Utils.GenerateButton(new Rectangle(contentPanel.Location.X, 5, 200, 30), "");
+			navButtonLeft = Utils.GenerateButton(new Rectangle(contentPanel.Left, 5, 200, 30), "");
 			navButtonLeft.Anchor = AnchorStyles.Top;
 			navButtonLeft.Click += NavLeft;
-			navButtonRight = Utils.GenerateButton(new Rectangle(contentPanel.Location.X + contentPanel.Width - 200, 5, 200, 30), "");
+			navButtonRight = Utils.GenerateButton(new Rectangle(contentPanel.Right - 200, 5, 200, 30), "");
 			navButtonRight.Anchor = AnchorStyles.Top;
 			navButtonRight.Click += NavRight;
 
 			//Ref buttons
-			refButtonBack = Utils.GenerateButton(new Rectangle(contentPanel.Location.X + 205, 5, 30, 30), "<");
+			refButtonBack = Utils.GenerateButton(new Rectangle(contentPanel.Left + 205, 5, 30, 30), "<");
 			refButtonBack.Anchor = AnchorStyles.Top;
 			refButtonBack.Click += RefBack;
-			refButtonForward = Utils.GenerateButton(new Rectangle(contentPanel.Location.X + 240, 5, 30, 30), ">");
+			refButtonForward = Utils.GenerateButton(new Rectangle(contentPanel.Left + 240, 5, 30, 30), ">");
 			refButtonForward.Anchor = AnchorStyles.Top;
 			refButtonForward.Click += RefForward;
+
+			//Filter box
+			filterBox = Utils.GenerateComboBox(new Rectangle(contentPanel.Right - 405, 5, 200, BUTTON_HEIGHT), ComboBoxStyle.DropDownList, false);
+			filterBox.Anchor = AnchorStyles.Top;
+			filterBox.Items.AddRange(new string[] { FILTER_ALL, FILTER_PRINTS, FILTER_FRAMES, FILTER_ART });
+			filterBox.SelectedIndex = FilterIndex;
+			filterBox.SelectedValueChanged += FilterChanged;
+			int width = Utils.MeasureWidth("Filter");
+			Label filterLabel = Utils.GenerateLabel(new Rectangle(contentPanel.Right - (width + 410), 10, width, TEXT_HEIGHT), "Filter");
+			filterLabel.Anchor = AnchorStyles.Top;
 
 			//Tooltips
 			tooltips = new List<Tooltip>();
@@ -209,7 +230,8 @@ namespace CollectionTracker {
 			printPanel.Controls.Add(Utils.GenerateLabel(new Rectangle(LEFT_PAD, TOP_PAD, printPanel.Width - (LEFT_PAD * 2), TEXT_HEIGHT), "Printings"));
 			contentPanel.Controls.Add(printPanel);
 			printCopyPanel = Utils.GenerateTrackerPanel(new Rectangle(865, 5, 400, TOP_PAD + TEXT_HEIGHT + BOTTOM_PAD));
-			printCopyPanel.Controls.Add(Utils.GenerateLabel(new Rectangle(LEFT_PAD, TOP_PAD, printPanel.Width - (LEFT_PAD * 2), TEXT_HEIGHT), "Identical Prints"));
+			printCopyHeader = Utils.GenerateLabel(new Rectangle(LEFT_PAD, TOP_PAD, printPanel.Width - (LEFT_PAD * 2), TEXT_HEIGHT), "Identical Prints");
+			printCopyPanel.Controls.Add(printCopyHeader);
 			contentPanel.Controls.Add(printCopyPanel);
 			printCopyPanel.Hide();
 
@@ -218,6 +240,8 @@ namespace CollectionTracker {
 			panel.Controls.Add(navButtonRight);
 			panel.Controls.Add(refButtonBack);
 			panel.Controls.Add(refButtonForward);
+			panel.Controls.Add(filterBox);
+			panel.Controls.Add(filterLabel);
 			panel.Controls.Add(contentPanel);
 
 			//Set printing
@@ -275,6 +299,9 @@ namespace CollectionTracker {
 		//Print list
 		private void UpdatePrintList() {
 
+			//Update index
+			FilterIndex = filterBox.SelectedIndex;
+
 			//Clear rows
 			foreach (DetailPrintrow row in printRows) {
 				printPanel.Controls.Remove(row.Label);
@@ -287,46 +314,109 @@ namespace CollectionTracker {
 			printRows.Clear();
 			printCopyRows.Clear();
 
-			//Get identical prints
+			//Filter string
+			string filter = filterBox.SelectedItem.ToString();
+
+			//Initial values
 			Point pos = printCopyPanel.Location;
-			Printing basePrint = printing;
-			if (printing.TryGetBaseField("printcopy", out string printcopy)) {
-				basePrint = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.TryGetBaseField("printid", out string printid_) && printid_.Equals(printcopy));
-				if (basePrint == null)
-					basePrint = printing;
-			}
-			if (basePrint.TryGetBaseField("printid", out string printid)) {
-				List<Printing> identicalPrints = TrackerForm.Catalog.Printings.Where(p => p.TryGetBaseField("printcopy", out printcopy) && printid.Equals(printcopy)).ToList();
-				if (!identicalPrints.Contains(printing))
-					identicalPrints.Add(printing);
-				if (!identicalPrints.Contains(basePrint))
-					identicalPrints.Add(basePrint);
-				if (identicalPrints.Count > 1) {
-					identicalPrints.Sort(Printing.SortInverseNewest);
-					for (int i = 0; i < identicalPrints.Count; ++i) {
-						DetailPrintrow row = new DetailPrintrow(
-							this,
-							identicalPrints[i].GetField("printid"),
-							identicalPrints[i].Set.Name,
-							TOP_PAD + ((i + 1) * TEXT_HEIGHT),
-							printCopyPanel.Width - (LEFT_PAD * 2),
-							identicalPrints[i] == printing
-						);
-						printCopyRows.Add(row);
-						printCopyPanel.Controls.Add(row.Label);
-					}
-					printCopyPanel.Height = TOP_PAD + ((identicalPrints.Count + 1) * TEXT_HEIGHT) + BOTTOM_PAD;
+			string printid;
+
+			//Get filtered prints
+			if (!filter.Equals(FILTER_ALL)) {
+
+				//Base print reference
+				Printing basePrint = printing;
+
+				//Determine if current card is a copy
+				bool isCopy;
+				string copyid;
+				if (filter.Equals(FILTER_ART))
+					isCopy = printing.TryGetBaseField("artcopy", out copyid) || printing.TryGetBaseField("framecopy", out copyid) || printing.TryGetBaseField("printcopy", out copyid);
+				else if (filter.Equals(FILTER_FRAMES))
+					isCopy = printing.TryGetBaseField("framecopy", out copyid) || printing.TryGetBaseField("printcopy", out copyid);
+				else
+					isCopy = printing.TryGetBaseField("printcopy", out copyid);
+
+				//Find referenced base printing
+				if (isCopy) {
+					basePrint = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.TryGetBaseField("printid", out printid) && printid.Equals(copyid));
+					if (basePrint == null)
+						basePrint = printing;
 				}
-				printCopyPanel.Visible = identicalPrints.Count > 1;
-				if (identicalPrints.Count > 1)
-					pos.Y += printCopyPanel.Height + 5;
+
+				//Get base printid
+				if (basePrint.TryGetBaseField("printid", out printid)) {
+
+					//Get list of cards to be filtered
+					List<Printing> identicalPrints;
+					string printcopy, framecopy, artcopy;
+					if (filter.Equals(FILTER_ART))
+						identicalPrints = TrackerForm.Catalog.Printings.Where(p => (p.TryGetBaseField("artcopy", out artcopy) && printid.Equals(artcopy)) || (p.TryGetBaseField("framecopy", out framecopy) && printid.Equals(framecopy)) || (p.TryGetBaseField("printcopy", out printcopy) && printid.Equals(printcopy))).ToList();
+					else if (filter.Equals(FILTER_FRAMES))
+						identicalPrints = TrackerForm.Catalog.Printings.Where(p => (p.TryGetBaseField("framecopy", out framecopy) && printid.Equals(framecopy)) || (p.TryGetBaseField("printcopy", out printcopy) && printid.Equals(printcopy))).ToList();
+					else
+						identicalPrints = TrackerForm.Catalog.Printings.Where(p => p.TryGetBaseField("printcopy", out printcopy) && printid.Equals(printcopy)).ToList();
+
+					//Add current and base prints if not in list
+					if (!identicalPrints.Contains(printing))
+						identicalPrints.Add(printing);
+					if (!identicalPrints.Contains(basePrint))
+						identicalPrints.Add(basePrint);
+
+					//Change header text
+					if (filter.Equals(FILTER_ART))
+						printCopyHeader.Text = "Identical Art";
+					else if (filter.Equals(FILTER_FRAMES))
+						printCopyHeader.Text = "Identical Frames";
+					else
+						printCopyHeader.Text = "Identical Prints";
+
+					//Sort and display
+					if (identicalPrints.Count > 1) {
+						identicalPrints.Sort(Printing.SortInverseNewest);
+						for (int i = 0; i < identicalPrints.Count; ++i) {
+							DetailPrintrow row = new DetailPrintrow(
+								this,
+								identicalPrints[i].GetField("printid"),
+								identicalPrints[i].Set.Name,
+								TOP_PAD + ((i + 1) * TEXT_HEIGHT),
+								printCopyPanel.Width - (LEFT_PAD * 2),
+								identicalPrints[i] == printing
+							);
+							printCopyRows.Add(row);
+							printCopyPanel.Controls.Add(row.Label);
+						}
+						printCopyPanel.Height = TOP_PAD + ((identicalPrints.Count + 1) * TEXT_HEIGHT) + BOTTOM_PAD;
+					}
+
+					//Set visibility and print list position
+					printCopyPanel.Visible = identicalPrints.Count > 1;
+					if (identicalPrints.Count > 1)
+						pos.Y += printCopyPanel.Height + 5;
+
+				}
+
 			}
-			else
+
+			//Hide if no content
+			if (pos.Y == printCopyPanel.Location.Y)
 				printCopyPanel.Hide();
 
-			//List prints with same cardref
+			//List prints
 			if (printing.Card != null && printing.TryGetField("name", out string name) && !name.Equals("_")) {
-				List<Printing> prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _)).ToList();
+
+				//Filter prints
+				List<Printing> prints;
+				if (filter.Equals(FILTER_ART))
+					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _) && !p.TryGetField("framecopy", out _) && !p.TryGetField("artcopy", out _)).ToList();
+				else if (filter.Equals(FILTER_FRAMES))
+					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _) && !p.TryGetField("framecopy", out _)).ToList();
+				else if (filter.Equals(FILTER_PRINTS))
+					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _)).ToList();
+				else
+					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
+
+				//Sort and display
 				prints.Sort(Printing.SortInverseNewest);
 				for (int i = 0; i < prints.Count; ++i) {
 					DetailPrintrow row = new DetailPrintrow(
@@ -340,11 +430,17 @@ namespace CollectionTracker {
 					printRows.Add(row);
 					printPanel.Controls.Add(row.Label);
 				}
+
+				//Set panel height
 				printPanel.Height = TOP_PAD + ((prints.Count + 1) * TEXT_HEIGHT) + BOTTOM_PAD;
 				printPanel.Location = pos;
+
 			}
 
 		}
+
+		//Update print list filter
+		private void FilterChanged(object sender, EventArgs e) => UpdatePrintList();
 
 		#endregion
 
