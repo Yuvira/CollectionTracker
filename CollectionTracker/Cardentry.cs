@@ -18,6 +18,8 @@ namespace CollectionTracker {
 		private Button addButton;
 		private Button saveButton;
 		private Button returnButton;
+		private Button artButton;
+		private Button frontButton;
 
 		//Constructor
 		public Cardentry(Card card, Printing print) : base() {
@@ -79,6 +81,16 @@ namespace CollectionTracker {
 			returnButton.Click += ReturnToDetails;
 			listPanel.Controls.Add(returnButton);
 
+			//Art card button
+			artButton = Utils.GenerateButton(new Rectangle(listPanel.Width - (200 + PANEL_MARGIN + SCROLL_MARGIN), 0, 100, 30), "Art");
+			artButton.Click += SetTypeArt;
+			listPanel.Controls.Add(artButton);
+
+			//Front card button
+			frontButton = Utils.GenerateButton(new Rectangle(listPanel.Width - (100 + SCROLL_MARGIN), 0, 100, 30), "Front");
+			frontButton.Click += SetTypeFront;
+			listPanel.Controls.Add(frontButton);
+
 			//Resume
 			listPanel.ResumeLayout();
 
@@ -129,7 +141,19 @@ namespace CollectionTracker {
 			addButton.Location = pos;
 			saveButton.Location = new Point(35, pos.Y);
 			returnButton.Location = new Point(140, pos.Y);
+			artButton.Top = pos.Y;
+			frontButton.Top = pos.Y;
 			listPanel.ResumeLayout();
+		}
+
+		//Type shortcuts
+		private void SetTypeArt(object sender, EventArgs e) => SetType("Art Card");
+		private void SetTypeFront(object sender, EventArgs e) => SetType("Front Card");
+		private void SetType(string type) {
+			foreach (FieldEntry entry in fields.Entries) {
+				if (entry.Field.Equals("type"))
+					entry.SetValue(type);
+			}
 		}
 
 		//Save
