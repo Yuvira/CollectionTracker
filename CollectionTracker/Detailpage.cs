@@ -314,14 +314,50 @@ namespace CollectionTracker {
 			printRows.Clear();
 			printCopyRows.Clear();
 
+			//Initial position
+			Point pos = printPanel.Location;
+
 			//Filter string
 			string filter = filterBox.SelectedItem.ToString();
 
-			//Initial values
-			Point pos = printCopyPanel.Location;
-			string printid;
+			//List prints
+			if (printing.Card != null && printing.TryGetField("name", out string name) && !name.Equals("_")) {
+
+				//Filter prints
+				List<Printing> prints;
+				if (filter.Equals(FILTER_ART))
+					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _) && !p.TryGetField("framecopy", out _) && !p.TryGetField("artcopy", out _)).ToList();
+				else if (filter.Equals(FILTER_FRAMES))
+					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _) && !p.TryGetField("framecopy", out _)).ToList();
+				else if (filter.Equals(FILTER_PRINTS))
+					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _)).ToList();
+				else
+					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
+
+				//Sort and display
+				prints.Sort(Printing.SortInverseNewest);
+				for (int i = 0; i < prints.Count; ++i) {
+					DetailPrintrow row = new DetailPrintrow(
+						this,
+						prints[i].GetField("printid"),
+						prints[i].Set.Name,
+						TOP_PAD + ((i + 1) * TEXT_HEIGHT),
+						printPanel.Width - (LEFT_PAD * 2),
+						prints[i] == printing
+					);
+					printRows.Add(row);
+					printPanel.Controls.Add(row.Label);
+				}
+
+				//Set panel height
+				printPanel.Height = TOP_PAD + ((prints.Count + 1) * TEXT_HEIGHT) + BOTTOM_PAD;
+				printPanel.Location = pos;
+				pos.Y += printPanel.Height + 5;
+
+			}
 
 			//Get filtered prints
+			string printid;
 			if (!filter.Equals(FILTER_ALL)) {
 
 				//Base print reference
@@ -391,8 +427,10 @@ namespace CollectionTracker {
 
 					//Set visibility and print list position
 					printCopyPanel.Visible = identicalPrints.Count > 1;
-					if (identicalPrints.Count > 1)
+					if (identicalPrints.Count > 1) {
+						printCopyPanel.Location = pos;
 						pos.Y += printCopyPanel.Height + 5;
+					}
 
 				}
 
@@ -401,41 +439,6 @@ namespace CollectionTracker {
 			//Hide if no content
 			if (pos.Y == printCopyPanel.Location.Y)
 				printCopyPanel.Hide();
-
-			//List prints
-			if (printing.Card != null && printing.TryGetField("name", out string name) && !name.Equals("_")) {
-
-				//Filter prints
-				List<Printing> prints;
-				if (filter.Equals(FILTER_ART))
-					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _) && !p.TryGetField("framecopy", out _) && !p.TryGetField("artcopy", out _)).ToList();
-				else if (filter.Equals(FILTER_FRAMES))
-					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _) && !p.TryGetField("framecopy", out _)).ToList();
-				else if (filter.Equals(FILTER_PRINTS))
-					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _)).ToList();
-				else
-					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
-
-				//Sort and display
-				prints.Sort(Printing.SortInverseNewest);
-				for (int i = 0; i < prints.Count; ++i) {
-					DetailPrintrow row = new DetailPrintrow(
-						this,
-						prints[i].GetField("printid"),
-						prints[i].Set.Name,
-						TOP_PAD + ((i + 1) * TEXT_HEIGHT),
-						printPanel.Width - (LEFT_PAD * 2),
-						prints[i] == printing
-					);
-					printRows.Add(row);
-					printPanel.Controls.Add(row.Label);
-				}
-
-				//Set panel height
-				printPanel.Height = TOP_PAD + ((prints.Count + 1) * TEXT_HEIGHT) + BOTTOM_PAD;
-				printPanel.Location = pos;
-
-			}
 
 		}
 
