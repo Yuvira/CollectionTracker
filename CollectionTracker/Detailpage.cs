@@ -1315,27 +1315,37 @@ namespace CollectionTracker {
 
 			//Properties
 			public Symbol symbol;
-			public DescriptionSymbol(string text) =>
+			public string text;
+			public DescriptionSymbol(string text) {
+				this.text = text;
 				symbol = TrackerForm.Catalog.Symbols.FirstOrDefault(s => s.Text.Equals(text));
+			}
 
 			//Symbol width
 			public override int GetWidth() {
 				if (symbol == null)
-					return 0;
+					return Utils.MeasureWidth(text);
 				return (int)(symbol.Aspect * TEXT_HEIGHT);
 			}
 
 			//Generate
 			public override Point GenerateControl(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
-				int width = (int)(symbol.Aspect * TEXT_HEIGHT);
 				if (rightAlign)
-					location.X -= width;
-				PictureBox imgBox = Utils.GeneratePictureBox(new Rectangle(location.Add(new Point(1, 1)), new Size(width - 2, TEXT_HEIGHT - 2)));
+					location.X -= GetWidth();
+				if (symbol == null) {
+					Label label = Utils.GenerateLabel(new Rectangle(location, new Size(GetWidth(), TEXT_HEIGHT)), text);
+					label.ForeColor = Color.Black;
+					label.BackColor = Color.White;
+					panel.Controls.Add(label);
+					location.X += GetWidth();
+					return location;
+				}
+				PictureBox imgBox = Utils.GeneratePictureBox(new Rectangle(location.Add(new Point(1, 1)), new Size(GetWidth() - 2, TEXT_HEIGHT - 2)));
 				Utils.TryLoadImage(imgBox, symbol.ImgPath);
 				panel.Controls.Add(imgBox);
 				if (rightAlign)
 					return location;
-				location.X += width;
+				location.X += GetWidth();
 				return location;
 			}
 
