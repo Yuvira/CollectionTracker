@@ -72,7 +72,7 @@ namespace CollectionTracker {
 				}
 
 				//No cards logged but folder exists
-				else if (setPrints.Count == 0 && Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game) && Directory.Exists(Utils.ResourcePaths[TrackerForm.Catalog.Game] + set.Code)) {
+				else if (setPrints.Count == 0 && Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game) && Directory.Exists(Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code)) {
 					cardRefLabel = Utils.GenerateLabel(new Rectangle(780, 20, 35, TEXT_HEIGHT), "&");
 					cardRefLabel.TextAlign = ContentAlignment.MiddleCenter;
 					panel.Controls.Add(cardRefLabel);
