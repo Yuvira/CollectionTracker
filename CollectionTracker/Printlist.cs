@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -24,49 +25,50 @@ namespace CollectionTracker {
 				private Treatment treatment;
 
 				//Controls
+				private TrackerPanel panel;
 				private Label nameLabel;
 				private Label countLabel;
 				private Button decrementButton;
 				private Button incrementButton;
 
+				//Accessors
+				public Panel Panel => panel;
+
 				//Generator
-				public Treatmentrow(Printentry parent, Printing print, int idx) {
+				public Treatmentrow(Printentry parent, Treatment treatment, int yPos) {
 
 					//Initial values
 					this.parent = parent;
-					treatment = print.Treatments[idx];
+					this.treatment = treatment;
 
-					//Name label
-					nameLabel = Utils.GenerateLabel(new Rectangle(60, 430 + (idx * 30), 115, TEXT_HEIGHT), treatment.Name);
-					nameLabel.TextAlign = ContentAlignment.MiddleRight;
-					parent.Panel.Controls.Add(nameLabel);
+					//Panel
+					panel = Utils.GenerateTrackerPanel(new Rectangle(PANEL_MARGIN, yPos, ENTRY_WIDTH - (PANEL_MARGIN * 2), BUTTON_HEIGHT));
 
-					//Count label
-					countLabel = Utils.GenerateLabel(new Rectangle(185, 430 + (idx * 30), 55, TEXT_HEIGHT), treatment.OwnedCount.ToString());
-					parent.Panel.Controls.Add(countLabel);
-
-					//Decrement
-					decrementButton = Utils.GenerateButton(new Rectangle(5, 425 + (idx * 30), 55, BUTTON_HEIGHT), "<");
+					//Buttons
+					decrementButton = Utils.GenerateButton(new Rectangle(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT), "<");
 					decrementButton.Click += DecrementCount;
-					parent.Panel.Controls.Add(decrementButton);
-
-					//Increment
-					incrementButton = Utils.GenerateButton(new Rectangle(240, 425 + (idx * 30), 55, BUTTON_HEIGHT), ">");
+					incrementButton = Utils.GenerateButton(new Rectangle(panel.Width - BUTTON_HEIGHT, 0, BUTTON_HEIGHT, BUTTON_HEIGHT), ">");
 					incrementButton.Click += IncrementCount;
-					parent.Panel.Controls.Add(incrementButton);
+
+					//Labels
+					int width = (incrementButton.Left - decrementButton.Right) - (PANEL_MARGIN * 3);
+					nameLabel = Utils.GenerateLabel(new Rectangle(decrementButton.Right + PANEL_MARGIN, 5, (int)(width * 0.7f), TEXT_HEIGHT), treatment.Name);
+					nameLabel.TextAlign = ContentAlignment.MiddleRight;
+					countLabel = Utils.GenerateLabel(new Rectangle(nameLabel.Right + PANEL_MARGIN, 5, (int)(width * 0.3f), TEXT_HEIGHT), treatment.OwnedCount.ToString());
+
+					//Add controls
+					panel.Controls.Add(decrementButton);
+					panel.Controls.Add(incrementButton);
+					panel.Controls.Add(nameLabel);
+					panel.Controls.Add(countLabel);
 
 				}
 
-				//Dispose
-				public void Dispose() {
-					parent.panel.Controls.Remove(nameLabel);
-					parent.panel.Controls.Remove(countLabel);
-					parent.panel.Controls.Remove(decrementButton);
-					parent.panel.Controls.Remove(incrementButton);
-					nameLabel.Dispose();
-					countLabel.Dispose();
-					decrementButton.Dispose();
-					incrementButton.Dispose();
+				//Update reference
+				public void UpdateTreatment(Treatment treatment) {
+					this.treatment = treatment;
+					nameLabel.Text = treatment.Name;
+					countLabel.Text = treatment.OwnedCount.ToString();
 				}
 
 				//Count modifiers
@@ -105,10 +107,10 @@ namespace CollectionTracker {
 				print = null;
 
 				//Panel
-				panel = Utils.GeneratePanel(new Rectangle(5, 5, 300, 430));
+				panel = Utils.GeneratePanel(new Rectangle(0, 0, ENTRY_WIDTH, ENTRY_HEIGHT));
 
 				//Image box
-				imgBox = Utils.GeneratePictureBox(new Rectangle(0, 0, 300, 420));
+				imgBox = Utils.GeneratePictureBox(new Rectangle(0, 0, ENTRY_WIDTH, ENTRY_HEIGHT));
 				imgBox.MouseUp += OnClick;
 				panel.Controls.Add(imgBox);
 
@@ -118,13 +120,13 @@ namespace CollectionTracker {
 			}
 
 			//Set print reference
-			public int SetPrinting(List<Printing> printings, int idx) {
+			public int SetPrinting(Printing printing) {
 
 				//Set print
-				print = printings[idx];
+				print = printing;
 
 				//Resize panel
-				panel.Height = 430 + (30 * print.Treatments.Count);
+				panel.Height = ENTRY_HEIGHT + ((PANEL_MARGIN + BUTTON_HEIGHT) * print.Treatments.Count) + PANEL_MARGIN;
 
 				//Load image
 				if (print.ImagePaths.Count > 0)
@@ -132,11 +134,21 @@ namespace CollectionTracker {
 
 				//Add treatments
 				panel.SuspendLayout();
-				foreach (Treatmentrow row in rows)
-					row.Dispose();
-				rows.Clear();
-				for (int i = 0; i < print.Treatments.Count; ++i)
-					rows.Add(new Treatmentrow(this, print, i));
+				while (rows.Count > print.Treatments.Count) {
+					panel.Controls.Remove(rows[rows.Count - 1].Panel);
+					rows[rows.Count - 1].Panel.Dispose();
+					rows.RemoveAt(rows.Count - 1);
+				}
+				for (int i = 0; i < print.Treatments.Count; ++i) {
+					Treatment treatment = print.Treatments[i];
+					if (i < rows.Count)
+						rows[i].UpdateTreatment(treatment);
+					else {
+						Treatmentrow row = new Treatmentrow(this, treatment, ENTRY_HEIGHT + ((PANEL_MARGIN + BUTTON_HEIGHT) * i));
+						rows.Add(row);
+						panel.Controls.Add(row.Panel);
+					}
+				}
 				panel.ResumeLayout();
 
 				//Color
@@ -181,10 +193,15 @@ namespace CollectionTracker {
 
 		#endregion
 
+		//Constants
+		private const int BUTTON_WIDTH = 120;
+		private const int FILTER_WIDTH = 120;
+		private const int ENTRY_WIDTH = 300;
+		private const int ENTRY_HEIGHT = 420;
+		private const int ENTRIES_PER_PAGE = 50;
+
 		//Properties
 		private int page = 0;
-		private int rowsPerPage = 15;
-		private int entriesPerRow = 4;
 		private List<Printing> printings;
 		private List<Printing> filteredPrints;
 		private List<Printentry> entries;
@@ -193,12 +210,12 @@ namespace CollectionTracker {
 		private Label headerLabel;
 		private ComboBox sortBox;
 		private ComboBox filterBox;
+		private Label filterLabel;
 		private Button prevPageButton;
 		private Button nextPageButton;
 		private Panel listPanel;
 
 		//Accessors
-		public int EntriesPerPage => rowsPerPage * entriesPerRow;
 		public List<Printing> FilteredPrints => filteredPrints;
 
 		//Constructor
@@ -209,30 +226,31 @@ namespace CollectionTracker {
 			filteredPrints = new List<Printing>(printings);
 			filteredPrints.Sort(Printing.SortNewest);
 
+			//Page buttons
+			prevPageButton = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT), "<");
+			prevPageButton.Anchor = AnchorStyles.Top;
+			prevPageButton.Click += PrevPage;
+			nextPageButton = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT), ">");
+			nextPageButton.Anchor = AnchorStyles.Top;
+			nextPageButton.Click += NextPage;
+
 			//Header
-			headerLabel = Utils.GenerateLabel(new Rectangle(((panel.Width - 1245) / 2) + 130, 10, 0, TEXT_HEIGHT), "");
+			headerLabel = Utils.GenerateLabel(new Rectangle(0, PANEL_MARGIN + 5, 0, TEXT_HEIGHT), "");
 			headerLabel.Anchor = AnchorStyles.Top;
 
 			//Filter
-			filterBox = Utils.GenerateComboBox(new Rectangle(((panel.Width + 1245) / 2) - 250, 5, 120, BUTTON_HEIGHT), ComboBoxStyle.DropDownList, false);
+			filterBox = Utils.GenerateComboBox(new Rectangle(0, PANEL_MARGIN, FILTER_WIDTH, BUTTON_HEIGHT), ComboBoxStyle.DropDownList, false);
 			filterBox.Anchor = AnchorStyles.Top;
 			filterBox.Items.AddRange(new string[] { "None", "Newest", "Oldest" });
 			filterBox.SelectedIndex = 0;
 			filterBox.SelectedValueChanged += FilterChanged;
 			int width = Utils.MeasureWidth("Filter");
-			Label filterLabel = Utils.GenerateLabel(new Rectangle(((panel.Width + 1245) / 2) - (260 + width), 10, width, TEXT_HEIGHT), "Filter");
+			filterLabel = Utils.GenerateLabel(new Rectangle(0, PANEL_MARGIN + 5, width, TEXT_HEIGHT), "Filter");
 			filterLabel.Anchor = AnchorStyles.Top;
 
-			//Page buttons
-			prevPageButton = Utils.GenerateButton(new Rectangle((panel.Width - 1245) / 2, 5, 120, BUTTON_HEIGHT), "<");
-			prevPageButton.Anchor = AnchorStyles.Top;
-			prevPageButton.Click += PrevPage;
-			nextPageButton = Utils.GenerateButton(new Rectangle(((panel.Width + 1245) / 2) - 120, 5, 120, BUTTON_HEIGHT), ">");
-			nextPageButton.Anchor = AnchorStyles.Top;
-			nextPageButton.Click += NextPage;
-
 			//Panel
-			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1245, panel.Height - 40), panel.Size, new Point(0, 20)));
+			int yPos = BUTTON_HEIGHT + (PANEL_MARGIN * 2);
+			listPanel = Utils.GeneratePanel(new Rectangle(0, yPos, 0, panel.Height - (yPos + PANEL_MARGIN)));
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 
@@ -240,7 +258,7 @@ namespace CollectionTracker {
 			listPanel.SuspendLayout();
 			entries = new List<Printentry>();
 			Printentry entry;
-			for (int i = 0; i < EntriesPerPage; ++i) {
+			for (int i = 0; i < ENTRIES_PER_PAGE; ++i) {
 				entry = new Printentry(this);
 				entry.Panel.Visible = false;
 				entries.Add(entry);
@@ -256,8 +274,9 @@ namespace CollectionTracker {
 			panel.Controls.Add(filterBox);
 			panel.Controls.Add(listPanel);
 
-			//Update
-			UpdateEntries();
+			//Update entries and resize
+			UpdateEntries(false);
+			OnFormResizeEnd();
 
 		}
 
@@ -276,49 +295,85 @@ namespace CollectionTracker {
 			UpdateEntries();
 		}
 
-		//Update entries
-		public void UpdateEntries() {
+		//Update entry contents
+		public void UpdateEntries(bool doLayout = true) {
 
 			//Paging
 			int maxPage = 0;
-			while (((maxPage + 1) * EntriesPerPage) < filteredPrints.Count)
+			while (((maxPage + 1) * ENTRIES_PER_PAGE) < filteredPrints.Count)
 				++maxPage;
 			if (page > maxPage)
 				page = 0;
 			else if (page < 0)
 				page = maxPage;
-			int startIdx = page * EntriesPerPage;
+			int startIdx = page * ENTRIES_PER_PAGE;
 
 			//Header
-			string str = $"Showing {startIdx + 1} - {Math.Min((page + 1) * EntriesPerPage, filteredPrints.Count)} of {filteredPrints.Count}";
+			string str = $"Showing {startIdx + 1} - {Math.Min((page + 1) * ENTRIES_PER_PAGE, filteredPrints.Count)} of {filteredPrints.Count}";
 			headerLabel.Width = Utils.MeasureWidth(str);
 			headerLabel.Text = str;
 
 			//Button visibility
-			prevPageButton.Visible = filteredPrints.Count > EntriesPerPage;
-			nextPageButton.Visible = filteredPrints.Count > EntriesPerPage;
+			prevPageButton.Visible = filteredPrints.Count > ENTRIES_PER_PAGE;
+			nextPageButton.Visible = filteredPrints.Count > ENTRIES_PER_PAGE;
+
+			//Update contents
+			for (int i = 0; i < ENTRIES_PER_PAGE; ++i) {
+				if (startIdx + i < filteredPrints.Count) {
+					Printing print = filteredPrints[startIdx + i];
+					entries[i].SetPrinting(print);
+					entries[i].Panel.Show();
+				}
+				else
+					entries[i].Panel.Hide();
+			}
+
+			//Layout
+			if (doLayout)
+				LayoutEntries();
+
+		}
+
+
+		//Update entry positions
+		private void LayoutEntries() {
 
 			//Reset scroll
 			listPanel.AutoScrollPosition = new Point(0, 0);
 
+			//Determine max width
+			int maxWidth = listPanel.Width - ((PANEL_MARGIN * 2) + SCROLL_MARGIN);
+			int remainingWidth = maxWidth - ENTRY_WIDTH;
+			int columns = 1;
+			while (true) {
+				if (remainingWidth - (ENTRY_WIDTH + PANEL_MARGIN) < 0)
+					break;
+				remainingWidth -= ENTRY_WIDTH + PANEL_MARGIN;
+				++columns;
+			}
+			int left = PANEL_MARGIN + (remainingWidth / 2);
+
+			//Top margin
+			int top = PANEL_MARGIN;
+			int rows = 0;
+			while (rows * columns < ENTRIES_PER_PAGE)
+				++rows;
+			int rowHeight;
+
 			//Loop entries
-			int idx;
-			int yPos = 5;
-			int maxHeight;
 			listPanel.SuspendLayout();
-			for (int y = 0; y < rowsPerPage; ++y) {
-				maxHeight = 0;
-				for (int x = 0; x < entriesPerRow; ++x) {
-					idx = x + (y * entriesPerRow);
-					if (startIdx + idx < filteredPrints.Count) {
-						maxHeight = Math.Max(maxHeight, entries[idx].SetPrinting(filteredPrints, startIdx + idx));
-						entries[idx].Panel.Location = new Point(5 + (x * 305), yPos);
-						entries[idx].Panel.Visible = true;
+			int idx;
+			for (int y = 0; y < rows; ++y) {
+				rowHeight = 0;
+				for (int x = 0; x < columns; ++x) {
+					idx = x + (y * columns);
+					if (idx < entries.Count && entries[idx].Panel.Visible) {
+						entries[idx].Panel.Left = left + ((ENTRY_WIDTH + PANEL_MARGIN) * x);
+						entries[idx].Panel.Top = top;
+						rowHeight = Math.Max(rowHeight, entries[idx].Panel.Height);
 					}
-					else
-						entries[idx].Panel.Visible = false;
 				}
-				yPos += maxHeight + 5;
+				top += rowHeight + PANEL_MARGIN;
 			}
 			listPanel.ResumeLayout();
 
@@ -336,6 +391,19 @@ namespace CollectionTracker {
 
 		//Details
 		public void ShowDetails(Printing print) => TrackerForm.Instance.SetPage<Detailpage>(printref: print);
+
+		//Resize event
+		protected override void OnFormResizeEnd(object sender = null, EventArgs e = null) {
+			listPanel.Width = Math.Max(panel.Width - (PANEL_MARGIN * 2), ENTRY_WIDTH + (PANEL_MARGIN * 2) + SCROLL_MARGIN);
+			listPanel.Left = PANEL_MARGIN;
+			prevPageButton.Left = listPanel.Left;
+			nextPageButton.Left = listPanel.Right - BUTTON_WIDTH;
+			headerLabel.Left = prevPageButton.Right + PANEL_MARGIN;
+			filterBox.Left = nextPageButton.Left - (FILTER_WIDTH + PANEL_MARGIN);
+			filterLabel.Left = filterBox.Left - (filterLabel.Width + PANEL_MARGIN);
+			LayoutEntries();
+			oldWidth = panel.Width;
+		}
 
 	}
 
