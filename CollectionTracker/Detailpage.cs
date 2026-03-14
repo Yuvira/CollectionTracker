@@ -101,6 +101,9 @@ namespace CollectionTracker {
 		#endregion
 
 		//Constants
+		private const int MAX_WIDTH = 1300;
+		private const int NAV_WIDTH = 200;
+		private const int FILTER_WIDTH = 150;
 		private const string FILTER_ALL = "All";
 		private const string FILTER_PRINTS = "Unique Prints";
 		private const string FILTER_FRAMES = "Unique Frames";
@@ -126,6 +129,7 @@ namespace CollectionTracker {
 		private Button refButtonBack;
 		private Button refButtonForward;
 		private ComboBox filterBox;
+		private Label filterLabel;
 		private PictureBox imgBox;
 		private Panel contentPanel;
 		private ComboBox moveToBox;
@@ -137,6 +141,7 @@ namespace CollectionTracker {
 		private Label printCopyHeader;
 		private Panel tooltipPanel;
 		private PictureBox cardtipBox;
+		private TrackerPanel bottomRight;
 
 		//Filter index
 		private static int FilterIndex = 0;
@@ -158,36 +163,37 @@ namespace CollectionTracker {
 			printCopyRows = new List<DetailPrintrow>();
 			moveToBox = null;
 
-			//Generate content panel
-			contentPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(1290, panel.Height - 45), panel.Size, new Point(0, 20)));
-			contentPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-			contentPanel.AutoScroll = true;
-
 			//Nav buttons
-			navButtonLeft = Utils.GenerateButton(new Rectangle(contentPanel.Left, 5, 200, 30), "");
+			navButtonLeft = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, NAV_WIDTH, BUTTON_HEIGHT), "");
 			navButtonLeft.Anchor = AnchorStyles.Top;
 			navButtonLeft.Click += NavLeft;
-			navButtonRight = Utils.GenerateButton(new Rectangle(contentPanel.Right - 200, 5, 200, 30), "");
+			navButtonRight = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, NAV_WIDTH, BUTTON_HEIGHT), "");
 			navButtonRight.Anchor = AnchorStyles.Top;
 			navButtonRight.Click += NavRight;
 
 			//Ref buttons
-			refButtonBack = Utils.GenerateButton(new Rectangle(contentPanel.Left + 205, 5, 30, 30), "<");
+			refButtonBack = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, BUTTON_HEIGHT, BUTTON_HEIGHT), "<");
 			refButtonBack.Anchor = AnchorStyles.Top;
 			refButtonBack.Click += RefBack;
-			refButtonForward = Utils.GenerateButton(new Rectangle(contentPanel.Left + 240, 5, 30, 30), ">");
+			refButtonForward = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, BUTTON_HEIGHT, BUTTON_HEIGHT), ">");
 			refButtonForward.Anchor = AnchorStyles.Top;
 			refButtonForward.Click += RefForward;
 
 			//Filter box
-			filterBox = Utils.GenerateComboBox(new Rectangle(contentPanel.Right - 405, 5, 200, BUTTON_HEIGHT), ComboBoxStyle.DropDownList, false);
+			filterBox = Utils.GenerateComboBox(new Rectangle(0, PANEL_MARGIN, FILTER_WIDTH, BUTTON_HEIGHT), ComboBoxStyle.DropDownList, false);
 			filterBox.Anchor = AnchorStyles.Top;
 			filterBox.Items.AddRange(new string[] { FILTER_ALL, FILTER_PRINTS, FILTER_FRAMES, FILTER_ART });
 			filterBox.SelectedIndex = FilterIndex;
 			filterBox.SelectedValueChanged += FilterChanged;
 			int width = Utils.MeasureWidth("Filter");
-			Label filterLabel = Utils.GenerateLabel(new Rectangle(contentPanel.Right - (width + 410), 10, width, TEXT_HEIGHT), "Filter");
+			filterLabel = Utils.GenerateLabel(new Rectangle(0, PANEL_MARGIN + 5, width, TEXT_HEIGHT), "Filter");
 			filterLabel.Anchor = AnchorStyles.Top;
+
+			//Content panel
+			int yPos = BUTTON_HEIGHT + (PANEL_MARGIN * 2);
+			contentPanel = Utils.GeneratePanel(new Rectangle(0, yPos, 0, panel.Height - (yPos + PANEL_MARGIN)));
+			contentPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+			contentPanel.AutoScroll = true;
 
 			//Tooltips
 			tooltips = new List<Tooltip>();
@@ -235,6 +241,10 @@ namespace CollectionTracker {
 			contentPanel.Controls.Add(printCopyPanel);
 			printCopyPanel.Hide();
 
+			//Bottom right object for forcing autoscroll height
+			bottomRight = Utils.GenerateTrackerPanel(new Rectangle(printPanel.Right + PANEL_MARGIN - 1, 0, 1, 1));
+			contentPanel.Controls.Add(bottomRight);
+
 			//Add to panel
 			panel.Controls.Add(navButtonLeft);
 			panel.Controls.Add(navButtonRight);
@@ -247,6 +257,10 @@ namespace CollectionTracker {
 			//Set printing
 			viewData = true;
 			SetPrinting(printing);
+
+			//Resize
+			oldWidth = 0;
+			OnFormResizeEnd();
 
 		}
 
@@ -293,6 +307,21 @@ namespace CollectionTracker {
 		//Modify card data
 		private void EditCard(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Cardentry>(cardref: printing.Card, printref: printing);
 		private void EditPrint(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Printentry>(printref: printing);
+
+		//Resize event
+		protected override void OnFormResizeEnd(object sender = null, EventArgs e = null) {
+			if (panel.Width >= MAX_WIDTH && oldWidth >= MAX_WIDTH)
+				return;
+			contentPanel.Width = Math.Min(panel.Width - (PANEL_MARGIN * 2), MAX_WIDTH - (PANEL_MARGIN * 2));
+			contentPanel.Left = Math.Max((panel.Width - contentPanel.Width) / 2, PANEL_MARGIN);
+			navButtonLeft.Left = contentPanel.Left;
+			navButtonRight.Left = contentPanel.Right - NAV_WIDTH;
+			refButtonBack.Left = navButtonLeft.Right + PANEL_MARGIN;
+			refButtonForward.Left = refButtonBack.Right + PANEL_MARGIN;
+			filterBox.Left = navButtonRight.Left - (FILTER_WIDTH + PANEL_MARGIN);
+			filterLabel.Left = filterBox.Left - (filterLabel.Width + PANEL_MARGIN);
+			oldWidth = panel.Width;
+		}
 
 		#region Print List
 
@@ -439,6 +468,9 @@ namespace CollectionTracker {
 			//Hide if no content
 			if (pos.Y == printCopyPanel.Location.Y)
 				printCopyPanel.Hide();
+
+			//Set bottom right
+			bottomRight.Top = pos.Y + cardtipBox.Height;
 
 		}
 
