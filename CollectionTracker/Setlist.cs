@@ -112,11 +112,11 @@ namespace CollectionTracker {
 			sets.Sort(Set.SortNewest);
 
 			//Header
-			headerLabel = Utils.GenerateAutoSizeLabel(new Point(0, PANEL_MARGIN), $"Sets: {TrackerForm.Catalog.Sets.Count} | Cards: {TrackerForm.Catalog.Cards.Count} | Prints: {TrackerForm.Catalog.Printings.Count} | Symbols: {TrackerForm.Catalog.Symbols.Count}");
+			headerLabel = Utils.GenerateAutoSizeLabel(new Point(0, PANEL_MARGIN + 5), $"Sets: {TrackerForm.Catalog.Sets.Count} | Cards: {TrackerForm.Catalog.Cards.Count} | Prints: {TrackerForm.Catalog.Printings.Count} | Symbols: {TrackerForm.Catalog.Symbols.Count}");
 			headerLabel.Anchor = AnchorStyles.Top;
 
 			//Filter box
-			filterLabel = Utils.GenerateAutoSizeLabel(new Point(0, PANEL_MARGIN), "Filter");
+			filterLabel = Utils.GenerateAutoSizeLabel(new Point(0, PANEL_MARGIN + 5), "Filter");
 			filterLabel.Anchor = AnchorStyles.Top;
 			filterBox = Utils.GenerateTextBox(new Rectangle(0, PANEL_MARGIN, FILTER_WIDTH, BUTTON_HEIGHT), "");
 			filterBox.TextChanged += OnFilterChanged;
