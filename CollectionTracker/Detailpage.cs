@@ -1553,6 +1553,7 @@ namespace CollectionTracker {
 				}
 
 				//Loop lines
+				bool forceLineSpacing = false;
 				foreach (string line in Utils.SplitString(block, "\r\n")) {
 
 					//Get text
@@ -1571,9 +1572,17 @@ namespace CollectionTracker {
 						firstLine = false;
 					else
 						location.Y += reduceLineSpacing ? 0 : LINE_SPACING;
+					if (reduceLineSpacing && forceLineSpacing) {
+						location.Y += LINE_SPACING;
+						forceLineSpacing = false;
+					}
 
 					//Detect dividers
 					if (text.Equals("——")) {
+						if (!firstLine && reduceLineSpacing) {
+							location.Y += LINE_SPACING;
+							forceLineSpacing = true;
+						}
 						DescriptionDivider divider = new DescriptionDivider(panel.Width - (LEFT_PAD * 2));
 						borderPanels.Add(divider.GenerateControl(this, panel, location));
 						continue;
