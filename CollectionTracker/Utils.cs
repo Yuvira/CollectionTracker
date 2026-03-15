@@ -46,19 +46,22 @@ namespace CollectionTracker {
 			public virtual void DrawBorder(Graphics g, int width, int height) => g.DrawRectangle(pen, 0, 0, width, height);
 		}
 		private class DoublePanelBorder : PanelBorder {
-			private Pen pen2, pen3;
+			private Pen pen2, pen3, pen4;
 			public DoublePanelBorder(Color color1, Color color2, int width) : base(color1, width) {
 				pen2 = new Pen(color2, width);
-				pen3 = new Pen(Utils.BlendColours(color1, color2), width);
+				pen3 = new Pen(Utils.BlendColours(color1, color1, color2), width);
+				pen4 = new Pen(Utils.BlendColours(color1, color2, color2), width);
 			}
 			public override void DrawBorder(Graphics g, int width, int height) {
 				g.DrawLine(pen, 0, 0, 0, height);
-				g.DrawLine(pen, 0, 0, width * 0.45f, 0);
-				g.DrawLine(pen, 0, height, width * 0.45f, height);
-				g.DrawLine(pen3, width * 0.45f, 0, width * 0.55f, 0);
-				g.DrawLine(pen3, width * 0.45f, height, width * 0.55f, height);
-				g.DrawLine(pen2, width * 0.55f, 0, width, 0);
-				g.DrawLine(pen2, width * 0.55f, height, width, height);
+				g.DrawLine(pen, 0, 0, width * 0.4f, 0);
+				g.DrawLine(pen, 0, height, width * 0.4f, height);
+				g.DrawLine(pen3, width * 0.4f, 0, width * 0.5f, 0);
+				g.DrawLine(pen3, width * 0.4f, height, width * 0.5f, height);
+				g.DrawLine(pen4, width * 0.5f, 0, width * 0.6f, 0);
+				g.DrawLine(pen4, width * 0.5f, height, width * 0.6f, height);
+				g.DrawLine(pen2, width * 0.6f, 0, width, 0);
+				g.DrawLine(pen2, width * 0.6f, height, width, height);
 				g.DrawLine(pen2, width, 0, width, height);
 			}
 		}
@@ -468,6 +471,8 @@ namespace CollectionTracker {
 		//Blend list of colours
 		public static Color BlendColours(Color col1, Color col2) =>
 			Color.FromArgb((col1.A + col2.A) / 2, (col1.R + col2.R) / 2, (col1.G + col2.G) / 2, (col1.B + col2.B) / 2);
+		public static Color BlendColours(Color col1, Color col2, Color col3) =>
+			Color.FromArgb((col1.A + col2.A + col3.A) / 3, (col1.R + col2.R + col3.R) / 3, (col1.G + col2.G + col3.G) / 3, (col1.B + col2.B + col3.B) / 3);
 		public static Color BlendColours(List<Color> cols) {
 			int A = 0, R = 0, G = 0, B = 0;
 			foreach (Color c in cols) {
