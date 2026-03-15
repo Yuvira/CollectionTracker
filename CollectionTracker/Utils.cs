@@ -46,13 +46,20 @@ namespace CollectionTracker {
 			public virtual void DrawBorder(Graphics g, int width, int height) => g.DrawRectangle(pen, 0, 0, width, height);
 		}
 		private class DoublePanelBorder : PanelBorder {
-			private Pen pen2;
-			public DoublePanelBorder(Color color1, Color color2, int width) : base(color1, width) => pen2 = new Pen(color2, width);
+			private Pen pen2, pen3;
+			public DoublePanelBorder(Color color1, Color color2, int width) : base(color1, width) {
+				pen2 = new Pen(color2, width);
+				pen3 = new Pen(Utils.BlendColours(color1, color2), width);
+			}
 			public override void DrawBorder(Graphics g, int width, int height) {
-				g.DrawLine(pen, 0, 0, width, 0);
 				g.DrawLine(pen, 0, 0, 0, height);
+				g.DrawLine(pen, 0, 0, width * 0.45f, 0);
+				g.DrawLine(pen, 0, height, width * 0.45f, height);
+				g.DrawLine(pen3, width * 0.45f, 0, width * 0.55f, 0);
+				g.DrawLine(pen3, width * 0.45f, height, width * 0.55f, height);
+				g.DrawLine(pen2, width * 0.55f, 0, width, 0);
+				g.DrawLine(pen2, width * 0.55f, height, width, height);
 				g.DrawLine(pen2, width, 0, width, height);
-				g.DrawLine(pen2, 0, height, width, height);
 			}
 		}
 		private List<PanelBorder> borders;

@@ -596,11 +596,11 @@ namespace CollectionTracker {
 
 		//Color dictionary
 		private static readonly Dictionary<char, Color> MTGTypeColors = new Dictionary<char, Color> {
-			{ 'w' , Color.White },
-			{ 'u' , Color.Blue  },
-			{ 'b' , Color.Black },
-			{ 'r' , Color.Red   },
-			{ 'g' , Color.Green },
+			{ 'w' , Color.White          },
+			{ 'u' , Color.CornflowerBlue },
+			{ 'b' , Color.Black          },
+			{ 'r' , Color.Red            },
+			{ 'g' , Color.Green          },
 		};
 
 		//Set panel color
