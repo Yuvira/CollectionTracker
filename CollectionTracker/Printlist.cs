@@ -143,7 +143,7 @@ namespace CollectionTracker {
 					if (i < rows.Count)
 						rows[i].UpdateTreatment(treatment);
 					else {
-						Treatmentrow row = new Treatmentrow(this, treatment, ENTRY_HEIGHT + ((PANEL_MARGIN + BUTTON_HEIGHT) * i));
+						Treatmentrow row = new Treatmentrow(this, treatment, ENTRY_HEIGHT + PANEL_MARGIN + ((PANEL_MARGIN + BUTTON_HEIGHT) * i));
 						rows.Add(row);
 						panel.Controls.Add(row.Panel);
 					}
