@@ -307,7 +307,12 @@ namespace CollectionTracker {
 			if (string.IsNullOrWhiteSpace(code))
 				return;
 			int index = textValue.SelectionStart;
-			textValue.Text = textValue.Text.Insert(index + textValue.SelectionLength, "</" + code + ">");
+			int length = textValue.SelectionLength;
+			if (textValue.Text.Substring(index, length).EndsWith(" "))
+				--length;
+			if (textValue.Text.Substring(index, length).EndsWith(".") || textValue.Text.Substring(index, length).EndsWith(","))
+				--length;
+			textValue.Text = textValue.Text.Insert(index + length, "</" + code + ">");
 			textValue.Text = textValue.Text.Insert(index, "<" + code + (code.Length == 2 ? "|>" : ">"));
 		}
 
