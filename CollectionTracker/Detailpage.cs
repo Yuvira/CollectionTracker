@@ -457,7 +457,7 @@ namespace CollectionTracker {
 
 			//Hide if invalid card reference
 			else {
-				printPanel.Height = TEXT_HEIGHT + (PANEL_MARGIN * 2);
+				printPanel.Height = TEXT_HEIGHT + TOP_PAD + BOTTOM_PAD;
 				printCopyPanel.Hide();
 				panelY = printPanel.Bottom + PANEL_MARGIN;
 			}
