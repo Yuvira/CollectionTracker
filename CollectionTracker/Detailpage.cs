@@ -131,6 +131,7 @@ namespace CollectionTracker {
 		private ComboBox filterBox;
 		private Label filterLabel;
 		private PictureBox imgBox;
+		private Label indexLabel;
 		private Panel contentPanel;
 		private ComboBox moveToBox;
 		private List<TrackerPanel> dataPanels;
@@ -219,6 +220,10 @@ namespace CollectionTracker {
 			Button editPrintButton = Utils.GenerateButton(new Rectangle(110, 550, 100, BUTTON_HEIGHT), "Edit Print");
 			editPrintButton.Click += EditPrint;
 			contentPanel.Controls.Add(editPrintButton);
+
+			//Index
+			indexLabel = Utils.GenerateLabel(new Rectangle(0, 555, 0, TEXT_HEIGHT), "");
+			contentPanel.Controls.Add(indexLabel);
 
 			//Views
 			viewPanel = Utils.GenerateTrackerPanel(new Rectangle(410, 5, 450, BUTTON_HEIGHT + 10));
@@ -489,6 +494,10 @@ namespace CollectionTracker {
 				nextListPrint = TrackerForm.Instance.FilteredPrints[(idx + 1) % TrackerForm.Instance.FilteredPrints.Count];
 				navButtonLeft.Text = prevListPrint.GetField("name");
 				navButtonRight.Text = nextListPrint.GetField("name");
+				string str = $"{idx} of {TrackerForm.Instance.FilteredPrints.Count}";
+				indexLabel.Text = str;
+				indexLabel.Width = Utils.MeasureWidth(str);
+				indexLabel.Left = imgBox.Right - indexLabel.Width;
 				navButtonLeft.Show();
 				navButtonRight.Show();
 			}
