@@ -494,7 +494,7 @@ namespace CollectionTracker {
 				nextListPrint = TrackerForm.Instance.FilteredPrints[(idx + 1) % TrackerForm.Instance.FilteredPrints.Count];
 				navButtonLeft.Text = prevListPrint.GetField("name").Replace("&", "&&");
 				navButtonRight.Text = nextListPrint.GetField("name").Replace("&", "&&");
-				string str = $"{idx} of {TrackerForm.Instance.FilteredPrints.Count}";
+				string str = $"{idx + 1} of {TrackerForm.Instance.FilteredPrints.Count}";
 				indexLabel.Text = str;
 				indexLabel.Width = Utils.MeasureWidth(str);
 				indexLabel.Left = imgBox.Right - indexLabel.Width;
