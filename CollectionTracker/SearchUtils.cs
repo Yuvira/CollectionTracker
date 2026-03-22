@@ -201,6 +201,8 @@ namespace CollectionTracker {
 				return EvaluateExpression(print.Set.Code, expression.Operation, expression.Value);
 			else if (expression.Field.Equals("l") || expression.Field.Equals("loc") || expression.Field.Equals("location"))
 				return EvaluateExpression(string.Join(" / ", print.Treatments.SelectMany(t => t.Locations.Select(l => l.Name)).Distinct()), expression.Operation, expression.Value);
+			else if (print.TryGetField(expression.Field, out string rawfield))
+				return EvaluateExpression(rawfield, expression.Operation, expression.Value);
 			else
 				return false;
 		}
