@@ -594,9 +594,6 @@ namespace CollectionTracker {
 			borderPanels.Add(viewPanel);
 			borderPanels.Add(printPanel);
 			borderPanels.Add(printCopyPanel);
-			viewPanel.Refresh();
-			printPanel.Refresh();
-			printCopyPanel.Refresh();
 
 			//Clear data panels
 			foreach (TrackerPanel panel in dataPanels) {
@@ -654,6 +651,7 @@ namespace CollectionTracker {
 					panel.AddBorder(Color.Yellow, 3);
 				else
 					panel.AddBorder(Utils.THEME.ForeColor, 1);
+				panel.Refresh();
 			}
 		}
 
