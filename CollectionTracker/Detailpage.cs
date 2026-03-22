@@ -19,6 +19,7 @@ namespace CollectionTracker {
 			private Detailpage parent;
 			private Label label;
 			private string printid;
+			private bool isCurrent;
 
 			//Accessors
 			public Label Label => label;
@@ -27,6 +28,7 @@ namespace CollectionTracker {
 			public DetailPrintrow(Detailpage parent, string printid, string setname, int yPos, int width, bool isCurrent) {
 				this.parent = parent;
 				this.printid = printid;
+				this.isCurrent = isCurrent;
 				label = Utils.GenerateLabel(
 					new Rectangle(LEFT_PAD, yPos, width, TEXT_HEIGHT),
 					printid.ToUpper() + " - " + setname,
@@ -40,10 +42,15 @@ namespace CollectionTracker {
 			}
 
 			//Update
-			public void UpdatePrintID(string printid, string setname, bool isCurrent) {
+			public void UpdatePrintID(string printid, string setname, bool newCurrent) {
 				this.printid = printid;
 				label.Text = (printid.ToUpper() + " - " + setname).Replace("&", "&&");
-				label.ForeColor = isCurrent ? Utils.THEME.ForeColor : Utils.THEME.TextTooltip;
+				label.ForeColor = newCurrent ? Utils.THEME.ForeColor : Utils.THEME.TextTooltip;
+				if (isCurrent && !newCurrent)
+					label.Click += LoadCardtip;
+				else if (!isCurrent && newCurrent)
+					label.Click -= LoadCardtip;
+				isCurrent = newCurrent;
 			}
 
 			//Cardtip functions
@@ -845,6 +852,15 @@ namespace CollectionTracker {
 				footerPanel.ResumeLayout();
 				++panelIdx;
 
+			}
+
+			//Remove unused panels
+			for (int i = panelIdx; i < dataPanels.Count; ++i) {
+				borderPanels.Remove(dataPanels[i]);
+				contentPanel.Controls.Remove(dataPanels[i]);
+				dataPanels[i].Dispose();
+				dataPanels.RemoveAt(i);
+				--i;
 			}
 
 			//View panel
