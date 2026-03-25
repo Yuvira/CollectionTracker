@@ -54,7 +54,7 @@ namespace CollectionTracker {
 			}
 
 			//Cardtip functions
-			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(label, printid);
+			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(label, printid, true);
 			private void HideCardtip(object sender, EventArgs e) => parent.HideCardtip();
 			private void LoadCardtip(object sender, EventArgs e) => parent.LoadCardtip(printid);
 
@@ -120,6 +120,9 @@ namespace CollectionTracker {
 		private const int MAX_WIDTH = 1300;
 		private const int NAV_WIDTH = 200;
 		private const int FILTER_WIDTH = 150;
+		private const int CARDTIP_WIDTH = 250;
+		private const int CARDTIP_HEIGHT = 350;
+		private const int TOOLTIP_WIDTH = 300;
 		private const string FILTER_ALL = "All";
 		private const string FILTER_PRINTS = "Unique Prints";
 		private const string FILTER_FRAMES = "Unique Frames";
@@ -158,6 +161,7 @@ namespace CollectionTracker {
 		private Label printCopyHeader;
 		private Panel tooltipPanel;
 		private PictureBox cardtipBox;
+		private PictureBox cardtipBox2;
 		private TrackerPanel bottomRight;
 
 		//Filter index
@@ -215,12 +219,15 @@ namespace CollectionTracker {
 			//Tooltips
 			tooltips = new List<Tooltip>();
 			cardtips = new List<Cardtip>();
-			tooltipPanel = Utils.GeneratePanel(new Rectangle(0, 0, 300, TEXT_HEIGHT));
+			tooltipPanel = Utils.GeneratePanel(new Rectangle(0, 0, TOOLTIP_WIDTH, TEXT_HEIGHT));
 			tooltipPanel.Hide();
-			cardtipBox = Utils.GeneratePictureBox(new Rectangle(0, 0, 250, 350));
+			cardtipBox = Utils.GeneratePictureBox(new Rectangle(0, 0, CARDTIP_WIDTH, CARDTIP_HEIGHT));
 			cardtipBox.Hide();
+			cardtipBox2 = Utils.GeneratePictureBox(new Rectangle(0, 0, CARDTIP_WIDTH, CARDTIP_HEIGHT));
+			cardtipBox2.Hide();
 			contentPanel.Controls.Add(tooltipPanel);
 			contentPanel.Controls.Add(cardtipBox);
+			contentPanel.Controls.Add(cardtipBox2);
 
 			//Image box
 			imgBox = Utils.GeneratePictureBox(new Rectangle(5, 5, 400, 540));
@@ -1355,11 +1362,21 @@ namespace CollectionTracker {
 			Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(printid));
 			if (print != null) {
 
+				//Negate show all sides if less than two arts
+				if (print.ImagePaths.Count < 2)
+					showAllSides = false;
+
 				//Sideways cards
-				if (mod == 's')
-					cardtipBox.Size = new Size(350, 250);
-				else
-					cardtipBox.Size = new Size(250, 350);
+				if (mod == 's') {
+					cardtipBox.Size = new Size(CARDTIP_HEIGHT, CARDTIP_WIDTH);
+					if (showAllSides)
+						cardtipBox2.Size = new Size(CARDTIP_HEIGHT, CARDTIP_WIDTH);
+				}
+				else {
+					cardtipBox.Size = new Size(CARDTIP_WIDTH, CARDTIP_HEIGHT);
+					if (showAllSides)
+						cardtipBox2.Size = new Size(CARDTIP_WIDTH, CARDTIP_HEIGHT);
+				}
 
 				//Position
 				cardtipBox.Left = control.Left + ((control.Width - cardtipBox.Width) / 2);
@@ -1368,20 +1385,39 @@ namespace CollectionTracker {
 				cardtipBox.Top = control.Bottom + PANEL_MARGIN;
 				if (control != tooltipPanel)
 					cardtipBox.Top += control.Parent.Top;
+				if (showAllSides) {
+					cardtipBox.Left -= cardtipBox.Width / 2;
+					cardtipBox2.Left = cardtipBox.Right;
+					cardtipBox2.Top = cardtipBox.Top;
+				}
 
 				//Show
 				cardtipBox.Show();
 				cardtipBox.BringToFront();
+				if (showAllSides) {
+					cardtipBox2.Show();
+					cardtipBox2.BringToFront();
+				}
 
 				//Load image
-				Utils.TryLoadCardImage(cardtipBox, print.GetImagePath(mod == 'b' ? 1 : 0), TrackerForm.Catalog.Game);
+				if (!showAllSides)
+					Utils.TryLoadCardImage(cardtipBox, print.GetImagePath(mod == 'b' ? 1 : 0), TrackerForm.Catalog.Game);
+				else {
+					Utils.TryLoadCardImage(cardtipBox, print.GetImagePath(0), TrackerForm.Catalog.Game);
+					Utils.TryLoadCardImage(cardtipBox2, print.GetImagePath(1), TrackerForm.Catalog.Game);
+				}
 
 				//Rotation
-				Image image = cardtipBox.Image;
-				if (mod == 'u')
-					image.RotateFlip(RotateFlipType.Rotate180FlipNone);
-				if (mod == 's')
-					image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+				if (mod == 'u') {
+					cardtipBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+					if (showAllSides)
+						cardtipBox2.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+				}
+				if (mod == 's') {
+					cardtipBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+					if (showAllSides)
+						cardtipBox2.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+				}
 
 			}
 
@@ -1406,7 +1442,10 @@ namespace CollectionTracker {
 
 		//Hide
 		public void HideTooltip() => tooltipPanel.Hide();
-		public void HideCardtip() => cardtipBox.Hide();
+		public void HideCardtip() {
+			cardtipBox.Hide();
+			cardtipBox2.Hide();
+		}
 
 		#endregion
 
