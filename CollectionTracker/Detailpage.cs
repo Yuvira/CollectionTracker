@@ -94,19 +94,21 @@ namespace CollectionTracker {
 			private Detailpage parent;
 			private Control control;
 			private string printid;
+			private bool parentToTooltip;
 
 			//Constructor
-			public Cardtip(Detailpage parent, Control control, string printid) {
+			public Cardtip(Detailpage parent, Control control, string printid, bool parentToTooltip = false) {
 				this.parent = parent;
 				this.control = control;
 				this.printid = printid;
+				this.parentToTooltip = parentToTooltip;
 				this.control.MouseEnter += ShowCardtip;
 				this.control.MouseLeave += HideCardtip;
 				this.control.Click += LoadCardtip;
 			}
 
 			//Cardtip functions
-			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(control, printid);
+			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(parentToTooltip ? parent.tooltipPanel : control, printid);
 			private void HideCardtip(object sender, EventArgs e) => parent.HideCardtip();
 			private void LoadCardtip(object sender, EventArgs e) => parent.LoadCardtip(printid);
 
@@ -606,6 +608,10 @@ namespace CollectionTracker {
 				panel.Dispose();
 			}
 			dataPanels.Clear();
+
+			//Clear tooltips and cardtips
+			tooltips.Clear();
+			cardtips.Clear();
 
 			//Card data
 			if (viewData) {
@@ -1326,18 +1332,17 @@ namespace CollectionTracker {
 
 		//Show tooltip window relative to given control with given text
 		public void ShowTooltip(Control control, string text) {
-			int posX = control.Parent.Location.X + control.Location.X + (control.Width / 2) - (tooltipPanel.Width / 2);
-			int posY = control.Parent.Location.Y + control.Location.Y + TEXT_HEIGHT;
+			tooltipPanel.Left = control.Parent.Left + control.Left + ((control.Width - tooltipPanel.Width) / 2);
+			tooltipPanel.Top = control.Parent.Top + control.Bottom + PANEL_MARGIN;
 			tooltipPanel.Show();
 			tooltipPanel.BringToFront();
-			tooltipPanel.Location = new Point(posX, posY);
 			tooltipPanel.Controls.Clear();
 			int height = GenerateDescription(text, tooltipPanel, new Point(LEFT_PAD, TOP_PAD));
 			tooltipPanel.Height = height + TOP_PAD + BOTTOM_PAD;
 		}
 
 		//Show tooltip window relative to given control with given text
-		public void ShowCardtip(Control control, string printid) {
+		public void ShowCardtip(Control control, string printid, bool showAllSides = false) {
 
 			//Get modifier
 			char mod = ' ';
@@ -1357,13 +1362,16 @@ namespace CollectionTracker {
 					cardtipBox.Size = new Size(250, 350);
 
 				//Position
-				int posX = control.Parent.Location.X + control.Location.X + (control.Width / 2) - (cardtipBox.Width / 2);
-				int posY = control.Parent.Location.Y + control.Location.Y + TEXT_HEIGHT;
+				cardtipBox.Left = control.Left + ((control.Width - cardtipBox.Width) / 2);
+				if (control != tooltipPanel)
+					cardtipBox.Left += control.Parent.Left;
+				cardtipBox.Top = control.Bottom + PANEL_MARGIN;
+				if (control != tooltipPanel)
+					cardtipBox.Top += control.Parent.Top;
 
 				//Show
 				cardtipBox.Show();
 				cardtipBox.BringToFront();
-				cardtipBox.Location = new Point(posX, posY);
 
 				//Load image
 				Utils.TryLoadCardImage(cardtipBox, print.GetImagePath(mod == 'b' ? 1 : 0), TrackerForm.Catalog.Game);
@@ -1452,7 +1460,7 @@ namespace CollectionTracker {
 				if (settings.tooltip != null)
 					parent.Tooltips.Add(new Tooltip(parent, label, settings.tooltip));
 				if (settings.printid != null)
-					parent.Cardtips.Add(new Cardtip(parent, label, settings.printid));
+					parent.Cardtips.Add(new Cardtip(parent, label, settings.printid, settings.tooltip != null));
 				panel.Controls.Add(label);
 				if (rightAlign)
 					return location;
