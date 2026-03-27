@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -405,6 +406,7 @@ namespace CollectionTracker {
 			path = Utils.GenerateLabel(new Rectangle(210, 0, 670, 30), imagePath);
 			path.MouseEnter += ShowCardtip;
 			path.MouseLeave += HideCardtip;
+			path.MouseClick += OpenImage;
 			if (cardtip == null) {
 				cardtip = Utils.GeneratePictureBox(new Rectangle(0, 0, 250, 350));
 				cardtip.Hide();
@@ -445,6 +447,9 @@ namespace CollectionTracker {
 			cardtip.Location = pos;
 		}
 		private void HideCardtip(object sender, EventArgs e) => cardtip.Hide();
+
+		//Open image file
+		private void OpenImage(object sender, EventArgs e) => Process.Start(Path.GetFullPath(path.Text));
 
 		//List generator
 		public static List<ImageEntry> GenerateEntries(List<string> paths) {
