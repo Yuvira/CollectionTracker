@@ -244,12 +244,18 @@ namespace CollectionTracker {
 
 			//Copy to existing print ref
 			if (printref != null) {
+
+				//Copy data
 				printref.CopySet(set);
 				printref.CopyCard(card);
 				printref.CopyTreatments(TreatmentEntry.GetEntryList(treatments.Entries));
 				printref.CopyFields(FieldEntry.GetEntryDict(fields.Entries), faceDicts);
 				printref.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
+
+				//Autofill and return
+				AutofillFields(set, card);
 				ReturnToDetails();
+
 			}
 
 			//Generate new printing
@@ -264,52 +270,13 @@ namespace CollectionTracker {
 				print.CopyImgPaths(ImageEntry.GetEntryList(images.Entries));
 				TrackerForm.Catalog.Printings.Add(print);
 
-				//Autofill next fields
-				printref = null;
-				string cn = fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.Value;
-				if (!string.IsNullOrWhiteSpace(cn)) {
-					string prefix = "";
-					int width = 3;
-					while (cn.Length > 0 && !char.IsNumber(cn[0])) {
-						prefix += cn[0];
-						cn = cn.Substring(1);
-					}
-					while (cn.Length > 0 && !char.IsNumber(cn[cn.Length - 1]))
-						cn = cn.Substring(0, cn.Length - 1);
-					width = cn.Length;
-					while (cn.Length > 0 && cn[0] == '0')
-						cn = cn.Substring(1);
-					if (!string.IsNullOrWhiteSpace(cn) && int.TryParse(cn, out int value)) {
-						++value;
-						cn = prefix + value.ToString().PadLeft(width, '0');
-						fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.SetValue(cn);
-						images.ClearRows();
-						fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(prefix.ToLower() + set.Code.ToLower() + '/' + value.ToString());
-						if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
-							string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code + '/' + cn;
-							if (Utils.ImageExistsAtPath(path, out path))
-								images.AddRow(new ImageEntry(path));
-							else {
-								char suffix = 'a';
-								while (Utils.ImageExistsAtPath(path + suffix, out string newPath)) {
-									images.AddRow(new ImageEntry(newPath));
-									++suffix;
-								}
-							}
-						}
-					}
-				}
-				foreach (FieldEntry entry in fields.Entries) {
-					if (!Utils.KeepableFields.Contains(entry.Field))
-						entry.SetValue();
-					entry.OnFieldChanged();
-				}
-				while (faces.Count > 0)
-					faces[0].ClearRows();
-				if (card.TryGetField("name", out string name) && !name.Equals("_"))
-					cardBox.SelectedIndex = -1;
+				//Autofill next
+				AutofillFields(set, card);
 
 			}
+
+			//Clear ref
+			printref = null;
 
 		}
 
@@ -318,6 +285,170 @@ namespace CollectionTracker {
 			if (printref != null)
 				TrackerForm.Instance.SetPage<Detailpage>(printref: printref);
 		}
+
+		#region Autofill
+
+		//Autofill fields
+		private void AutofillFields(Set set, Card card) {
+			if (TrackerForm.Catalog.Game == Game.MTG)
+				AutofillMTG(set, card);
+			else if (TrackerForm.Catalog.Game == Game.YGO)
+				AutofillYGO(set, card);
+			else if (TrackerForm.Catalog.Game == Game.PKMN)
+				AutofillPKMN(set, card);
+		}
+
+		#region MTG
+
+		//Autofill MTG fields
+		private void AutofillMTG(Set set, Card card) {
+			string cn = fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.Value;
+			if (!string.IsNullOrWhiteSpace(cn)) {
+				string prefix = "";
+				int width = 3;
+				while (cn.Length > 0 && !char.IsNumber(cn[0])) {
+					prefix += cn[0];
+					cn = cn.Substring(1);
+				}
+				while (cn.Length > 0 && !char.IsNumber(cn[cn.Length - 1]))
+					cn = cn.Substring(0, cn.Length - 1);
+				width = cn.Length;
+				while (cn.Length > 0 && cn[0] == '0')
+					cn = cn.Substring(1);
+				if (!string.IsNullOrWhiteSpace(cn) && int.TryParse(cn, out int value)) {
+					++value;
+					cn = prefix + value.ToString().PadLeft(width, '0');
+					fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.SetValue(cn);
+					images.ClearRows();
+					fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(prefix.ToLower() + set.Code.ToLower() + '/' + value.ToString());
+					if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
+						string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code + '/' + cn;
+						if (Utils.ImageExistsAtPath(path, out path))
+							images.AddRow(new ImageEntry(path));
+						else {
+							char suffix = 'a';
+							while (Utils.ImageExistsAtPath(path + suffix, out string newPath)) {
+								images.AddRow(new ImageEntry(newPath));
+								++suffix;
+							}
+						}
+					}
+				}
+			}
+			foreach (FieldEntry entry in fields.Entries) {
+				if (!Utils.KeepableFields.Contains(entry.Field))
+					entry.SetValue();
+				entry.OnFieldChanged();
+			}
+			while (faces.Count > 0)
+				faces[0].ClearRows();
+			if (card.TryGetField("name", out string name) && !name.Equals("_"))
+				cardBox.SelectedIndex = -1;
+		}
+
+		#endregion
+
+		#region YGO
+
+		//Autofill MTG fields
+		private void AutofillYGO(Set set, Card card) {
+			string cn = fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.Value;
+			if (!string.IsNullOrWhiteSpace(cn)) {
+				while (cn.Length > 0 && !char.IsNumber(cn[0]))
+					cn = cn.Substring(1);
+				while (cn.Length > 0 && !char.IsNumber(cn[cn.Length - 1]))
+					cn = cn.Substring(0, cn.Length - 1);
+				int width = cn.Length;
+				while (cn.Length > 0 && cn[0] == '0')
+					cn = cn.Substring(1);
+				if (string.IsNullOrWhiteSpace(cn))
+					cn = "0";
+				if (int.TryParse(cn, out int value)) {
+					++value;
+					cn = value.ToString().PadLeft(width, '0');
+					fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.SetValue(cn);
+					images.ClearRows();
+					fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(set.Code.ToUpper() + "-EN" + cn);
+					if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
+						string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code + "/EN" + cn;
+						if (Utils.ImageExistsAtPath(path, out path))
+							images.AddRow(new ImageEntry(path));
+						else {
+							char suffix = 'a';
+							while (Utils.ImageExistsAtPath(path + suffix, out string newPath)) {
+								images.AddRow(new ImageEntry(newPath));
+								++suffix;
+							}
+						}
+					}
+				}
+			}
+			foreach (FieldEntry entry in fields.Entries) {
+				if (!Utils.KeepableFields.Contains(entry.Field))
+					entry.SetValue();
+				entry.OnFieldChanged();
+			}
+			while (faces.Count > 0)
+				faces[0].ClearRows();
+			if (card.TryGetField("name", out string name) && !name.Equals("_"))
+				cardBox.SelectedIndex = -1;
+		}
+
+		#endregion
+
+		#region PKMN
+
+		//Autofill MTG fields
+		private void AutofillPKMN(Set set, Card card) {
+			/*
+			string cn = fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.Value;
+			if (!string.IsNullOrWhiteSpace(cn)) {
+				string prefix = "";
+				int width = 3;
+				while (cn.Length > 0 && !char.IsNumber(cn[0])) {
+					prefix += cn[0];
+					cn = cn.Substring(1);
+				}
+				while (cn.Length > 0 && !char.IsNumber(cn[cn.Length - 1]))
+					cn = cn.Substring(0, cn.Length - 1);
+				width = cn.Length;
+				while (cn.Length > 0 && cn[0] == '0')
+					cn = cn.Substring(1);
+				if (!string.IsNullOrWhiteSpace(cn) && int.TryParse(cn, out int value)) {
+					++value;
+					cn = prefix + value.ToString().PadLeft(width, '0');
+					fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.SetValue(cn);
+					images.ClearRows();
+					fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(prefix.ToLower() + set.Code.ToLower() + '/' + value.ToString());
+					if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
+						string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code + '/' + cn;
+						if (Utils.ImageExistsAtPath(path, out path))
+							images.AddRow(new ImageEntry(path));
+						else {
+							char suffix = 'a';
+							while (Utils.ImageExistsAtPath(path + suffix, out string newPath)) {
+								images.AddRow(new ImageEntry(newPath));
+								++suffix;
+							}
+						}
+					}
+				}
+			}
+			foreach (FieldEntry entry in fields.Entries) {
+				if (!Utils.KeepableFields.Contains(entry.Field))
+					entry.SetValue();
+				entry.OnFieldChanged();
+			}
+			while (faces.Count > 0)
+				faces[0].ClearRows();
+			if (card.TryGetField("name", out string name) && !name.Equals("_"))
+				cardBox.SelectedIndex = -1;
+			*/
+		}
+
+		#endregion
+
+		#endregion
 
 	}
 
