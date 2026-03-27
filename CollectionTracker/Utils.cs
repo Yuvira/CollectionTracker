@@ -177,13 +177,14 @@ namespace CollectionTracker {
 		public static readonly Dictionary<Game, List<string>> DefaultPrintFields = new Dictionary<Game, List<string>> {
 			{ Game.MTG  , new List<string> { "cn", "printid", "rarity", "artist" } },
 			{ Game.YGO  , new List<string> { "cn", "printid" } },
-			{ Game.PKMN , new List<string> { "cn", "printid", "rarity", "regulation", "artist", "flavor" } },
+			{ Game.PKMN , new List<string> { "cn", "printid", "rarity", "artist", "flavor", "regulation" } },
 		};
 
 		//Fields that can list all values
 		public static readonly List<string> ListableFields = new List<string> {
 			"rarity",
 			"artist",
+			"regulation",
 			"cardtype",
 			"attribute",
 			"property",
@@ -194,6 +195,7 @@ namespace CollectionTracker {
 			"cn",
 			"printid",
 			"rarity",
+			"regulation",
 		};
 
 		//Fields that contain multiline text

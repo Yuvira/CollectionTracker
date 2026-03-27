@@ -400,18 +400,16 @@ namespace CollectionTracker {
 
 		//Autofill MTG fields
 		private void AutofillPKMN(Set set, Card card) {
-			/*
 			string cn = fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.Value;
 			if (!string.IsNullOrWhiteSpace(cn)) {
 				string prefix = "";
-				int width = 3;
 				while (cn.Length > 0 && !char.IsNumber(cn[0])) {
 					prefix += cn[0];
 					cn = cn.Substring(1);
 				}
 				while (cn.Length > 0 && !char.IsNumber(cn[cn.Length - 1]))
 					cn = cn.Substring(0, cn.Length - 1);
-				width = cn.Length;
+				int width = cn.Length;
 				while (cn.Length > 0 && cn[0] == '0')
 					cn = cn.Substring(1);
 				if (!string.IsNullOrWhiteSpace(cn) && int.TryParse(cn, out int value)) {
@@ -419,7 +417,7 @@ namespace CollectionTracker {
 					cn = prefix + value.ToString().PadLeft(width, '0');
 					fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.SetValue(cn);
 					images.ClearRows();
-					fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(prefix.ToLower() + set.Code.ToLower() + '/' + value.ToString());
+					fields.Entries.FirstOrDefault(fe => fe.Field.Equals("printid"))?.SetValue(set.Code.ToLower() + '/' + prefix + value.ToString());
 					if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
 						string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code + '/' + cn;
 						if (Utils.ImageExistsAtPath(path, out path))
@@ -443,7 +441,6 @@ namespace CollectionTracker {
 				faces[0].ClearRows();
 			if (card.TryGetField("name", out string name) && !name.Equals("_"))
 				cardBox.SelectedIndex = -1;
-			*/
 		}
 
 		#endregion
