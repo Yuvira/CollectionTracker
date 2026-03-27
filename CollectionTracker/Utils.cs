@@ -169,7 +169,7 @@ namespace CollectionTracker {
 		//Default card fields
 		public static readonly Dictionary<Game, List<string>> DefaultCardFields = new Dictionary<Game, List<string>> {
 			{ Game.MTG  , new List<string> { "name", "identity", "color", "cost", "type", "oracle", "power", "toughness" } },
-			{ Game.YGO  , new List<string> { "name", "cardtype", "attribute", "property", "type", "oracle", "level", "attack", "defense" } },
+			{ Game.YGO  , new List<string> { "name", "cardtype", "attribute", "property", "level", "type", "oracle", "attack", "defense" } },
 			{ Game.PKMN , new List<string> { "name", "energy", "type", "stage", "hp", "oracle", "weak", "resist", "retreat" } },
 		};
 
@@ -184,6 +184,9 @@ namespace CollectionTracker {
 		public static readonly List<string> ListableFields = new List<string> {
 			"rarity",
 			"artist",
+			"cardtype",
+			"attribute",
+			"property",
 		};
 
 		//Fields that can be kept on list regeneration
