@@ -729,7 +729,8 @@ namespace CollectionTracker {
 				bool hasPower = printing.Card.TryGetFaceField("power", i, out string power);
 				bool hasToughness = printing.Card.TryGetFaceField("toughness", i, out string toughness);
 				bool hasLoyalty = printing.Card.TryGetFaceField("loyalty", i, out string loyalty);
-				if (hasPower || hasToughness || hasLoyalty) {
+				bool hasDefense = printing.Card.TryGetFaceField("defense", i, out string defense);
+				if (hasPower || hasToughness || hasLoyalty || hasDefense) {
 					string pt = "";
 					if (hasPower && hasToughness)
 						pt = $"{power} / {toughness}";
@@ -737,10 +738,14 @@ namespace CollectionTracker {
 						pt = $"{power} Power";
 					else if (hasToughness)
 						pt = $"{toughness} Toughness";
-					if (hasLoyalty && (hasPower || hasToughness))
+					if (hasLoyalty && !string.IsNullOrEmpty(pt))
 						pt = $"{loyalty} Loyalty, {pt}";
 					else if (hasLoyalty)
 						pt = $"{loyalty} Loyalty";
+					if (hasDefense && !string.IsNullOrEmpty(pt))
+						pt = $"{defense} Defense, {pt}";
+					else if (hasDefense)
+						pt = $"{defense} Defense";
 					textPos.Y += LINE_SPACING + GenerateDescription($"<b>{pt}", facePanel, textPos, false, true);
 				}
 
