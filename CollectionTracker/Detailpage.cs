@@ -917,7 +917,7 @@ namespace CollectionTracker {
 			//Header
 			TrackerPanel headerPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 			if (printing.Card.TryGetField("name", out string name))
-				textPos.Y += GenerateDescription($"<b>{name}", headerPanel, textPos, false);
+				textPos.Y += LINE_SPACING + GenerateDescription($"<b>{name}", headerPanel, textPos, false);
 			if (printing.Card.TryGetField("cardtype", out string cardtype)) {
 				if (printing.Card.TryGetField("attribute", out string attribute))
 					cardtype = $"{attribute} {cardtype}";
