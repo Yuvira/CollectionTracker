@@ -581,7 +581,11 @@ namespace CollectionTracker {
 
 		//ToString
 		public override string ToString() {
+
+			//Get name
 			if (TryGetField("name", out string name)) {
+
+				//Add clarifiers to card types that need them
 				if (TryGetField("type", out string type)) {
 					if (type.Contains("Token")) {
 						name += " (Token";
@@ -595,6 +599,17 @@ namespace CollectionTracker {
 							name += " | " + oracle.Replace("\r\n", " / ").CleanFormatMarkers();
 						return name + ")";
 					}
+					if (type.Contains("Pokémon") && !type.Contains("Pokémon Tool")) {
+						name += " | ";
+						if (TryGetField("energy", out string energy))
+							name += energy + " ";
+						if (TryGetField("hp", out string hp))
+							name += hp + " ";
+						name += "| ";
+						if (TryGetField("oracle", out string oracle))
+							name += oracle.Replace("\r\n", " / ").CleanFormatMarkers();
+						return name;
+					}
 					if (type.Contains("Art Card"))
 						return name + " (Art Card)";
 					if (type.Contains("Front Card"))
@@ -602,9 +617,15 @@ namespace CollectionTracker {
 					if (type.Contains("Emblem"))
 						return name + " (Emblem)";
 				}
+
+				//Return text
 				return name;
+
 			}
+
+			//No name field
 			return "MISSING NAME FIELD";
+
 		}
 
 		#endregion
