@@ -218,10 +218,11 @@ namespace CollectionTracker {
 		public List<Printing> FilteredPrints => filteredPrints;
 
 		//Constructor
-		public Printlist(string searchTerms) : base() {
+		public Printlist(string searchTerms) : this(SearchUtils.SearchPrintings(searchTerms)) { }
+		public Printlist(List<Printing> printlist) : base() {
 
 			//Get print list
-			printings = SearchUtils.SearchPrintings(searchTerms);
+			printings = new List<Printing>(printlist);
 			filteredPrints = new List<Printing>(printings);
 			filteredPrints.Sort(Printing.SortNewest);
 

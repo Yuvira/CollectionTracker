@@ -117,7 +117,7 @@ namespace CollectionTracker {
 		public void OpenKeywordentries(object sender, EventArgs e) => SetPage<Keywordentrylist>();
 
 		//Set new page
-		public void SetPage<T>(Card cardref = null, Printing printref = null, string searchTerms = "") where T : TrackerPage {
+		public void SetPage<T>(Card cardref = null, Printing printref = null, string searchTerms = "", List<Printing> printlist = null) where T : TrackerPage {
 
 			//Clear print list if moving to unsupported page
 			bool TKeepsPrintlist = typeof(T) == typeof(Printlist) || typeof(T) == typeof(Detailpage) || typeof(T) == typeof(Cardentry) || typeof(T) == typeof(Printentry);
@@ -165,8 +165,12 @@ namespace CollectionTracker {
 					Page = new Homepage();
 				else if (typeof(T) == typeof(Setlist))
 					Page = new Setlist();
-				else if (typeof(T) == typeof(Printlist))
-					Page = new Printlist(searchTerms);
+				else if (typeof(T) == typeof(Printlist)) {
+					if (printlist != null)
+						Page = new Printlist(printlist);
+					else
+						Page = new Printlist(searchTerms);
+				}
 				else if (typeof(T) == typeof(Detailpage)) {
 					if (printref != null) {
 						Detailpage dp = new Detailpage(printref);

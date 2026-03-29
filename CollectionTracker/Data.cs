@@ -572,6 +572,16 @@ namespace CollectionTracker {
 			return true;
 		}
 
+		//Has field
+		public bool HasField(string field) {
+			if (fields.ContainsKey(field))
+				return true;
+			foreach (Face face in faces)
+				if (face.Fields.ContainsKey(field))
+					return true;
+			return false;
+		}
+
 		#endregion
 
 		#region Utils
@@ -789,6 +799,16 @@ namespace CollectionTracker {
 			if (face >= 0 && face < faces.Count && faces[face].TryGetField(field, out value))
 				return true;
 			value = "";
+			return false;
+		}
+
+		//Has field
+		public bool HasField(string field) {
+			if (fields.ContainsKey(field))
+				return true;
+			foreach (Face face in faces)
+				if (face.Fields.ContainsKey(field))
+					return true;
 			return false;
 		}
 

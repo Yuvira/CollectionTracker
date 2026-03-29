@@ -26,7 +26,7 @@ namespace CollectionTracker {
 			private Button filter;
 			private Label progressLabel;
 			private ProgressBar progressBar;
-			private Label cardRefLabel = null;
+			private Label warningLabel = null;
 
 			//Accessors
 			public Panel Panel => panel;
@@ -43,7 +43,9 @@ namespace CollectionTracker {
 				List<Printing> setPrints = TrackerForm.Catalog.Printings.Where(print => print.Set == set).ToList();
 				int setCount = setPrints.Count;
 				int setOwned = setPrints.Count(print => print.IsOwned);
-				bool missingCardref = setPrints.Count(print => !print.TryGetField("name", out string value) || value.Equals("_")) > 0;
+				bool missingCardref = setPrints.Count(print => MissingCardRef(print)) > 0;
+				bool missingPrintData = TrackerForm.Catalog.Game != Game.YGO && setPrints.Count(print => MissingPrintData(print)) > 0;
+				bool noCardsWithFolder = setPrints.Count == 0 && Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game) && Directory.Exists(Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code);
 
 				//Panel
 				panel = Utils.GeneratePanel(new Rectangle(5, 5, 820, 60));
@@ -51,8 +53,7 @@ namespace CollectionTracker {
 				//Filter button
 				filter = Utils.GenerateButton(new Rectangle(5, 5, 350, 50), set.Name, set.ImgPath);
 				filter.Click += FilterBySet;
-				if (!string.IsNullOrWhiteSpace(setURL))
-					filter.MouseUp += LoadSetURL;
+				filter.MouseUp += LoadSetURL;
 				panel.Controls.Add(filter);
 
 				//Progress label
@@ -65,17 +66,16 @@ namespace CollectionTracker {
 				panel.Controls.Add(progressBar);
 
 				//Missing cardref label
-				if (missingCardref) {
-					cardRefLabel = Utils.GenerateLabel(new Rectangle(780, 20, 35, TEXT_HEIGHT), "*");
-					cardRefLabel.TextAlign = ContentAlignment.MiddleCenter;
-					panel.Controls.Add(cardRefLabel);
-				}
-
-				//No cards logged but folder exists
-				else if (setPrints.Count == 0 && Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game) && Directory.Exists(Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code)) {
-					cardRefLabel = Utils.GenerateLabel(new Rectangle(780, 20, 35, TEXT_HEIGHT), "&");
-					cardRefLabel.TextAlign = ContentAlignment.MiddleCenter;
-					panel.Controls.Add(cardRefLabel);
+				if (missingCardref || missingPrintData || noCardsWithFolder) {
+					warningLabel = Utils.GenerateLabel(new Rectangle(780, 20, 35, TEXT_HEIGHT), "");
+					if (missingCardref)
+						warningLabel.Text = "*";
+					else if (missingPrintData)
+						warningLabel.Text = "!";
+					else if (noCardsWithFolder)
+						warningLabel.Text = "&";
+					warningLabel.TextAlign = ContentAlignment.MiddleCenter;
+					panel.Controls.Add(warningLabel);
 				}
 
 			}
@@ -85,9 +85,18 @@ namespace CollectionTracker {
 
 			//Load set URL
 			private void LoadSetURL(object sender, MouseEventArgs e) {
-				if (e.Button == MouseButtons.Right)
+				if (e.Button == MouseButtons.Right && !string.IsNullOrWhiteSpace(setURL))
 					Process.Start(setURL);
+				else if (e.Button == MouseButtons.Middle) {
+					List<Printing> printlist = TrackerForm.Catalog.Printings.Where(print => print.Set == set && (MissingCardRef(print) || (TrackerForm.Catalog.Game != Game.YGO && MissingPrintData(print)))).ToList();
+					if (printlist.Count > 0)
+						parent.FilterByList(printlist);
+				}
 			}
+
+			//Check if print is missing data
+			private bool MissingCardRef(Printing print) => !print.TryGetField("name", out string name) || name.Equals("_");
+			private bool MissingPrintData(Printing print) => !print.HasField("rarity") && !print.HasField("artist") && print.TryGetField("name", out string name) && !name.Equals("Punchcard") && !print.GetField("type").Equals("Basic Energy");
 
 		}
 
@@ -155,6 +164,7 @@ namespace CollectionTracker {
 
 		//Filter catalog by set ID
 		private void FilterBySet(Set set) => TrackerForm.Instance.SetPage<Printlist>(searchTerms: $"s={set.Code}");
+		private void FilterByList(List<Printing> printlist) => TrackerForm.Instance.SetPage<Printlist>(printlist: printlist);
 
 		//Set filter changed
 		private void OnFilterChanged(object sender, EventArgs e) {
