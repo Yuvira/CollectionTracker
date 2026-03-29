@@ -90,8 +90,9 @@ namespace CollectionTracker {
 
 			//Keyword box
 			int keywordWidth = (BUTTON_WIDTH * 2) + PANEL_MARGIN;
-			keywordBox = Utils.GenerateComboBox(new Rectangle(listPanel.Width - (keywordWidth + SCROLL_MARGIN), 0, keywordWidth, BUTTON_HEIGHT), ComboBoxStyle.DropDown, true);
+			keywordBox = Utils.GenerateComboBox(new Rectangle(listPanel.Width - (keywordWidth + SCROLL_MARGIN), 0, keywordWidth, BUTTON_HEIGHT), ComboBoxStyle.DropDownList, true);
 			keywordBox.Items.AddRange(TrackerForm.Catalog.Keywords.Keys.ToArray());
+			keywordBox.SelectedIndexChanged += CopyKeyword;
 			listPanel.Controls.Add(keywordBox);
 
 			//Keyword button
