@@ -64,10 +64,7 @@ namespace CollectionTracker {
 		}
 
 		//Save
-		private void SaveKeywords(object sender, EventArgs e) {
-			TrackerForm.Catalog.CopyKeywords(FieldEntry.GetEntryDict(keywords.Entries));
-			TrackerForm.Instance.UpdateKeywords();
-		}
+		private void SaveKeywords(object sender, EventArgs e) => TrackerForm.Catalog.CopyKeywords(FieldEntry.GetEntryDict(keywords.Entries));
 
 	}
 

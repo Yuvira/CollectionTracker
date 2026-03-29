@@ -19,8 +19,6 @@ namespace CollectionTracker {
 		private MenuStrip toolbar;
 		private ToolStripLabel catalogLabel;
 		private ToolStripDropDownButton entryDDButton;
-		private ToolStripDropDownButton keywordDDButton;
-		private ToolStripDropDownMenu keywordDropDown;
 		private ToolStripButton saveButton;
 		private ToolStripButton printListButton;
 
@@ -76,15 +74,6 @@ namespace CollectionTracker {
 			catalogLabel = Utils.GenerateTSLabel("", true, 10);
 			toolbar.Items.Add(catalogLabel);
 
-			//Keywords
-			keywordDropDown = new ToolStripDropDownMenu();
-			keywordDropDown.ShowCheckMargin = false;
-			keywordDropDown.ShowImageMargin = false;
-			keywordDropDown.MaximumSize = new Size(keywordDropDown.MaximumSize.Width, 900);
-			keywordDDButton = Utils.GenerateTSDDButton("Keywords", keywordDropDown, false);
-			keywordDDButton.Alignment = ToolStripItemAlignment.Right;
-			toolbar.Items.Add(keywordDDButton);
-
 			//Add
 			Controls.Add(toolbar);
 
@@ -111,10 +100,8 @@ namespace CollectionTracker {
 			catalogLabel.Text = Catalog.Name;
 			saveButton.Enabled = true;
 			entryDDButton.Enabled = true;
-			keywordDDButton.Enabled = true;
 			Printentry.SetsAltered = true;
 			Printentry.CardsAltered = true;
-			UpdateKeywords();
 		}
 
 		#endregion
@@ -206,19 +193,6 @@ namespace CollectionTracker {
 		private void InvokePageChangeError(string error) {
 			MessageBox.Show(error);
 			Page = new Homepage();
-		}
-
-		#endregion
-
-		#region Utils
-
-		//Update keyword dropdown
-		public void UpdateKeywords() {
-			for (int i = 0; i < keywordDropDown.Items.Count; ++i)
-				keywordDropDown.Items[i].Dispose();
-			keywordDropDown.Items.Clear();
-			foreach(string keyword in Catalog.Keywords.Keys)
-				keywordDropDown.Items.Add(Utils.GenerateTSButton(keyword, (s, e) => Clipboard.SetText(Catalog.Keywords[keyword])));
 		}
 
 		#endregion

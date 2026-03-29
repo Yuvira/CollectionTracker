@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
 
 	public class Cardentry : TrackerPage {
+
+		//Constants
+		private const int PANEL_WIDTH = 800;
+		private const int BUTTON_WIDTH = 100;
 
 		//Properties
 		private Card cardref;
@@ -20,6 +25,8 @@ namespace CollectionTracker {
 		private Button returnButton;
 		private Button artButton;
 		private Button frontButton;
+		private ComboBox keywordBox;
+		private Button copyKeywordButton;
 
 		//Constructor
 		public Cardentry(Card card, Printing print) : base() {
@@ -32,7 +39,7 @@ namespace CollectionTracker {
 			TrackerForm.FieldContext = FieldContext.CARD;
 
 			//Panel
-			listPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(800, panel.Height - 25), panel.Size, new Point(0, 0)));
+			listPanel = Utils.GenerateTrackerPanel(new Rectangle((panel.Width - PANEL_WIDTH) / 2, PANEL_MARGIN, PANEL_WIDTH, panel.Height - (PANEL_MARGIN * 2)));
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 
@@ -67,29 +74,40 @@ namespace CollectionTracker {
 			}
 
 			//Add face button
-			addButton = Utils.GenerateButton(new Rectangle(0, 0, 30, 30), "+");
+			addButton = Utils.GenerateButton(new Rectangle(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT), "+");
 			addButton.Click += AddFace;
 			listPanel.Controls.Add(addButton);
 
 			//Save button
-			saveButton = Utils.GenerateButton(new Rectangle(35, 0, 100, 30), "Save");
+			saveButton = Utils.GenerateButton(new Rectangle(addButton.Right + PANEL_MARGIN, 0, BUTTON_WIDTH, BUTTON_HEIGHT), "Save");
 			saveButton.Click += SaveCard;
 			listPanel.Controls.Add(saveButton);
 
 			//Return button
-			returnButton = Utils.GenerateButton(new Rectangle(140, 0, 100, 30), "Return");
+			returnButton = Utils.GenerateButton(new Rectangle(saveButton.Right, 0, BUTTON_WIDTH, BUTTON_HEIGHT), "Return");
 			returnButton.Click += ReturnToDetails;
 			listPanel.Controls.Add(returnButton);
 
-			//Art card button
-			artButton = Utils.GenerateButton(new Rectangle(listPanel.Width - (200 + PANEL_MARGIN + SCROLL_MARGIN), 0, 100, 30), "Art");
-			artButton.Click += SetTypeArt;
-			listPanel.Controls.Add(artButton);
+			//Keyword box
+			int keywordWidth = (BUTTON_WIDTH * 2) + PANEL_MARGIN;
+			keywordBox = Utils.GenerateComboBox(new Rectangle(listPanel.Width - (keywordWidth + SCROLL_MARGIN), 0, keywordWidth, BUTTON_HEIGHT), ComboBoxStyle.DropDown, true);
+			keywordBox.Items.AddRange(TrackerForm.Catalog.Keywords.Keys.ToArray());
+			listPanel.Controls.Add(keywordBox);
+
+			//Keyword button
+			copyKeywordButton = Utils.GenerateButton(new Rectangle(keywordBox.Left - (BUTTON_WIDTH + PANEL_MARGIN), 0, BUTTON_WIDTH, BUTTON_HEIGHT), "Copy");
+			copyKeywordButton.Click += CopyKeyword;
+			listPanel.Controls.Add(copyKeywordButton);
 
 			//Front card button
-			frontButton = Utils.GenerateButton(new Rectangle(listPanel.Width - (100 + SCROLL_MARGIN), 0, 100, 30), "Front");
+			frontButton = Utils.GenerateButton(new Rectangle(listPanel.Width - (BUTTON_WIDTH + SCROLL_MARGIN), 0, BUTTON_WIDTH, BUTTON_HEIGHT), "Front");
 			frontButton.Click += SetTypeFront;
 			listPanel.Controls.Add(frontButton);
+
+			//Art card button
+			artButton = Utils.GenerateButton(new Rectangle(frontButton.Left - (BUTTON_WIDTH + PANEL_MARGIN), 0, BUTTON_WIDTH, BUTTON_HEIGHT), "Art");
+			artButton.Click += SetTypeArt;
+			listPanel.Controls.Add(artButton);
 
 			//Resume
 			listPanel.ResumeLayout();
@@ -131,18 +149,20 @@ namespace CollectionTracker {
 		//On resize
 		private void OnFieldsResized() {
 			listPanel.SuspendLayout();
-			Point pos = new Point(0, 0);
-			fields.Panel.Location = pos;
-			pos.Y += fields.Panel.Height + 5;
+			int y = 0;
+			fields.Panel.Top = y;
+			y += fields.Panel.Height + PANEL_MARGIN;
 			foreach (Entrylist<FieldEntry> face in faces) {
-				face.Panel.Location = pos;
-				pos.Y += face.Panel.Height + 5;
+				face.Panel.Top = y;
+				y += face.Panel.Height + PANEL_MARGIN;
 			}
-			addButton.Location = pos;
-			saveButton.Location = new Point(35, pos.Y);
-			returnButton.Location = new Point(140, pos.Y);
-			artButton.Top = pos.Y;
-			frontButton.Top = pos.Y;
+			addButton.Top = y;
+			saveButton.Top = y;
+			returnButton.Top = y;
+			keywordBox.Top = y;
+			copyKeywordButton.Top = y;
+			artButton.Top = y + BUTTON_HEIGHT + PANEL_MARGIN;
+			frontButton.Top = y + BUTTON_HEIGHT + PANEL_MARGIN;
 			listPanel.ResumeLayout();
 		}
 
@@ -154,6 +174,14 @@ namespace CollectionTracker {
 				if (entry.Field.Equals("type"))
 					entry.SetValue(type);
 			}
+		}
+
+		//Copy keyword value
+		private void CopyKeyword(object sender, EventArgs e) {
+			if (TrackerForm.Catalog.Keywords.Keys.Contains(keywordBox.Text))
+				Clipboard.SetText(TrackerForm.Catalog.Keywords[keywordBox.Text]);
+			else
+				MessageBox.Show("Catalog has no Keyword entry \"keywordBox.Text\"!");
 		}
 
 		//Save
