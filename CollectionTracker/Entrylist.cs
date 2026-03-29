@@ -255,19 +255,19 @@ namespace CollectionTracker {
 			}
 			if (Utils.MultilineFields.Contains(field.Text)) {
 				if (!textValue.Multiline) {
-					textValue.Multiline = true;
-					textValue.ScrollBars = ScrollBars.Both;
 					int newHeight = field.Text.Equals("oracle") ? 210 : 120;
 					int delta = newHeight - textValue.Height;
+					textValue.Multiline = true;
+					textValue.ScrollBars = ScrollBars.Both;
 					textValue.Height = newHeight;
 					panel.Height = newHeight;
 					OnResize?.Invoke(this, delta);
 				}
 			}
 			else if (textValue.Multiline) {
+				int delta = 30 - textValue.Height;
 				textValue.Multiline = false;
 				textValue.ScrollBars = ScrollBars.None;
-				int delta = 30 - textValue.Height;
 				textValue.Height = 30;
 				panel.Height = 30;
 				OnResize?.Invoke(this, delta);
