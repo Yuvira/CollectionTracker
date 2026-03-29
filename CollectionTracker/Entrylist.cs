@@ -301,10 +301,12 @@ namespace CollectionTracker {
 				code = "b";
 			else if (e.KeyCode == Keys.U)
 				code = "u";
+			else if (e.KeyCode == Keys.O)
+				code = "c|";
 			else if (e.KeyCode == Keys.R)
-				code = "ct";
+				code = "ct|";
 			else if (e.KeyCode == Keys.T)
-				code = "tt";
+				code = "tt|";
 			if (string.IsNullOrWhiteSpace(code))
 				return;
 			int index = textValue.SelectionStart;
@@ -313,8 +315,10 @@ namespace CollectionTracker {
 				--length;
 			if (textValue.Text.Substring(index, length).EndsWith(".") || textValue.Text.Substring(index, length).EndsWith(","))
 				--length;
-			textValue.Text = textValue.Text.Insert(index + length, "</" + code + ">");
-			textValue.Text = textValue.Text.Insert(index, "<" + code + (code.Length == 2 ? "|>" : ">"));
+			textValue.Text = textValue.Text.Insert(index + length, "</" + (code.Contains('|') ? code.Substring(0, code.Length - 1) : code) + ">");
+			textValue.Text = textValue.Text.Insert(index, "<" + code + ">");
+			textValue.SelectionStart = index + code.Length + (code.Contains('|') ? 1 : 2);
+			textValue.SelectionLength = code.Contains('|') ? 0 : length;
 		}
 
 		//Clear value
