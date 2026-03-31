@@ -884,7 +884,7 @@ namespace CollectionTracker {
 			int compare = print1.Date.CompareTo(print2.Date);
 			if (compare != 0)
 				return -compare;
-			compare = print1.Set.Name.CompareTo(print2.Set.Name);
+			compare = -print1.Set.Name.CompareTo(print2.Set.Name);
 			if (compare != 0)
 				return compare;
 			return -print1.GetField("cn").CompareTo(print2.GetField("cn"));
