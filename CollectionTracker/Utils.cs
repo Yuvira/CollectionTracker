@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 
@@ -45,23 +46,18 @@ namespace CollectionTracker {
 			public PanelBorder(Color color, int width) => pen = new Pen(color, width);
 			public virtual void DrawBorder(Graphics g, int width, int height) => g.DrawRectangle(pen, 0, 0, width, height);
 		}
-		private class DoublePanelBorder : PanelBorder {
-			private Pen pen2, pen3, pen4;
-			public DoublePanelBorder(Color color1, Color color2, int width) : base(color1, width) {
+		private class HorizontalGradientPanelBorder : PanelBorder {
+			Brush gradientBrush;
+			private Pen pen2, gradientPen;
+			public HorizontalGradientPanelBorder(Color color1, Color color2, int width, int left, int right) : base(color1, width) {
 				pen2 = new Pen(color2, width);
-				pen3 = new Pen(Utils.BlendColours(color1, color1, color2), width);
-				pen4 = new Pen(Utils.BlendColours(color1, color2, color2), width);
+				gradientBrush = new LinearGradientBrush(new Point(left, 0), new Point(right, 0), color1, color2);
+				gradientPen = new Pen(gradientBrush, width);
 			}
 			public override void DrawBorder(Graphics g, int width, int height) {
+				g.DrawLine(gradientPen, 0, 0, width, 0);
+				g.DrawLine(gradientPen, 0, height, width, height);
 				g.DrawLine(pen, 0, 0, 0, height);
-				g.DrawLine(pen, 0, 0, width * 0.4f, 0);
-				g.DrawLine(pen, 0, height, width * 0.4f, height);
-				g.DrawLine(pen3, width * 0.4f, 0, width * 0.5f, 0);
-				g.DrawLine(pen3, width * 0.4f, height, width * 0.5f, height);
-				g.DrawLine(pen4, width * 0.5f, 0, width * 0.6f, 0);
-				g.DrawLine(pen4, width * 0.5f, height, width * 0.6f, height);
-				g.DrawLine(pen2, width * 0.6f, 0, width, 0);
-				g.DrawLine(pen2, width * 0.6f, height, width, height);
 				g.DrawLine(pen2, width, 0, width, height);
 			}
 		}
@@ -71,7 +67,7 @@ namespace CollectionTracker {
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
 		}
 		public void AddBorder(Color color, int width) => borders.Add(new PanelBorder(color, width));
-		public void AddDoubleBorder(Color color1, Color color2, int width) => borders.Add(new DoublePanelBorder(color1, color2, width));
+		public void AddHorizontalGradientBorder(Color color1, Color color2, int width) => borders.Add(new HorizontalGradientPanelBorder(color1, color2, width, ClientRectangle.Left, ClientRectangle.Right));
 		public void ClearBorders() => borders.Clear();
 		protected override void OnPaint(PaintEventArgs e) {
 			if (borders.Count > 0) {

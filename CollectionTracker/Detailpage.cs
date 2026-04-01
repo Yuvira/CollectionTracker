@@ -664,7 +664,7 @@ namespace CollectionTracker {
 				else if (color.Length == 1 && MTGTypeColors.ContainsKey(color[0]))
 					panel.AddBorder(MTGTypeColors[color[0]], 3);
 				else if (color.Length == 2 && MTGTypeColors.ContainsKey(color[0]) && MTGTypeColors.ContainsKey(color[1]))
-					panel.AddDoubleBorder(MTGTypeColors[color[0]], MTGTypeColors[color[1]], 3);
+					panel.AddHorizontalGradientBorder(MTGTypeColors[color[0]], MTGTypeColors[color[1]], 3);
 				else if (color.Length > 2)
 					panel.AddBorder(Color.Yellow, 3);
 				else
@@ -1014,7 +1014,7 @@ namespace CollectionTracker {
 				else if (color.Length == 1 && PKMNTypeColors.ContainsKey(color[0]))
 					panel.AddBorder(PKMNTypeColors[color[0]], 3);
 				else if (color.Length == 2 && PKMNTypeColors.ContainsKey(color[0]) && PKMNTypeColors.ContainsKey(color[1]))
-					panel.AddDoubleBorder(PKMNTypeColors[color[0]], PKMNTypeColors[color[1]], 3);
+					panel.AddHorizontalGradientBorder(PKMNTypeColors[color[0]], PKMNTypeColors[color[1]], 3);
 				else if (color.Length > 2)
 					panel.AddBorder(Color.Yellow, 3);
 				else
