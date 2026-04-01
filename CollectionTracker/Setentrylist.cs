@@ -23,6 +23,7 @@ namespace CollectionTracker {
 			private TextBox nameBox;
 			private TextBox codeBox;
 			private TextBox typeBox;
+			private NumericUpDown dateOrder;
 			private TextBox dateBox;
 			private TextBox prefixBox;
 			private NumericUpDown mainCount;
@@ -45,8 +46,10 @@ namespace CollectionTracker {
 				panel.Controls.Add(nameBox);
 				codeBox = Utils.GenerateTextBox(new Rectangle(5, 40, 120, 30), this.set.Code);
 				panel.Controls.Add(codeBox);
-				typeBox = Utils.GenerateTextBox(new Rectangle(130, 40, 275, 30), this.set.Type);
+				typeBox = Utils.GenerateTextBox(new Rectangle(130, 40, 135, 30), this.set.Type);
 				panel.Controls.Add(typeBox);
+				dateOrder = Utils.GenerateNumericUpDown(new Rectangle(270, 40, 135, 30), this.set.DateOrder);
+				panel.Controls.Add(dateOrder);
 				dateBox = Utils.GenerateTextBox(new Rectangle(5, 75, 120, 30), this.set.Date);
 				panel.Controls.Add(dateBox);
 				prefixBox = Utils.GenerateTextBox(new Rectangle(130, 75, 135, 30), this.set.PrefixOrder);
@@ -108,6 +111,7 @@ namespace CollectionTracker {
 					dateBox.Text,
 					pathLabel.Text,
 					(int)mainCount.Value,
+					(int)dateOrder.Value,
 					prefixBox.Text
 				));
 			}

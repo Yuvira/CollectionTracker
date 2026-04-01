@@ -170,6 +170,7 @@ namespace CollectionTracker {
 		[ProtoMember(4)] private string date;
 		[ProtoMember(5)] private string imgPath;
 		[ProtoMember(6)] private int mainCount;
+		[ProtoMember(8)] private int dateOrder;
 		[ProtoMember(7)] private string prefixOrder;
 
 		//Accessors
@@ -180,17 +181,19 @@ namespace CollectionTracker {
 		public DateTime DateTime => DateTime.ParseExact(date, "yyyy-MM-dd", null);
 		public string ImgPath => imgPath;
 		public int MainCount => mainCount;
+		public int DateOrder => dateOrder;
 		public string PrefixOrder => prefixOrder;
 
 		//Constructor
-		public Set() : this("Name", "Code", "Type", DateTime.Now.ToString("yyyy-MM-dd"), "", 0, "") { }
-		public Set(string name, string code, string type, string date, string imgPath, int mainCount, string prefixOrder) {
+		public Set() : this("Name", "Code", "Type", DateTime.Now.ToString("yyyy-MM-dd"), "", 0, 0, "") { }
+		public Set(string name, string code, string type, string date, string imgPath, int mainCount, int dateOrder, string prefixOrder) {
 			this.name = name;
 			this.code = code;
 			this.type = type;
 			this.date = date;
 			this.imgPath = imgPath;
 			this.mainCount = mainCount;
+			this.dateOrder = dateOrder;
 			this.prefixOrder = prefixOrder;
 		}
 
@@ -204,6 +207,7 @@ namespace CollectionTracker {
 			date = set.date.ToString("yyyy-MM-dd");
 			imgPath = set.imgPath;
 			mainCount = 0;
+			dateOrder = 0;
 			prefixOrder = "";
 		}
 		public Set(YGO_Set set) {
@@ -213,6 +217,7 @@ namespace CollectionTracker {
 			date = set.date.ToString("yyyy-MM-dd");
 			imgPath = set.imgPath;
 			mainCount = 0;
+			dateOrder = 0;
 			prefixOrder = "";
 		}
 		public Set(PKMN_Set set) {
@@ -222,6 +227,7 @@ namespace CollectionTracker {
 			date = set.date.ToString("yyyy-MM-dd");
 			imgPath = set.imgPath;
 			mainCount = set.mainSetCount;
+			dateOrder = 0;
 			prefixOrder = "";
 		}
 
@@ -237,6 +243,7 @@ namespace CollectionTracker {
 			date = set.date;
 			imgPath = set.imgPath;
 			mainCount = set.mainCount;
+			dateOrder = set.dateOrder;
 			prefixOrder = set.prefixOrder;
 		}
 
@@ -247,6 +254,9 @@ namespace CollectionTracker {
 		//Comparers
 		public static int SortNewest(Set set1, Set set2) {
 			int compare = set1.Date.CompareTo(set2.Date);
+			if (compare != 0)
+				return -compare;
+			compare = set1.dateOrder.CompareTo(set2.dateOrder);
 			if (compare != 0)
 				return -compare;
 			return set1.Name.CompareTo(set2.Name);
@@ -875,7 +885,7 @@ namespace CollectionTracker {
 			int compare = print1.Date.CompareTo(print2.Date);
 			if (compare != 0)
 				return -compare;
-			compare = print1.Set.Name.CompareTo(print2.Set.Name);
+			compare = Set.SortNewest(print1.set, print2.set);
 			if (compare != 0)
 				return compare;
 			return print1.GetField("cn").CompareTo(print2.GetField("cn"));
@@ -884,7 +894,7 @@ namespace CollectionTracker {
 			int compare = print1.Date.CompareTo(print2.Date);
 			if (compare != 0)
 				return -compare;
-			compare = -print1.Set.Name.CompareTo(print2.Set.Name);
+			compare = Set.SortNewest(print1.set, print2.set);
 			if (compare != 0)
 				return compare;
 			return -print1.GetField("cn").CompareTo(print2.GetField("cn"));
@@ -893,9 +903,9 @@ namespace CollectionTracker {
 			int compare = print1.Date.CompareTo(print2.Date);
 			if (compare != 0)
 				return compare;
-			compare = print1.Set.Name.CompareTo(print2.Set.Name);
+			compare = Set.SortNewest(print1.set, print2.set);
 			if (compare != 0)
-				return compare;
+				return -compare;
 			return print1.GetField("cn").CompareTo(print2.GetField("cn"));
 		}
 		public static int SortAlphabetical(Printing print1, Printing print2) =>
