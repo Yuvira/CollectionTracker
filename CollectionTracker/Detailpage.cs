@@ -39,6 +39,7 @@ namespace CollectionTracker {
 				label.MouseLeave += HideCardtip;
 				if (!isCurrent)
 					label.Click += LoadCardtip;
+				label.MouseUp += CopyPrintID;
 			}
 
 			//Update
@@ -51,6 +52,12 @@ namespace CollectionTracker {
 				else if (!isCurrent && newCurrent)
 					label.Click -= LoadCardtip;
 				isCurrent = newCurrent;
+			}
+
+			//Copy
+			private void CopyPrintID(object sender, MouseEventArgs e) {
+				if (e.Button == MouseButtons.Middle)
+					Clipboard.SetText(printid);
 			}
 
 			//Cardtip functions
