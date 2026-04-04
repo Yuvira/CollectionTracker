@@ -289,6 +289,10 @@ namespace CollectionTracker {
 			panel.Controls.Add(filterLabel);
 			panel.Controls.Add(contentPanel);
 
+			//Click event
+			panel.MouseUp += HandleMouseEvent;
+			contentPanel.MouseUp += HandleMouseEvent;
+
 			//Set printing
 			viewData = true;
 			SetPrinting(printing);
@@ -567,6 +571,14 @@ namespace CollectionTracker {
 		private void NavRight(object sender, EventArgs e) {
 			if (nextListPrint != null)
 				SetPrinting(nextListPrint);
+		}
+
+		//Navigate references on mouse click
+		private void HandleMouseEvent(object sender, MouseEventArgs e) {
+			if (e.Button == MouseButtons.XButton2)
+				RefForward(sender, e);
+			else if (e.Button == MouseButtons.XButton1)
+				RefBack(sender, e);
 		}
 
 		//References
