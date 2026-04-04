@@ -84,7 +84,7 @@ namespace CollectionTracker {
 			listPanel.Controls.Add(saveButton);
 
 			//Return button
-			returnButton = Utils.GenerateButton(new Rectangle(saveButton.Right, 0, BUTTON_WIDTH, BUTTON_HEIGHT), "Return");
+			returnButton = Utils.GenerateButton(new Rectangle(saveButton.Right + PANEL_MARGIN, 0, BUTTON_WIDTH, BUTTON_HEIGHT), "Return");
 			returnButton.Click += ReturnToDetails;
 			listPanel.Controls.Add(returnButton);
 
