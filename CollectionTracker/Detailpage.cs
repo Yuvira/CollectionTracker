@@ -682,8 +682,12 @@ namespace CollectionTracker {
 					panel.AddBorder(SystemColors.ControlDarkDark, 3);
 				else if (color.Length == 1 && MTGTypeColors.ContainsKey(color[0]))
 					panel.AddBorder(MTGTypeColors[color[0]], 3);
-				else if (color.Length == 2 && MTGTypeColors.ContainsKey(color[0]) && MTGTypeColors.ContainsKey(color[1]))
-					panel.AddHorizontalGradientBorder(MTGTypeColors[color[0]], MTGTypeColors[color[1]], 3);
+				else if (color.Length == 2 && MTGTypeColors.ContainsKey(color[0]) && MTGTypeColors.ContainsKey(color[1])) {
+					if (MTGTypeColors.Keys.ToList().IndexOf(color[1]) - MTGTypeColors.Keys.ToList().IndexOf(color[0]) < 3)
+						panel.AddHorizontalGradientBorder(MTGTypeColors[color[0]], MTGTypeColors[color[1]], 3);
+					else
+						panel.AddHorizontalGradientBorder(MTGTypeColors[color[1]], MTGTypeColors[color[0]], 3);
+				}
 				else if (color.Length > 2)
 					panel.AddBorder(Color.Yellow, 3);
 				else
