@@ -882,34 +882,37 @@ namespace CollectionTracker {
 
 		//Comparers
 		public static int SortNewest(Printing print1, Printing print2) {
-			int compare = print1.Date.CompareTo(print2.Date);
-			if (compare != 0)
-				return -compare;
-			compare = Set.SortNewest(print1.set, print2.set);
+			int compare = SortDateNewest(print1, print2);
 			if (compare != 0)
 				return compare;
 			return print1.GetField("cn").CompareTo(print2.GetField("cn"));
 		}
 		public static int SortInverseNewest(Printing print1, Printing print2) {
-			int compare = print1.Date.CompareTo(print2.Date);
-			if (compare != 0)
-				return -compare;
-			compare = Set.SortNewest(print1.set, print2.set);
+			int compare = SortDateNewest(print1, print2);
 			if (compare != 0)
 				return compare;
 			return -print1.GetField("cn").CompareTo(print2.GetField("cn"));
 		}
 		public static int SortOldest(Printing print1, Printing print2) {
-			int compare = print1.Date.CompareTo(print2.Date);
-			if (compare != 0)
-				return compare;
-			compare = Set.SortNewest(print1.set, print2.set);
+			int compare = SortDateNewest(print1, print2);
 			if (compare != 0)
 				return -compare;
 			return print1.GetField("cn").CompareTo(print2.GetField("cn"));
 		}
 		public static int SortAlphabetical(Printing print1, Printing print2) =>
 			print1.GetField("name").CompareTo(print2.GetField("name"));
+
+		//Comparison Utils
+		private static int SortDateNewest(Printing print1, Printing print2) {
+			int compare = print1.Date.CompareTo(print2.Date);
+			if (compare != 0)
+				return -compare;
+			if (print1.HasField("date") && !print2.HasField("date"))
+				return -1;
+			else if (print2.HasField("date") && !print1.HasField("date"))
+				return 1;
+			return Set.SortNewest(print1.set, print2.set);
+		}
 
 		#endregion
 
