@@ -636,6 +636,8 @@ namespace CollectionTracker {
 						return name + " (Front Card)";
 					if (type.Contains("Emblem"))
 						return name + " (Emblem)";
+					if (type.Contains("Minigame"))
+						return name + " (Minigame)";
 				}
 
 				//Return text

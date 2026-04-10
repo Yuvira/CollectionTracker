@@ -96,7 +96,7 @@ namespace CollectionTracker {
 
 			//Check if print is missing data
 			private bool MissingCardRef(Printing print) => !print.TryGetField("name", out string name) || name.Equals("_");
-			private bool MissingPrintData(Printing print) => !print.HasField("rarity") && !print.HasField("artist") && print.TryGetField("name", out string name) && !name.Equals("Punchcard") && !print.GetField("type").Equals("Basic Energy");
+			private bool MissingPrintData(Printing print) => !print.HasField("rarity") && !print.HasField("artist") && print.TryGetField("name", out string name) && !name.Equals("Punchcard") && !print.GetField("type").Equals("Basic Energy") && !print.GetField("type").Equals("Minigame");
 
 		}
 
