@@ -1487,12 +1487,14 @@ namespace CollectionTracker {
 			public string printid;
 			public FontStyle style;
 			public Color? color;
+			public bool rightAlign;
 			public int id;
 		}
 
 		//Description object class
 		private abstract class DescriptionObject {
 			public abstract int GetWidth();
+			public abstract bool IsRightAligned();
 			public abstract Point GenerateControl(Detailpage parent, Panel panel, Point location, bool rightAlign = false);
 		}
 
@@ -1509,6 +1511,7 @@ namespace CollectionTracker {
 
 			//Measure text
 			public override int GetWidth() => Utils.MeasureWidth(text, new Font(Utils.FONT_DEFAULT, settings.style));
+			public override bool IsRightAligned() => settings.rightAlign;
 
 			//Generate
 			public override Point GenerateControl(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
@@ -1543,8 +1546,10 @@ namespace CollectionTracker {
 			//Properties
 			public Symbol symbol;
 			public string text;
-			public DescriptionSymbol(string text) {
+			public FormatSettings settings;
+			public DescriptionSymbol(string text, FormatSettings settings) {
 				this.text = text;
+				this.settings = settings;
 				symbol = TrackerForm.Catalog.Symbols.FirstOrDefault(s => s.Text.Equals(text));
 			}
 
@@ -1554,6 +1559,7 @@ namespace CollectionTracker {
 					return Utils.MeasureWidth(text);
 				return (int)(symbol.Aspect * TEXT_HEIGHT);
 			}
+			public override bool IsRightAligned() => settings.rightAlign;
 
 			//Generate
 			public override Point GenerateControl(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
@@ -1659,15 +1665,14 @@ namespace CollectionTracker {
 			}
 
 			//Generate all controls
-			public void GenerateControls(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
-				if (!rightAlign)
-					foreach (DescriptionObject obj in objects)
-						location = obj.GenerateControl(parent, panel, location);
-				else {
-					location.X = panel.Width - location.X;
-					for (int i = objects.Count - 1; i >= 0; --i)
-						location = objects[i].GenerateControl(parent, panel, location, rightAlign);
-				}
+			public void GenerateControls(Detailpage parent, Panel panel, Point lLocation, bool rightAlign = false) {
+				Point rLocation = new Point(panel.Width - lLocation.X, lLocation.Y);
+				for (int i = 0; i < objects.Count; ++i)
+					if (!rightAlign && !objects[i].IsRightAligned())
+						lLocation = objects[i].GenerateControl(parent, panel, lLocation);
+				for (int i = objects.Count - 1; i >= 0; --i)
+					if (rightAlign || objects[i].IsRightAligned())
+						rLocation = objects[i].GenerateControl(parent, panel, rLocation, true);
 			}
 
 		}
@@ -1698,6 +1703,10 @@ namespace CollectionTracker {
 					settings.tooltip = null;
 				else if (splits[0].ToLower().Equals("/ct"))
 					settings.printid = null;
+				else if (splits[0].ToLower().Equals("al"))
+					settings.rightAlign = false;
+				else if (splits[0].ToLower().Equals("ar"))
+					settings.rightAlign = true;
 			}
 			else if (splits.Length == 2) {
 				if (splits[0].ToLower().Equals("c")) {
@@ -1795,7 +1804,7 @@ namespace CollectionTracker {
 							objectFound = true;
 							searchIdx = text.IndexOf('}', curIdx);
 							if (searchIdx >= 0) {
-								group.Add(new DescriptionSymbol(text.Substring(curIdx, searchIdx + 1 - curIdx)));
+								group.Add(new DescriptionSymbol(text.Substring(curIdx, searchIdx + 1 - curIdx), settings));
 								curIdx = searchIdx + 1;
 							}
 							else
