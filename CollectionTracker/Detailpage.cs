@@ -78,18 +78,20 @@ namespace CollectionTracker {
 			private Detailpage parent;
 			private Control control;
 			private string text;
+			private bool parentToTooltip;
 
 			//Constructor
-			public Tooltip(Detailpage parent, Control control, string text) {
+			public Tooltip(Detailpage parent, Control control, string text, bool parentToTooltip = false) {
 				this.parent = parent;
 				this.control = control;
 				this.text = text;
+				this.parentToTooltip = parentToTooltip;
 				this.control.MouseEnter += ShowTooltip;
 				this.control.MouseLeave += HideTooltip;
 			}
 
 			//Tooltip functions
-			private void ShowTooltip(object sender, EventArgs e) => parent.ShowTooltip(control, text);
+			private void ShowTooltip(object sender, EventArgs e) => parent.ShowTooltip(parentToTooltip ? parent.tooltipPanel : control, text);
 			private void HideTooltip(object sender, EventArgs e) => parent.HideTooltip();
 
 		}
@@ -167,6 +169,7 @@ namespace CollectionTracker {
 		private TrackerPanel printCopyPanel;
 		private Label printCopyHeader;
 		private Panel tooltipPanel;
+		private Panel nestedTooltipPanel;
 		private PictureBox cardtipBox;
 		private PictureBox cardtipBox2;
 		private TrackerPanel bottomRight;
@@ -228,11 +231,14 @@ namespace CollectionTracker {
 			cardtips = new List<Cardtip>();
 			tooltipPanel = Utils.GeneratePanel(new Rectangle(0, 0, TOOLTIP_WIDTH, TEXT_HEIGHT));
 			tooltipPanel.Hide();
+			nestedTooltipPanel = Utils.GeneratePanel(new Rectangle(0, 0, TOOLTIP_WIDTH, TEXT_HEIGHT));
+			nestedTooltipPanel.Hide();
 			cardtipBox = Utils.GeneratePictureBox(new Rectangle(0, 0, CARDTIP_WIDTH, CARDTIP_HEIGHT));
 			cardtipBox.Hide();
 			cardtipBox2 = Utils.GeneratePictureBox(new Rectangle(0, 0, CARDTIP_WIDTH, CARDTIP_HEIGHT));
 			cardtipBox2.Hide();
 			contentPanel.Controls.Add(tooltipPanel);
+			contentPanel.Controls.Add(nestedTooltipPanel);
 			contentPanel.Controls.Add(cardtipBox);
 			contentPanel.Controls.Add(cardtipBox2);
 
@@ -1367,13 +1373,18 @@ namespace CollectionTracker {
 
 		//Show tooltip window relative to given control with given text
 		public void ShowTooltip(Control control, string text) {
-			tooltipPanel.Left = control.Parent.Left + control.Left + ((control.Width - tooltipPanel.Width) / 2);
-			tooltipPanel.Top = control.Parent.Top + control.Bottom + PANEL_MARGIN;
-			tooltipPanel.Show();
-			tooltipPanel.BringToFront();
-			tooltipPanel.Controls.Clear();
-			int height = GenerateDescription(text, tooltipPanel, new Point(LEFT_PAD, TOP_PAD));
-			tooltipPanel.Height = height + TOP_PAD + BOTTOM_PAD;
+			Panel ttPanel = control == tooltipPanel ? nestedTooltipPanel : tooltipPanel;
+			ttPanel.Left = control.Left + ((control.Width - ttPanel.Width) / 2);
+			if (control != tooltipPanel)
+				ttPanel.Left += control.Parent.Left;
+			ttPanel.Top = control.Bottom + PANEL_MARGIN;
+			if (control != tooltipPanel)
+				ttPanel.Top += control.Parent.Top;
+			ttPanel.Show();
+			ttPanel.BringToFront();
+			ttPanel.Controls.Clear();
+			int height = GenerateDescription(text, ttPanel, new Point(LEFT_PAD, TOP_PAD));
+			ttPanel.Height = height + TOP_PAD + BOTTOM_PAD;
 		}
 
 		//Show tooltip window relative to given control with given text
@@ -1469,7 +1480,10 @@ namespace CollectionTracker {
 		}
 
 		//Hide
-		public void HideTooltip() => tooltipPanel.Hide();
+		public void HideTooltip() {
+			tooltipPanel.Hide();
+			nestedTooltipPanel.Hide();
+		}
 		public void HideCardtip() {
 			cardtipBox.Hide();
 			cardtipBox2.Hide();
@@ -1484,6 +1498,7 @@ namespace CollectionTracker {
 		//Formatting settings
 		private struct FormatSettings {
 			public string tooltip;
+			public string nestedTooltip;
 			public string printid;
 			public FontStyle style;
 			public Color? color;
@@ -1529,6 +1544,8 @@ namespace CollectionTracker {
 				Label label = Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), text, new Font(Utils.FONT_DEFAULT, settings.style), settings.color);
 				if (settings.tooltip != null)
 					parent.Tooltips.Add(new Tooltip(parent, label, settings.tooltip));
+				if (settings.nestedTooltip != null)
+					parent.Tooltips.Add(new Tooltip(parent, label, settings.nestedTooltip, settings.tooltip != null));
 				if (settings.printid != null)
 					parent.Cardtips.Add(new Cardtip(parent, label, settings.printid, settings.tooltip != null));
 				panel.Controls.Add(label);
@@ -1699,8 +1716,12 @@ namespace CollectionTracker {
 					settings.style &= ~FontStyle.Underline;
 				else if (splits[0].ToLower().Equals("/c"))
 					settings.color = null;
-				else if (splits[0].ToLower().Equals("/tt"))
-					settings.tooltip = null;
+				else if (splits[0].ToLower().Equals("/tt")) {
+					if (settings.nestedTooltip != null)
+						settings.nestedTooltip = null;
+					else
+						settings.tooltip = null;
+				}
 				else if (splits[0].ToLower().Equals("/ct"))
 					settings.printid = null;
 				else if (splits[0].ToLower().Equals("al"))
@@ -1714,8 +1735,12 @@ namespace CollectionTracker {
 					if (color != null)
 						settings.color = color;
 				}
-				else if (splits[0].ToLower().Equals("tt"))
-					settings.tooltip = splits[1];
+				else if (splits[0].ToLower().Equals("tt")) {
+					if (settings.tooltip != null)
+						settings.nestedTooltip = splits[1];
+					else
+						settings.tooltip = splits[1];
+				}
 				else if (splits[0].ToLower().Equals("ct"))
 					settings.printid = splits[1];
 			}
