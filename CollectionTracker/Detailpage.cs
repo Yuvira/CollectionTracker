@@ -103,10 +103,10 @@ namespace CollectionTracker {
 			private Detailpage parent;
 			private Control control;
 			private string printid;
-			private bool parentToTooltip;
+			private int parentToTooltip;
 
 			//Constructor
-			public Cardtip(Detailpage parent, Control control, string printid, bool parentToTooltip = false) {
+			public Cardtip(Detailpage parent, Control control, string printid, int parentToTooltip = 0) {
 				this.parent = parent;
 				this.control = control;
 				this.printid = printid;
@@ -117,7 +117,7 @@ namespace CollectionTracker {
 			}
 
 			//Cardtip functions
-			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(parentToTooltip ? parent.tooltipPanel : control, printid);
+			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(parentToTooltip > 0 ? (parentToTooltip == 1 ? parent.tooltipPanel : parent.nestedTooltipPanel) : control, printid);
 			private void HideCardtip(object sender, EventArgs e) => parent.HideCardtip();
 			private void LoadCardtip(object sender, EventArgs e) => parent.LoadCardtip(printid);
 
@@ -1419,10 +1419,10 @@ namespace CollectionTracker {
 
 				//Position
 				cardtipBox.Left = control.Left + ((control.Width - cardtipBox.Width) / 2);
-				if (control != tooltipPanel)
+				if (control != tooltipPanel && control != nestedTooltipPanel)
 					cardtipBox.Left += control.Parent.Left;
 				cardtipBox.Top = control.Bottom + PANEL_MARGIN;
-				if (control != tooltipPanel)
+				if (control != tooltipPanel && control != nestedTooltipPanel)
 					cardtipBox.Top += control.Parent.Top;
 				if (showAllSides) {
 					cardtipBox.Left -= cardtipBox.Width / 2;
@@ -1547,7 +1547,7 @@ namespace CollectionTracker {
 				if (settings.nestedTooltip != null)
 					parent.Tooltips.Add(new Tooltip(parent, label, settings.nestedTooltip, settings.tooltip != null));
 				if (settings.printid != null)
-					parent.Cardtips.Add(new Cardtip(parent, label, settings.printid, settings.tooltip != null));
+					parent.Cardtips.Add(new Cardtip(parent, label, settings.printid, settings.nestedTooltip != null ? 2 : (settings.tooltip != null ? 1 : 0)));
 				panel.Controls.Add(label);
 				if (rightAlign)
 					return location;
@@ -1737,9 +1737,9 @@ namespace CollectionTracker {
 				}
 				else if (splits[0].ToLower().Equals("tt")) {
 					if (settings.tooltip != null)
-						settings.nestedTooltip = splits[1];
+						settings.nestedTooltip = splits[1].Replace('[', '<').Replace(']', '>');
 					else
-						settings.tooltip = splits[1];
+						settings.tooltip = splits[1].Replace('[', '<').Replace(']', '>');
 				}
 				else if (splits[0].ToLower().Equals("ct"))
 					settings.printid = splits[1];
