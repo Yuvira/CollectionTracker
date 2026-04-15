@@ -7,6 +7,9 @@ namespace CollectionTracker {
 	//Homepage
 	public class Homepage : TrackerPage {
 
+		//Static search string
+		static string searchString = null;
+
 		//Properties
 		TrackerPanel searchPanel;
 		TextBox searchBox;
@@ -38,7 +41,7 @@ namespace CollectionTracker {
 			searchPanel.Anchor = AnchorStyles.None;
 
 			//Search bar
-			searchBox = Utils.GenerateTextBox(new Rectangle(5, 5, 370, BUTTON_HEIGHT), "Search");
+			searchBox = Utils.GenerateTextBox(new Rectangle(5, 5, 370, BUTTON_HEIGHT), searchString != null ? searchString : "Search");
 			searchBox.Size = new Size(370, 30);
 			searchBox.Click += SearchBoxClicked;
 			searchBox.KeyPress += SearchEnterPressed;
@@ -96,7 +99,10 @@ namespace CollectionTracker {
 			if (e.KeyChar == (char)Keys.Return)
 				Search();
 		}
-		private void Search() => TrackerForm.Instance.SetPage<Printlist>(searchTerms: searchBox.Text);
+		private void Search() {
+			searchString = searchBox.Text;
+			TrackerForm.Instance.SetPage<Printlist>(searchTerms: searchBox.Text);
+		}
 
 	}
 
