@@ -1851,10 +1851,20 @@ namespace CollectionTracker {
 						//Process text
 						else if (text[curIdx] != ' ') {
 							objectFound = true;
-							searchIdx = text.IndexOfAny(new char[] { '{', '<', ' ' }, curIdx);
-							if (searchIdx < 0)
-								searchIdx = text.Length;
-							group.Add(new DescriptionText(text.Substring(curIdx, searchIdx - curIdx), settings));
+							int searchStartIdx = curIdx;
+							while (true) {
+								searchIdx = text.IndexOfAny(new char[] { '{', '<', ' ' }, searchStartIdx);
+								if (searchIdx < 0) {
+									searchIdx = text.Length;
+									break;
+								}
+								if ((text[searchIdx] == '{' || text[searchIdx] == '<') && (searchIdx == 0 || text[searchIdx - 1] != '\\'))
+									break;
+								if (text[searchIdx] == ' ')
+									break;
+								searchStartIdx = searchIdx + 1;
+							}
+							group.Add(new DescriptionText(text.Substring(curIdx, searchIdx - curIdx).Replace("\\{", "{").Replace("\\<", "<"), settings));
 							curIdx = searchIdx;
 						}
 
