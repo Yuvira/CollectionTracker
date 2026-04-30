@@ -144,10 +144,13 @@ namespace CollectionTracker {
 			if (!(entry is T entryT) || !entries.Contains(entryT))
 				return;
 			panel.SuspendLayout();
-			for (int i = entries.IndexOf(entryT) + 1; i < entries.Count; ++i)
-				entries[i].Panel.Location = entries[i].Panel.Location.Add(0, delta);
-			add.Location = add.Location.Add(0, delta);
-			panel.Height += delta;
+			int y = TrackerPage.TEXT_HEIGHT + TrackerPage.PANEL_MARGIN;
+			for (int i = 0; i < entries.Count; ++i) {
+				entries[i].Panel.Top = y;
+				y += entries[i].Panel.Height + 5;
+			}
+			add.Top = y;
+			panel.Height = y + add.Height;
 			panel.ResumeLayout();
 			OnListResize?.Invoke();
 		}
