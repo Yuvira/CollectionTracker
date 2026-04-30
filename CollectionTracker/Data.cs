@@ -605,6 +605,9 @@ namespace CollectionTracker {
 			//Get name
 			if (TryGetField("name", out string name)) {
 
+				//Clean formatting
+				name = name.CleanFormatMarkers();
+
 				//Add clarifiers to card types that need them
 				if (TryGetField("type", out string type)) {
 					if (type.Contains("Token")) {
@@ -616,7 +619,7 @@ namespace CollectionTracker {
 						if (TryGetField("color", out string color))
 							name += " | " + color;
 						if (TryGetField("oracle", out string oracle))
-							name += " | " + oracle.Replace("\r\n", " / ").CleanFormatMarkers();
+							name += " | " + oracle.Replace("\r\n", " / ");
 						return name + ")";
 					}
 					if (type.Contains("Pokémon") && !type.Contains("Pokémon Tool")) {
@@ -627,7 +630,7 @@ namespace CollectionTracker {
 							name += hp + " ";
 						name += "| ";
 						if (TryGetField("oracle", out string oracle))
-							name += oracle.Replace("\r\n", " / ").CleanFormatMarkers();
+							name += oracle.Replace("\r\n", " / ");
 						return name;
 					}
 					if (type.Contains("Art Card"))
