@@ -56,7 +56,7 @@ namespace CollectionTracker {
 
 			//Copy
 			private void CopyPrintID(object sender, MouseEventArgs e) {
-				if (e.Button == MouseButtons.Middle)
+				if (e.Button == MouseButtons.Right)
 					Clipboard.SetText(printid);
 			}
 
