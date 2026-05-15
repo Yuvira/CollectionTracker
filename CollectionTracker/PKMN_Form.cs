@@ -1263,10 +1263,9 @@ namespace CollectionTracker {
 
 		//Create paint events for detail panels
 		private void PKMN_AddDetailPanelPaintEvent(TrackerPanel panel, Color col1, Color col2) {
-			panel.ClearBorders();
-			panel.AddBorder(col1, 3);
+			panel.SetBorder(col1, 3);
 			if (col2 != Color.Empty)
-				panel.AddBorder(col2, 1);
+				panel.SetBorder(col2, 1);
 		}
 
 		//Flip card image

@@ -683,21 +683,20 @@ namespace CollectionTracker {
 				printing.Card.TryGetBaseField("identity", out color);
 			color = color.ToLower();
 			foreach (TrackerPanel panel in panels) {
-				panel.ClearBorders();
 				if (color.Length == 0)
-					panel.AddBorder(SystemColors.ControlDarkDark, 3);
+					panel.SetBorder(SystemColors.ControlDarkDark, 3);
 				else if (color.Length == 1 && MTGTypeColors.ContainsKey(color[0]))
-					panel.AddBorder(MTGTypeColors[color[0]], 3);
+					panel.SetBorder(MTGTypeColors[color[0]], 3);
 				else if (color.Length == 2 && MTGTypeColors.ContainsKey(color[0]) && MTGTypeColors.ContainsKey(color[1])) {
 					if (MTGTypeColors.Keys.ToList().IndexOf(color[1]) - MTGTypeColors.Keys.ToList().IndexOf(color[0]) < 3)
-						panel.AddHorizontalGradientBorder(MTGTypeColors[color[0]], MTGTypeColors[color[1]], 3);
+						panel.SetBorder(MTGTypeColors[color[0]], MTGTypeColors[color[1]], 3);
 					else
-						panel.AddHorizontalGradientBorder(MTGTypeColors[color[1]], MTGTypeColors[color[0]], 3);
+						panel.SetBorder(MTGTypeColors[color[1]], MTGTypeColors[color[0]], 3);
 				}
 				else if (color.Length > 2)
-					panel.AddBorder(Color.Yellow, 3);
+					panel.SetBorder(Color.Yellow, 3);
 				else
-					panel.AddBorder(Utils.THEME.ForeColor, 1);
+					panel.SetBorder(Utils.THEME.ForeColor, 1);
 				panel.Refresh();
 			}
 		}
@@ -930,7 +929,7 @@ namespace CollectionTracker {
 		//Set panel color
 		private void SetPanelColorsYGO(List<TrackerPanel> panels) {
 			foreach (TrackerPanel panel in panels)
-				panel.AddBorder(SystemColors.ControlDarkDark, 3);
+				panel.SetBorder(SystemColors.ControlDarkDark, 3);
 		}
 
 		#endregion
@@ -1039,15 +1038,15 @@ namespace CollectionTracker {
 			string color = printing.GetField("energy").ToLower().Replace("{", "").Replace("}", "");
 			foreach (TrackerPanel panel in panels) {
 				if (color.Length == 0)
-					panel.AddBorder(SystemColors.ControlDarkDark, 3);
+					panel.SetBorder(SystemColors.ControlDarkDark, 3);
 				else if (color.Length == 1 && PKMNTypeColors.ContainsKey(color[0]))
-					panel.AddBorder(PKMNTypeColors[color[0]], 3);
+					panel.SetBorder(PKMNTypeColors[color[0]], 3);
 				else if (color.Length == 2 && PKMNTypeColors.ContainsKey(color[0]) && PKMNTypeColors.ContainsKey(color[1]))
-					panel.AddHorizontalGradientBorder(PKMNTypeColors[color[0]], PKMNTypeColors[color[1]], 3);
+					panel.SetBorder(PKMNTypeColors[color[0]], PKMNTypeColors[color[1]], 3);
 				else if (color.Length > 2)
-					panel.AddBorder(Color.Yellow, 3);
+					panel.SetBorder(Color.Yellow, 3);
 				else
-					panel.AddBorder(Utils.THEME.ForeColor, 1);
+					panel.SetBorder(Utils.THEME.ForeColor, 1);
 			}
 		}
 

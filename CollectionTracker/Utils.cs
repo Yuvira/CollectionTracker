@@ -41,6 +41,8 @@ namespace CollectionTracker {
 
 	//Custom panel class
 	public class TrackerPanel : Panel {
+
+		//Border subclass
 		private class PanelBorder {
 			protected Pen pen;
 			public PanelBorder(Color color, int width) => pen = new Pen(color, width);
@@ -61,23 +63,31 @@ namespace CollectionTracker {
 				g.DrawLine(pen2, width, 0, width, height);
 			}
 		}
-		private List<PanelBorder> borders;
+
+		//Properties / Constructors
+		private PanelBorder border;
 		public TrackerPanel() : base() {
-			borders = new List<PanelBorder>();
+			border = null;
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
 		}
-		public void AddBorder(Color color, int width) => borders.Add(new PanelBorder(color, width));
-		public void AddHorizontalGradientBorder(Color color1, Color color2, int width) => borders.Add(new HorizontalGradientPanelBorder(color1, color2, width, ClientRectangle.Left, ClientRectangle.Right));
-		public void ClearBorders() => borders.Clear();
+		public TrackerPanel(Color color, int width) : this() => SetBorder(color, width);
+		public TrackerPanel(Color color1, Color color2, int width) : this() => SetBorder(color1, color2, width);
+
+		//Border modifiers
+		public void SetBorder(Color color, int width) => border = new PanelBorder(color, width);
+		public void SetBorder(Color color1, Color color2, int width) => border = new HorizontalGradientPanelBorder(color1, color2, width, ClientRectangle.Left, ClientRectangle.Right);
+		public void ClearBorder() => border = null;
+
+		//Paint event
 		protected override void OnPaint(PaintEventArgs e) {
-			if (borders.Count > 0) {
+			if (border != null) {
 				e.Graphics.FillRectangle(Utils.BRUSH_BACK, ClientRectangle);
-				foreach (PanelBorder border in borders)
-					border.DrawBorder(e.Graphics, ClientSize.Width - 1, ClientSize.Height - 1);
+				border.DrawBorder(e.Graphics, ClientSize.Width - 1, ClientSize.Height - 1);
 			}
 			else
 				base.OnPaint(e);
 		}
+
 	}
 
 	#endregion
@@ -229,7 +239,7 @@ namespace CollectionTracker {
 			panel.Location = rect.Location;
 			panel.Size = rect.Size;
 			if (useDefaultBorder)
-				panel.AddBorder(THEME.ForeColor, 1);
+				panel.SetBorder(THEME.ForeColor, 1);
 			return panel;
 		}
 
