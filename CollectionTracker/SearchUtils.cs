@@ -163,7 +163,7 @@ namespace CollectionTracker {
 				return printList;
 			}
 			foreach (string expressionString in expressionStrings) {
-				string[] terms = expressionString.Split(new string[] { "!:", "!=", "~:", "~=", "==", ":", "=" }, StringSplitOptions.None);
+				string[] terms = expressionString.Split(new string[] { "!:", "!=", ":", "=" }, StringSplitOptions.None);
 				if (terms.Length != 2) {
 					MessageBox.Show($"Invalid term parsed! [{expressionString}]");
 					return printList;
