@@ -1047,6 +1047,7 @@ namespace CollectionTracker {
 					panel.SetBorder(Color.Yellow, 3);
 				else
 					panel.SetBorder(Utils.THEME.ForeColor, 1);
+				panel.Refresh();
 			}
 		}
 
