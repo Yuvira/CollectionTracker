@@ -101,7 +101,7 @@ namespace CollectionTracker {
 		}
 		private void Search() {
 			searchString = searchBox.Text;
-			TrackerForm.Instance.SetPage<Printlist>(searchTerms: searchBox.Text);
+			TrackerForm.Instance.SetPage<Printlist>(searchTerms: searchBox.Text.Replace("\\n", "\r\n").Replace("\\r\\n", "\r\n"));
 		}
 
 	}
