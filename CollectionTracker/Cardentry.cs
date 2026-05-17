@@ -27,6 +27,7 @@ namespace CollectionTracker {
 		private Button frontButton;
 		private ComboBox keywordBox;
 		private Button copyKeywordButton;
+		private Button defaultFieldsButton;
 
 		//Constructor
 		public Cardentry(Card card, Printing print) : base() {
@@ -110,6 +111,11 @@ namespace CollectionTracker {
 			artButton.Click += SetTypeArt;
 			listPanel.Controls.Add(artButton);
 
+			//Art card button
+			defaultFieldsButton = Utils.GenerateButton(new Rectangle(artButton.Left - (BUTTON_HEIGHT + PANEL_MARGIN), 0, BUTTON_HEIGHT, BUTTON_HEIGHT), "+");
+			defaultFieldsButton.Click += AddDefaultFields;
+			listPanel.Controls.Add(defaultFieldsButton);
+
 			//Resume
 			listPanel.ResumeLayout();
 
@@ -164,6 +170,7 @@ namespace CollectionTracker {
 			copyKeywordButton.Top = y;
 			artButton.Top = y + BUTTON_HEIGHT + PANEL_MARGIN;
 			frontButton.Top = y + BUTTON_HEIGHT + PANEL_MARGIN;
+			defaultFieldsButton.Top = y + BUTTON_HEIGHT + PANEL_MARGIN;
 			listPanel.ResumeLayout();
 		}
 
@@ -183,6 +190,14 @@ namespace CollectionTracker {
 				Clipboard.SetText(TrackerForm.Catalog.Keywords[keywordBox.Text]);
 			else
 				MessageBox.Show("Catalog has no Keyword entry \"keywordBox.Text\"!");
+		}
+
+		//Add missing default fields
+		private void AddDefaultFields(object sender, EventArgs e) {
+			if (Utils.DefaultCardFields.ContainsKey(TrackerForm.Catalog.Game))
+				foreach (string fieldName in Utils.DefaultCardFields[TrackerForm.Catalog.Game])
+					if (!fields.Entries.Select(entry => entry.Field).Contains(fieldName))
+						fields.AddRow(new FieldEntry(fieldName, ""));
 		}
 
 		//Save
