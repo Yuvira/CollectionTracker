@@ -1402,6 +1402,8 @@ namespace CollectionTracker {
 			if (print != null) {
 
 				//Negate show all sides if less than two arts
+				if (mod == 'd')
+					showAllSides = true;
 				if (print.ImagePaths.Count < 2)
 					showAllSides = false;
 
