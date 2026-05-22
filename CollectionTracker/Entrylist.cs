@@ -126,7 +126,7 @@ namespace CollectionTracker {
 		}
 
 		//Move rows
-		private void MoveRow(ItemEntry entry, int move) {
+		public void MoveRow(ItemEntry entry, int move) {
 			if (!(entry is T entryT) || !entries.Contains(entryT))
 				return;
 			int i = entries.IndexOf(entryT);

@@ -22,6 +22,7 @@ namespace CollectionTracker {
 		private Button addFaceButton;
 		private Button saveButton;
 		private Button returnButton;
+		private Button copyRAFButton;
 
 		//Static modified field identifiers
 		public static bool SetsAltered = true;
@@ -70,6 +71,11 @@ namespace CollectionTracker {
 			returnButton = Utils.GenerateButton(new Rectangle(140, 70, 100, 30), "Return");
 			returnButton.Click += ReturnToDetails;
 			listPanel.Controls.Add(returnButton);
+
+			//Copy RAF button
+			copyRAFButton = Utils.GenerateButton(new Rectangle(listPanel.Width - (100 + SCROLL_MARGIN), 70, 100, 30), "Copy RAF");
+			copyRAFButton.Click += CopyRAF;
+			listPanel.Controls.Add(copyRAFButton);
 
 			//Resume
 			listPanel.ResumeLayout();
@@ -221,7 +227,32 @@ namespace CollectionTracker {
 			pos.Y += images.Panel.Height + 5;
 			saveButton.Location = pos;
 			returnButton.Location = pos.Add(105, 0);
+			copyRAFButton.Location = pos.Add(listPanel.Width - (100 + SCROLL_MARGIN), 0);
 			listPanel.ResumeLayout();
+		}
+
+		//Copy RAF
+		private void CopyRAF(object sender, EventArgs e) {
+			foreach (FieldEntry entry in fields.Entries) {
+				if (entry.Field.Equals("printcopy") || entry.Field.Equals("framecopy") || entry.Field.Equals("artcopy")) {
+					Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(entry.Value));
+					if (print != null) {
+						if (print.TryGetField("rarity", out string rarity)) {
+							fields.AddRow(new FieldEntry("rarity", rarity));
+							fields.MoveRow(entry, 1);
+						}
+						if (print.TryGetField("artist", out string artist)) {
+							fields.AddRow(new FieldEntry("artist", artist));
+							fields.MoveRow(entry, 1);
+						}
+						if (print.TryGetField("flavor", out string flavor)) {
+							fields.AddRow(new FieldEntry("flavor", flavor));
+							fields.MoveRow(entry, 1);
+						}
+						break;
+					}
+				}
+			}
 		}
 
 		//Save
