@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -22,6 +23,7 @@ namespace CollectionTracker {
 		private Button addFaceButton;
 		private Button saveButton;
 		private Button returnButton;
+		private Button addRAFButton;
 		private Button copyRAFButton;
 
 		//Static modified field identifiers
@@ -76,6 +78,11 @@ namespace CollectionTracker {
 			copyRAFButton = Utils.GenerateButton(new Rectangle(listPanel.Width - (100 + SCROLL_MARGIN), 70, 100, 30), "Copy RAF");
 			copyRAFButton.Click += CopyRAF;
 			listPanel.Controls.Add(copyRAFButton);
+
+			//Add RAF button
+			addRAFButton = Utils.GenerateButton(new Rectangle(copyRAFButton.Left - (100 + PANEL_MARGIN), 70, 100, 30), "Add RAF");
+			addRAFButton.Click += AddRAF;
+			listPanel.Controls.Add(addRAFButton);
 
 			//Resume
 			listPanel.ResumeLayout();
@@ -228,7 +235,15 @@ namespace CollectionTracker {
 			saveButton.Location = pos;
 			returnButton.Location = pos.Add(105, 0);
 			copyRAFButton.Location = pos.Add(listPanel.Width - (100 + SCROLL_MARGIN), 0);
+			addRAFButton.Location = pos.Add(copyRAFButton.Left - (100 + PANEL_MARGIN), 0);
 			listPanel.ResumeLayout();
+		}
+
+		//Add RAF
+		private void AddRAF(object sender, EventArgs e) {
+			fields.AddRow(new FieldEntry("rarity", ""));
+			fields.AddRow(new FieldEntry("artist", ""));
+			fields.AddRow(new FieldEntry("flavor", ""));
 		}
 
 		//Copy RAF
