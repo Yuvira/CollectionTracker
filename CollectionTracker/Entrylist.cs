@@ -318,6 +318,7 @@ namespace CollectionTracker {
 				--length;
 			if (textValue.Text.Substring(index, length).EndsWith(".") || textValue.Text.Substring(index, length).EndsWith(","))
 				--length;
+			string text = textValue.Text.Substring(index, length);
 			if (!e.Shift) {
 				textValue.Text = textValue.Text.Insert(index + length, "</" + (code.Contains('|') ? code.Substring(0, code.Length - 1) : code) + ">");
 				textValue.Text = textValue.Text.Insert(index, "<" + code + ">");
@@ -329,6 +330,14 @@ namespace CollectionTracker {
 				textValue.SelectionStart = index + code.Length + (code.Contains('|') ? 2 : 3);
 			}
 			textValue.SelectionLength = code.Contains('|') ? 0 : length;
+			if (code.Equals("tt|") && Cardentry.KeywordBox != null) {
+				for (int i = 0; i < Cardentry.KeywordBox.Items.Count; ++i) {
+					if (Cardentry.KeywordBox.Items[i].ToString().ToLower().StartsWith(text.ToLower()) || text.ToLower().StartsWith(Cardentry.KeywordBox.Items[i].ToString().ToLower())) {
+						Cardentry.KeywordBox.SelectedIndex = i;
+						return;
+					}
+				}
+			}
 		}
 
 		//Clear value

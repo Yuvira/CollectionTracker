@@ -29,6 +29,9 @@ namespace CollectionTracker {
 		private Button copyKeywordButton;
 		private Button defaultFieldsButton;
 
+		//Static keyword box reference
+		public static ComboBox KeywordBox = null;
+
 		//Constructor
 		public Cardentry(Card card, Printing print) : base() {
 
@@ -95,6 +98,7 @@ namespace CollectionTracker {
 			keywordBox.Items.AddRange(TrackerForm.Catalog.Keywords.Keys.ToArray());
 			keywordBox.SelectedIndexChanged += CopyKeyword;
 			listPanel.Controls.Add(keywordBox);
+			KeywordBox = keywordBox;
 
 			//Keyword button
 			copyKeywordButton = Utils.GenerateButton(new Rectangle(keywordBox.Left - (BUTTON_WIDTH + PANEL_MARGIN), 0, BUTTON_WIDTH, BUTTON_HEIGHT), "Copy");
