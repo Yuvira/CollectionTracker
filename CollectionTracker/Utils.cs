@@ -90,6 +90,29 @@ namespace CollectionTracker {
 
 	}
 
+	//Custom text underline class
+	public class DottedUnderline : Panel {
+
+		//Properties / Constructors
+		private Pen pen;
+		public DottedUnderline() : base() => SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+		public DottedUnderline(Color color, int width) : this() => SetUnderline(color, width);
+
+		//Underline modifiers
+		public void SetUnderline(Color color, int width) {
+			pen = new Pen(color, 1);
+			pen.DashStyle = DashStyle.Dot;
+		}
+		public void ClearUnderline() => pen = null;
+
+		//Paint event
+		protected override void OnPaint(PaintEventArgs e) {
+			if (pen != null)
+				e.Graphics.DrawLine(pen, 0, 0, ClientSize.Width - 1, 0);
+		}
+
+	}
+
 	#endregion
 
 	//Global utilities
@@ -303,6 +326,14 @@ namespace CollectionTracker {
 			label.TextAlign = ContentAlignment.MiddleLeft;
 			label.FlatStyle = FlatStyle.System;
 			return label;
+		}
+
+		//Underline generator
+		public static DottedUnderline GenerateUnderline(Label label, Color? color = null, int width = 1) {
+			DottedUnderline underline = new DottedUnderline(color ?? label.ForeColor, width);
+			underline.Location = new Point(label.Location.X, label.Location.Y + TrackerPage.UNDERLINE_OFFSET);
+			underline.Size = new Size(label.Size.Width, 1);
+			return underline;
 		}
 
 		//Progress bar generator

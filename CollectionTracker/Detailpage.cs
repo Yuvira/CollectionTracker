@@ -1532,29 +1532,44 @@ namespace CollectionTracker {
 
 			//Generate
 			public override Point GenerateControl(Detailpage parent, Panel panel, Point location, bool rightAlign = false) {
+
+				//Width
 				int width = Utils.MeasureWidth(text, new Font(Utils.FONT_DEFAULT, settings.style));
+
+				//Alignment
 				if (rightAlign)
 					location.X -= width;
-				if (settings.tooltip != null || settings.printid != null)
+
+				//Font styles
+				if (settings.printid != null) {
 					settings.style |= FontStyle.Underline;
-				if (settings.tooltip != null && settings.printid != null)
-					settings.color = Utils.BlendColours(Utils.THEME.TextTooltip, Utils.THEME.TextCardtip);
-				else if (settings.tooltip != null)
-					settings.color = Utils.THEME.TextTooltip;
-				else if (settings.printid != null)
 					settings.color = Utils.THEME.TextCardtip;
+				}
+
+				//Generate label
 				Label label = Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), text, new Font(Utils.FONT_DEFAULT, settings.style), settings.color);
+
+				//Generate tips
 				if (settings.tooltip != null)
 					parent.Tooltips.Add(new Tooltip(parent, label, settings.tooltip));
 				if (settings.nestedTooltip != null)
 					parent.Tooltips.Add(new Tooltip(parent, label, settings.nestedTooltip, settings.tooltip != null));
 				if (settings.printid != null)
 					parent.Cardtips.Add(new Cardtip(parent, label, settings.printid, settings.nestedTooltip != null ? 2 : (settings.tooltip != null ? 1 : 0)));
+
+				//Dotted underline for tooltips
+				if (settings.tooltip != null) {
+					DottedUnderline underline = Utils.GenerateUnderline(label);
+					panel.Controls.Add(underline);
+				}
+
+				//Add control and return
 				panel.Controls.Add(label);
 				if (rightAlign)
 					return location;
 				location.X += width;
 				return location;
+
 			}
 
 		}

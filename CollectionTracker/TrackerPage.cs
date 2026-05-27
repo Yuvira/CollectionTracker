@@ -9,6 +9,7 @@ namespace CollectionTracker {
 
 		//Formatting constants
 		public const int TEXT_HEIGHT = 21;
+		public const int UNDERLINE_OFFSET = 18;
 		public const int TEXT_MARGIN = 9;
 		public const int LINE_SPACING = 9;
 		public const int BLOCK_SPACING = 17;
