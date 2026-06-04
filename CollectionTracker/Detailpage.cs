@@ -33,7 +33,7 @@ namespace CollectionTracker {
 					new Rectangle(LEFT_PAD, yPos, width, TEXT_HEIGHT),
 					printid.ToUpper() + " - " + setname,
 					Utils.FONT_UNDERLINE,
-					isCurrent ? Utils.THEME.ForeColor : Utils.THEME.TextTooltip
+					isCurrent ? Utils.THEME.ForeColor : Utils.THEME.TextSearchLink
 				);
 				label.MouseEnter += ShowCardtip;
 				label.MouseLeave += HideCardtip;
@@ -46,7 +46,7 @@ namespace CollectionTracker {
 			public void UpdatePrintID(string printid, string setname, bool newCurrent) {
 				this.printid = printid;
 				label.Text = (printid.ToUpper() + " - " + setname).Replace("&", "&&");
-				label.ForeColor = newCurrent ? Utils.THEME.ForeColor : Utils.THEME.TextTooltip;
+				label.ForeColor = newCurrent ? Utils.THEME.ForeColor : Utils.THEME.TextSearchLink;
 				if (isCurrent && !newCurrent)
 					label.Click += LoadCardtip;
 				else if (!isCurrent && newCurrent)
@@ -123,6 +123,25 @@ namespace CollectionTracker {
 
 		}
 
+		//Search link object
+		public class SearchLink {
+
+			//Properties
+			private Control control;
+			private string searchString;
+
+			//Constructor
+			public SearchLink(Control control, string searchString) {
+				this.control = control;
+				this.searchString = searchString;
+				this.control.Click += Search;
+			}
+
+			//Search function
+			private void Search(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Printlist>(searchTerms: searchString);
+
+		}
+
 		#endregion
 
 		//Constants
@@ -150,6 +169,7 @@ namespace CollectionTracker {
 		private List<DetailPrintrow> printCopyRows;
 		private List<Tooltip> tooltips;
 		private List<Cardtip> cardtips;
+		private List<SearchLink> searchLinks;
 
 		//Controls
 		private Button navButtonLeft;
@@ -180,6 +200,7 @@ namespace CollectionTracker {
 		//Accessors
 		public List<Tooltip> Tooltips => tooltips;
 		public List<Cardtip> Cardtips => cardtips;
+		public List<SearchLink> SearchLinks => searchLinks;
 
 		//Constructor
 		public Detailpage(Printing printing) : base() {
@@ -229,6 +250,7 @@ namespace CollectionTracker {
 			//Tooltips
 			tooltips = new List<Tooltip>();
 			cardtips = new List<Cardtip>();
+			searchLinks = new List<SearchLink>();
 			tooltipPanel = Utils.GeneratePanel(new Rectangle(0, 0, TOOLTIP_WIDTH, TEXT_HEIGHT));
 			tooltipPanel.Hide();
 			nestedTooltipPanel = Utils.GeneratePanel(new Rectangle(0, 0, TOOLTIP_WIDTH, TEXT_HEIGHT));
@@ -644,6 +666,7 @@ namespace CollectionTracker {
 			//Clear tooltips and cardtips
 			tooltips.Clear();
 			cardtips.Clear();
+			searchLinks.Clear();
 
 			//Card data
 			if (viewData) {
@@ -1502,6 +1525,7 @@ namespace CollectionTracker {
 			public string tooltip;
 			public string nestedTooltip;
 			public string printid;
+			public string searchString;
 			public FontStyle style;
 			public Color? color;
 			public bool rightAlign;
@@ -1541,10 +1565,12 @@ namespace CollectionTracker {
 					location.X -= width;
 
 				//Font styles
-				if (settings.printid != null) {
+				if (settings.printid != null || settings.searchString != null)
 					settings.style |= FontStyle.Underline;
+				if (settings.printid != null)
 					settings.color = Utils.THEME.TextCardtip;
-				}
+				else if (settings.searchString != null)
+					settings.color = Utils.THEME.TextSearchLink;
 
 				//Generate label
 				Label label = Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), text, new Font(Utils.FONT_DEFAULT, settings.style), settings.color);
@@ -1556,6 +1582,8 @@ namespace CollectionTracker {
 					parent.Tooltips.Add(new Tooltip(parent, label, settings.nestedTooltip, settings.tooltip != null));
 				if (settings.printid != null)
 					parent.Cardtips.Add(new Cardtip(parent, label, settings.printid, settings.nestedTooltip != null ? 2 : (settings.tooltip != null ? 1 : 0)));
+				else if (settings.searchString != null)
+					parent.SearchLinks.Add(new SearchLink(label, settings.searchString));
 
 				//Dotted underline for tooltips
 				if (settings.tooltip != null) {
@@ -1741,6 +1769,8 @@ namespace CollectionTracker {
 				}
 				else if (splits[0].ToLower().Equals("/ct"))
 					settings.printid = null;
+				else if (splits[0].ToLower().Equals("/s"))
+					settings.searchString = null;
 				else if (splits[0].ToLower().Equals("al"))
 					settings.rightAlign = false;
 				else if (splits[0].ToLower().Equals("ar"))
@@ -1760,6 +1790,8 @@ namespace CollectionTracker {
 				}
 				else if (splits[0].ToLower().Equals("ct"))
 					settings.printid = splits[1];
+				else if (splits[0].ToLower().Equals("s"))
+					settings.searchString = splits[1];
 			}
 			return settings;
 		}

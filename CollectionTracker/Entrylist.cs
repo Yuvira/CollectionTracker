@@ -289,7 +289,7 @@ namespace CollectionTracker {
 		private void HandleControlInput(object sender, KeyEventArgs e) {
 			if (!e.Control || string.IsNullOrEmpty(textValue.SelectedText))
 				return;
-			if (e.KeyCode == Keys.L || e.KeyCode == Keys.B || e.KeyCode == Keys.U || e.KeyCode == Keys.R || e.KeyCode == Keys.T)
+			if (e.KeyCode == Keys.L || e.KeyCode == Keys.B || e.KeyCode == Keys.U || e.KeyCode == Keys.O || e.KeyCode == Keys.R || e.KeyCode == Keys.T || e.KeyCode == Keys.S)
 				e.SuppressKeyPress = true;
 		}
 
@@ -297,26 +297,12 @@ namespace CollectionTracker {
 		private void TextKeyPressed(object sender, KeyEventArgs e) {
 			if (!e.Control || string.IsNullOrEmpty(textValue.SelectedText))
 				return;
-			string code = "";
-			if (e.KeyCode == Keys.L)
-				code = "i";
-			else if (e.KeyCode == Keys.B)
-				code = "b";
-			else if (e.KeyCode == Keys.U)
-				code = "u";
-			else if (e.KeyCode == Keys.O)
-				code = "c|";
-			else if (e.KeyCode == Keys.R)
-				code = "ct|";
-			else if (e.KeyCode == Keys.T)
-				code = "tt|";
-			if (string.IsNullOrWhiteSpace(code))
+			if (!Utils.TagShortcuts.ContainsKey(e.KeyCode))
 				return;
+			string code = Utils.TagShortcuts[e.KeyCode];
 			int index = textValue.SelectionStart;
 			int length = textValue.SelectionLength;
-			if (textValue.Text.Substring(index, length).EndsWith(" "))
-				--length;
-			if (textValue.Text.Substring(index, length).EndsWith(".") || textValue.Text.Substring(index, length).EndsWith(","))
+			while (textValue.Text.Substring(index, length).EndsWithAny(Utils.TagExcludedChars))
 				--length;
 			string text = textValue.Text.Substring(index, length);
 			if (!e.Shift) {

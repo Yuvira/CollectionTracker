@@ -19,7 +19,7 @@ namespace CollectionTracker {
 		public readonly Color CardUnowned;
 		public readonly Color CardOwnedFavorite;
 		public readonly Color CardUnownedFavorite;
-		public readonly Color TextTooltip;
+		public readonly Color TextSearchLink;
 		public readonly Color TextCardtip;
 		public Theme(Color backColor, Color foreColor, Color button, Color buttonText, Color cardOwned, Color cardUnowned, Color cardOwnedFavorite, Color cardUnownedFavorite, Color textTooltip, Color textCardtip) {
 			BackColor = backColor;
@@ -30,7 +30,7 @@ namespace CollectionTracker {
 			CardUnowned = cardUnowned;
 			CardOwnedFavorite = cardOwnedFavorite;
 			CardUnownedFavorite = cardUnownedFavorite;
-			TextTooltip = textTooltip;
+			TextSearchLink = textTooltip;
 			TextCardtip = textCardtip;
 		}
 	}
@@ -209,6 +209,25 @@ namespace CollectionTracker {
 			{ Game.PKMN , new List<string> { "cn", "printid", "rarity", "artist", "flavor", "regulation" } },
 		};
 
+		//Tag shortcuts
+		public static readonly Dictionary<Keys, string> TagShortcuts = new Dictionary<Keys, string> {
+			{ Keys.L , "i" },
+			{ Keys.B , "b" },
+			{ Keys.U , "u" },
+			{ Keys.O , "c|" },
+			{ Keys.R , "ct|" },
+			{ Keys.T , "tt|" },
+			{ Keys.S , "s|" },
+		};
+
+		//String-defined colors
+		public static readonly Dictionary<string, Color> ColorDefinitions = new Dictionary<string, Color> {
+			{ "red"   , Color.Red   },
+			{ "green" , Color.Green },
+			{ "blue"  , Color.Blue  },
+			{ "white" , Color.White },
+		};
+
 		//Fields that can list all values
 		public static readonly List<string> ListableFields = new List<string> {
 			"rarity",
@@ -233,12 +252,17 @@ namespace CollectionTracker {
 			"flavor",
 		};
 
-		//String-defined colors
-		public static readonly Dictionary<string, Color> ColorDefinitions = new Dictionary<string, Color> {
-			{ "red"   , Color.Red   },
-			{ "green" , Color.Green },
-			{ "blue"  , Color.Blue  },
-			{ "white" , Color.White },
+		//List of characters to exclude for tag text selection
+		public static readonly List<string> TagExcludedChars = new List<string> {
+			" ",
+			".",
+			",",
+			"'",
+			"\"",
+			"‘",
+			"’",
+			"“",
+			"”",
 		};
 
 		#endregion
@@ -590,6 +614,14 @@ namespace CollectionTracker {
 				idx = str.IndexOf('<');
 			}
 			return str;
+		}
+
+		//Check if string ends with any listed strings
+		public static bool EndsWithAny(this string str, List<string> ends) {
+			foreach (string end in ends)
+				if (str.EndsWith(end))
+					return true;
+			return false;
 		}
 
 		#endregion

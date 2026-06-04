@@ -121,7 +121,7 @@ namespace CollectionTracker {
 
 			//Clear print list if moving to unsupported page
 			bool TKeepsPrintlist = typeof(T) == typeof(Printlist) || typeof(T) == typeof(Detailpage) || typeof(T) == typeof(Cardentry) || typeof(T) == typeof(Printentry);
-			if (savedPrintlist != null && !TKeepsPrintlist) {
+			if (savedPrintlist != null && (!TKeepsPrintlist || (Page is Detailpage && !searchTerms.Equals("")))) {
 				toolbar.Items.Remove(printListButton);
 				if (Page != savedPrintlist)
 					savedPrintlist.Dispose();
