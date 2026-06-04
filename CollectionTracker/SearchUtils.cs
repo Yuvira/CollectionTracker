@@ -87,7 +87,7 @@ namespace CollectionTracker {
 			{ "cost"      , "cost"      },
 			{ "ct"        , "cardtype"  },
 			{ "cardtype"  , "cardtype"  },
-			{ "a"         , "attribute" },
+			{ "att"       , "attribute" },
 			{ "attribute" , "attribute" },
 			{ "p"         , "property"  },
 			{ "property"  , "property"  },
@@ -117,6 +117,9 @@ namespace CollectionTracker {
 			{ "weak"      , "weak"      },
 			{ "resist"    , "resist"    },
 			{ "retreat"   , "retreat"   },
+			{ "a"         , "artist"    },
+			{ "art"       , "artist"    },
+			{ "artist"    , "artist"    },
 		};
 
 		#endregion

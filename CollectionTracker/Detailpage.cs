@@ -824,12 +824,13 @@ namespace CollectionTracker {
 				if (i >= 0) {
 
 					//Field checks
+					bool faceHasRarity = printing.TryGetFaceField("rarity", i, out string faceRarity);
 					bool faceHasFlavor = printing.TryGetFaceField("flavor", i, out string faceFlavor);
 					bool faceHasArtist = printing.TryGetFaceField("artist", i, out string faceArtist);
-					bool faceHasRarity = printing.TryGetFaceField("rarity", i, out string faceRarity);
+					bool faceHasDisplayArtist = printing.TryGetFaceField("displayartist", i, out string faceDisplayArtist);
 
 					//Generate flavor text
-					if (faceHasRarity || faceHasFlavor || faceHasArtist) {
+					if (faceHasRarity || faceHasFlavor || faceHasArtist || faceHasDisplayArtist) {
 
 						//Y position
 						textPos.Y = TOP_PAD;
@@ -852,8 +853,10 @@ namespace CollectionTracker {
 						if (faceHasFlavor)
 							textPos.Y += LINE_SPACING + GenerateDescription($"<i>{faceFlavor}", footerPanel, textPos, true, false, true);
 						int footerHeight = 0;
-						if (faceHasArtist)
-							footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription($"🖌 {faceArtist}", footerPanel, textPos, false));
+						if (faceHasArtist && !faceHasDisplayArtist)
+							faceDisplayArtist = $"<s|artist:{faceArtist}>{faceArtist}</s>";
+						if (faceHasArtist || faceHasDisplayArtist)
+							footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription($"🖌 {faceDisplayArtist}", footerPanel, textPos, false));
 						if (faceHasRarity)
 							footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription(faceRarity, footerPanel, textPos, false, true));
 						textPos.Y += footerHeight;
@@ -879,12 +882,13 @@ namespace CollectionTracker {
 			}
 
 			//Base footer field checks
+			bool hasRarity = printing.TryGetBaseField("rarity", out string rarity);
 			bool hasFlavor = printing.TryGetBaseField("flavor", out string flavor);
 			bool hasArtist = printing.TryGetBaseField("artist", out string artist);
-			bool hasRarity = printing.TryGetBaseField("rarity", out string rarity);
+			bool hasDisplayArtist = printing.TryGetBaseField("displayartist", out string displayArtist);
 
 			//Generate print footer
-			if (hasRarity || hasFlavor || hasArtist) {
+			if (hasRarity || hasFlavor || hasArtist || hasDisplayArtist) {
 
 				//Position
 				textPos = new Point(LEFT_PAD, TOP_PAD);
@@ -907,8 +911,10 @@ namespace CollectionTracker {
 				if (hasFlavor)
 					textPos.Y += LINE_SPACING + GenerateDescription($"<i>{flavor}", footerPanel, textPos, true, false, true);
 				int footerHeight = 0;
+				if (hasArtist && !hasDisplayArtist)
+					displayArtist = $"<s|artist:{artist}>{artist}</s>";
 				if (hasArtist)
-					footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription($"🖌 {artist}", footerPanel, textPos, false));
+					footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription($"🖌 {displayArtist}", footerPanel, textPos, false));
 				if (hasRarity)
 					footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription(rarity, footerPanel, textPos, false, true));
 				textPos.Y += footerHeight;
