@@ -478,6 +478,7 @@ namespace CollectionTracker {
 		public bool TryGetField(string field, out string value) {
 			if (card.TryGetField(field, out value))
 				return true;
+			value = null;
 			for (int i = -1; i < faces.Count; ++i) {
 				if (TryGetFaceField(field, i, out string faceValue)) {
 					if (string.IsNullOrEmpty(value))
