@@ -474,6 +474,40 @@ namespace CollectionTracker {
 			return false;
 		}
 
+		//Get field
+		public bool TryGetField(string field, out string value) {
+			if (card.TryGetField(field, out value))
+				return true;
+			for (int i = -1; i < faces.Count; ++i) {
+				if (TryGetFaceField(field, i, out string faceValue)) {
+					if (string.IsNullOrEmpty(value))
+						value = faceValue;
+					else
+						value += " // " + faceValue;
+				}
+			}
+			if (value == null) {
+				value = "";
+				return false;
+			}
+			return true;
+		}
+		public string GetField(string field) {
+			if (card.TryGetField(field, out string value))
+				return value;
+			for (int i = -1; i < faces.Count; ++i) {
+				if (TryGetFaceField(field, i, out string faceValue)) {
+					if (string.IsNullOrEmpty(value))
+						value = faceValue;
+					else
+						value += " // " + faceValue;
+				}
+			}
+			if (value == null)
+				return "";
+			return value;
+		}
+
 		//Has field
 		public bool HasField(string field) {
 			if (fields.ContainsKey(field))
@@ -482,23 +516,6 @@ namespace CollectionTracker {
 				if (face.Fields.ContainsKey(field))
 					return true;
 			return false;
-		}
-
-		//Get field
-		public bool TryGetField(string field, out string value) {
-			if (card.TryGetField(field, out value))
-				return true;
-			if (!fields.ContainsKey(field))
-				return false;
-			value = fields[field];
-			return true;
-		}
-		public string GetField(string field) {
-			if (card.TryGetField(field, out string value))
-				return value;
-			if (fields.ContainsKey(field))
-				return fields[field];
-			return "";
 		}
 
 		//Get image
