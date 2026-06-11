@@ -472,7 +472,7 @@ namespace CollectionTracker {
 		//Increment image index
 		private void OnClickImage(object sender, MouseEventArgs e) {
 			if (e.Button == MouseButtons.Left) {
-				if (printing.ImagePaths.Count == 0)
+				if (printing.ImagePaths.Count < 2)
 					return;
 				UpdateImage((imgIndex + 1) % printing.ImagePaths.Count);
 			}
