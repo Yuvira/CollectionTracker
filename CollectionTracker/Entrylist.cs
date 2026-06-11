@@ -224,9 +224,17 @@ namespace CollectionTracker {
 		public FieldEntry(string fieldString, string valueString) : base() {
 			field = Utils.GenerateComboBox(new Rectangle(105, 0, 100, 30), ComboBoxStyle.DropDown, true);
 			if (TrackerForm.FieldContext == FieldContext.CARD)
-				field.Items.AddRange(TrackerForm.Catalog.Cards.SelectMany(c => c.Fields.Keys).Distinct().ToArray());
+				field.Items.AddRange(
+					TrackerForm.Catalog.Cards.SelectMany(c => c.Fields.Keys)
+					.Concat(TrackerForm.Catalog.Cards.SelectMany(p => p.Faces).SelectMany(f => f.Fields.Keys))
+					.Distinct().ToArray()
+				);
 			else if (TrackerForm.FieldContext == FieldContext.PRINT)
-				field.Items.AddRange(TrackerForm.Catalog.Printings.SelectMany(p => p.Fields.Keys).Distinct().ToArray());
+				field.Items.AddRange(
+					TrackerForm.Catalog.Printings.SelectMany(p => p.Fields.Keys)
+					.Concat(TrackerForm.Catalog.Printings.SelectMany(p => p.Faces).SelectMany(f => f.Fields.Keys))
+					.Distinct().ToArray()
+				);
 			field.TextChanged += OnFieldChanged;
 			textValue = Utils.GenerateTextBox(new Rectangle(210, 0, 570, 30), valueString);
 			textValue.KeyDown += HandleControlInput;
