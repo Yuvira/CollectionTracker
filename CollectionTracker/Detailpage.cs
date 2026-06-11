@@ -418,8 +418,11 @@ namespace CollectionTracker {
 					imgExpanded = false;
 					return;
 				}
-				else if (mod.ToLower().Equals("flip")) {
-					imgRotateType = RotateFlipType.Rotate180FlipNone;
+				else if (mod.ToLower().Equals("flip") || mod.ToLower().Equals("aftermath")) {
+					if (mod.ToLower().Equals("flip"))
+						imgRotateType = RotateFlipType.Rotate180FlipNone;
+					else
+						imgRotateType = RotateFlipType.Rotate270FlipNone;
 					imgBox.Size = new Size(IMAGE_WIDTH, IMAGE_HEIGHT);
 					Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], TrackerForm.Catalog.Game);
 					rotateImageButton.Visible = true;
@@ -428,7 +431,7 @@ namespace CollectionTracker {
 					return;
 				}
 			}
-			imgRotateType = RotateFlipType.Rotate180FlipNone;
+			imgRotateType = RotateFlipType.RotateNoneFlipNone;
 			imgBox.Size = new Size(IMAGE_WIDTH, IMAGE_HEIGHT);
 			Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], TrackerForm.Catalog.Game);
 			rotateImageButton.Visible = false;
@@ -438,14 +441,20 @@ namespace CollectionTracker {
 
 		//Rotate image if it has a rotatable layout
 		private void RotateImage(object sender, EventArgs e) {
-			if (imgRotateType == RotateFlipType.Rotate90FlipNone) {
+			if (imgRotateType == RotateFlipType.Rotate90FlipNone || imgRotateType == RotateFlipType.Rotate270FlipNone) {
 				if (imgRotated) {
 					imgBox.Size = new Size(IMAGE_WIDTH, IMAGE_HEIGHT);
-					imgBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+					if (imgRotateType == RotateFlipType.Rotate90FlipNone)
+						imgBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+					else
+						imgBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
 				}
 				else {
 					imgBox.Size = new Size(IMAGE_ROT_MIN_WIDTH, IMAGE_ROT_MIN_HEIGHT);
-					imgBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+					if (imgRotateType == RotateFlipType.Rotate90FlipNone)
+						imgBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+					else
+						imgBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
 				}
 				imgRotated = !imgRotated;
 			}
@@ -460,7 +469,7 @@ namespace CollectionTracker {
 		private void OnHoverImage(object sender, MouseEventArgs e) => ToggleImageHovered(imgRotated && e.X < IMAGE_ROT_MIN_WIDTH && e.Y < IMAGE_ROT_MIN_HEIGHT);
 		private void OnLeaveImage(object sender, EventArgs e) => ToggleImageHovered(false);
 		private void ToggleImageHovered(bool hovered) {
-			if (hovered == imgExpanded || imgRotateType != RotateFlipType.Rotate90FlipNone)
+			if (hovered == imgExpanded || (imgRotateType != RotateFlipType.Rotate90FlipNone && imgRotateType != RotateFlipType.Rotate270FlipNone))
 				return;
 			if (hovered)
 				imgBox.Size = new Size(IMAGE_ROT_MAX_WIDTH, IMAGE_ROT_MAX_HEIGHT);
