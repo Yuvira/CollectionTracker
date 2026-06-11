@@ -236,6 +236,7 @@ namespace CollectionTracker {
 			"cardtype",
 			"attribute",
 			"property",
+			"layout",
 		};
 
 		//Fields that can be kept on list regeneration

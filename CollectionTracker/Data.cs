@@ -274,6 +274,16 @@ namespace CollectionTracker {
 			return false;
 		}
 
+		//Get field from specific face, but treat base fields as face 0
+		public bool TryGetBaseOrFaceField(string field, int face, out string value) {
+			if (face == 0 && TryGetBaseField(field, out value))
+				return true;
+			if (face >= 0 && face < faces.Count && faces[face].TryGetField(field, out value))
+				return true;
+			value = "";
+			return false;
+		}
+
 		//Get first instance of field
 		public bool TryGetFirstField(string field, out string value) {
 			for (int i = -1; i < faces.Count; ++i)

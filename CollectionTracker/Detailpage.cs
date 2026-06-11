@@ -148,6 +148,12 @@ namespace CollectionTracker {
 		private const int MAX_WIDTH = 1300;
 		private const int NAV_WIDTH = 200;
 		private const int FILTER_WIDTH = 150;
+		private const int IMAGE_WIDTH = 400;
+		private const int IMAGE_HEIGHT = 540;
+		private const int IMAGE_ROT_MIN_WIDTH = 400;
+		private const int IMAGE_ROT_MIN_HEIGHT = 300;
+		private const int IMAGE_ROT_MAX_WIDTH = 730;
+		private const int IMAGE_ROT_MAX_HEIGHT = 540;
 		private const int CARDTIP_WIDTH = 250;
 		private const int CARDTIP_HEIGHT = 350;
 		private const int TOOLTIP_WIDTH = 300;
@@ -170,6 +176,9 @@ namespace CollectionTracker {
 		private List<Tooltip> tooltips;
 		private List<Cardtip> cardtips;
 		private List<SearchLink> searchLinks;
+		private RotateFlipType imgRotateType;
+		private bool imgRotated;
+		private bool imgExpanded;
 
 		//Controls
 		private Button navButtonLeft;
@@ -179,6 +188,7 @@ namespace CollectionTracker {
 		private ComboBox filterBox;
 		private Label filterLabel;
 		private PictureBox imgBox;
+		private Button rotateImageButton;
 		private Label indexLabel;
 		private Panel contentPanel;
 		private ComboBox moveToBox;
@@ -213,6 +223,9 @@ namespace CollectionTracker {
 			treatmentPanels = new List<DetailTreatmentPanel>();
 			printRows = new List<DetailPrintrow>();
 			printCopyRows = new List<DetailPrintrow>();
+			imgRotateType = RotateFlipType.RotateNoneFlipNone;
+			imgRotated = false;
+			imgExpanded = false;
 			moveToBox = null;
 
 			//Nav buttons
@@ -265,19 +278,26 @@ namespace CollectionTracker {
 			contentPanel.Controls.Add(cardtipBox2);
 
 			//Image box
-			imgBox = Utils.GeneratePictureBox(new Rectangle(5, 5, 400, 540));
+			imgBox = Utils.GeneratePictureBox(new Rectangle(5, 5, IMAGE_WIDTH, IMAGE_HEIGHT));
+			imgBox.MouseMove += OnHoverImage;
+			imgBox.MouseLeave += OnLeaveImage;
 			imgBox.MouseClick += OnClickImage;
 			contentPanel.Controls.Add(imgBox);
 
 			//Edit card
-			Button editCardButton = Utils.GenerateButton(new Rectangle(5, 550, 100, BUTTON_HEIGHT), "Edit Card");
+			Button editCardButton = Utils.GenerateButton(new Rectangle(5, imgBox.Bottom + PANEL_MARGIN, 100, BUTTON_HEIGHT), "Edit Card");
 			editCardButton.Click += EditCard;
 			contentPanel.Controls.Add(editCardButton);
 
 			//Edit print
-			Button editPrintButton = Utils.GenerateButton(new Rectangle(110, 550, 100, BUTTON_HEIGHT), "Edit Print");
+			Button editPrintButton = Utils.GenerateButton(new Rectangle(editCardButton.Right + PANEL_MARGIN, imgBox.Bottom + PANEL_MARGIN, 100, BUTTON_HEIGHT), "Edit Print");
 			editPrintButton.Click += EditPrint;
 			contentPanel.Controls.Add(editPrintButton);
+
+			//Rotate image
+			rotateImageButton = Utils.GenerateButton(new Rectangle(editPrintButton.Right + PANEL_MARGIN, imgBox.Bottom + PANEL_MARGIN, 100, BUTTON_HEIGHT), "Rotate");
+			rotateImageButton.Click += RotateImage;
+			contentPanel.Controls.Add(rotateImageButton);
 
 			//Index
 			indexLabel = Utils.GenerateLabel(new Rectangle(0, 555, 0, TEXT_HEIGHT), "");
@@ -337,17 +357,15 @@ namespace CollectionTracker {
 			//Set print reference
 			this.printing = printing;
 
-			//Image
-			imgIndex = 0;
-			if (this.printing.ImagePaths.Count > 0)
-				Utils.TryLoadCardImage(imgBox, this.printing.ImagePaths[0], TrackerForm.Catalog.Game);
-
 			//Suspend
 			contentPanel.SuspendLayout();
 
 			//Hide tool/cardtips
 			HideTooltip();
 			HideCardtip();
+
+			//Image
+			UpdateImage();
 
 			//Print list
 			UpdatePrintList();
@@ -361,20 +379,6 @@ namespace CollectionTracker {
 			//Resume
 			contentPanel.ResumeLayout();
 
-		}
-
-		//Increment image index
-		private void OnClickImage(object sender, MouseEventArgs e) {
-			if (e.Button == MouseButtons.Left) {
-				if (printing.ImagePaths.Count == 0)
-					return;
-				imgIndex = (imgIndex + 1) % printing.ImagePaths.Count;
-				Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], TrackerForm.Catalog.Game);
-			}
-			else if (e.Button == MouseButtons.Right && printing.TryGetField("printid", out string printid)) {
-				if (Utils.CardURLs.ContainsKey(TrackerForm.Catalog.Game))
-					Process.Start(Utils.CardURLs[TrackerForm.Catalog.Game] + printid);
-			}
 		}
 
 		//Modify card data
@@ -395,6 +399,90 @@ namespace CollectionTracker {
 			filterLabel.Left = filterBox.Left - (filterLabel.Width + PANEL_MARGIN);
 			oldWidth = panel.Width;
 		}
+
+		#region Image
+
+		//Set card image
+		private void UpdateImage(int index = 0) {
+			if (index < 0 || index >= printing.ImagePaths.Count)
+				return;
+			imgIndex = index;
+			if (printing.Card.TryGetBaseOrFaceField("layout", imgIndex, out string mod)) {
+				if (mod.ToLower().Equals("landscape")) {
+					imgRotateType = RotateFlipType.Rotate90FlipNone;
+					imgBox.Size = new Size(IMAGE_ROT_MIN_WIDTH, IMAGE_ROT_MIN_HEIGHT);
+					Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], TrackerForm.Catalog.Game);
+					imgBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+					rotateImageButton.Visible = true;
+					imgRotated = true;
+					imgExpanded = false;
+					return;
+				}
+				else if (mod.ToLower().Equals("flip")) {
+					imgRotateType = RotateFlipType.Rotate180FlipNone;
+					imgBox.Size = new Size(IMAGE_WIDTH, IMAGE_HEIGHT);
+					Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], TrackerForm.Catalog.Game);
+					rotateImageButton.Visible = true;
+					imgRotated = false;
+					imgExpanded = false;
+					return;
+				}
+			}
+			imgRotateType = RotateFlipType.Rotate180FlipNone;
+			imgBox.Size = new Size(IMAGE_WIDTH, IMAGE_HEIGHT);
+			Utils.TryLoadCardImage(imgBox, printing.ImagePaths[imgIndex], TrackerForm.Catalog.Game);
+			rotateImageButton.Visible = false;
+			imgRotated = false;
+			imgExpanded = false;
+		}
+
+		//Rotate image if it has a rotatable layout
+		private void RotateImage(object sender, EventArgs e) {
+			if (imgRotateType == RotateFlipType.Rotate90FlipNone) {
+				if (imgRotated) {
+					imgBox.Size = new Size(IMAGE_WIDTH, IMAGE_HEIGHT);
+					imgBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+				}
+				else {
+					imgBox.Size = new Size(IMAGE_ROT_MIN_WIDTH, IMAGE_ROT_MIN_HEIGHT);
+					imgBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+				}
+				imgRotated = !imgRotated;
+			}
+			else if (imgRotateType == RotateFlipType.Rotate180FlipNone) {
+				imgBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+				imgRotated = !imgRotated;
+			}
+			imgBox.Refresh();
+		}
+
+		//Size horizontal cards on mouse hover
+		private void OnHoverImage(object sender, MouseEventArgs e) => ToggleImageHovered(imgRotated && e.X < IMAGE_ROT_MIN_WIDTH && e.Y < IMAGE_ROT_MIN_HEIGHT);
+		private void OnLeaveImage(object sender, EventArgs e) => ToggleImageHovered(false);
+		private void ToggleImageHovered(bool hovered) {
+			if (hovered == imgExpanded || imgRotateType != RotateFlipType.Rotate90FlipNone)
+				return;
+			if (hovered)
+				imgBox.Size = new Size(IMAGE_ROT_MAX_WIDTH, IMAGE_ROT_MAX_HEIGHT);
+			else
+				imgBox.Size = new Size(IMAGE_ROT_MIN_WIDTH, IMAGE_ROT_MIN_HEIGHT);
+			imgExpanded = hovered;
+		}
+
+		//Increment image index
+		private void OnClickImage(object sender, MouseEventArgs e) {
+			if (e.Button == MouseButtons.Left) {
+				if (printing.ImagePaths.Count == 0)
+					return;
+				UpdateImage((imgIndex + 1) % printing.ImagePaths.Count);
+			}
+			else if (e.Button == MouseButtons.Right && printing.TryGetField("printid", out string printid)) {
+				if (Utils.CardURLs.ContainsKey(TrackerForm.Catalog.Game))
+					Process.Start(Utils.CardURLs[TrackerForm.Catalog.Game] + printid);
+			}
+		}
+
+		#endregion
 
 		#region Print List
 
