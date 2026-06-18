@@ -59,6 +59,7 @@ namespace CollectionTracker {
 			{ '”', '"' },
 			{ '‘', '\'' },
 			{ '’', '\'' },
+			{ ' ', ' ' },
 		};
 		public static readonly Dictionary<string, string> searchStrings = new Dictionary<string, string> {
 			{ "𝑒", "e" },
