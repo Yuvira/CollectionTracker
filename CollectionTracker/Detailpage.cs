@@ -190,6 +190,7 @@ namespace CollectionTracker {
 		private PictureBox imgBox;
 		private Button rotateImageButton;
 		private Label indexLabel;
+		private Label favoriteLabel;
 		private Panel contentPanel;
 		private ComboBox moveToBox;
 		private List<TrackerPanel> dataPanels;
@@ -303,6 +304,12 @@ namespace CollectionTracker {
 			indexLabel = Utils.GenerateLabel(new Rectangle(0, 555, 0, TEXT_HEIGHT), "");
 			contentPanel.Controls.Add(indexLabel);
 
+			//Favorite
+			width = Utils.MeasureWidth("Favorite");
+			favoriteLabel = Utils.GenerateLabel(new Rectangle(imgBox.Right - width, indexLabel.Bottom + PANEL_MARGIN, width, TEXT_HEIGHT), "Favorite");
+			favoriteLabel.Click += ToggleFavorite;
+			contentPanel.Controls.Add(favoriteLabel);
+
 			//Views
 			viewPanel = Utils.GenerateTrackerPanel(new Rectangle(410, 5, 450, BUTTON_HEIGHT + 10));
 			RadioButton cardViewButton = Utils.GenerateRadioButton(new Rectangle(5, 5, 217, BUTTON_HEIGHT), "Card Data");
@@ -373,6 +380,9 @@ namespace CollectionTracker {
 			//Nav buttons
 			UpdateNavButtons();
 
+			//Favorite
+			favoriteLabel.ForeColor = printing.Card.Favorite ? Utils.THEME.CardOwnedFavorite : Utils.THEME.ForeColor;
+
 			//View
 			UpdateView();
 
@@ -384,6 +394,10 @@ namespace CollectionTracker {
 		//Modify card data
 		private void EditCard(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Cardentry>(cardref: printing.Card, printref: printing);
 		private void EditPrint(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Printentry>(printref: printing);
+		private void ToggleFavorite(object sender, EventArgs e) {
+			printing.Card.ToggleFavorite();
+			favoriteLabel.ForeColor = printing.Card.Favorite ? Utils.THEME.CardOwnedFavorite : Utils.THEME.ForeColor;
+		}
 
 		//Resize event
 		protected override void OnFormResizeEnd(object sender = null, EventArgs e = null) {
