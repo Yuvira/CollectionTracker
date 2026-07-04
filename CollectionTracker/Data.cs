@@ -362,8 +362,15 @@ namespace CollectionTracker {
 							name += oracle.Replace("\r\n", " / ").CleanFormatMarkers();
 						return name;
 					}
-					if (type.Contains("Art Card"))
+					if (type.Contains("Art Card")) {
+						if (TryGetField("oracle", out string oracle)) {
+							int start = oracle.IndexOf("ct|");
+							int stop = oracle.IndexOf('>');
+							if (start != -1 && stop != -1 && start < stop)
+								return name + $" (Art Card [{oracle.Substring(start + 3, stop - (start + 3))}])";
+						}
 						return name + " (Art Card)";
+					}
 					if (type.Contains("Front Card"))
 						return name + " (Front Card)";
 					if (type.Contains("Emblem"))
