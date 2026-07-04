@@ -37,9 +37,7 @@ namespace CollectionTracker {
 				);
 				label.MouseEnter += ShowCardtip;
 				label.MouseLeave += HideCardtip;
-				if (!isCurrent)
-					label.Click += LoadCardtip;
-				label.MouseUp += CopyPrintID;
+				label.MouseUp += MouseUp;
 			}
 
 			//Update
@@ -47,23 +45,20 @@ namespace CollectionTracker {
 				this.printid = printid;
 				label.Text = (printid.ToUpper() + " - " + setname).Replace("&", "&&");
 				label.ForeColor = newCurrent ? Utils.THEME.ForeColor : Utils.THEME.TextSearchLink;
-				if (isCurrent && !newCurrent)
-					label.Click += LoadCardtip;
-				else if (!isCurrent && newCurrent)
-					label.Click -= LoadCardtip;
 				isCurrent = newCurrent;
 			}
 
 			//Copy
-			private void CopyPrintID(object sender, MouseEventArgs e) {
+			private void MouseUp(object sender, MouseEventArgs e) {
 				if (e.Button == MouseButtons.Right)
 					Clipboard.SetText(printid);
+				if (!isCurrent && (e.Button == MouseButtons.Left ||  e.Button == MouseButtons.Right))
+					parent.LoadCardtip(printid);
 			}
 
 			//Cardtip functions
 			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(label, printid, true);
 			private void HideCardtip(object sender, EventArgs e) => parent.HideCardtip();
-			private void LoadCardtip(object sender, EventArgs e) => parent.LoadCardtip(printid);
 
 		}
 
@@ -187,6 +182,7 @@ namespace CollectionTracker {
 		private Button refButtonForward;
 		private ComboBox filterBox;
 		private Label filterLabel;
+		private CheckBox sharedSetBox;
 		private PictureBox imgBox;
 		private Button rotateImageButton;
 		private Label indexLabel;
@@ -207,6 +203,7 @@ namespace CollectionTracker {
 
 		//Filter index
 		private static int FilterIndex = 0;
+		private static bool ShowSharedSets = true;
 
 		//Accessors
 		public List<Tooltip> Tooltips => tooltips;
@@ -254,6 +251,11 @@ namespace CollectionTracker {
 			int width = Utils.MeasureWidth("Filter");
 			filterLabel = Utils.GenerateLabel(new Rectangle(0, PANEL_MARGIN + 5, width, TEXT_HEIGHT), "Filter");
 			filterLabel.Anchor = AnchorStyles.Top;
+
+			//Shared set checkbox
+			sharedSetBox = Utils.GenerateCheckbox(new Rectangle(0, PANEL_MARGIN, 200, TEXT_HEIGHT), ShowSharedSets, "Show shared sets");
+			sharedSetBox.Anchor = AnchorStyles.Top;
+			sharedSetBox.CheckedChanged += FilterChanged;
 
 			//Content panel
 			int yPos = BUTTON_HEIGHT + (PANEL_MARGIN * 2);
@@ -341,6 +343,7 @@ namespace CollectionTracker {
 			panel.Controls.Add(refButtonBack);
 			panel.Controls.Add(refButtonForward);
 			panel.Controls.Add(filterBox);
+			panel.Controls.Add(sharedSetBox);
 			panel.Controls.Add(filterLabel);
 			panel.Controls.Add(contentPanel);
 
@@ -411,6 +414,7 @@ namespace CollectionTracker {
 			refButtonForward.Left = refButtonBack.Right + PANEL_MARGIN;
 			filterBox.Left = navButtonRight.Left - (FILTER_WIDTH + PANEL_MARGIN);
 			filterLabel.Left = filterBox.Left - (filterLabel.Width + PANEL_MARGIN);
+			sharedSetBox.Left = filterLabel.Left - (sharedSetBox.Width + PANEL_MARGIN);
 			oldWidth = panel.Width;
 		}
 
@@ -514,6 +518,7 @@ namespace CollectionTracker {
 
 			//Update index
 			FilterIndex = filterBox.SelectedIndex;
+			ShowSharedSets = sharedSetBox.Checked;
 
 			//Initial position
 			int panelY = printPanel.Top;
@@ -538,6 +543,8 @@ namespace CollectionTracker {
 					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && !p.TryGetField("printcopy", out _)).ToList();
 				else
 					prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
+				if (!sharedSetBox.Checked)
+					prints = prints.Where(p => p == printing || p.Set != printing.Set).ToList();
 
 				//Sort and display
 				panelY += PANEL_MARGIN + UpdatePrintListPanel(prints, ref printRows, printPanel, panelY);
