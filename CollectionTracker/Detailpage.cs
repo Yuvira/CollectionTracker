@@ -1263,10 +1263,24 @@ namespace CollectionTracker {
 				contentPanel.Controls.Add(footerPanel);
 			}
 
-			//Flavor
-			if (printing.TryGetField("flavor", out string flavor)) {
+			//Flavor / Artist / Rarity
+			bool hasArtist = printing.TryGetField("artist", out string artist);
+			bool hasFlavor = printing.TryGetField("flavor", out string flavor);
+			bool hasRarity = printing.TryGetField("rarity", out string rarity);
+			if (hasArtist || hasFlavor) {
+				textPos.Y = TOP_PAD;
 				TrackerPanel flavorPanel = Utils.GenerateTrackerPanel(new Rectangle(panelPos, panelSize));
 				flavorPanel.Height = TOP_PAD + BOTTOM_PAD + GenerateDescription($"<i>{flavor}", flavorPanel, textPos);
+				flavorPanel.SuspendLayout();
+				if (hasFlavor)
+					textPos.Y += LINE_SPACING + GenerateDescription($"<i>{flavor}", flavorPanel, textPos, true, false, true);
+				int footerHeight = 0;
+				if (hasArtist)
+					footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription($"🖌 <s|artist:{artist}>{artist}</s>", flavorPanel, textPos, false));
+				if (hasRarity)
+					footerHeight = Math.Max(footerHeight, LINE_SPACING + GenerateDescription(rarity, flavorPanel, textPos, false, true));
+				textPos.Y += footerHeight;
+				flavorPanel.Height = textPos.Y + BOTTOM_PAD - LINE_SPACING;
 				panelPos.Y += flavorPanel.Height + 5;
 				borderPanels.Add(flavorPanel);
 				dataPanels.Add(flavorPanel);
