@@ -259,6 +259,10 @@ namespace CollectionTracker {
 							fields.AddRow(new FieldEntry("artist", artist));
 							fields.MoveRow(entry, 1);
 						}
+						if (print.TryGetField("displayartist", out string displayartist)) {
+							fields.AddRow(new FieldEntry("displayartist", displayartist));
+							fields.MoveRow(entry, 1);
+						}
 						if (print.TryGetField("flavor", out string flavor)) {
 							fields.AddRow(new FieldEntry("flavor", flavor));
 							fields.MoveRow(entry, 1);
