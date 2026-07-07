@@ -189,6 +189,8 @@ namespace CollectionTracker {
 		private Label favoriteLabel;
 		private Panel contentPanel;
 		private ComboBox moveToBox;
+		private TextBox newTreatmentBox1;
+		private TextBox newTreatmentBox2;
 		private List<TrackerPanel> dataPanels;
 		private List<TrackerPanel> borderPanels;
 		private TrackerPanel viewPanel;
@@ -207,6 +209,8 @@ namespace CollectionTracker {
 		//Filter index
 		private static int FilterIndex = 0;
 		private static bool ShowSharedSets = true;
+		private static string NewTreatmentText1 = "";
+		private static string NewTreatmentText2 = "";
 
 		//Accessors
 		public List<Tooltip> Tooltips => tooltips;
@@ -228,6 +232,8 @@ namespace CollectionTracker {
 			imgRotated = false;
 			imgExpanded = false;
 			moveToBox = null;
+			newTreatmentBox1 = null;
+			newTreatmentBox2 = null;
 
 			//Nav buttons
 			navButtonLeft = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, NAV_WIDTH, BUTTON_HEIGHT), "");
@@ -423,6 +429,13 @@ namespace CollectionTracker {
 				printing.Fields[field] = Clipboard.GetText();
 			else
 				printing.Fields.Add(field, Clipboard.GetText());
+		}
+		private void AddTreatments(object sender, EventArgs e) {
+			if (!string.IsNullOrWhiteSpace(newTreatmentBox1.Text) && !printing.Treatments.Select(t => t.Name).Contains(newTreatmentBox1.Text))
+				printing.Treatments.Add(new Treatment(newTreatmentBox1.Text));
+			if (!string.IsNullOrWhiteSpace(newTreatmentBox2.Text) && !printing.Treatments.Select(t => t.Name).Contains(newTreatmentBox2.Text))
+				printing.Treatments.Add(new Treatment(newTreatmentBox2.Text));
+			UpdateView();
 		}
 
 		//Resize event
@@ -793,7 +806,20 @@ namespace CollectionTracker {
 		private void UpdateView() {
 
 			//Locations
-			moveToBox = null;
+			if (moveToBox != null) {
+				moveToBox.Dispose();
+				moveToBox = null;
+			}
+			if (newTreatmentBox1 != null) {
+				NewTreatmentText1 = newTreatmentBox1.Text;
+				newTreatmentBox1.Dispose();
+				newTreatmentBox1 = null;
+			}
+			if (newTreatmentBox2 != null) {
+				NewTreatmentText2 = newTreatmentBox2.Text;
+				newTreatmentBox2.Dispose();
+				newTreatmentBox2 = null;
+			}
 			treatmentPanels.Clear();
 
 			//Clear borders
@@ -1526,8 +1552,23 @@ namespace CollectionTracker {
 				contentPanel.Controls.Add(panel.Panel);
 			}
 
+			//Add treatment(s)
+			TrackerPanel addTreatmentPanel = Utils.GenerateTrackerPanel(new Rectangle(410, yPos, 450, BUTTON_HEIGHT + 10));
+			width = 430;
+			newTreatmentBox1 = Utils.GenerateTextBox(new Rectangle(5, 5, width / 3, BUTTON_HEIGHT), NewTreatmentText1);
+			newTreatmentBox2 = Utils.GenerateTextBox(new Rectangle((width / 3) + 10, 5, width / 3, BUTTON_HEIGHT), NewTreatmentText2);
+			addTreatmentPanel.Controls.Add(newTreatmentBox1);
+			addTreatmentPanel.Controls.Add(newTreatmentBox2);
+			Button addTreatmentButton = Utils.GenerateButton(new Rectangle(((width / 3) * 2) + 15, 5, width / 3, BUTTON_HEIGHT), "Add Treatment(s)");
+			addTreatmentButton.Click += AddTreatments;
+			addTreatmentPanel.Controls.Add(addTreatmentButton);
+			yPos += addTreatmentPanel.Height + 5;
+			borderPanels.Add(addTreatmentPanel);
+			dataPanels.Add(addTreatmentPanel);
+			contentPanel.Controls.Add(addTreatmentPanel);
+
 			//View panel
-			viewPanel.Location = new Point(viewPanel.Location.X, yPos);
+			viewPanel.Top = yPos;
 
 			//Panel colors
 			if (TrackerForm.Catalog.Game == Game.MTG)
