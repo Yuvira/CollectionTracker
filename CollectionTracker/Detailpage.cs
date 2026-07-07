@@ -195,6 +195,9 @@ namespace CollectionTracker {
 		private TrackerPanel printPanel;
 		private TrackerPanel printCopyPanel;
 		private Label printCopyHeader;
+		private Button artCopyButton;
+		private Button frameCopyButton;
+		private Button printCopyButton;
 		private Panel tooltipPanel;
 		private Panel nestedTooltipPanel;
 		private PictureBox cardtipBox;
@@ -333,6 +336,17 @@ namespace CollectionTracker {
 			contentPanel.Controls.Add(printCopyPanel);
 			printCopyPanel.Hide();
 
+			//Copy art ID
+			artCopyButton = Utils.GenerateButton(new Rectangle(865, printCopyPanel.Bottom + PANEL_MARGIN, 130, BUTTON_HEIGHT), "Artcopy");
+			artCopyButton.Click += CopyArtID;
+			contentPanel.Controls.Add(artCopyButton);
+			frameCopyButton = Utils.GenerateButton(new Rectangle(artCopyButton.Right + PANEL_MARGIN, printCopyPanel.Bottom + PANEL_MARGIN, 130, BUTTON_HEIGHT), "Framecopy");
+			frameCopyButton.Click += CopyFrameID;
+			contentPanel.Controls.Add(frameCopyButton);
+			printCopyButton = Utils.GenerateButton(new Rectangle(frameCopyButton.Right + PANEL_MARGIN, printCopyPanel.Bottom + PANEL_MARGIN, 130, BUTTON_HEIGHT), "Printcopy");
+			printCopyButton.Click += CopyPrintID;
+			contentPanel.Controls.Add(printCopyButton);
+
 			//Bottom right object for forcing autoscroll height
 			bottomRight = Utils.GenerateTrackerPanel(new Rectangle(printPanel.Right + PANEL_MARGIN - 1, 0, 1, 1));
 			contentPanel.Controls.Add(bottomRight);
@@ -400,6 +414,15 @@ namespace CollectionTracker {
 		private void ToggleFavorite(object sender, EventArgs e) {
 			printing.Card.ToggleFavorite();
 			favoriteLabel.ForeColor = printing.Card.Favorite ? Utils.THEME.CardOwnedFavorite : Utils.THEME.ForeColor;
+		}
+		private void CopyArtID(object sender, EventArgs e) => CopyID("artcopy");
+		private void CopyFrameID(object sender, EventArgs e) => CopyID("framecopy");
+		private void CopyPrintID(object sender, EventArgs e) => CopyID("printcopy");
+		private void CopyID(string field) {
+			if (printing.HasField(field))
+				printing.Fields[field] = Clipboard.GetText();
+			else
+				printing.Fields.Add(field, Clipboard.GetText());
 		}
 
 		//Resize event
@@ -632,6 +655,11 @@ namespace CollectionTracker {
 				printCopyPanel.Hide();
 				panelY = printPanel.Bottom + PANEL_MARGIN;
 			}
+
+			//Position buttons
+			artCopyButton.Top = panelY;
+			frameCopyButton.Top = panelY;
+			printCopyButton.Top = panelY;
 
 			//Set bottom right
 			bottomRight.Top = panelY + cardtipBox.Height;
