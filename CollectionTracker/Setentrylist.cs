@@ -184,12 +184,15 @@ namespace CollectionTracker {
 				MessageBox.Show($"Can't remove set, {prints.Count} prints still rely on it");
 				return;
 			}
+			int idx = entries.IndexOf(entry);
+			int height = entry.Panel.Height + 5;
 			entries.Remove(entry);
 			listPanel.Controls.Remove(entry.Panel);
 			entry.Panel.Dispose();
 			TrackerForm.Catalog.Sets.Remove(set);
 			Printentry.SetsAltered = true;
-			Update();
+			for (int i = idx; i < entries.Count; ++i)
+				entries[i].Panel.Top -= height;
 		}
 
 		//Add new set
