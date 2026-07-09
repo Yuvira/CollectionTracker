@@ -233,8 +233,19 @@ namespace CollectionTracker {
 				ReturnToDetails();
 
 			//Generate new
-			else
+			else {
+				foreach (FieldEntry entry in fields.Entries) {
+					if (entry.Field.Equals("type") && (entry.Value.Equals("Art Card") || entry.Value.Equals("Front Card"))) {
+						foreach (FieldEntry entry2 in fields.Entries) {
+							if (entry2.Field.Equals("name")) {
+								entry2.SetValue("");
+								return;
+							}
+						}
+					}
+				}
 				TrackerForm.Instance.SetPage<Cardentry>();
+			}
 
 		}
 
