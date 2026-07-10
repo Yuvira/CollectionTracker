@@ -222,10 +222,11 @@ namespace CollectionTracker {
 
 		//String-defined colors
 		public static readonly Dictionary<string, Color> ColorDefinitions = new Dictionary<string, Color> {
-			{ "red"   , Color.Red   },
-			{ "green" , Color.Green },
-			{ "blue"  , Color.Blue  },
-			{ "white" , Color.White },
+			{ "red"   , THEME.CardOwnedFavorite },
+			{ "green" , THEME.TextCardtip       },
+			{ "blue"  , THEME.TextSearchLink    },
+			{ "white" , Color.White             },
+			{ "text"  , THEME.ForeColor         },
 		};
 
 		//Fields that can list all values
