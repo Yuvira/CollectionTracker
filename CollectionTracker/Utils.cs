@@ -218,6 +218,7 @@ namespace CollectionTracker {
 			{ Keys.R , "ct|" },
 			{ Keys.T , "tt|" },
 			{ Keys.S , "s|" },
+			{ Keys.G , "c|green" },
 		};
 
 		//String-defined colors

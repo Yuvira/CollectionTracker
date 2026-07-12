@@ -297,33 +297,58 @@ namespace CollectionTracker {
 		private void HandleControlInput(object sender, KeyEventArgs e) {
 			if (!e.Control || string.IsNullOrEmpty(textValue.SelectedText))
 				return;
-			if (e.KeyCode == Keys.L || e.KeyCode == Keys.B || e.KeyCode == Keys.U || e.KeyCode == Keys.O || e.KeyCode == Keys.R || e.KeyCode == Keys.T || e.KeyCode == Keys.S)
+			if (Utils.TagShortcuts.Keys.Contains(e.KeyCode))
 				e.SuppressKeyPress = true;
 		}
 
 		//Tag shortcuts
 		private void TextKeyPressed(object sender, KeyEventArgs e) {
+
+			//Ignore invalid source or shortcut code
 			if (!e.Control || string.IsNullOrEmpty(textValue.SelectedText))
 				return;
 			if (!Utils.TagShortcuts.ContainsKey(e.KeyCode))
 				return;
+
+			//Get tag text from keycode
 			string code = Utils.TagShortcuts[e.KeyCode];
+
+			//Determine index/length of text to tag
 			int index = textValue.SelectionStart;
 			int length = textValue.SelectionLength;
 			while (textValue.Text.Substring(index, length).EndsWithAny(Utils.TagExcludedChars))
 				--length;
+
+			//Get highlighted string for later
 			string text = textValue.Text.Substring(index, length);
+
+			//Determine whether to use regular or nested brackets
+			string open = "<";
+			string close = ">";
+			for (int i = index - 1; i >= 0; --i) {
+				if (textValue.Text[i] == '>')
+					break;
+				if (textValue.Text[i] == '<') {
+					open = "[";
+					close = "]";
+					break;
+				}
+			}
+
+			//Apply tag
 			if (!e.Shift) {
-				textValue.Text = textValue.Text.Insert(index + length, "</" + (code.Contains('|') ? code.Substring(0, code.Length - 1) : code) + ">");
-				textValue.Text = textValue.Text.Insert(index, "<" + code + ">");
-				textValue.SelectionStart = index + code.Length + (code.Contains('|') ? 1 : 2);
+				textValue.Text = textValue.Text.Insert(index + length, open + '/' + (code.Contains('|') ? code.Substring(0, code.IndexOf('|')) : code) + close);
+				textValue.Text = textValue.Text.Insert(index, open + code + close);
+				textValue.SelectionStart = index + code.Length + (code.EndsWith("|") ? 1 : 2);
 			}
 			else {
-				textValue.Text = textValue.Text.Insert(index + length, "<" + code + ">");
-				textValue.Text = textValue.Text.Insert(index, "</" + (code.Contains('|') ? code.Substring(0, code.Length - 1) : code) + ">");
-				textValue.SelectionStart = index + code.Length + (code.Contains('|') ? 2 : 3);
+				textValue.Text = textValue.Text.Insert(index + length, open + code + close);
+				textValue.Text = textValue.Text.Insert(index, open + '/' + (code.Contains('|') ? code.Substring(0, code.IndexOf('|')) : code) + close);
+				textValue.SelectionStart = index + code.Length + (code.EndsWith("|") ? 2 : 3);
 			}
-			textValue.SelectionLength = code.Contains('|') ? 0 : length;
+			textValue.SelectionLength = code.EndsWith("|") ? 0 : length;
+
+			//If we tagged a recognized keyword, select it in the keyword box
 			if (code.Equals("tt|") && Cardentry.KeywordBox != null) {
 				for (int i = 0; i < Cardentry.KeywordBox.Items.Count; ++i) {
 					if (Cardentry.KeywordBox.Items[i].ToString().ToLower().StartsWith(text.ToLower()) || text.ToLower().StartsWith(Cardentry.KeywordBox.Items[i].ToString().ToLower())) {
@@ -332,6 +357,7 @@ namespace CollectionTracker {
 					}
 				}
 			}
+
 		}
 
 		//Clear value
