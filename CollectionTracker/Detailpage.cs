@@ -1772,12 +1772,14 @@ namespace CollectionTracker {
 					location.X -= width;
 
 				//Font styles
-				if (settings.printid != null || settings.searchString != null)
-					settings.style |= FontStyle.Underline;
-				if (settings.printid != null)
-					settings.color = Utils.THEME.TextCardtip;
-				else if (settings.searchString != null)
-					settings.color = Utils.THEME.TextSearchLink;
+				if (settings.tooltip == null || TrackerForm.COLOR_NESTED_LINKS) {
+					if (settings.printid != null || settings.searchString != null)
+						settings.style |= FontStyle.Underline;
+					if (settings.printid != null)
+						settings.color = Utils.THEME.TextCardtip;
+					else if (settings.searchString != null)
+						settings.color = Utils.THEME.TextSearchLink;
+				}
 
 				//Generate label
 				Label label = Utils.GenerateLabel(new Rectangle(location, new Size(width, TEXT_HEIGHT)), text, new Font(Utils.FONT_DEFAULT, settings.style), settings.color);
@@ -1952,7 +1954,7 @@ namespace CollectionTracker {
 		private FormatSettings ProcessFormatMarker(string text, FormatSettings settings) {
 			if (string.IsNullOrWhiteSpace(text))
 				return settings;
-			string[] splits = text.Split('|');
+			string[] splits = text.Split(new string[] { "|" }, 2, StringSplitOptions.None);
 			if (splits.Length == 1) {
 				if (splits[0].ToLower().Equals("b"))
 					settings.style |= FontStyle.Bold;

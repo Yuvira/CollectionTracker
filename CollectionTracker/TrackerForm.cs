@@ -10,6 +10,9 @@ namespace CollectionTracker {
 	//Form class
 	public partial class TrackerForm : Form {
 
+		//Settings
+		public const bool COLOR_NESTED_LINKS = false;
+
 		//Properties
 		private Catalog mtgCatalog;
 		private Catalog ygoCatalog;
