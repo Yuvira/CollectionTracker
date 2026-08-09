@@ -302,6 +302,11 @@ namespace CollectionTracker {
 			editCardButton.Click += EditCard;
 			contentPanel.Controls.Add(editCardButton);
 
+			//New card
+			Button newCardButton = Utils.GenerateButton(new Rectangle(5, editCardButton.Bottom + PANEL_MARGIN, 100, BUTTON_HEIGHT), "New Card");
+			newCardButton.Click += NewCard;
+			contentPanel.Controls.Add(newCardButton);
+
 			//Edit print
 			Button editPrintButton = Utils.GenerateButton(new Rectangle(editCardButton.Right + PANEL_MARGIN, imgBox.Bottom + PANEL_MARGIN, 100, BUTTON_HEIGHT), "Edit Print");
 			editPrintButton.Click += EditPrint;
@@ -420,6 +425,7 @@ namespace CollectionTracker {
 
 		//Modify card data
 		private void EditCard(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Cardentry>(cardref: printing.Card, printref: printing);
+		private void NewCard(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Cardentry>(cardref: null, printref: printing);
 		private void EditPrint(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Printentry>(printref: printing);
 		private void ToggleFavorite(object sender, EventArgs e) {
 			printing.Card.ToggleFavorite();

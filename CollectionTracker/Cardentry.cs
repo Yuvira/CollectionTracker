@@ -226,6 +226,8 @@ namespace CollectionTracker {
 				card.CopyFields(FieldEntry.GetEntryDict(fields.Entries), faceDicts);
 				TrackerForm.Catalog.Cards.Add(card);
 				Printentry.CardsAltered = true;
+				if (printref != null)
+					printref.CopyCard(card);
 			}
 
 			//Return to details
