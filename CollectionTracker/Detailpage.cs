@@ -200,6 +200,7 @@ namespace CollectionTracker {
 		private Button artCopyButton;
 		private Button frameCopyButton;
 		private Button printCopyButton;
+		private Button replaceCopyButton;
 		private Panel tooltipPanel;
 		private Panel nestedTooltipPanel;
 		private PictureBox cardtipBox;
@@ -352,6 +353,9 @@ namespace CollectionTracker {
 			printCopyButton = Utils.GenerateButton(new Rectangle(frameCopyButton.Right + PANEL_MARGIN, printCopyPanel.Bottom + PANEL_MARGIN, 130, BUTTON_HEIGHT), "Printcopy");
 			printCopyButton.Click += CopyPrintID;
 			contentPanel.Controls.Add(printCopyButton);
+			replaceCopyButton = Utils.GenerateButton(new Rectangle(frameCopyButton.Right + PANEL_MARGIN, printCopyButton.Bottom + PANEL_MARGIN, 130, BUTTON_HEIGHT), "Replace Copies");
+			replaceCopyButton.Click += ReplaceCopies;
+			contentPanel.Controls.Add(replaceCopyButton);
 
 			//Bottom right object for forcing autoscroll height
 			bottomRight = Utils.GenerateTrackerPanel(new Rectangle(printPanel.Right + PANEL_MARGIN - 1, 0, 1, 1));
@@ -424,6 +428,17 @@ namespace CollectionTracker {
 		private void CopyArtID(object sender, EventArgs e) => CopyID("artcopy");
 		private void CopyFrameID(object sender, EventArgs e) => CopyID("framecopy");
 		private void CopyPrintID(object sender, EventArgs e) => CopyID("printcopy");
+		private void ReplaceCopies(object sender, EventArgs e) {
+			if (printing.TryGetField("cn", out string cn)) {
+				string copy;
+				foreach (Printing print in TrackerForm.Catalog.Printings.Where(p => p.TryGetField("artcopy", out copy) && copy.Equals(cn)))
+					print.Fields["artcopy"] = Clipboard.GetText();
+				foreach (Printing print in TrackerForm.Catalog.Printings.Where(p => p.TryGetField("framecopy", out copy) && copy.Equals(cn)))
+					print.Fields["framecopy"] = Clipboard.GetText();
+				foreach (Printing print in TrackerForm.Catalog.Printings.Where(p => p.TryGetField("printcopy", out copy) && copy.Equals(cn)))
+					print.Fields["printcopy"] = Clipboard.GetText();
+			}
+		}
 		private void CopyID(string field) {
 			if (printing.HasField(field))
 				printing.Fields[field] = Clipboard.GetText();
@@ -673,6 +688,7 @@ namespace CollectionTracker {
 			artCopyButton.Top = panelY;
 			frameCopyButton.Top = panelY;
 			printCopyButton.Top = panelY;
+			replaceCopyButton.Top = printCopyButton.Bottom + PANEL_MARGIN;
 
 			//Set bottom right
 			bottomRight.Top = panelY + cardtipBox.Height;
