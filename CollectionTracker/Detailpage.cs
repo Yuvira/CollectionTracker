@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -294,7 +295,7 @@ namespace CollectionTracker {
 			imgBox = Utils.GeneratePictureBox(new Rectangle(5, 5, IMAGE_WIDTH, IMAGE_HEIGHT));
 			imgBox.MouseMove += OnHoverImage;
 			imgBox.MouseLeave += OnLeaveImage;
-			imgBox.MouseClick += OnClickImage;
+			imgBox.MouseUp += OnClickImage;
 			contentPanel.Controls.Add(imgBox);
 
 			//Edit card
@@ -564,6 +565,8 @@ namespace CollectionTracker {
 				if (Utils.CardURLs.ContainsKey(TrackerForm.Catalog.Game))
 					Process.Start(Utils.CardURLs[TrackerForm.Catalog.Game] + printid);
 			}
+			else if (e.Button == MouseButtons.Middle && printing.ImagePaths.Count > imgIndex)
+				Process.Start(Path.GetFullPath(printing.ImagePaths[imgIndex]));
 		}
 
 		#endregion
