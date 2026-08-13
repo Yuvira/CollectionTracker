@@ -199,8 +199,8 @@ namespace CollectionTracker {
 
 		//Evaluate search expression on printing
 		private static bool EvaluateExpression(SearchExpression expression, Printing print) {
-			if (fieldShortcuts.ContainsKey(expression.Field) && print.TryGetField(fieldShortcuts[expression.Field], out string field))
-				return EvaluateExpression(field, expression.Operation, expression.Value);
+			else if (fieldShortcuts.ContainsKey(expression.Field) && print.TryGetField(fieldShortcuts[expression.Field], out string value))
+				return EvaluateExpression(value.CleanFormatMarkers(), expression.Operation, expression.Value);
 			else if (expression.Field.Equals("s") || expression.Field.Equals("set"))
 				return EvaluateExpression(print.Set.Code, expression.Operation, expression.Value);
 			else if (expression.Field.Equals("l") || expression.Field.Equals("loc") || expression.Field.Equals("location"))
@@ -214,15 +214,15 @@ namespace CollectionTracker {
 		}
 
 		//Evaluate strings with operation
-		private static bool EvaluateExpression(string field, string op, string value) {
+		private static bool EvaluateExpression(string left, string op, string right) {
 			if (op.Equals(":"))
-				return SearchableString(field).Contains(SearchableString(value));
+				return SearchableString(left).Contains(SearchableString(right));
 			if (op.Equals("!:"))
-				return !SearchableString(field).Contains(SearchableString(value));
+				return !SearchableString(left).Contains(SearchableString(right));
 			if (op.Equals("="))
-				return SearchableString(field).Equals(SearchableString(value));
+				return SearchableString(left).Equals(SearchableString(right));
 			if (op.Equals("!="))
-				return !SearchableString(field).Equals(SearchableString(value));
+				return !SearchableString(left).Equals(SearchableString(right));
 			return false;
 		}
 
