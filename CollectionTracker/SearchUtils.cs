@@ -201,6 +201,8 @@ namespace CollectionTracker {
 		private static bool EvaluateExpression(SearchExpression expression, Printing print) {
 			else if (fieldShortcuts.ContainsKey(expression.Field) && print.TryGetField(fieldShortcuts[expression.Field], out string value))
 				return EvaluateExpression(value.CleanFormatMarkers(), expression.Operation, expression.Value);
+			else if (expression.Field.Equals("fo") || expression.Field.Equals("fulloracle"))
+				return EvaluateExpression(print.GetField("oracle"), expression.Operation, expression.Value);
 			else if (expression.Field.Equals("s") || expression.Field.Equals("set"))
 				return EvaluateExpression(print.Set.Code, expression.Operation, expression.Value);
 			else if (expression.Field.Equals("l") || expression.Field.Equals("loc") || expression.Field.Equals("location"))
