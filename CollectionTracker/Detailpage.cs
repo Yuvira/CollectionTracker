@@ -766,8 +766,8 @@ namespace CollectionTracker {
 				int idx = TrackerForm.Instance.FilteredPrints.IndexOf(printing);
 				prevListPrint = TrackerForm.Instance.FilteredPrints[idx == 0 ? TrackerForm.Instance.FilteredPrints.Count - 1 : idx - 1];
 				nextListPrint = TrackerForm.Instance.FilteredPrints[(idx + 1) % TrackerForm.Instance.FilteredPrints.Count];
-				navButtonLeft.Text = prevListPrint.GetField("name").Replace("&", "&&");
-				navButtonRight.Text = nextListPrint.GetField("name").Replace("&", "&&");
+				navButtonLeft.Text = prevListPrint.GetField("name").Replace("&", "&&").CleanFormatMarkers();
+				navButtonRight.Text = nextListPrint.GetField("name").Replace("&", "&&").CleanFormatMarkers();
 				string str = $"{idx + 1} of {TrackerForm.Instance.FilteredPrints.Count}";
 				indexLabel.Text = str;
 				indexLabel.Width = Utils.MeasureWidth(str);
