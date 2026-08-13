@@ -123,17 +123,23 @@ namespace CollectionTracker {
 		public class SearchLink {
 
 			//Properties
+			private Detailpage parent;
 			private Control control;
 			private string searchString;
 
 			//Constructor
-			public SearchLink(Control control, string searchString) {
+			public SearchLink(Detailpage parent, Control control, string searchString) {
+				this.parent = parent;
 				this.control = control;
 				this.searchString = searchString;
 				this.control.Click += Search;
+				this.control.MouseEnter += ShowSearchtip;
+				this.control.MouseLeave += HideSearchtip;
 			}
 
 			//Search function
+			private void ShowSearchtip(object sender, EventArgs e) => parent.ShowSearchtip(control, searchString);
+			private void HideSearchtip(object sender, EventArgs e) => parent.HideSearchtip();
 			private void Search(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Printlist>(searchTerms: searchString);
 
 		}
@@ -204,6 +210,7 @@ namespace CollectionTracker {
 		private Button replaceCopyButton;
 		private Panel tooltipPanel;
 		private Panel nestedTooltipPanel;
+		private Label searchTip;
 		private PictureBox cardtipBox;
 		private PictureBox cardtipBox2;
 		private TrackerPanel bottomRight;
@@ -282,12 +289,15 @@ namespace CollectionTracker {
 			tooltipPanel.Hide();
 			nestedTooltipPanel = Utils.GeneratePanel(new Rectangle(0, 0, TOOLTIP_WIDTH, TEXT_HEIGHT));
 			nestedTooltipPanel.Hide();
+			searchTip = Utils.GenerateLabel(new Rectangle(0, 0, 0, TEXT_HEIGHT), "");
+			searchTip.Hide();
 			cardtipBox = Utils.GeneratePictureBox(new Rectangle(0, 0, CARDTIP_WIDTH, CARDTIP_HEIGHT));
 			cardtipBox.Hide();
 			cardtipBox2 = Utils.GeneratePictureBox(new Rectangle(0, 0, CARDTIP_WIDTH, CARDTIP_HEIGHT));
 			cardtipBox2.Hide();
 			contentPanel.Controls.Add(tooltipPanel);
 			contentPanel.Controls.Add(nestedTooltipPanel);
+			contentPanel.Controls.Add(searchTip);
 			contentPanel.Controls.Add(cardtipBox);
 			contentPanel.Controls.Add(cardtipBox2);
 
@@ -1642,6 +1652,16 @@ namespace CollectionTracker {
 			ttPanel.Height = height + TOP_PAD + BOTTOM_PAD;
 		}
 
+		//Show searchtip text
+		public void ShowSearchtip(Control control, string text) {
+			searchTip.Width = Utils.MeasureWidth(text);
+			searchTip.Text = text.Replace("&", "&&");
+			searchTip.Left = control.Left + ((control.Width - searchTip.Width) / 2) + control.Parent.Left;
+			searchTip.Top = control.Top - (searchTip.Height + PANEL_MARGIN) + control.Parent.Top;
+			searchTip.Show();
+			searchTip.BringToFront();
+		}
+
 		//Show tooltip window relative to given control with given text
 		public void ShowCardtip(Control control, string printid, bool showAllSides = false) {
 
@@ -1741,6 +1761,7 @@ namespace CollectionTracker {
 			tooltipPanel.Hide();
 			nestedTooltipPanel.Hide();
 		}
+		public void HideSearchtip() => searchTip.Hide();
 		public void HideCardtip() {
 			cardtipBox.Hide();
 			cardtipBox2.Hide();
@@ -1817,7 +1838,7 @@ namespace CollectionTracker {
 				if (settings.printid != null)
 					parent.Cardtips.Add(new Cardtip(parent, label, settings.printid, settings.nestedTooltip != null ? 2 : (settings.tooltip != null ? 1 : 0)));
 				else if (settings.searchString != null)
-					parent.SearchLinks.Add(new SearchLink(label, settings.searchString));
+					parent.SearchLinks.Add(new SearchLink(parent, label, settings.searchString));
 
 				//Dotted underline for tooltips
 				if (settings.tooltip != null) {
