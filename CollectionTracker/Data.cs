@@ -422,6 +422,9 @@ namespace CollectionTracker {
 		public bool IsOwned => OwnedCount > 0;
 		public int OwnedCount => treatments.Sum(t => t.OwnedCount);
 		public List<string> ImagePaths => imagePaths;
+		public string ArtID => GetField("artid");
+		public string FrameID => GetField("artid") + GetField("frame") + GetField("effects") + GetField("watermark") + GetField("marker") + GetField("indicator");
+		public string PrintID => FrameID + (set != null ? set.Code : "");
 
 		//Constructor
 		public Printing() : this(null, null) { }
@@ -575,7 +578,7 @@ namespace CollectionTracker {
 
 		#endregion
 
-		#region Utils
+		#region Sorting
 
 		//Comparers
 		public static int SortNewest(Printing print1, Printing print2) {
@@ -594,6 +597,16 @@ namespace CollectionTracker {
 			int compare = SortDateNewest(print1, print2);
 			if (compare != 0)
 				return -compare;
+			return print1.GetField("cn").CompareTo(print2.GetField("cn"));
+		}
+		public static int SortPreferred(Printing print1, Printing print2) {
+			int compare = SortDateNewest(print1, print2);
+			if (compare != 0)
+				return -compare;
+			int idx1 = Utils.PrefFrames.IndexOf(print1.GetField("frame"));
+			int idx2 = Utils.PrefFrames.IndexOf(print2.GetField("frame"));
+			if (idx1 != idx2)
+				return (idx1 < 0 ? Utils.PrefFrames.Count : idx1).CompareTo(idx2 < 0 ? Utils.PrefFrames.Count : idx2);
 			return print1.GetField("cn").CompareTo(print2.GetField("cn"));
 		}
 		public static int SortAlphabetical(Printing print1, Printing print2) =>

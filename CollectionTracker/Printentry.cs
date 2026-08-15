@@ -240,9 +240,16 @@ namespace CollectionTracker {
 
 		//Add RAF
 		private void AddRAF(object sender, EventArgs e) {
-			fields.AddRow(new FieldEntry("rarity", ""));
-			fields.AddRow(new FieldEntry("artist", ""));
-			fields.AddRow(new FieldEntry("flavor", ""));
+			if (!fields.Entries.Select(fe => fe.Field).Contains("artid"))
+				fields.AddRow(new FieldEntry("artid", ""));
+			if (!fields.Entries.Select(fe => fe.Field).Contains("rarity"))
+				fields.AddRow(new FieldEntry("rarity", ""));
+			if (!fields.Entries.Select(fe => fe.Field).Contains("artist"))
+				fields.AddRow(new FieldEntry("artist", ""));
+			if (!fields.Entries.Select(fe => fe.Field).Contains("flavor"))
+				fields.AddRow(new FieldEntry("flavor", ""));
+			if (!fields.Entries.Select(fe => fe.Field).Contains("frame"))
+				fields.AddRow(new FieldEntry("frame", ""));
 		}
 
 		//Copy RAF
@@ -251,6 +258,10 @@ namespace CollectionTracker {
 				if (entry.Field.Equals("printcopy") || entry.Field.Equals("framecopy") || entry.Field.Equals("artcopy")) {
 					Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(entry.Value));
 					if (print != null) {
+						if (print.TryGetField("artid", out string artid)) {
+							fields.AddRow(new FieldEntry("artid", artid));
+							fields.MoveRow(entry, 1);
+						}
 						if (print.TryGetField("rarity", out string rarity)) {
 							fields.AddRow(new FieldEntry("rarity", rarity));
 							fields.MoveRow(entry, 1);
@@ -265,6 +276,10 @@ namespace CollectionTracker {
 						}
 						if (print.TryGetField("flavor", out string flavor)) {
 							fields.AddRow(new FieldEntry("flavor", flavor));
+							fields.MoveRow(entry, 1);
+						}
+						if (!fields.Entries.Select(fe => fe.Field).Contains("frame")) {
+							fields.AddRow(new FieldEntry("frame", ""));
 							fields.MoveRow(entry, 1);
 						}
 						break;

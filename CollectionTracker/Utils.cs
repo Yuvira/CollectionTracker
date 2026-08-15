@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -152,6 +153,7 @@ namespace CollectionTracker {
 		public static readonly Font FONT_BOLD = new Font(FONT_DEFAULT, FontStyle.Bold);
 		public static readonly Font FONT_ITALIC = new Font(FONT_DEFAULT, FontStyle.Italic);
 		public static readonly Font FONT_UNDERLINE = new Font(FONT_DEFAULT, FontStyle.Underline);
+		public static readonly Font FONT_MONOSPACE = new Font("Courier New", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
 
 		//Brush references
 		public static readonly SolidBrush BRUSH_BACK = new SolidBrush(THEME.BackColor);
@@ -239,6 +241,10 @@ namespace CollectionTracker {
 			"attribute",
 			"property",
 			"layout",
+			"frame",
+			"effects",
+			"watermark",
+			"marker",
 		};
 
 		//Fields that can be kept on list regeneration
@@ -266,6 +272,14 @@ namespace CollectionTracker {
 			"’",
 			"“",
 			"”",
+		};
+
+		//Order of preferred frames for default printings
+		public static readonly List<string> PrefFrames = new List<string> {
+			"2015",
+			"2003",
+			"1997",
+			"1993",
 		};
 
 		#endregion
@@ -664,6 +678,24 @@ namespace CollectionTracker {
 		}
 
 		#endregion
+
+		//Insert into dictionary at position
+		public static Dictionary<string, string> InsertAt(this Dictionary<string, string> dict, int idx, string key, string value) {
+			if (idx >= dict.Count) {
+				dict.Add(key, value);
+				return dict;
+			}
+			if (idx < 0)
+				idx = 0;
+			Dictionary<string, string> temp = dict.ToDictionary(e => e.Key, e => e.Value);
+			dict.Clear();
+			for (int i = 0; i < temp.Count; ++i) {
+				if (i == idx)
+					dict.Add(key, value);
+				dict.Add(temp.Keys.ToArray()[i], temp.Values.ToArray()[i]);
+			}
+			return dict;
+		}
 
 	}
 
