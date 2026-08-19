@@ -252,6 +252,9 @@ namespace CollectionTracker {
 		private Label printCopyHeader;
 		private Button newArtIDButton;
 		private Button highArtIDButton;
+		private TextBox setIDBox;
+		private Button setIDButton;
+		private Button miscIDButton;
 		private Panel tooltipPanel;
 		private Panel nestedTooltipPanel;
 		private Label searchTip;
@@ -415,6 +418,14 @@ namespace CollectionTracker {
 			highArtIDButton = Utils.GenerateButton(new Rectangle(1068, printCopyPanel.Bottom + PANEL_MARGIN, 197, BUTTON_HEIGHT), "Highest Art ID");
 			highArtIDButton.Click += HighArtID;
 			contentPanel.Controls.Add(highArtIDButton);
+			setIDBox = Utils.GenerateTextBox(new Rectangle(865, newArtIDButton.Bottom + PANEL_MARGIN, 130, BUTTON_HEIGHT), "");
+			contentPanel.Controls.Add(setIDBox);
+			setIDButton = Utils.GenerateButton(new Rectangle(1000, setIDBox.Bottom, 130, BUTTON_HEIGHT), "Set Art ID");
+			setIDButton.Click += SetArtID;
+			contentPanel.Controls.Add(setIDButton);
+			miscIDButton = Utils.GenerateButton(new Rectangle(1135, setIDBox.Bottom, 130, BUTTON_HEIGHT), "Misc. ID");
+			miscIDButton.Click += MiscArtID;
+			contentPanel.Controls.Add(miscIDButton);
 
 			//Debug data
 			debugLabel = Utils.GenerateLabel(new Rectangle(imgBox.Left, newCardButton.Bottom + PANEL_MARGIN, imgBox.Width, TEXT_HEIGHT * 6), "", Utils.FONT_MONOSPACE);
@@ -516,6 +527,15 @@ namespace CollectionTracker {
 		}
 		private void NewArtID(object sender, EventArgs e) => AddArtID(listPrints.Select(p => int.TryParse(p.GetField("artid"), out int i) ? i : -1).Max() + 1);
 		private void HighArtID(object sender, EventArgs e) => AddArtID(listPrints.Select(p => int.TryParse(p.GetField("artid"), out int i) ? i : 0).Max());
+		private void SetArtID(object sender, EventArgs e) => AddArtID(int.TryParse(setIDBox.Text, out int id) ? id : 0);
+		private void MiscArtID(object sender, EventArgs e) {
+			AddArtID(0);
+			if (printing.HasField("frame"))
+				printing.Fields["frame"] = "Misc.";
+			else
+				printing.Fields.Add("frame", "Misc.");
+			UpdateDebug();
+		}
 		private void AddArtID(int id) {
 			if (printing.HasField("artid"))
 				printing.Fields["artid"] = id.ToString();
@@ -737,6 +757,9 @@ namespace CollectionTracker {
 			//Position buttons
 			newArtIDButton.Top = panelY;
 			highArtIDButton.Top = panelY;
+			setIDBox.Top = newArtIDButton.Bottom + PANEL_MARGIN;
+			setIDButton.Top = setIDBox.Top;
+			miscIDButton.Top = setIDBox.Top;
 
 			//Set bottom right
 			bottomRight.Top = panelY + cardtipBox.Height;
