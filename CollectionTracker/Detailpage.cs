@@ -241,6 +241,7 @@ namespace CollectionTracker {
 		private Button navButtonRight;
 		private Button refButtonBack;
 		private Button refButtonForward;
+		private Button setFrameWatermark;
 		private ComboBox filterBox;
 		private Label filterLabel;
 		private CheckBox sharedSetBox;
@@ -262,7 +263,11 @@ namespace CollectionTracker {
 		private Button highArtIDButton;
 		private TextBox setIDBox;
 		private Button setIDButton;
+		private Button setAllIDButton;
 		private Button miscIDButton;
+		private Button copyRAFButton;
+		private Button copyRAButton;
+		private Button pasteFlavorButton;
 		private Panel tooltipPanel;
 		private Panel nestedTooltipPanel;
 		private Label searchTip;
@@ -324,6 +329,11 @@ namespace CollectionTracker {
 			refButtonForward = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, BUTTON_HEIGHT, BUTTON_HEIGHT), ">");
 			refButtonForward.Anchor = AnchorStyles.Top;
 			refButtonForward.Click += RefForward;
+
+			//Frame and watermark shortcut
+			setFrameWatermark = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, NAV_WIDTH, BUTTON_HEIGHT), "Frame/Watermark");
+			setFrameWatermark.Anchor = AnchorStyles.Top;
+			setFrameWatermark.Click += SetFrameWatermark;
 
 			//Filter box
 			filterBox = Utils.GenerateComboBox(new Rectangle(0, PANEL_MARGIN, FILTER_WIDTH, BUTTON_HEIGHT), ComboBoxStyle.DropDownList, false);
@@ -431,14 +441,28 @@ namespace CollectionTracker {
 			highArtIDButton = Utils.GenerateButton(new Rectangle(1068, printCopyPanel.Bottom + PANEL_MARGIN, 197, BUTTON_HEIGHT), "Highest Art ID");
 			highArtIDButton.Click += HighArtID;
 			contentPanel.Controls.Add(highArtIDButton);
-			setIDBox = Utils.GenerateTextBox(new Rectangle(865, newArtIDButton.Bottom + PANEL_MARGIN, 130, BUTTON_HEIGHT), "");
+			setIDBox = Utils.GenerateTextBox(new Rectangle(865, newArtIDButton.Bottom + PANEL_MARGIN, 97, BUTTON_HEIGHT), "");
 			contentPanel.Controls.Add(setIDBox);
-			setIDButton = Utils.GenerateButton(new Rectangle(1000, setIDBox.Bottom, 130, BUTTON_HEIGHT), "Set Art ID");
+			setIDButton = Utils.GenerateButton(new Rectangle(966, setIDBox.Top, 97, BUTTON_HEIGHT), "Set Art ID");
 			setIDButton.Click += SetArtID;
 			contentPanel.Controls.Add(setIDButton);
-			miscIDButton = Utils.GenerateButton(new Rectangle(1135, setIDBox.Bottom, 130, BUTTON_HEIGHT), "Misc. ID");
+			setAllIDButton = Utils.GenerateButton(new Rectangle(1067, setIDBox.Top, 97, BUTTON_HEIGHT), "Set All ID");
+			setAllIDButton.Click += SetAllArtID;
+			contentPanel.Controls.Add(setAllIDButton);
+			miscIDButton = Utils.GenerateButton(new Rectangle(1168, setIDBox.Top, 97, BUTTON_HEIGHT), "Misc. ID");
 			miscIDButton.Click += MiscArtID;
 			contentPanel.Controls.Add(miscIDButton);
+
+			//Print data copier
+			copyRAFButton = Utils.GenerateButton(new Rectangle(865, setIDBox.Bottom + PANEL_MARGIN, 400, BUTTON_HEIGHT), "Copy RAF");
+			copyRAFButton.Click += CopyRAF;
+			contentPanel.Controls.Add(copyRAFButton);
+			copyRAButton = Utils.GenerateButton(new Rectangle(865, copyRAFButton.Bottom + PANEL_MARGIN, 195, BUTTON_HEIGHT), "Copy Rarity/Artist");
+			copyRAButton.Click += CopyRarityArtist;
+			contentPanel.Controls.Add(copyRAButton);
+			pasteFlavorButton = Utils.GenerateButton(new Rectangle(1067, copyRAFButton.Bottom + PANEL_MARGIN, 198, BUTTON_HEIGHT), "Paste Flavor");
+			pasteFlavorButton.Click += PasteFlavor;
+			contentPanel.Controls.Add(pasteFlavorButton);
 
 			//Debug data
 			debugLabel = Utils.GenerateLabel(new Rectangle(imgBox.Left, newCardButton.Bottom + PANEL_MARGIN, imgBox.Width * 3, TEXT_HEIGHT * 6), "", Utils.FONT_MONOSPACE);
@@ -466,6 +490,7 @@ namespace CollectionTracker {
 			panel.Controls.Add(navButtonRight);
 			panel.Controls.Add(refButtonBack);
 			panel.Controls.Add(refButtonForward);
+			panel.Controls.Add(setFrameWatermark);
 			panel.Controls.Add(filterBox);
 			panel.Controls.Add(sharedSetBox);
 			panel.Controls.Add(filterLabel);
@@ -544,6 +569,18 @@ namespace CollectionTracker {
 		private void NewArtID(object sender, EventArgs e) => AddArtID(listPrints.Select(p => int.TryParse(p.GetField("artid"), out int i) ? i : -1).Max() + 1);
 		private void HighArtID(object sender, EventArgs e) => AddArtID(listPrints.Select(p => int.TryParse(p.GetField("artid"), out int i) ? i : 0).Max());
 		private void SetArtID(object sender, EventArgs e) => AddArtID(int.TryParse(setIDBox.Text, out int id) ? id : 0);
+		private void SetAllArtID(object sender, EventArgs e) {
+			if (!int.TryParse(setIDBox.Text, out int id))
+				id = 0;
+			List<Printing> prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && p.GetField("artid").Equals(printing.GetField("artid"))).ToList();
+			foreach (Printing print in prints) {
+				if (print.HasField("artid"))
+					print.Fields["artid"] = id.ToString();
+				else
+					print.Fields.InsertAt(2, "artid", id.ToString());
+			}
+			UpdateDebug();
+		}
 		private void MiscArtID(object sender, EventArgs e) {
 			AddArtID(0);
 			if (printing.HasField("frame"))
@@ -559,12 +596,83 @@ namespace CollectionTracker {
 				printing.Fields.InsertAt(2, "artid", id.ToString());
 			UpdateDebug();
 		}
+		private void CopyRAF(object sender, EventArgs e) {
+			Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(Clipboard.GetText()));
+			if (print != null) {
+				if (print.TryGetField("rarity", out string rarity)) {
+					if (printing.HasField("rarity"))
+						printing.Fields["rarity"] = rarity;
+					else
+						printing.Fields.Add("rarity", rarity);
+				}
+				if (print.TryGetField("artist", out string artist)) {
+					if (printing.HasField("artist"))
+						printing.Fields["artist"] = artist;
+					else
+						printing.Fields.Add("artist", artist);
+				}
+				if (print.TryGetField("displayartist", out string displayartist)) {
+					if (printing.HasField("displayartist"))
+						printing.Fields["displayartist"] = displayartist;
+					else
+						printing.Fields.Add("displayartist", displayartist);
+				}
+				if (print.TryGetField("flavor", out string flavor)) {
+					if (printing.HasField("flavor"))
+						printing.Fields["flavor"] = flavor;
+					else
+						printing.Fields.Add("flavor", flavor);
+				}
+				UpdateDebug();
+				UpdateView();
+			}
+		}
+		private void CopyRarityArtist(object sender, EventArgs e) {
+			Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(Clipboard.GetText()));
+			if (print != null) {
+				if (print.TryGetField("rarity", out string rarity)) {
+					if (printing.HasField("rarity"))
+						printing.Fields["rarity"] = rarity;
+					else
+						printing.Fields.Add("rarity", rarity);
+				}
+				if (print.TryGetField("artist", out string artist)) {
+					if (printing.HasField("artist"))
+						printing.Fields["artist"] = artist;
+					else
+						printing.Fields.Add("artist", artist);
+				}
+				if (print.TryGetField("displayartist", out string displayartist)) {
+					if (printing.HasField("displayartist"))
+						printing.Fields["displayartist"] = displayartist;
+					else
+						printing.Fields.Add("displayartist", displayartist);
+				}
+				UpdateDebug();
+				UpdateView();
+			}
+		}
+		private void PasteFlavor(object sender, EventArgs e) {
+			if (printing.HasField("flavor"))
+				printing.Fields["flavor"] = Clipboard.GetText();
+			else
+				printing.Fields.Add("flavor", Clipboard.GetText());
+			UpdateDebug();
+			UpdateView();
+		}
 		private void AddTreatments(object sender, EventArgs e) {
 			if (!string.IsNullOrWhiteSpace(newTreatmentBox1.Text) && !printing.Treatments.Select(t => t.Name).Contains(newTreatmentBox1.Text))
 				printing.Treatments.Add(new Treatment(newTreatmentBox1.Text));
 			if (!string.IsNullOrWhiteSpace(newTreatmentBox2.Text) && !printing.Treatments.Select(t => t.Name).Contains(newTreatmentBox2.Text))
 				printing.Treatments.Add(new Treatment(newTreatmentBox2.Text));
 			UpdateView();
+		}
+
+		//Set fields
+		private void SetFrameWatermark(object sender, EventArgs e) {
+			frameField.AddField();
+			watermarkField.AddField();
+			UpdateDebug();
 		}
 
 		//Refresh debug fields
@@ -586,6 +694,7 @@ namespace CollectionTracker {
 			navButtonRight.Left = contentPanel.Right - NAV_WIDTH;
 			refButtonBack.Left = navButtonLeft.Right + PANEL_MARGIN;
 			refButtonForward.Left = refButtonBack.Right + PANEL_MARGIN;
+			setFrameWatermark.Left = refButtonForward.Right + PANEL_MARGIN;
 			filterBox.Left = navButtonRight.Left - (FILTER_WIDTH + PANEL_MARGIN);
 			filterLabel.Left = filterBox.Left - (filterLabel.Width + PANEL_MARGIN);
 			sharedSetBox.Left = filterLabel.Left - (sharedSetBox.Width + PANEL_MARGIN);
@@ -784,7 +893,11 @@ namespace CollectionTracker {
 			highArtIDButton.Top = panelY;
 			setIDBox.Top = newArtIDButton.Bottom + PANEL_MARGIN;
 			setIDButton.Top = setIDBox.Top;
+			setAllIDButton.Top = setIDBox.Top;
 			miscIDButton.Top = setIDBox.Top;
+			copyRAFButton.Top = panelY + 70;
+			copyRAButton.Top = panelY + 105;
+			pasteFlavorButton.Top = panelY + 105;
 
 			//Set bottom right
 			bottomRight.Top = panelY + cardtipBox.Height;
