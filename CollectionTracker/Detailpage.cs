@@ -588,6 +588,7 @@ namespace CollectionTracker {
 			else
 				printing.Fields.Add("frame", "Misc.");
 			UpdateDebug();
+			NavRight(null, null);
 		}
 		private void AddArtID(int id) {
 			if (printing.HasField("artid"))
