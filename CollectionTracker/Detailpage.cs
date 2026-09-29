@@ -173,16 +173,24 @@ namespace CollectionTracker {
 			}
 
 			//Add to printing
-			private void AddField(object sender, EventArgs e) {
-				if (parent.Printing.HasField(field))
-					parent.Printing.Fields[field] = box.Text;
-				else
-					parent.Printing.Fields.Add(field, box.Text);
+			private void AddField(object sender, EventArgs e) => AddField();
+			public void AddField() {
+				if (string.IsNullOrEmpty(box.Text)) {
+					if (parent.Printing.HasField(field))
+						parent.Printing.Fields.Remove(field);
+				}
+				else {
+					if (parent.Printing.HasField(field))
+						parent.Printing.Fields[field] = box.Text;
+					else
+						parent.Printing.Fields.Add(field, box.Text);
+				}
 				parent.UpdateDebug();
 			}
 
 			//Refresh values
-			private void Refresh(object sender, EventArgs e) {
+			private void Refresh(object sender, EventArgs e) => Refresh();
+			public void Refresh() {
 				box.Items.Clear();
 				box.Items.AddRange(TrackerForm.Catalog.Printings.Select(p => p.GetField(field)).SelectMany(f => Utils.SplitString(f, " // ")).Distinct().ToArray());
 			}
