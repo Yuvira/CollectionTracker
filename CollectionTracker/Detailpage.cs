@@ -264,6 +264,11 @@ namespace CollectionTracker {
 
 		//Frame debug controls
 		private Label debugLabel;
+		private FieldAdder frameField;
+		private FieldAdder effectsField;
+		private FieldAdder watermarkField;
+		private FieldAdder markerField;
+		private FieldAdder indicatorField;
 
 		//Filter index
 		private static int FilterIndex = 0;
@@ -428,18 +433,21 @@ namespace CollectionTracker {
 			contentPanel.Controls.Add(miscIDButton);
 
 			//Debug data
-			debugLabel = Utils.GenerateLabel(new Rectangle(imgBox.Left, newCardButton.Bottom + PANEL_MARGIN, imgBox.Width, TEXT_HEIGHT * 6), "", Utils.FONT_MONOSPACE);
+			debugLabel = Utils.GenerateLabel(new Rectangle(imgBox.Left, newCardButton.Bottom + PANEL_MARGIN, imgBox.Width * 3, TEXT_HEIGHT * 6), "", Utils.FONT_MONOSPACE);
 			contentPanel.Controls.Add(debugLabel);
-			FieldAdder frameField = new FieldAdder(this, "frame", debugLabel.Bottom + 5);
+			frameField = new FieldAdder(this, "frame", debugLabel.Bottom + 5);
 			contentPanel.Controls.AddRange(frameField.Controls.ToArray());
-			FieldAdder effectsField = new FieldAdder(this, "effects", debugLabel.Bottom + 40);
+			effectsField = new FieldAdder(this, "effects", debugLabel.Bottom + 40);
 			contentPanel.Controls.AddRange(effectsField.Controls.ToArray());
-			FieldAdder watermarkField = new FieldAdder(this, "watermark", debugLabel.Bottom + 75);
+			watermarkField = new FieldAdder(this, "watermark", debugLabel.Bottom + 75);
 			contentPanel.Controls.AddRange(watermarkField.Controls.ToArray());
-			FieldAdder markerField = new FieldAdder(this, "marker", debugLabel.Bottom + 110);
+			markerField = new FieldAdder(this, "marker", debugLabel.Bottom + 110);
 			contentPanel.Controls.AddRange(markerField.Controls.ToArray());
-			FieldAdder indicatorField = new FieldAdder(this, "indicator", debugLabel.Bottom + 145);
+			indicatorField = new FieldAdder(this, "indicator", debugLabel.Bottom + 145);
 			contentPanel.Controls.AddRange(indicatorField.Controls.ToArray());
+			Button refreshFields = Utils.GenerateButton(new Rectangle(imgBox.Left, debugLabel.Bottom + 180, imgBox.Width, BUTTON_HEIGHT), "Refresh All");
+			refreshFields.Click += RefreshFields;
+			contentPanel.Controls.Add(refreshFields);
 
 			//Bottom right object for forcing autoscroll height
 			bottomRight = Utils.GenerateTrackerPanel(new Rectangle(printPanel.Right + PANEL_MARGIN - 1, 0, 1, 1));
@@ -549,6 +557,15 @@ namespace CollectionTracker {
 			if (!string.IsNullOrWhiteSpace(newTreatmentBox2.Text) && !printing.Treatments.Select(t => t.Name).Contains(newTreatmentBox2.Text))
 				printing.Treatments.Add(new Treatment(newTreatmentBox2.Text));
 			UpdateView();
+		}
+
+		//Refresh debug fields
+		private void RefreshFields(object sender, EventArgs e) {
+			frameField.Refresh();
+			effectsField.Refresh();
+			watermarkField.Refresh();
+			markerField.Refresh();
+			indicatorField.Refresh();
 		}
 
 		//Resize event

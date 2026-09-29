@@ -24,6 +24,10 @@ namespace CollectionTracker {
 		private Button returnButton;
 		private Button addRAFButton;
 		private Button copyRAFButton;
+		private Button addEffectsButton;
+		private Button addWatermarkButton;
+		private Button addMarkerButton;
+		private Button addIndicatorButton;
 
 		//Static modified field identifiers
 		public static bool SetsAltered = true;
@@ -82,6 +86,20 @@ namespace CollectionTracker {
 			addRAFButton = Utils.GenerateButton(new Rectangle(copyRAFButton.Left - (100 + PANEL_MARGIN), 70, 100, 30), "Add RAF");
 			addRAFButton.Click += AddRAF;
 			listPanel.Controls.Add(addRAFButton);
+
+			//Fiel adders
+			addIndicatorButton = Utils.GenerateButton(new Rectangle(listPanel.Width - (100 + SCROLL_MARGIN), 105, 100, 30), "Indicator");
+			addIndicatorButton.Click += AddIndicator;
+			listPanel.Controls.Add(addIndicatorButton);
+			addMarkerButton = Utils.GenerateButton(new Rectangle(addIndicatorButton.Left - (100 + PANEL_MARGIN), 105, 100, 30), "Marker");
+			addMarkerButton.Click += AddMarker;
+			listPanel.Controls.Add(addMarkerButton);
+			addWatermarkButton = Utils.GenerateButton(new Rectangle(addMarkerButton.Left - (100 + PANEL_MARGIN), 105, 100, 30), "Watermark");
+			addWatermarkButton.Click += AddWatermark;
+			listPanel.Controls.Add(addWatermarkButton);
+			addEffectsButton = Utils.GenerateButton(new Rectangle(addWatermarkButton.Left - (100 + PANEL_MARGIN), 105, 100, 30), "Effects");
+			addEffectsButton.Click += AddEffects;
+			listPanel.Controls.Add(addEffectsButton);
 
 			//Resume
 			listPanel.ResumeLayout();
@@ -235,6 +253,10 @@ namespace CollectionTracker {
 			returnButton.Location = pos.Add(105, 0);
 			copyRAFButton.Location = pos.Add(listPanel.Width - (100 + SCROLL_MARGIN), 0);
 			addRAFButton.Location = pos.Add(copyRAFButton.Left - (100 + PANEL_MARGIN), 0);
+			addIndicatorButton.Location = pos.Add(listPanel.Width - (100 + SCROLL_MARGIN), 35);
+			addMarkerButton.Location = pos.Add(addIndicatorButton.Left - (100 + PANEL_MARGIN), 35);
+			addWatermarkButton.Location = pos.Add(addMarkerButton.Left - (100 + PANEL_MARGIN), 35);
+			addEffectsButton.Location = pos.Add(addWatermarkButton.Left - (100 + PANEL_MARGIN), 35);
 			listPanel.ResumeLayout();
 		}
 
@@ -286,6 +308,16 @@ namespace CollectionTracker {
 					}
 				}
 			}
+		}
+
+		//Add fields
+		private void AddEffects(object sender, EventArgs e) => AddField("effects");
+		private void AddWatermark(object sender, EventArgs e) => AddField("watermark");
+		private void AddMarker(object sender, EventArgs e) => AddField("marker");
+		private void AddIndicator(object sender, EventArgs e) => AddField("indicator");
+		private void AddField(string field) {
+			if (!fields.Entries.Select(fe => fe.Field).Contains(field))
+				fields.AddRow(new FieldEntry(field, ""));
 		}
 
 		//Save
