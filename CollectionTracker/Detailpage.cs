@@ -709,7 +709,7 @@ namespace CollectionTracker {
 			if (index < 0 || index >= printing.ImagePaths.Count)
 				return;
 			imgIndex = index;
-			if (printing.Card.TryGetBaseOrFaceField("layout", imgIndex, out string mod)) {
+			if (printing.Card.TryGetBaseOrFaceField("orientation", imgIndex, out string mod)) {
 				if (mod.ToLower().Equals("landscape")) {
 					imgRotateType = RotateFlipType.Rotate90FlipNone;
 					imgBox.Size = new Size(IMAGE_ROT_MIN_WIDTH, IMAGE_ROT_MIN_HEIGHT);

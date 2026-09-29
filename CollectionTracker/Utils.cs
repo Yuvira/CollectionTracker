@@ -241,6 +241,7 @@ namespace CollectionTracker {
 			"attribute",
 			"property",
 			"layout",
+			"orientation",
 			"frame",
 			"effects",
 			"watermark",
