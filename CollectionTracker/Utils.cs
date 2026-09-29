@@ -206,7 +206,7 @@ namespace CollectionTracker {
 
 		//Default print fields
 		public static readonly Dictionary<Game, List<string>> DefaultPrintFields = new Dictionary<Game, List<string>> {
-			{ Game.MTG  , new List<string> { "cn", "printid", "rarity", "artist" } },
+			{ Game.MTG  , new List<string> { "cn", "printid", "rarity", "artist", "frame" } },
 			{ Game.YGO  , new List<string> { "cn", "printid" } },
 			{ Game.PKMN , new List<string> { "cn", "printid", "rarity", "artist", "flavor", "regulation" } },
 		};
@@ -253,6 +253,7 @@ namespace CollectionTracker {
 			"printid",
 			"rarity",
 			"regulation",
+			"frame",
 		};
 
 		//Fields that contain multiline text
