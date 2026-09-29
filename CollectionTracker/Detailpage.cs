@@ -18,47 +18,65 @@ namespace CollectionTracker {
 
 			//Properties
 			private Detailpage parent;
+			private Label symbol;
 			private Label label;
-			private string printid;
+			private Printing print;
 			private bool isCurrent;
 
 			//Accessors
+			public Label Symbol => symbol;
 			public Label Label => label;
+			private string PrintID => print != null ? print.GetField("printid") : "???";
 
 			//Constructor
-			public DetailPrintrow(Detailpage parent, string printid, string setname, int yPos, int width, bool isCurrent) {
+			public DetailPrintrow(Detailpage parent, Printing print, int count, int yPos, int width, bool isCurrent) {
 				this.parent = parent;
-				this.printid = printid;
+				this.print = print;
 				this.isCurrent = isCurrent;
+				symbol = Utils.GenerateLabel(
+					new Rectangle(LEFT_PAD, yPos, TEXT_HEIGHT, TEXT_HEIGHT),
+					count > 0 ? count.ToString() : "★",
+					Utils.FONT_DEFAULT,
+					count > 0 ? Utils.THEME.ForeColor : GetRarityColor()
+				);
 				label = Utils.GenerateLabel(
-					new Rectangle(LEFT_PAD, yPos, width, TEXT_HEIGHT),
-					printid.ToUpper() + " - " + setname,
+					new Rectangle(LEFT_PAD + TEXT_HEIGHT, yPos, width - TEXT_HEIGHT, TEXT_HEIGHT),
+					PrintID.ToUpper() + " - " + print.Set.Name,
 					Utils.FONT_UNDERLINE,
 					isCurrent ? Utils.THEME.ForeColor : Utils.THEME.TextSearchLink
 				);
+				symbol.TextAlign = ContentAlignment.MiddleCenter;
 				label.MouseEnter += ShowCardtip;
 				label.MouseLeave += HideCardtip;
 				label.MouseUp += MouseUp;
 			}
 
 			//Update
-			public void UpdatePrintID(string printid, string setname, bool newCurrent) {
-				this.printid = printid;
-				label.Text = (printid.ToUpper() + " - " + setname).Replace("&", "&&");
+			public void UpdatePrintID(Printing print, bool newCurrent, int count) {
+				this.print = print;
+				symbol.Text = count > 0 ? count.ToString() : "★";
+				symbol.ForeColor = count > 0 ? Utils.THEME.ForeColor : GetRarityColor();
+				label.Text = (PrintID.ToUpper() + " - " + print.Set.Name).Replace("&", "&&");
 				label.ForeColor = newCurrent ? Utils.THEME.ForeColor : Utils.THEME.TextSearchLink;
 				isCurrent = newCurrent;
+			}
+
+			//Get rarity from print id
+			private Color GetRarityColor() {
+				string rarity = (print != null ? print.GetField("rarity") : "common").ToLower();
+				return Utils.RarityColors.ContainsKey(rarity) ? Utils.RarityColors[rarity] : Color.Black;
 			}
 
 			//Copy
 			private void MouseUp(object sender, MouseEventArgs e) {
 				if (e.Button == MouseButtons.Right)
-					Clipboard.SetText(printid);
+					Clipboard.SetText(PrintID);
 				if (!isCurrent && (e.Button == MouseButtons.Left ||  e.Button == MouseButtons.Right))
-					parent.LoadCardtip(printid);
+					parent.LoadCardtip(PrintID);
 			}
 
 			//Cardtip functions
-			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(label, printid, true);
+			private void ShowCardtip(object sender, EventArgs e) => parent.ShowCardtip(label, PrintID, true);
 			private void HideCardtip(object sender, EventArgs e) => parent.HideCardtip();
 
 		}
@@ -839,7 +857,7 @@ namespace CollectionTracker {
 					prints = prints.Where(p => p == printing || p.Set != printing.Set).ToList();
 
 				//Display panel
-				panelY += PANEL_MARGIN + UpdatePrintListPanel(prints, ref printRows, printPanel, panelY);
+				panelY += PANEL_MARGIN + UpdatePrintListPanel(prints, ref printRows, printPanel, panelY, !filter.Equals(FILTER_ALL));
 
 				//Get filtered prints
 				if (!filter.Equals(FILTER_ALL)) {
@@ -862,7 +880,7 @@ namespace CollectionTracker {
 
 					//Display panel
 					if (prints.Count > 1)
-						panelY += PANEL_MARGIN + UpdatePrintListPanel(prints, ref printCopyRows, printCopyPanel, panelY);
+						panelY += PANEL_MARGIN + UpdatePrintListPanel(prints, ref printCopyRows, printCopyPanel, panelY, false);
 					printCopyPanel.Visible = prints.Count > 1;
 
 				}
@@ -880,7 +898,9 @@ namespace CollectionTracker {
 			//Hide if invalid card reference
 			else {
 				while (printRows.Count > 0) {
+					panel.Controls.Remove(printRows[0].Symbol);
 					panel.Controls.Remove(printRows[0].Label);
+					printRows[0].Symbol.Dispose();
 					printRows[0].Label.Dispose();
 					printRows.RemoveAt(0);
 				}
@@ -906,30 +926,44 @@ namespace CollectionTracker {
 		}
 
 		//Update print list panel
-		private int UpdatePrintListPanel(List<Printing> prints, ref List<DetailPrintrow> rows, TrackerPanel panel, int posY) {
+		private int UpdatePrintListPanel(List<Printing> prints, ref List<DetailPrintrow> rows, TrackerPanel panel, int posY, bool showCount) {
 
 			//Sort and display
 			prints.Sort(Printing.SortInverseNewest);
+			List<Printing> cardMatches = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card).ToList();
+			int count;
 			for (int i = 0; i < prints.Count; ++i) {
+				count = 0;
+				if (showCount) {
+					if (filterBox.SelectedItem.ToString().Equals(FILTER_ART))
+						count = cardMatches.Count(p => p.ArtID == prints[i].ArtID);
+					else if (filterBox.SelectedItem.ToString().Equals(FILTER_FRAMES))
+						count = cardMatches.Count(p => p.FrameID == prints[i].FrameID);
+					else if (filterBox.SelectedItem.ToString().Equals(FILTER_PRINTS))
+						count = cardMatches.Count(p => p.PrintID == prints[i].PrintID);
+				}
 				if (i < rows.Count)
-					rows[i].UpdatePrintID(prints[i].GetField("printid"), prints[i].Set.Name, prints[i] == printing);
+					rows[i].UpdatePrintID(prints[i], prints[i] == printing, count);
 				else {
 					DetailPrintrow row = new DetailPrintrow(
 						this,
-						prints[i].GetField("printid"),
-						prints[i].Set.Name,
+						prints[i],
+						count,
 						TOP_PAD + ((i + 1) * TEXT_HEIGHT),
 						panel.Width - (LEFT_PAD * 2),
 						prints[i] == printing
 					);
 					rows.Add(row);
+					panel.Controls.Add(row.Symbol);
 					panel.Controls.Add(row.Label);
 				}
 			}
 
 			//Remove unused rows
 			while (prints.Count < rows.Count) {
+				panel.Controls.Remove(rows[rows.Count - 1].Symbol);
 				panel.Controls.Remove(rows[rows.Count - 1].Label);
+				rows[rows.Count - 1].Symbol.Dispose();
 				rows[rows.Count - 1].Label.Dispose();
 				rows.RemoveAt(rows.Count - 1);
 			}

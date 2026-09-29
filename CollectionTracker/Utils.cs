@@ -232,6 +232,14 @@ namespace CollectionTracker {
 			{ "text"  , THEME.ForeColor         },
 		};
 
+		//Rarity colors
+		public static readonly Dictionary<string, Color> RarityColors = new Dictionary<string, Color> {
+			{ "common"      , Color.Black     },
+			{ "uncommon"    , Color.LightGray },
+			{ "rare"        , Color.Gold      },
+			{ "mythic rare" , Color.Orange    },
+		};
+
 		//Fields that can list all values
 		public static readonly List<string> ListableFields = new List<string> {
 			"rarity",
