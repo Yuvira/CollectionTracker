@@ -44,7 +44,7 @@ namespace CollectionTracker {
 				int setCount = setPrints.Count;
 				int setOwned = setPrints.Count(print => print.IsOwned);
 				bool missingCardref = setPrints.Count(print => MissingCardRef(print)) > 0;
-				bool missingPrintData = TrackerForm.Catalog.Game != Game.YGO && setPrints.Count(print => MissingPrintData(print)) > 0;
+				bool missingPrintData = TrackerForm.Catalog.Game != Game.YGO && (setPrints.Count(print => MissingPrintData(print)) > 0 || setPrints.Count(print => MissingFrameData(print)) > 0);
 				bool noCardsWithFolder = setPrints.Count == 0 && Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game) && Directory.Exists(Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code);
 
 				//Panel
@@ -88,7 +88,7 @@ namespace CollectionTracker {
 				if (e.Button == MouseButtons.Right && !string.IsNullOrWhiteSpace(setURL))
 					Process.Start(setURL);
 				else if (e.Button == MouseButtons.Middle) {
-					List<Printing> printlist = TrackerForm.Catalog.Printings.Where(print => print.Set == set && (MissingCardRef(print) || (TrackerForm.Catalog.Game != Game.YGO && MissingPrintData(print)))).ToList();
+					List<Printing> printlist = TrackerForm.Catalog.Printings.Where(print => print.Set == set && (MissingCardRef(print) || (TrackerForm.Catalog.Game != Game.YGO && (MissingPrintData(print) || MissingFrameData(print))))).ToList();
 					if (printlist.Count > 0)
 						parent.FilterByList(printlist);
 				}
@@ -97,6 +97,7 @@ namespace CollectionTracker {
 			//Check if print is missing data
 			private bool MissingCardRef(Printing print) => !print.TryGetField("name", out string name) || name.Equals("_");
 			private bool MissingPrintData(Printing print) => !print.HasField("rarity") && !print.HasField("artist") && print.TryGetField("name", out string name) && !name.Equals("Punchcard") && !print.GetField("type").Equals("Basic Energy") && !print.GetField("type").Equals("Minigame");
+			private bool MissingFrameData(Printing print) => !print.HasField("artid") || !print.HasField("frame");
 
 		}
 
