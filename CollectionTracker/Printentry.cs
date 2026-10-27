@@ -33,6 +33,10 @@ namespace CollectionTracker {
 		public static bool SetsAltered = true;
 		public static bool CardsAltered = true;
 
+		//Static card/set dropdown references
+		public static ComboBox SetBox = null;
+		public static ComboBox CardBox = null;
+
 		//Constructor
 		public Printentry(Printing print) : base() {
 
@@ -49,12 +53,14 @@ namespace CollectionTracker {
 			setBox = Utils.GenerateComboBox(new Rectangle(105, 0, 675, 30), ComboBoxStyle.DropDownList, true);
 			listPanel.Controls.Add(setLabel);
 			listPanel.Controls.Add(setBox);
+			SetBox = setBox;
 
 			//Card
 			Label cardLabel = Utils.GenerateLabel(new Rectangle(0, 35, 100, 30), "Card");
 			cardBox = Utils.GenerateComboBox(new Rectangle(105, 35, 675, 30), ComboBoxStyle.DropDownList, true);
 			listPanel.Controls.Add(cardLabel);
 			listPanel.Controls.Add(cardBox);
+			CardBox = cardBox;
 
 			//Field lists
 			treatments = null;
@@ -212,6 +218,40 @@ namespace CollectionTracker {
 			//Resize
 			OnFieldsResized();
 
+		}
+
+		//Add or remove sets and cards from dropdowns
+		public static void RemoveCard(Card card) {
+			if (CardBox == null || CardsAltered)
+				return;
+			if (!CardBox.Items.Contains(card))
+				MessageBox.Show("Card not contained in list!");
+			else
+				CardBox.Items.Remove(card);
+		}
+		public static void AddCard(Card card) {
+			if (CardBox == null || CardsAltered)
+				return;
+			if (CardBox.Items.Contains(card))
+				MessageBox.Show("Card already in list!");
+			else
+				CardBox.Items.Add(card);
+		}
+		public static void RemoveSet(Set set) {
+			if (SetBox == null || SetsAltered)
+				return;
+			if (!SetBox.Items.Contains(set))
+				MessageBox.Show("Set not contained in list!");
+			else
+				SetBox.Items.Remove(set);
+		}
+		public static void AddSet(Set set) {
+			if (SetBox == null || SetsAltered)
+				return;
+			if (SetBox.Items.Contains(set))
+				MessageBox.Show("Set already in list!");
+			else
+				SetBox.Items.Add(set);
 		}
 
 		//Add face

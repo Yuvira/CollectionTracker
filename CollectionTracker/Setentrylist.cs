@@ -102,8 +102,7 @@ namespace CollectionTracker {
 
 			//Save entry fields
 			private void SaveEntry(object sender, EventArgs e) {
-				if (!set.Name.Equals(nameBox.Text))
-					Printentry.SetsAltered = true;
+				Printentry.RemoveSet(set);
 				set.Copy(new Set(
 					nameBox.Text,
 					codeBox.Text,
@@ -114,6 +113,7 @@ namespace CollectionTracker {
 					(int)dateOrder.Value,
 					prefixBox.Text
 				));
+				Printentry.AddSet(set);
 			}
 
 			//Compare
@@ -190,7 +190,7 @@ namespace CollectionTracker {
 			listPanel.Controls.Remove(entry.Panel);
 			entry.Panel.Dispose();
 			TrackerForm.Catalog.Sets.Remove(set);
-			Printentry.SetsAltered = true;
+			Printentry.RemoveSet(set);
 			for (int i = idx; i < entries.Count; ++i)
 				entries[i].Panel.Top -= height;
 		}
@@ -202,7 +202,7 @@ namespace CollectionTracker {
 			Setentry entry = new Setentry(this, set);
 			entries.Insert(0, entry);
 			listPanel.Controls.Add(entry.Panel);
-			Printentry.SetsAltered = true;
+			Printentry.AddSet(set);
 			Update();
 		}
 

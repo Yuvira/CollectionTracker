@@ -214,10 +214,9 @@ namespace CollectionTracker {
 
 			//Copy to existing card ref
 			if (cardref != null) {
-				string name = printref.GetField("name");
+				Printentry.RemoveCard(cardref);
 				cardref.CopyFields(FieldEntry.GetEntryDict(fields.Entries), faceDicts);
-				if (!printref.GetField("name").Equals(name))
-					Printentry.CardsAltered = true;
+				Printentry.AddCard(cardref);
 			}
 
 			//Generate new card
@@ -225,7 +224,7 @@ namespace CollectionTracker {
 				Card card = new Card();
 				card.CopyFields(FieldEntry.GetEntryDict(fields.Entries), faceDicts);
 				TrackerForm.Catalog.Cards.Add(card);
-				Printentry.CardsAltered = true;
+				Printentry.AddCard(card);
 				if (printref != null)
 					printref.CopyCard(card);
 			}
