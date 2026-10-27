@@ -407,11 +407,6 @@ namespace CollectionTracker {
 			editCardButton.Click += EditCard;
 			contentPanel.Controls.Add(editCardButton);
 
-			//New card
-			Button newCardButton = Utils.GenerateButton(new Rectangle(5, editCardButton.Bottom + PANEL_MARGIN, 100, BUTTON_HEIGHT), "New Card");
-			newCardButton.Click += NewCard;
-			contentPanel.Controls.Add(newCardButton);
-
 			//Edit print
 			Button editPrintButton = Utils.GenerateButton(new Rectangle(editCardButton.Right + PANEL_MARGIN, imgBox.Bottom + PANEL_MARGIN, 100, BUTTON_HEIGHT), "Edit Print");
 			editPrintButton.Click += EditPrint;
@@ -421,6 +416,16 @@ namespace CollectionTracker {
 			rotateImageButton = Utils.GenerateButton(new Rectangle(editPrintButton.Right + PANEL_MARGIN, imgBox.Bottom + PANEL_MARGIN, 100, BUTTON_HEIGHT), "Rotate");
 			rotateImageButton.Click += RotateImage;
 			contentPanel.Controls.Add(rotateImageButton);
+
+			//New card
+			Button newCardButton = Utils.GenerateButton(new Rectangle(5, editCardButton.Bottom + PANEL_MARGIN, 100, BUTTON_HEIGHT), "New Card");
+			newCardButton.Click += NewCard;
+			contentPanel.Controls.Add(newCardButton);
+
+			//Set landscape rotation
+			Button setLandscapeButton = Utils.GenerateButton(new Rectangle(newCardButton.Right + PANEL_MARGIN, editCardButton.Bottom + PANEL_MARGIN, 100, BUTTON_HEIGHT), "Landscape");
+			setLandscapeButton.Click += SetLandscape;
+			contentPanel.Controls.Add(setLandscapeButton);
 
 			//Index
 			indexLabel = Utils.GenerateLabel(new Rectangle(0, 555, 0, TEXT_HEIGHT), "");
@@ -518,6 +523,7 @@ namespace CollectionTracker {
 			//Click event
 			panel.MouseUp += HandleMouseEvent;
 			contentPanel.MouseUp += HandleMouseEvent;
+			debugLabel.MouseUp += HandleMouseEvent;
 
 			//Set printing
 			viewData = true;
@@ -693,6 +699,15 @@ namespace CollectionTracker {
 			frameField.AddField();
 			watermarkField.AddField();
 			UpdateDebug();
+		}
+
+		//Set landscape orientation
+		private void SetLandscape(object sender, EventArgs e) {
+			if (printing.Card.Fields.ContainsKey("orientation"))
+				printing.Card.Fields["orientation"] = "landscape";
+			else
+				printing.Card.Fields.Add("orientation", "landscape");
+			UpdateImage(imgIndex);
 		}
 
 		//Refresh debug fields
