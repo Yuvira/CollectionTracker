@@ -502,7 +502,7 @@ namespace CollectionTracker {
 					idx = str.IndexOfAny(FORMAT_CHARS, idx);
 				else
 					idx = str.IndexOf(formatChar, idx);
-				if (idx <= 0 || str[idx = 1] != '\\')
+				if (idx <= 0 || str[idx - 1] != '\\')
 					return idx;
 				++idx;
 			}
