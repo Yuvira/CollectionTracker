@@ -22,6 +22,7 @@ namespace CollectionTracker {
 		private Button addFaceButton;
 		private Button saveButton;
 		private Button returnButton;
+		private Button autoArtButton;
 		private Button addRAFButton;
 		private Button copyRAFButton;
 		private Button addEffectsButton;
@@ -92,6 +93,11 @@ namespace CollectionTracker {
 			addRAFButton = Utils.GenerateButton(new Rectangle(copyRAFButton.Left - (100 + PANEL_MARGIN), 70, 100, 30), "Add RAF");
 			addRAFButton.Click += AddRAF;
 			listPanel.Controls.Add(addRAFButton);
+
+			//Auto art button
+			autoArtButton = Utils.GenerateButton(new Rectangle(addRAFButton.Left - (100 + PANEL_MARGIN), 70, 100, 30), "Auto Art");
+			autoArtButton.Click += AutoArt;
+			listPanel.Controls.Add(autoArtButton);
 
 			//Fiel adders
 			addIndicatorButton = Utils.GenerateButton(new Rectangle(listPanel.Width - (100 + SCROLL_MARGIN), 105, 100, 30), "Indicator");
@@ -293,71 +299,12 @@ namespace CollectionTracker {
 			returnButton.Location = pos.Add(105, 0);
 			copyRAFButton.Location = pos.Add(listPanel.Width - (100 + SCROLL_MARGIN), 0);
 			addRAFButton.Location = pos.Add(copyRAFButton.Left - (100 + PANEL_MARGIN), 0);
+			autoArtButton.Location = pos.Add(addRAFButton.Left - (100 + PANEL_MARGIN), 0);
 			addIndicatorButton.Location = pos.Add(listPanel.Width - (100 + SCROLL_MARGIN), 35);
 			addMarkerButton.Location = pos.Add(addIndicatorButton.Left - (100 + PANEL_MARGIN), 35);
 			addWatermarkButton.Location = pos.Add(addMarkerButton.Left - (100 + PANEL_MARGIN), 35);
 			addEffectsButton.Location = pos.Add(addWatermarkButton.Left - (100 + PANEL_MARGIN), 35);
 			listPanel.ResumeLayout();
-		}
-
-		//Add RAF
-		private void AddRAF(object sender, EventArgs e) {
-			if (!fields.Entries.Select(fe => fe.Field).Contains("artid"))
-				fields.AddRow(new FieldEntry("artid", ""));
-			if (!fields.Entries.Select(fe => fe.Field).Contains("rarity"))
-				fields.AddRow(new FieldEntry("rarity", ""));
-			if (!fields.Entries.Select(fe => fe.Field).Contains("artist"))
-				fields.AddRow(new FieldEntry("artist", ""));
-			if (!fields.Entries.Select(fe => fe.Field).Contains("flavor"))
-				fields.AddRow(new FieldEntry("flavor", ""));
-			if (!fields.Entries.Select(fe => fe.Field).Contains("frame"))
-				fields.AddRow(new FieldEntry("frame", ""));
-		}
-
-		//Copy RAF
-		private void CopyRAF(object sender, EventArgs e) {
-			foreach (FieldEntry entry in fields.Entries) {
-				if (entry.Field.Equals("printcopy") || entry.Field.Equals("framecopy") || entry.Field.Equals("artcopy")) {
-					Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(entry.Value));
-					if (print != null) {
-						if (print.TryGetField("artid", out string artid)) {
-							fields.AddRow(new FieldEntry("artid", artid));
-							fields.MoveRow(entry, 1);
-						}
-						if (print.TryGetField("rarity", out string rarity)) {
-							fields.AddRow(new FieldEntry("rarity", rarity));
-							fields.MoveRow(entry, 1);
-						}
-						if (print.TryGetField("artist", out string artist)) {
-							fields.AddRow(new FieldEntry("artist", artist));
-							fields.MoveRow(entry, 1);
-						}
-						if (print.TryGetField("displayartist", out string displayartist)) {
-							fields.AddRow(new FieldEntry("displayartist", displayartist));
-							fields.MoveRow(entry, 1);
-						}
-						if (print.TryGetField("flavor", out string flavor)) {
-							fields.AddRow(new FieldEntry("flavor", flavor));
-							fields.MoveRow(entry, 1);
-						}
-						if (!fields.Entries.Select(fe => fe.Field).Contains("frame")) {
-							fields.AddRow(new FieldEntry("frame", ""));
-							fields.MoveRow(entry, 1);
-						}
-						break;
-					}
-				}
-			}
-		}
-
-		//Add fields
-		private void AddEffects(object sender, EventArgs e) => AddField("effects");
-		private void AddWatermark(object sender, EventArgs e) => AddField("watermark");
-		private void AddMarker(object sender, EventArgs e) => AddField("marker");
-		private void AddIndicator(object sender, EventArgs e) => AddField("indicator");
-		private void AddField(string field) {
-			if (!fields.Entries.Select(fe => fe.Field).Contains(field))
-				fields.AddRow(new FieldEntry(field, ""));
 		}
 
 		//Save
@@ -422,7 +369,7 @@ namespace CollectionTracker {
 				TrackerForm.Instance.SetPage<Detailpage>(printref: printref);
 		}
 
-		#region Autofill
+		#region Autofill & Shortcuts
 
 		//Autofill fields
 		private void AutofillFields(Set set, Card card) {
@@ -432,6 +379,104 @@ namespace CollectionTracker {
 				AutofillYGO(set, card);
 			else if (TrackerForm.Catalog.Game == Game.PKMN)
 				AutofillPKMN(set, card);
+		}
+
+		//Fetch image file
+		private void AutoArt(object sender, EventArgs e) {
+			if (setBox.SelectedItem == null || !(setBox.SelectedItem is Set set)) {
+				MessageBox.Show("Invalid set reference!");
+				return;
+			}
+			string cn = fields.Entries.FirstOrDefault(fe => fe.Field.Equals("cn"))?.Value;
+			if (!string.IsNullOrWhiteSpace(cn)) {
+				string prefix = "";
+				int width = 3;
+				while (cn.Length > 0 && !char.IsNumber(cn[0])) {
+					prefix += cn[0];
+					cn = cn.Substring(1);
+				}
+				while (cn.Length > 0 && !char.IsNumber(cn[cn.Length - 1]))
+					cn = cn.Substring(0, cn.Length - 1);
+				width = cn.Length;
+				while (cn.Length > 0 && cn[0] == '0')
+					cn = cn.Substring(1);
+				if (!string.IsNullOrWhiteSpace(cn) && int.TryParse(cn, out int value)) {
+					cn = prefix + value.ToString().PadLeft(width, '0');
+					images.ClearRows();
+					if (Utils.ResourcePaths.ContainsKey(TrackerForm.Catalog.Game)) {
+						string path = Utils.ResourcePaths[TrackerForm.Catalog.Game] + "sets/" + set.Code + '/' + cn;
+						if (Utils.ImageExistsAtPath(path, out path))
+							images.AddRow(new ImageEntry(path));
+						else {
+							char suffix = 'a';
+							while (Utils.ImageExistsAtPath(path + suffix, out string newPath)) {
+								images.AddRow(new ImageEntry(newPath));
+								++suffix;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		//Add RAF
+		private void AddRAF(object sender, EventArgs e) {
+			if (!fields.Entries.Select(fe => fe.Field).Contains("artid"))
+				fields.AddRow(new FieldEntry("artid", ""));
+			if (!fields.Entries.Select(fe => fe.Field).Contains("rarity"))
+				fields.AddRow(new FieldEntry("rarity", ""));
+			if (!fields.Entries.Select(fe => fe.Field).Contains("artist"))
+				fields.AddRow(new FieldEntry("artist", ""));
+			if (!fields.Entries.Select(fe => fe.Field).Contains("flavor"))
+				fields.AddRow(new FieldEntry("flavor", ""));
+			if (!fields.Entries.Select(fe => fe.Field).Contains("frame"))
+				fields.AddRow(new FieldEntry("frame", ""));
+		}
+
+		//Copy RAF
+		private void CopyRAF(object sender, EventArgs e) {
+			foreach (FieldEntry entry in fields.Entries) {
+				if (entry.Field.Equals("printcopy") || entry.Field.Equals("framecopy") || entry.Field.Equals("artcopy")) {
+					Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(entry.Value));
+					if (print != null) {
+						if (print.TryGetField("artid", out string artid)) {
+							fields.AddRow(new FieldEntry("artid", artid));
+							fields.MoveRow(entry, 1);
+						}
+						if (print.TryGetField("rarity", out string rarity)) {
+							fields.AddRow(new FieldEntry("rarity", rarity));
+							fields.MoveRow(entry, 1);
+						}
+						if (print.TryGetField("artist", out string artist)) {
+							fields.AddRow(new FieldEntry("artist", artist));
+							fields.MoveRow(entry, 1);
+						}
+						if (print.TryGetField("displayartist", out string displayartist)) {
+							fields.AddRow(new FieldEntry("displayartist", displayartist));
+							fields.MoveRow(entry, 1);
+						}
+						if (print.TryGetField("flavor", out string flavor)) {
+							fields.AddRow(new FieldEntry("flavor", flavor));
+							fields.MoveRow(entry, 1);
+						}
+						if (!fields.Entries.Select(fe => fe.Field).Contains("frame")) {
+							fields.AddRow(new FieldEntry("frame", ""));
+							fields.MoveRow(entry, 1);
+						}
+						break;
+					}
+				}
+			}
+		}
+
+		//Add fields
+		private void AddEffects(object sender, EventArgs e) => AddField("effects");
+		private void AddWatermark(object sender, EventArgs e) => AddField("watermark");
+		private void AddMarker(object sender, EventArgs e) => AddField("marker");
+		private void AddIndicator(object sender, EventArgs e) => AddField("indicator");
+		private void AddField(string field) {
+			if (!fields.Entries.Select(fe => fe.Field).Contains(field))
+				fields.AddRow(new FieldEntry(field, ""));
 		}
 
 		#region MTG
