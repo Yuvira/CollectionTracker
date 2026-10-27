@@ -160,6 +160,7 @@ namespace CollectionTracker {
 
 		//Color references
 		public static readonly Color COLOR_DARK_ORANGE = BlendColours(Color.Orange, Color.Black);
+		public static readonly Color COLOR_MYTHIC = BlendColours(COLOR_DARK_ORANGE, Color.Gold);
 
 		//Formatting characters
 		public static readonly char[] FORMAT_CHARS = { '{', '<' };
@@ -237,7 +238,7 @@ namespace CollectionTracker {
 			{ "common"      , Color.Black     },
 			{ "uncommon"    , Color.LightGray },
 			{ "rare"        , Color.Gold      },
-			{ "mythic rare" , Color.Orange    },
+			{ "mythic rare" , COLOR_MYTHIC    },
 		};
 
 		//Fields that can list all values
