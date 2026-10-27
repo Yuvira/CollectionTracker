@@ -125,21 +125,6 @@ namespace CollectionTracker {
 
 		#endregion
 
-		//Search operation class
-		private struct SearchExpression {
-			private string field;
-			private string operation;
-			private string value;
-			public SearchExpression(string field, string operation, string value) {
-				this.field = field.ToLower();
-				this.operation = operation;
-				this.value = value.ToLower();
-			}
-			public string Field => field;
-			public string Operation => operation;
-			public string Value => value;
-		}
-
 		//Return list of printings from catalog for search string
 		public static List<Printing> SearchPrintings(string search) {
 
@@ -148,138 +133,217 @@ namespace CollectionTracker {
 
 			//Check search string exists
 			if (string.IsNullOrWhiteSpace(search) || search.ToLower().Equals("search")) {
-				foreach (Printing print in TrackerForm.Catalog.Printings)
+				printList.AddRange(TrackerForm.Catalog.Printings);
+				return printList;
+			}
+
+			//Build search evaluator
+			SearchNode root;
+			try { root = BuildQuery(search); }
+			catch (Exception e) {
+				MessageBox.Show(e.Message);
+				return printList;
+			}
+
+			//Evaluate printings
+			foreach (Printing print in TrackerForm.Catalog.Printings)
+				if (root.Evaluate(print))
 					printList.Add(print);
-				return printList;
-			}
-
-			//Check all parentheses closed
-			if (search.Count(c => c == '(') != search.Count(c => c == ')')) {
-				MessageBox.Show($"Mismatched parentheses count! [{search.Count(c => c == '(')}:{search.Count(c => c == ')')}]");
-				return printList;
-			}
-
-			//Split expressions
-			List<SearchExpression> expressions = new List<SearchExpression>();
-			string[] expressionStrings = search.Split(new char[] { '(', ')', '&', '|' }, StringSplitOptions.RemoveEmptyEntries);
-			if (expressionStrings.Length > 10) {
-				MessageBox.Show("Can't evaluate more than 10 expressions!");
-				return printList;
-			}
-			foreach (string expressionString in expressionStrings) {
-				string[] terms = expressionString.Split(new string[] { "!:", "!=", "!!", ":", "=" }, StringSplitOptions.None);
-				if (terms.Length != 2) {
-					MessageBox.Show($"Invalid term parsed! [{expressionString}]");
-					return printList;
-				}
-				expressions.Add(new SearchExpression(terms[0], expressionString.Substring(terms[0].Length, expressionString.Length - (terms[0].Length + terms[1].Length)), terms[1]));
-				search = search.Replace(expressionString, (expressions.Count - 1).ToString());
-			}
-
-			//Search printings
-			string evaluate;
-			foreach (Printing print in TrackerForm.Catalog.Printings) {
-				evaluate = string.Copy(search);
-				for (int i = 0; i < expressions.Count; ++i)
-					evaluate = evaluate.Replace(i.ToString(), EvaluateExpression(expressions[i], print) ? "t" : "f");
-				try {
-					if (EvaluateBoolean(evaluate))
-						printList.Add(print);
-				}
-				catch (Exception e) {
-					MessageBox.Show($"{e.Message} [{evalString}:{index}]");
-					return printList;
-				}
-			}
 
 			//Return
 			return printList;
 
 		}
 
-		//Evaluate search expression on printing
-		private static bool EvaluateExpression(SearchExpression expression, Printing print) {
-			if (expression.Operation.Equals("!!") && !print.HasField(expression.Value) && !print.Card.HasField(expression.Value))
-				return true;
-			else if (fieldShortcuts.ContainsKey(expression.Field) && print.TryGetField(fieldShortcuts[expression.Field], out string value))
-				return EvaluateExpression(value.CleanFormatMarkers(), expression.Operation, expression.Value);
-			else if (expression.Field.Equals("fo") || expression.Field.Equals("fulloracle"))
-				return EvaluateExpression(print.GetField("oracle"), expression.Operation, expression.Value);
-			else if (expression.Field.Equals("s") || expression.Field.Equals("set"))
-				return EvaluateExpression(print.Set.Code, expression.Operation, expression.Value);
-			else if (expression.Field.Equals("l") || expression.Field.Equals("loc") || expression.Field.Equals("location"))
-				return EvaluateExpression(string.Join(" / ", print.Treatments.SelectMany(t => t.Locations.Select(l => l.Name)).Distinct()), expression.Operation, expression.Value);
-			else if (expression.Field.Equals("f") || expression.Field.Equals("fav") || expression.Field.Equals("favorite"))
-				return EvaluateExpression(print.Card.Favorite.ToString(), expression.Operation, expression.Value);
-			else if (print.TryGetField(expression.Field, out string rawfield))
-				return EvaluateExpression(rawfield, expression.Operation, expression.Value);
-			else
-				return false;
+		#region Query Node Chain
+
+		//Query chain object
+		private abstract class SearchNode {
+			public abstract bool Evaluate(Printing print);
+		}
+		private sealed class AndNode : SearchNode {
+			private SearchNode left, right;
+			public AndNode(SearchNode left, SearchNode right) {
+				this.left = left;
+				this.right = right;
+			}
+			public override bool Evaluate(Printing print) => left.Evaluate(print) && right.Evaluate(print);
+		}
+		private sealed class OrNode : SearchNode {
+			private SearchNode left, right;
+			public OrNode(SearchNode left, SearchNode right) {
+				this.left = left;
+				this.right = right;
+			}
+			public override bool Evaluate(Printing print) => left.Evaluate(print) || right.Evaluate(print);
+		}
+		private sealed class TermNode : SearchNode {
+			private readonly string field;
+			private readonly string op;
+			private readonly string value;
+			public TermNode(string field, string op, string value) {
+				this.field = field.ToLower();
+				this.op = op;
+				this.value = SearchableString(value);
+			}
+			public override bool Evaluate(Printing print) {
+				if (!TryGetField(field, print, out string raw))
+					return false;
+				string left = SearchableString(raw);
+				switch (op) {
+					case ":": return left.Contains(value);
+					case "!:": return !left.Contains(value);
+					case "=": return left.Equals(value);
+					case "!=": return !left.Equals(value);
+					default: return false;
+				}
+			}
 		}
 
-		//Evaluate strings with operation
-		private static bool EvaluateExpression(string left, string op, string right) {
-			if (op.Equals(":"))
-				return SearchableString(left).Contains(SearchableString(right));
-			if (op.Equals("!:"))
-				return !SearchableString(left).Contains(SearchableString(right));
-			if (op.Equals("="))
-				return SearchableString(left).Equals(SearchableString(right));
-			if (op.Equals("!="))
-				return !SearchableString(left).Equals(SearchableString(right));
+		#endregion
+
+		#region Query Construction
+
+		//Build query
+		private static int queryIdx = 0;
+		private static string searchQuery = "";
+		private static SearchNode BuildQuery(string text) {
+			queryIdx = 0;
+			searchQuery = text;
+			SearchNode root = ParseOr();
+			ParseWhitespace();
+			if (queryIdx < searchQuery.Length)
+				throw new Exception(searchQuery[queryIdx] == ')'
+					? $"Expected token ')' not found! [{searchQuery}:{queryIdx}]"
+					: $"Unexpected token {searchQuery[queryIdx]} found! [{searchQuery}:{queryIdx}]");
+			return root;
+		}
+
+		//Parse operators
+		private static SearchNode ParseOr() {
+			SearchNode left = ParseAnd();
+			while (TryConsume('|'))
+				left = new OrNode(left, ParseAnd());
+			return left;
+		}
+		private static SearchNode ParseAnd() {
+			SearchNode left = ParseAtom();
+			while (TryConsume('&'))
+				left = new AndNode(left, ParseAtom());
+			return left;
+		}
+		private static SearchNode ParseAtom() {
+			ParseWhitespace();
+			if (queryIdx >= searchQuery.Length)
+				throw new Exception($"Expected search term! [{searchQuery}:{queryIdx}]");
+			if (searchQuery[queryIdx] == '(') {
+				int open = queryIdx++;
+				SearchNode inner = ParseOr();
+				if (!TryConsume(')'))
+					throw new Exception($"Unmatched '('! [{searchQuery}:{open}]");
+				return inner;
+			}
+			return ParseTerm();
+		}
+
+		//Parse search term
+		private static SearchNode ParseTerm() {
+
+			//Get field
+			int start = queryIdx;
+			while (queryIdx < searchQuery.Length && ":=!&|()\"".IndexOf(searchQuery[queryIdx]) < 0)
+				++queryIdx;
+			string field = searchQuery.Substring(start, queryIdx - start).Trim();
+			if (field.Length == 0)
+				throw new Exception($"Missing field name! [{searchQuery}:{start}]");
+
+			//Get operator
+			string op = "";
+			if (TryConsume('!'))
+				op += '!';
+			if (TryConsume(':'))
+				op += ':';
+			else if (TryConsume('='))
+				op += '=';
+			if (op.Length == 0 || op.Equals("!"))
+				throw new Exception($"Missing or invalid operator after '{field}'! [{searchQuery}:{queryIdx}]");
+
+			//Read value and return term node
+			return new TermNode(field, op, ReadValue());
+
+		}
+
+		//Read value
+		private static string ReadValue() {
+
+			//Skip whitespace and initialize value
+			ParseWhitespace();
+			string value = "";
+			char c;
+
+			//Read quoted value
+			if (TryConsume('"')) {
+				int open = queryIdx - 1;
+				while (true) {
+					if (queryIdx >= searchQuery.Length)
+						throw new Exception($"Missing closing '\"'! [{searchQuery}:{open}]");
+					c = searchQuery[queryIdx++];
+					if (c == '"')
+						break;
+					if (c == '\\' && queryIdx < searchQuery.Length)
+						c = searchQuery[queryIdx++];
+					value += c;
+				}
+				ParseWhitespace();
+				c = searchQuery[queryIdx];
+				if (queryIdx < searchQuery.Length && c != '&' && c != '|' && c != ')')
+					throw new Exception($"Unexpected text after quoted value! [{searchQuery}:{queryIdx}]");
+				return value;
+			}
+
+			//Read unquoted value
+			while (queryIdx < searchQuery.Length) {
+				c = searchQuery[queryIdx];
+				if (c == '\\' && queryIdx + 1 < searchQuery.Length) {
+					value += searchQuery[queryIdx + 1];
+					queryIdx += 2;
+					continue;
+				}
+				if (c == '&' || c == '|' || c == '(' || c == ')')
+					break;
+				if (c == ':' || c == '=' || c == '!')
+					throw new Exception($"Unexpected operator in value! [{searchQuery}:{queryIdx}]");
+				value += c;
+				++queryIdx;
+			}
+
+			//Return value
+			return value.Trim();
+
+		}
+
+		//Skip whitespace characters
+		private static void ParseWhitespace() {
+			while (queryIdx < searchQuery.Length && char.IsWhiteSpace(searchQuery[queryIdx]))
+				++queryIdx;
+		}
+
+		//Find character at current position in query
+		private static bool TryConsume(char c) {
+			ParseWhitespace();
+			if (queryIdx < searchQuery.Length && searchQuery[queryIdx] == c) {
+				++queryIdx;
+				return true;
+			}
 			return false;
 		}
 
-		//Evaluate
-		private static int index = 0;
-		private static string evalString = "";
-		private static bool EvaluateBoolean(string str) {
-			index = 0;
-			evalString = str;
-			return ParseOperand();
-		}
-		private static bool ParseOperand() {
-			bool left = ParseValue();
-			while (index < evalString.Length && (evalString[index] == '&' || evalString[index] == '|')) {
-				if (evalString[index] == '&') {
-					++index;
-					left = left && ParseValue();
-				}
-				else if (evalString[index] == '|') {
-					++index;
-					left = left || ParseValue();
-				}
-			}
-			return left;
-		}
-		private static bool ParseValue() {
-			if (evalString[index] == '(') {
-				++index;
-				bool result = ParseOperand();
-				if (evalString[index] != ')')
-					throw new Exception($"Expected token ')' not found! [{evalString}:{index}]");
-				++index;
-				return result;
-			}
-			if (evalString[index] == 't') {
-				++index;
-				return true;
-			}
-			if (evalString[index] == 'f') {
-				++index;
-				return false;
-			}
-			throw new Exception($"Unexpected token {evalString[index]} found! [{evalString}:{index}]");
-		}
+		#endregion
 
-		#region Legacy Code
+		#region Utils
 
 		//Convert input to searchable string by replacing non-standard characters and switching to lowercase
-		public static Dictionary<string, string> searchSymbols;
 		public static string SearchableString(string input) {
-			if (searchSymbols != null)
-				foreach (KeyValuePair<string, string> kvp in searchSymbols)
-					input = input.Replace(kvp.Key, kvp.Value);
 			foreach (KeyValuePair<char, char> kvp in searchChars)
 				input = input.Replace(kvp.Key, kvp.Value);
 			foreach (KeyValuePair<string, string> kvp in searchStrings)
@@ -287,71 +351,33 @@ namespace CollectionTracker {
 			return input.ToLower();
 		}
 
-		//Evaluate if a search operation is true or not
-		public static bool EvaluateSearchOperation(string field, string op, string value, Dictionary<string, string> symbols, bool fieldIsList = false) {
-			searchSymbols = symbols;
-			if (op.Equals("!:")) {
-				if (!SearchableString(field).Contains(SearchableString(value)))
+		//Get the text a search field refers to on a printing. Returns false if no such field exists
+		//Most of this logic can probably be merged into Printing.TryGetField()
+		private static bool TryGetField(string field, Printing print, out string value) {
+			if (fieldShortcuts.TryGetValue(field, out string shortcut)) {
+				if (print.TryGetField(shortcut, out value)) {
+					value = value.CleanFormatMarkers();
 					return true;
-				return false;
-			}
-			else if (op.Equals("~:")) {
-				if (field.Contains(value))
-					return true;
-				return false;
-			}
-			else if (op.Equals(":")) {
-				if (SearchableString(field).Contains(SearchableString(value)))
-					return true;
-				return false;
-			}
-			else if (op.Equals("==")) {
-				if (SearchableString(field).Equals(SearchableString(value)))
-					return true;
-			}
-			else if (op.Equals("!=")) {
-				if (!fieldIsList) {
-					if (!SearchableString(field).Equals(SearchableString(value)))
-						return true;
-					return false;
 				}
-				foreach (string subfield in field.Split(new string[] { " / " }, StringSplitOptions.None))
-					if (SearchableString(subfield).Equals(SearchableString(value)))
-						return false;
+				return false;
+			}
+			else if (field.Equals("fo") || field.Equals("fulloracle")) {
+				value = print.GetField("oracle");
 				return true;
 			}
-			else if (op.Equals("~=")) {
-				if (!fieldIsList) {
-					if (field.Equals(value))
-						return true;
-					return false;
-				}
-				foreach (string subfield in field.Split(new string[] { " / " }, StringSplitOptions.None))
-					if (subfield.Equals(value))
-						return true;
-				return false;
+			else if (field.Equals("s") || field.Equals("set")) {
+				value = print.Set.Code;
+				return true;
 			}
-			else if (op.Equals("=")) {
-				if (!fieldIsList) {
-					if (SearchableString(field).Equals(SearchableString(value)))
-						return true;
-					return false;
-				}
-				foreach (string subfield in field.Split(new string[] { " / " }, StringSplitOptions.None))
-					if (SearchableString(subfield).Equals(SearchableString(value)))
-						return true;
-				return false;
+			else if (field.Equals("l") || field.Equals("loc") || field.Equals("location")) {
+				value = string.Join(" / ", print.Treatments.SelectMany(t => t.Locations.Select(l => l.Name)).Distinct());
+				return true;
 			}
-			return false;
-		}
-
-		//Check if list delimited by string contains another exact string
-		public static bool ListContainsExact(string input, string delimiter, string search) {
-			string[] terms = input.Split(new string[] { delimiter }, StringSplitOptions.None);
-			foreach (string term in terms)
-				if (term.Equals(search))
-					return true;
-			return false;
+			else if (field.Equals("f") || field.Equals("fav") || field.Equals("favorite")) {
+				value = print.Card.Favorite.ToString();
+				return true;
+			}
+			return print.TryGetField(field, out value);
 		}
 
 		#endregion
