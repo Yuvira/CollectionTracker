@@ -63,8 +63,9 @@ namespace CollectionTracker {
 
 			//Get rarity from print id
 			private Color GetRarityColor() {
-				string rarity = (print != null ? print.GetField("rarity") : "common").ToLower();
-				return Utils.RarityColors.ContainsKey(rarity) ? Utils.RarityColors[rarity] : Color.Black;
+				if (print == null || !print.TryGetField("rarity", out string rarity) || !Utils.RarityColors.ContainsKey(rarity.ToLower()))
+					return Utils.THEME.BackColor;
+				return Utils.RarityColors[rarity.ToLower()];
 			}
 
 			//Copy
