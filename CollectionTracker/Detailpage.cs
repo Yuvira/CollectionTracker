@@ -286,6 +286,7 @@ namespace CollectionTracker {
 		private Button miscIDButton;
 		private Button copyRAFButton;
 		private Button copyRAButton;
+		private Button incrementAllIDsButton;
 		private Button pasteFlavorButton;
 		private Panel tooltipPanel;
 		private Panel nestedTooltipPanel;
@@ -476,9 +477,12 @@ namespace CollectionTracker {
 			miscIDButton = Utils.GenerateButton(new Rectangle(1168, setIDBox.Top, 97, BUTTON_HEIGHT), "Misc. ID");
 			miscIDButton.Click += MiscArtID;
 			contentPanel.Controls.Add(miscIDButton);
+			incrementAllIDsButton = Utils.GenerateButton(new Rectangle(1067, setAllIDButton.Bottom + PANEL_MARGIN, 197, BUTTON_HEIGHT), "+1 All IDs");
+			incrementAllIDsButton.Click += IncrementAllIDs;
+			contentPanel.Controls.Add(incrementAllIDsButton);
 
 			//Print data copier
-			copyRAFButton = Utils.GenerateButton(new Rectangle(865, setIDBox.Bottom + PANEL_MARGIN, 400, BUTTON_HEIGHT), "Copy RAF");
+			copyRAFButton = Utils.GenerateButton(new Rectangle(865, setIDBox.Bottom + PANEL_MARGIN, 195, BUTTON_HEIGHT), "Copy RAF");
 			copyRAFButton.Click += CopyRAF;
 			contentPanel.Controls.Add(copyRAFButton);
 			copyRAButton = Utils.GenerateButton(new Rectangle(865, copyRAFButton.Bottom + PANEL_MARGIN, 195, BUTTON_HEIGHT), "Copy Rarity/Artist");
@@ -603,6 +607,16 @@ namespace CollectionTracker {
 					print.Fields["artid"] = id.ToString();
 				else
 					print.Fields.InsertAt(2, "artid", id.ToString());
+			}
+			UpdateDebug();
+		}
+		private void IncrementAllIDs(object sender, EventArgs e) {
+			List<Printing> prints = TrackerForm.Catalog.Printings.Where(p => p.Card == printing.Card && p.HasField("artid")).ToList();
+			foreach (Printing print in prints) {
+				if (int.TryParse(print.GetField("artid"), out int id)) {
+					++id;
+					print.Fields["artid"] = id.ToString();
+				}
 			}
 			UpdateDebug();
 		}
@@ -932,6 +946,7 @@ namespace CollectionTracker {
 			setIDButton.Top = setIDBox.Top;
 			setAllIDButton.Top = setIDBox.Top;
 			miscIDButton.Top = setIDBox.Top;
+			incrementAllIDsButton.Top = panelY + 70;
 			copyRAFButton.Top = panelY + 70;
 			copyRAButton.Top = panelY + 105;
 			pasteFlavorButton.Top = panelY + 105;
