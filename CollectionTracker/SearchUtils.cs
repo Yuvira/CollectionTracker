@@ -167,7 +167,7 @@ namespace CollectionTracker {
 				return printList;
 			}
 			foreach (string expressionString in expressionStrings) {
-				string[] terms = expressionString.Split(new string[] { "!:", "!=", ":", "=" }, StringSplitOptions.None);
+				string[] terms = expressionString.Split(new string[] { "!:", "!=", "!!", ":", "=" }, StringSplitOptions.None);
 				if (terms.Length != 2) {
 					MessageBox.Show($"Invalid term parsed! [{expressionString}]");
 					return printList;
@@ -199,6 +199,8 @@ namespace CollectionTracker {
 
 		//Evaluate search expression on printing
 		private static bool EvaluateExpression(SearchExpression expression, Printing print) {
+			if (expression.Operation.Equals("!!") && !print.HasField(expression.Value) && !print.Card.HasField(expression.Value))
+				return true;
 			else if (fieldShortcuts.ContainsKey(expression.Field) && print.TryGetField(fieldShortcuts[expression.Field], out string value))
 				return EvaluateExpression(value.CleanFormatMarkers(), expression.Operation, expression.Value);
 			else if (expression.Field.Equals("fo") || expression.Field.Equals("fulloracle"))
