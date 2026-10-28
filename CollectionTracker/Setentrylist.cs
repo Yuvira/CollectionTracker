@@ -131,26 +131,68 @@ namespace CollectionTracker {
 		#endregion
 
 		//Properties
-		private List<Setentry> entries;
+		private List<Setentry> entries = null;
 
 		//Controls
 		private Panel listPanel;
+		private TextBox dateFilter = null;
 
 		//Constructor
 		public Setentrylist() : base() {
-
-			//Set list
-			List<Set> sets = new List<Set>(TrackerForm.Catalog.Sets);
-			sets.Sort(Set.SortNewest);
 
 			//Panel
 			listPanel = Utils.GeneratePanel(Utils.CenterRect(new Size(SETBOX_WIDTH + (PANEL_MARGIN * 2) + SCROLL_MARGIN, panel.Height - 25), panel.Size));
 			listPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			listPanel.AutoScroll = true;
 
-			//Generate sets
+			//Generate
+			GenerateEntries();
+
+			//Add button
+			Button addButton = Utils.GenerateButton(new Rectangle(listPanel.Location.X + listPanel.Width + PANEL_MARGIN, PANEL_MARGIN, BUTTON_HEIGHT, BUTTON_HEIGHT), "+");
+			addButton.Click += AddSet;
+			panel.Controls.Add(addButton);
+
+			//Filter
+			Label filterLabel = Utils.GenerateAutoSizeLabel(new Point(addButton.Left, addButton.Bottom + PANEL_MARGIN), "Before:");
+			dateFilter = Utils.GenerateTextBox(new Rectangle(addButton.Left, filterLabel.Bottom + PANEL_MARGIN, 120, BUTTON_HEIGHT), DateTime.Now.ToString("yyyy-MM-dd"));
+			Button filterButton = Utils.GenerateButton(new Rectangle(addButton.Left, filterLabel.Bottom + (PANEL_MARGIN * 2) + BUTTON_HEIGHT, 120, BUTTON_HEIGHT), "Filter");
+			filterButton.Click += GenerateEntries;
+			panel.Controls.Add(filterLabel);
+			panel.Controls.Add(dateFilter);
+			panel.Controls.Add(filterButton);
+
+			//Add to panel
+			panel.Controls.Add(listPanel);
+
+		}
+
+		//Entry generator
+		private void GenerateEntries(object sender, EventArgs e) => GenerateEntries();
+		private void GenerateEntries() {
+
+			//Set list
+			List<Set> sets;
+			if (dateFilter != null)
+				sets = new List<Set>(TrackerForm.Catalog.Sets.Where(s => s.Date.CompareTo(dateFilter.Text) < 0).ToList());
+			else
+				sets = new List<Set>(TrackerForm.Catalog.Sets);
+			sets.Sort(Set.SortNewest);
+
+			//Clear entries and get start position
 			Point pos = new Point(PANEL_MARGIN, PANEL_MARGIN);
-			entries = new List<Setentry>();
+			if (entries == null)
+				entries = new List<Setentry>();
+			else if (entries.Count > 0) {
+				pos.Y = entries[0].Panel.Top;
+				foreach (Setentry entry in entries) {
+					listPanel.Controls.Remove(entry.Panel);
+					entry.Panel.Dispose();
+				}
+				entries.Clear();
+			}
+
+			//Generate
 			listPanel.SuspendLayout();
 			foreach (Set set in sets) {
 				Setentry entry = new Setentry(this, set);
@@ -160,14 +202,6 @@ namespace CollectionTracker {
 				listPanel.Controls.Add(entry.Panel);
 			}
 			listPanel.ResumeLayout();
-
-			//Add button
-			Button addButton = Utils.GenerateButton(new Rectangle(listPanel.Location.X + listPanel.Width + PANEL_MARGIN, PANEL_MARGIN, BUTTON_HEIGHT, BUTTON_HEIGHT), "+");
-			addButton.Click += AddSet;
-			panel.Controls.Add(addButton);
-
-			//Add to panel
-			panel.Controls.Add(listPanel);
 
 		}
 
