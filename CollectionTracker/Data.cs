@@ -113,7 +113,6 @@ namespace CollectionTracker {
 		[ProtoMember(5)] private string imgPath;
 		[ProtoMember(6)] private int mainCount;
 		[ProtoMember(8)] private int dateOrder;
-		[ProtoMember(7)] private string prefixOrder;
 
 		//Accessors
 		public string Name => name;
@@ -124,11 +123,10 @@ namespace CollectionTracker {
 		public string ImgPath => imgPath;
 		public int MainCount => mainCount;
 		public int DateOrder => dateOrder;
-		public string PrefixOrder => prefixOrder;
 
 		//Constructor
-		public Set() : this("Name", "Code", "Type", DateTime.Now.ToString("yyyy-MM-dd"), "", 0, 0, "") { }
-		public Set(string name, string code, string type, string date, string imgPath, int mainCount, int dateOrder, string prefixOrder) {
+		public Set() : this("Name", "Code", "Type", DateTime.Now.ToString("yyyy-MM-dd"), "", 0, 0) { }
+		public Set(string name, string code, string type, string date, string imgPath, int mainCount, int dateOrder) {
 			this.name = name;
 			this.code = code;
 			this.type = type;
@@ -136,7 +134,6 @@ namespace CollectionTracker {
 			this.imgPath = imgPath;
 			this.mainCount = mainCount;
 			this.dateOrder = dateOrder;
-			this.prefixOrder = prefixOrder;
 		}
 
 		#region Copy
@@ -150,7 +147,6 @@ namespace CollectionTracker {
 			imgPath = set.imgPath;
 			mainCount = set.mainCount;
 			dateOrder = set.dateOrder;
-			prefixOrder = set.prefixOrder;
 		}
 
 		#endregion
