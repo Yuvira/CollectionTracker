@@ -581,7 +581,8 @@ namespace CollectionTracker {
 		//Load image. Load nothing if it doesn't exist
 		public static bool TryLoadImage(PictureBox box, string path) {
 			try {
-				box.Load(path);
+				using (Image img = Image.FromFile(path))
+					box.Image = new Bitmap(img);
 				return true;
 			}
 			catch (Exception) { return false; }
@@ -590,14 +591,18 @@ namespace CollectionTracker {
 		//Try to load card image and return default path if failed
 		public static bool TryLoadCardImage(PictureBox imgBox, string path, Game game, Label label = null) {
 			try {
-				imgBox.Load(path);
+				using (Image img = Image.FromFile(path))
+					imgBox.Image = new Bitmap(img);
 				if (label != null)
 					label.Text = path;
 				return true;
 			}
 			catch (Exception) {
 				if (CardBackPaths.ContainsKey(game)) {
-					try { imgBox.Load(CardBackPaths[game]); }
+					try {
+						using (Image img = Image.FromFile(CardBackPaths[game]))
+							imgBox.Image = new Bitmap(img);
+					}
 					catch (Exception) { }
 				}
 				if (label != null)
