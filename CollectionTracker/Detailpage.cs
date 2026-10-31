@@ -595,8 +595,8 @@ namespace CollectionTracker {
 			printing.Card.ToggleFavorite();
 			favoriteLabel.ForeColor = printing.Card.Favorite ? Utils.THEME.CardOwnedFavorite : Utils.THEME.ForeColor;
 		}
-		private void NewArtID(object sender, EventArgs e) => AddArtID(listPrints.Select(p => int.TryParse(p.GetField("artid"), out int i) ? i : -1).Max() + 1);
-		private void HighArtID(object sender, EventArgs e) => AddArtID(listPrints.Select(p => int.TryParse(p.GetField("artid"), out int i) ? i : 0).Max());
+		private void NewArtID(object sender, EventArgs e) => AddArtID(listPrints.Count > 0 ? listPrints.Select(p => int.TryParse(p.GetField("artid"), out int i) ? i : -1).Max() + 1 : 0);
+		private void HighArtID(object sender, EventArgs e) => AddArtID(listPrints.Count > 0 ? listPrints.Select(p => int.TryParse(p.GetField("artid"), out int i) ? i : 0).Max() : 0);
 		private void SetArtID(object sender, EventArgs e) => AddArtID(int.TryParse(setIDBox.Text, out int id) ? id : 0);
 		private void SetAllArtID(object sender, EventArgs e) {
 			if (!int.TryParse(setIDBox.Text, out int id))
