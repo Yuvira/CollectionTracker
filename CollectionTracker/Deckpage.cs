@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
 namespace CollectionTracker {
@@ -24,6 +23,7 @@ namespace CollectionTracker {
 			private Label label;
 
 			//Accessors
+			public Deckpage Parent => parent;
 			public string Name => name;
 			public List<DeckPrint> Prints => prints;
 			public Label Label => label;
@@ -100,6 +100,7 @@ namespace CollectionTracker {
 			//Properties
 			private DeckGroup parent;
 			private Printing printing;
+			private string path;
 
 			//Controls
 			private PictureBox imgBox;
@@ -121,10 +122,10 @@ namespace CollectionTracker {
 
 			//Load image
 			private void UpdateImage() {
+				path = "";
 				if (printing != null && printing.ImagePaths.Count > 0)
-					Utils.TryLoadCardImage(imgBox, printing.ImagePaths[0], TrackerForm.Catalog.Game);
-				else
-					Utils.TryLoadCardImage(imgBox, "", TrackerForm.Catalog.Game);
+					path = printing.ImagePaths[0];
+				Utils.TryLoadCardImage(imgBox, path, TrackerForm.Catalog.Game);
 			}
 
 			//Sorter
@@ -137,7 +138,10 @@ namespace CollectionTracker {
 			}
 
 			//Focus on hover
-			private void GetFocus(object sender, EventArgs e) => imgBox.Focus();
+			private void GetFocus(object sender, EventArgs e) {
+				imgBox.Focus();
+				Utils.TryLoadCardImage(parent.Parent.previewImage, path, TrackerForm.Catalog.Game);
+			}
 
 			//Remove on right click
 			private void ProcessClick(object sender, MouseEventArgs e) {
@@ -159,6 +163,7 @@ namespace CollectionTracker {
 					++idx;
 				printing = prints[(idx + prints.Count) % prints.Count];
 				UpdateImage();
+				Utils.TryLoadCardImage(parent.Parent.previewImage, path, TrackerForm.Catalog.Game);
 				if (e is HandledMouseEventArgs args)
 					args.Handled = true;
 			}
@@ -168,6 +173,8 @@ namespace CollectionTracker {
 		#endregion
 
 		//Constants
+		private const int PREVIEW_WIDTH = 400;
+		private const int PREVIEW_HEIGHT = 540;
 		private const int DECK_CARD_WIDTH = 200;
 		private const int DECK_CARD_HEIGHT = 270;
 		private const int CARD_GAP_SHARED = DECK_CARD_WIDTH / 4;
@@ -189,7 +196,9 @@ namespace CollectionTracker {
 		private ComboBox cardBox;
 		private ComboBox targetBox;
 		private Button addCardButton;
+		private CheckBox previewToggle;
 		private Button saveDeckButton;
+		private PictureBox previewImage;
 		private Panel layoutPanel;
 
 		//Constructor
@@ -218,13 +227,24 @@ namespace CollectionTracker {
 			addCardButton.Anchor = AnchorStyles.Top;
 			addCardButton.Click += AddCard;
 
+			//Preview toggle
+			previewToggle = Utils.GenerateToggleButton(new Rectangle(0, PANEL_MARGIN, 150, BUTTON_HEIGHT), true, "Show Preview");
+			previewToggle.Anchor = AnchorStyles.Top;
+			previewToggle.CheckedChanged += OnFormResizeEnd;
+
 			//Save button
 			saveDeckButton = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, 150, BUTTON_HEIGHT), "Save Deck");
 			saveDeckButton.Anchor = AnchorStyles.Top;
 			saveDeckButton.Click += SaveDeck;
 
-			//Panel
+			//Y Position for body
 			int yPos = BUTTON_HEIGHT + (PANEL_MARGIN * 2);
+
+			//Preview image
+			previewImage = Utils.GeneratePictureBox(new Rectangle(PANEL_MARGIN, yPos, PREVIEW_WIDTH, PREVIEW_HEIGHT));
+			previewImage.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
+			//Panel
 			layoutPanel = Utils.GeneratePanel(new Rectangle(0, yPos, 0, panel.Height - (yPos + PANEL_MARGIN)));
 			layoutPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			layoutPanel.AutoScroll = true;
@@ -234,7 +254,9 @@ namespace CollectionTracker {
 			panel.Controls.Add(cardBox);
 			panel.Controls.Add(targetBox);
 			panel.Controls.Add(addCardButton);
+			panel.Controls.Add(previewToggle);
 			panel.Controls.Add(saveDeckButton);
+			panel.Controls.Add(previewImage);
 			panel.Controls.Add(layoutPanel);
 
 			//Clear lists
@@ -315,13 +337,15 @@ namespace CollectionTracker {
 
 		//Resize event
 		protected override void OnFormResizeEnd(object sender = null, EventArgs e = null) {
-			layoutPanel.Width = Math.Max(panel.Width - (PANEL_MARGIN * 2), (PANEL_MARGIN * 4) + SCROLL_MARGIN);
-			layoutPanel.Left = PANEL_MARGIN;
-			nameBox.Left = layoutPanel.Left;
+			previewImage.Visible = previewToggle.Checked;
+			layoutPanel.Left = previewToggle.Checked ? PREVIEW_WIDTH + (PANEL_MARGIN * 2) : PANEL_MARGIN;
+			layoutPanel.Width = Math.Max(panel.Width - (layoutPanel.Left + PANEL_MARGIN), DECK_CARD_WIDTH + (PANEL_MARGIN * 2) + SCROLL_MARGIN);
+			nameBox.Left = PANEL_MARGIN;
 			cardBox.Left = nameBox.Right + PANEL_MARGIN;
 			targetBox.Left = cardBox.Right + PANEL_MARGIN;
 			addCardButton.Left = targetBox.Right + PANEL_MARGIN;
 			saveDeckButton.Left = layoutPanel.Right - saveDeckButton.Width;
+			previewToggle.Left = saveDeckButton.Left - (previewToggle.Width + PANEL_MARGIN);
 			DoLayout();
 			oldWidth = panel.Width;
 		}

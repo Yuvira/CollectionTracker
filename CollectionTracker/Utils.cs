@@ -447,6 +447,18 @@ namespace CollectionTracker {
 			return box;
 		}
 
+		//ToggleButton generator
+		public static CheckBox GenerateToggleButton(Rectangle rect, bool check, string text = "") {
+			CheckBox box = new CheckBox();
+			box.Location = rect.Location;
+			box.Size = rect.Size;
+			box.Checked = check;
+			box.Appearance = Appearance.Button;
+			box.Text = text.Replace("&", "&&");
+			box.TextAlign = ContentAlignment.MiddleCenter;
+			return box;
+		}
+
 		//Date time picker
 		public static DateTimePicker GenerateDateTimePicker(DateTime? value = null) => GenerateDateTimePicker(Rectangle.Empty, value);
 		public static DateTimePicker GenerateDateTimePicker(Rectangle rect, DateTime? value = null) {
