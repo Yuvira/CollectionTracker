@@ -120,7 +120,7 @@ namespace CollectionTracker {
 		public void OpenKeywordentries(object sender, EventArgs e) => SetPage<Keywordentrylist>();
 
 		//Set new page
-		public void SetPage<T>(Card cardref = null, Printing printref = null, string searchTerms = "", List<Printing> printlist = null) where T : TrackerPage {
+		public void SetPage<T>(Card cardref = null, Printing printref = null, Deck deckref = null, string searchTerms = "", List<Printing> printlist = null) where T : TrackerPage {
 
 			//Clear print list if moving to unsupported page
 			bool TKeepsPrintlist = typeof(T) == typeof(Printlist) || typeof(T) == typeof(Detailpage) || typeof(T) == typeof(Cardentry) || typeof(T) == typeof(Printentry);
@@ -183,6 +183,10 @@ namespace CollectionTracker {
 					else
 						InvokePageChangeError("Detailpage printing can't be null!");
 				}
+				else if (typeof(T) == typeof(Decklist))
+					Page = new Decklist();
+				else if (typeof(T) == typeof(Deckpage))
+					Page = new Deckpage(deckref);
 				else if (typeof(T) == typeof(Cardentry))
 					Page = new Cardentry(cardref, printref);
 				else if (typeof(T) == typeof(Printentry))

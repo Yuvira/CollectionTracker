@@ -37,25 +37,29 @@ namespace CollectionTracker {
 			catalogPanel.Controls.Add(pkmnButton);
 
 			//Search tools
-			searchPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(382, 77), panel.Size, new Point(0, 32)));
+			searchPanel = Utils.GenerateTrackerPanel(Utils.CenterRect(new Size(380, (BUTTON_HEIGHT * 2) + (PANEL_MARGIN * 3)), panel.Size, new Point(0, 32)));
 			searchPanel.Anchor = AnchorStyles.None;
 
 			//Search bar
-			searchBox = Utils.GenerateTextBox(new Rectangle(5, 5, 370, BUTTON_HEIGHT), searchString != null ? searchString : "Search");
-			searchBox.Size = new Size(370, 30);
+			searchBox = Utils.GenerateTextBox(new Rectangle(PANEL_MARGIN, PANEL_MARGIN, 370, BUTTON_HEIGHT), searchString != null ? searchString : "Search");
 			searchBox.Click += SearchBoxClicked;
 			searchBox.KeyPress += SearchEnterPressed;
 			searchPanel.Controls.Add(searchBox);
 
 			//Search button
-			Button searchButton = Utils.GenerateButton(new Rectangle(5, 35, 183, BUTTON_HEIGHT), "Search");
+			Button searchButton = Utils.GenerateButton(new Rectangle(5, 40, 120, BUTTON_HEIGHT), "Search");
 			searchButton.Click += SearchButtonClicked;
 			searchPanel.Controls.Add(searchButton);
 
 			//Setlist button
-			Button setlistButton = Utils.GenerateButton(new Rectangle(192, 35, 183, BUTTON_HEIGHT), "All Sets");
+			Button setlistButton = Utils.GenerateButton(new Rectangle(130, 40, 120, BUTTON_HEIGHT), "All Sets");
 			setlistButton.Click += OpenSetlist;
 			searchPanel.Controls.Add(setlistButton);
+
+			//Decks button
+			Button decksButton = Utils.GenerateButton(new Rectangle(255, 40, 120, BUTTON_HEIGHT), "Decks");
+			decksButton.Click += OpenDecklist;
+			searchPanel.Controls.Add(decksButton);
 
 			//Add to panel
 			searchPanel.Visible = false;
@@ -88,6 +92,7 @@ namespace CollectionTracker {
 
 		//Show setlist
 		private void OpenSetlist(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Setlist>();
+		private void OpenDecklist(object sender, EventArgs e) => TrackerForm.Instance.SetPage<Decklist>();
 
 		//Search event handlers
 		private void SearchBoxClicked(object sender, EventArgs e) {

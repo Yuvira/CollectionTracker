@@ -35,6 +35,7 @@ namespace CollectionTracker {
 		[ProtoMember(1)] private List<Set> sets;
 		[ProtoMember(2)] private List<Card> cards;
 		[ProtoMember(3)] private List<Printing> printings;
+		[ProtoMember(8)] private List<Deck> decks;
 		[ProtoMember(4)] private List<Symbol> symbols;
 		[ProtoMember(6)] private Dictionary<string, string> keywords;
 		[ProtoMember(7)] private string name;
@@ -44,6 +45,7 @@ namespace CollectionTracker {
 		public List<Set> Sets => sets;
 		public List<Card> Cards => cards;
 		public List<Printing> Printings => printings;
+		public List<Deck> Decks => decks;
 		public List<Symbol> Symbols => symbols;
 		public Dictionary<string, string> Keywords => keywords;
 		public string Name => name;
@@ -54,6 +56,7 @@ namespace CollectionTracker {
 			sets = new List<Set>();
 			cards = new List<Card>();
 			printings = new List<Printing>();
+			decks = new List<Deck>();
 			symbols = new List<Symbol>();
 			keywords = new Dictionary<string, string>();
 			name = "";
@@ -319,6 +322,77 @@ namespace CollectionTracker {
 
 		#endregion
 
+		#region Sorting
+
+		//Type comparers
+		public static int SortTypeMTG(Card card1, Card card2) {
+			int compare = CompareFieldValue(card1, card2, "type", "creature");
+			if (compare != 0) return compare;
+			compare = CompareFieldValue(card1, card2, "type", "planeswalker");
+			if (compare != 0) return compare;
+			compare = CompareFieldValue(card1, card2, "type", "instant");
+			if (compare != 0) return compare;
+			compare = CompareFieldValue(card1, card2, "type", "sorcery");
+			if (compare != 0) return compare;
+			compare = CompareFieldValue(card1, card2, "type", "artifact");
+			if (compare != 0) return compare;
+			compare = CompareFieldValue(card1, card2, "type", "enchantment");
+			if (compare != 0) return compare;
+			compare = CompareFieldValue(card1, card2, "type", "land");
+			if (compare != 0) return compare;
+			return CompareFields(card1, card2, "name");
+		}
+		public static int SortTypeYGO(Card card1, Card card2) {
+			int compare = CompareFieldValue(card1, card2, "cardtype", "monster");
+			if (compare != 0) return compare;
+			compare = CompareFieldValue(card1, card2, "cardtype", "spell");
+			if (compare != 0) return compare;
+			compare = CompareFieldValue(card1, card2, "cardtype", "trap");
+			if (compare != 0) return compare;
+			compare = CompareFieldValue(card1, card2, "type", "link");
+			if (compare != 0) return -compare;
+			compare = CompareFieldValue(card1, card2, "type", "xyz");
+			if (compare != 0) return -compare;
+			compare = CompareFieldValue(card1, card2, "type", "synchro");
+			if (compare != 0) return -compare;
+			compare = CompareFieldValue(card1, card2, "type", "fusion");
+			if (compare != 0) return -compare;
+			compare = CompareFieldValue(card1, card2, "type", "ritual");
+			if (compare != 0) return -compare;
+			compare = CompareFieldValue(card1, card2, "type", "effect");
+			if (compare != 0) return -compare;
+			return CompareFields(card1, card2, "name");
+		}
+
+		//Helpers
+		private static int CompareFieldValue(Card card1, Card card2, string field, string value) {
+			if (card1.TryGetField(field, out string val1) && card2.TryGetField(field, out string val2)) {
+				bool b1 = val1.ToLower().Contains(value.ToLower());
+				bool b2 = val2.ToLower().Contains(value.ToLower());
+				if (b1 == b2)
+					return 0;
+				if (b1)
+					return -1;
+				return 1;
+			}
+			if (!card1.HasField(field) && !card2.HasField(field))
+				return 0;
+			if (card1.HasField(field))
+				return -1;
+			return 1;
+		}
+		private static int CompareFields(Card card1, Card card2, string field) {
+			if (card1.TryGetField(field, out string val1) && card2.TryGetField(field, out string val2))
+				return val1.CompareTo(val2);
+			if (!card1.HasField(field) && !card2.HasField(field))
+				return 0;
+			if (card1.HasField(field))
+				return -1;
+			return 1;
+		}
+
+		#endregion
+
 		#region Utils
 
 		//Toggle favorite status
@@ -435,16 +509,7 @@ namespace CollectionTracker {
 
 		#region Copy
 
-		//Copy function
-		public void Copy(Printing print) {
-			set = print.set;
-			card = print.card;
-			treatments = new List<Treatment>();
-			foreach (Treatment treatment in print.treatments)
-				treatments.Add(new Treatment(treatment));
-			fields = new Dictionary<string, string>(print.fields);
-			imagePaths = new List<string>(print.imagePaths);
-		}
+		//Copy functions
 		public void CopySet(Set set) => this.set = set;
 		public void CopyCard(Card card) => this.card = card;
 		public void CopyTreatments(List<string> names) {
@@ -758,6 +823,36 @@ namespace CollectionTracker {
 		public void Decrement() => --count;
 
 		#endregion
+
+	}
+
+	#endregion
+
+	#region Decks
+
+	[ProtoContract]
+	public class Deck {
+
+		//Serialized properties
+		[ProtoMember(1)] private string name;
+		[ProtoMember(2)] private Dictionary<string, List<string>> idMap;
+
+		//Accessors
+		public string Name => name;
+		public Dictionary<string, List<string>> IDMap => idMap;
+
+		//Constructor
+		public Deck() : this("New Deck", new Dictionary<string, List<string>>()) { }
+		public Deck(string name, Dictionary<string, List<string>> idMap) {
+			this.name = name;
+			this.idMap = new Dictionary<string, List<string>>(idMap);
+		}
+
+		//Copy function
+		public void Copy(Deck deck) {
+			name = deck.name;
+			idMap = new Dictionary<string, List<string>>(deck.idMap);
+		}
 
 	}
 

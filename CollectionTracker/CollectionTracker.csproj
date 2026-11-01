@@ -73,6 +73,8 @@
   <ItemGroup>
     <Compile Include="Cardentry.cs" />
     <Compile Include="Data.cs" />
+    <Compile Include="Decklist.cs" />
+    <Compile Include="Deckpage.cs" />
     <Compile Include="Detailpage.cs" />
     <Compile Include="Entrylist.cs" />
     <Compile Include="Homepage.cs" />
