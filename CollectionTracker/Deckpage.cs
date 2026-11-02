@@ -68,20 +68,32 @@ namespace CollectionTracker {
 				label.Location = pos;
 				pos.Y += TEXT_HEIGHT + PANEL_MARGIN;
 				prints.Sort(DeckPrint.CompareCards);
-				IEnumerable<IGrouping<string, DeckPrint>> groups = prints.GroupBy(p => p.Printing.GetField("name"));
-				foreach (IGrouping<string, DeckPrint> group in groups) {
-					if (pos.X > PANEL_MARGIN) {
-						int groupWidth = DECK_CARD_WIDTH + ((group.Count() - 1) * CARD_GAP_SHARED);
-						if (pos.X + groupWidth > width) {
+				if (parent.groupToggle.Checked) {
+					IEnumerable<IGrouping<string, DeckPrint>> groups = prints.GroupBy(p => p.Printing.GetField("name"));
+					foreach (IGrouping<string, DeckPrint> group in groups) {
+						if (pos.X > PANEL_MARGIN) {
+							int groupWidth = DECK_CARD_WIDTH + ((group.Count() - 1) * CARD_GAP_SHARED);
+							if (pos.X + groupWidth > width) {
+								pos.X = xPos;
+								pos.Y += DECK_CARD_HEIGHT + PANEL_MARGIN;
+							}
+						}
+						foreach (DeckPrint print in group) {
+							print.ImgBox.Location = pos;
+							pos.X += CARD_GAP_SHARED;
+						}
+						pos.X += CARD_GAP_UNSHARED - CARD_GAP_SHARED;
+					}
+				}
+				else {
+					foreach (DeckPrint print in prints) {
+						if (pos.X > PANEL_MARGIN && pos.X + CARD_GAP_UNSHARED > width) {
 							pos.X = xPos;
 							pos.Y += DECK_CARD_HEIGHT + PANEL_MARGIN;
 						}
-					}
-					foreach(DeckPrint print in group) {
 						print.ImgBox.Location = pos;
-						pos.X += CARD_GAP_SHARED;
+						pos.X += CARD_GAP_UNSHARED;
 					}
-					pos.X += CARD_GAP_UNSHARED - CARD_GAP_SHARED;
 				}
 				for (int i = prints.Count - 1; i >= 0; --i)
 					prints[i].ImgBox.BringToFront();
@@ -197,6 +209,7 @@ namespace CollectionTracker {
 		private ComboBox targetBox;
 		private Button addCardButton;
 		private CheckBox previewToggle;
+		private CheckBox groupToggle;
 		private Button saveDeckButton;
 		private PictureBox previewImage;
 		private Panel layoutPanel;
@@ -233,6 +246,11 @@ namespace CollectionTracker {
 			previewToggle.Anchor = AnchorStyles.Top;
 			previewToggle.CheckedChanged += OnFormResizeEnd;
 
+			//Group toggle
+			groupToggle = Utils.GenerateToggleButton(new Rectangle(0, PANEL_MARGIN, 150, BUTTON_HEIGHT), true, "Group Cards");
+			groupToggle.Anchor = AnchorStyles.Top;
+			groupToggle.CheckedChanged += OnFormResizeEnd;
+
 			//Save button
 			saveDeckButton = Utils.GenerateButton(new Rectangle(0, PANEL_MARGIN, 150, BUTTON_HEIGHT), "Save Deck");
 			saveDeckButton.Anchor = AnchorStyles.Top;
@@ -260,6 +278,7 @@ namespace CollectionTracker {
 			panel.Controls.Add(targetBox);
 			panel.Controls.Add(addCardButton);
 			panel.Controls.Add(previewToggle);
+			panel.Controls.Add(groupToggle);
 			panel.Controls.Add(saveDeckButton);
 			panel.Controls.Add(previewImage);
 			panel.Controls.Add(layoutPanel);
@@ -345,6 +364,7 @@ namespace CollectionTracker {
 			addCardButton.Left = targetBox.Right + PANEL_MARGIN;
 			saveDeckButton.Left = layoutPanel.Right - saveDeckButton.Width;
 			previewToggle.Left = saveDeckButton.Left - (previewToggle.Width + PANEL_MARGIN);
+			groupToggle.Left = previewToggle.Left - (groupToggle.Width + PANEL_MARGIN);
 			DoLayout();
 			oldWidth = panel.Width;
 		}
