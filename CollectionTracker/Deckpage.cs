@@ -200,6 +200,7 @@ namespace CollectionTracker {
 		private Button saveDeckButton;
 		private PictureBox previewImage;
 		private Panel layoutPanel;
+		private TrackerPanel topLeft;
 
 		//Constructor
 		public Deckpage(Deck deck) {
@@ -248,6 +249,10 @@ namespace CollectionTracker {
 			layoutPanel = Utils.GeneratePanel(new Rectangle(0, yPos, 0, panel.Height - (yPos + PANEL_MARGIN)));
 			layoutPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 			layoutPanel.AutoScroll = true;
+
+			//Top left object for relative position
+			topLeft = Utils.GenerateTrackerPanel(new Rectangle(PANEL_MARGIN, PANEL_MARGIN, 1, 1));
+			layoutPanel.Controls.Add(topLeft);
 
 			//Add to panel
 			panel.Controls.Add(nameBox);
@@ -321,18 +326,12 @@ namespace CollectionTracker {
 
 		//Layout cards
 		private void DoLayout() {
-
-			//Reset scroll position
-			layoutPanel.AutoScrollPosition = new Point(0, 0);
-
-			//Width and Y position
-			int y = PANEL_MARGIN;
+			int y = topLeft.Location.Y;
 			int maxWidth = layoutPanel.Width - ((PANEL_MARGIN * 2) + SCROLL_MARGIN);
 			layoutPanel.SuspendLayout();
 			foreach (DeckGroup group in groups)
-				y = group.Layout(maxWidth, PANEL_MARGIN, y);
+				y = group.Layout(maxWidth, topLeft.Location.X, y);
 			layoutPanel.ResumeLayout();
-
 		}
 
 		//Resize event
