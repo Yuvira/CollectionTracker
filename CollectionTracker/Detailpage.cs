@@ -2449,18 +2449,23 @@ namespace CollectionTracker {
 					//Generate controls
 					curIdx = 0;
 					int maxWidth = panel.Width - (location.X + 5);
+					int indent = 0;
 					group = new DescriptionGroup();
 					for (int i = 0; i < groups.Count; ++i) {
-						if (group.objects.Count == 0 || group.GetWidth() + groups[i].GetWidth() <= maxWidth || !allowLineBreaks)
+						if (group.objects.Count == 0 || group.GetWidth() + groups[i].GetWidth() <= maxWidth - indent || !allowLineBreaks)
 							group.Merge(groups[i]);
 						else {
-							group.GenerateControls(this, panel, location, rightAlign);
+							group.GenerateControls(this, panel, location.AddX(indent), rightAlign);
 							location.Y += TEXT_HEIGHT;
+							if (text.StartsWith("• "))
+								indent = Utils.MeasureWidth("• ");
+							else if (text.StartsWith("● "))
+								indent = Utils.MeasureWidth("● ");
 							group = new DescriptionGroup();
 							group.Merge(groups[i]);
 						}
 					}
-					group.GenerateControls(this, panel, location, rightAlign);
+					group.GenerateControls(this, panel, location.AddX(indent), rightAlign);
 					location.Y += TEXT_HEIGHT;
 
 				}
