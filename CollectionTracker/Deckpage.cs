@@ -157,6 +157,8 @@ namespace CollectionTracker {
 
 			//Remove on right click, move groups on middle click
 			private void ProcessClick(object sender, MouseEventArgs e) {
+				if (e.Button == MouseButtons.Left)
+					TrackerForm.Instance.SetPage<Detailpage>(printref: printing);
 				if (e.Button == MouseButtons.Right)
 					parent.RemovePrint(this);
 				else if (e.Button == MouseButtons.Middle) {
@@ -349,7 +351,7 @@ namespace CollectionTracker {
 		}
 
 		//Layout cards
-		private void DoLayout() {
+		public void DoLayout() {
 			int y = topLeft.Location.Y;
 			int maxWidth = layoutPanel.Width - ((PANEL_MARGIN * 2) + SCROLL_MARGIN);
 			layoutPanel.SuspendLayout();

@@ -24,10 +24,12 @@ namespace CollectionTracker {
 		private ToolStripDropDownButton entryDDButton;
 		private ToolStripButton saveButton;
 		private ToolStripButton printListButton;
+		private ToolStripButton deckPageButton;
 
 		//Saved pages
 		private Printlist savedPrintlist = null;
 		private Printentry savedPrintentry = null;
+		private Deckpage savedDeckpage = null;
 
 		//Accessors
 		public int ToolbarHeight => toolbar.Height;
@@ -72,6 +74,7 @@ namespace CollectionTracker {
 
 			//Print list ref
 			printListButton = Utils.GenerateTSButton("Prints", OpenPrintlist);
+			deckPageButton = Utils.GenerateTSButton("Deck", OpenDeckpage);
 
 			//Label
 			catalogLabel = Utils.GenerateTSLabel("", true, 10);
@@ -114,6 +117,7 @@ namespace CollectionTracker {
 		//Open pages
 		public void OpenHomePage(object sender, EventArgs e) => SetPage<Homepage>();
 		public void OpenPrintlist(object sender, EventArgs e) => SetPage<Printlist>();
+		public void OpenDeckpage(object sender, EventArgs e) => SetPage<Deckpage>();
 		public void OpenSetentries(object sender, EventArgs e) => SetPage<Setentrylist>();
 		public void OpenCardEntry(object sender, EventArgs e) => SetPage<Cardentry>();
 		public void OpenPrintEntry(object sender, EventArgs e) => SetPage<Printentry>();
@@ -122,8 +126,12 @@ namespace CollectionTracker {
 		//Set new page
 		public void SetPage<T>(Card cardref = null, Printing printref = null, Deck deckref = null, string searchTerms = "", List<Printing> printlist = null) where T : TrackerPage {
 
+			//Reference checks
+			bool TKeepsRef = typeof(T) == typeof(Detailpage) || typeof(T) == typeof(Cardentry) || typeof(T) == typeof(Printentry);
+			bool TKeepsPrintlist = typeof(T) == typeof(Printlist) || TKeepsRef;
+			bool TKeepsDeckpage = typeof(T) == typeof(Deckpage) || TKeepsRef;
+
 			//Clear print list if moving to unsupported page
-			bool TKeepsPrintlist = typeof(T) == typeof(Printlist) || typeof(T) == typeof(Detailpage) || typeof(T) == typeof(Cardentry) || typeof(T) == typeof(Printentry);
 			if (savedPrintlist != null && (!TKeepsPrintlist || (Page is Detailpage && !searchTerms.Equals("")))) {
 				toolbar.Items.Remove(printListButton);
 				if (Page != savedPrintlist)
@@ -131,11 +139,24 @@ namespace CollectionTracker {
 				savedPrintlist = null;
 			}
 
+			//Clear deck page if moving to unsupported page
+			if (savedDeckpage != null && (!TKeepsDeckpage || (Page is Detailpage && !searchTerms.Equals("")))) {
+				toolbar.Items.Remove(deckPageButton);
+				if (Page != savedDeckpage)
+					savedDeckpage.Dispose();
+				savedDeckpage = null;
+			}
+
 			//Clear current page
 			if (Page != null) {
 				if (Page is Printlist pl && TKeepsPrintlist) {
 					toolbar.Items.Add(printListButton);
 					savedPrintlist = pl;
+					Page.Panel.Hide();
+				}
+				else if (Page is Deckpage dp && TKeepsDeckpage) {
+					toolbar.Items.Add(deckPageButton);
+					savedDeckpage = dp;
 					Page.Panel.Hide();
 				}
 				else if (Page is Printentry pe) {
@@ -155,6 +176,13 @@ namespace CollectionTracker {
 				savedPrintlist.UpdateEntries();
 				Page = savedPrintlist;
 				savedPrintlist = null;
+			}
+			else if (typeof(T) == typeof(Deckpage) && savedDeckpage != null) {
+				toolbar.Items.Remove(deckPageButton);
+				savedDeckpage.Panel.Show();
+				savedDeckpage.DoLayout();
+				Page = savedDeckpage;
+				savedDeckpage = null;
 			}
 			else if (typeof(T) == typeof(Printentry) && savedPrintentry != null) {
 				savedPrintentry.Panel.Show();
