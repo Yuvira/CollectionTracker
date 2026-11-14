@@ -155,10 +155,14 @@ namespace CollectionTracker {
 				Utils.TryLoadCardImage(parent.Parent.previewImage, path, TrackerForm.Catalog.Game);
 			}
 
-			//Remove on right click
+			//Remove on right click, move groups on middle click
 			private void ProcessClick(object sender, MouseEventArgs e) {
 				if (e.Button == MouseButtons.Right)
 					parent.RemovePrint(this);
+				else if (e.Button == MouseButtons.Middle) {
+					parent.Parent.AddToGroup(printing);
+					parent.RemovePrint(this);
+				}
 			}
 
 			//Change printing on mouse wheel
@@ -309,6 +313,7 @@ namespace CollectionTracker {
 			Printing print = TrackerForm.Catalog.Printings.FirstOrDefault(p => p.Card == card);
 			AddToGroup(targetBox.SelectedItem.ToString(), print);
 		}
+		private void AddToGroup(Printing print) => AddToGroup(targetBox.SelectedItem.ToString(), print);
 		private void AddToGroup(string groupName, string id) => AddToGroup(groupName, TrackerForm.Catalog.Printings.FirstOrDefault(p => p.GetField("printid").Equals(id)));
 		private void AddToGroup(string groupName, Printing printing) {
 			DeckGroup group = groups.FirstOrDefault(g => g.Name.Equals(groupName));
