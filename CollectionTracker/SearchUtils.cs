@@ -377,6 +377,10 @@ namespace CollectionTracker {
 				value = print.Card.Favorite.ToString();
 				return true;
 			}
+			else if (field.Equals("has")) {
+				value = string.Join(" // ", print.Card.Fields.Keys.Concat(print.Card.Faces.SelectMany(c => c.Fields.Keys)).Concat(print.Fields.Keys).Concat(print.Faces.SelectMany(p => p.Fields.Keys)).Distinct());
+				return true;
+			}
 			return print.TryGetField(field, out value);
 		}
 
