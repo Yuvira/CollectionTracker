@@ -235,10 +235,11 @@ namespace CollectionTracker {
 
 		//Rarity colors
 		public static readonly Dictionary<string, Color> RarityColors = new Dictionary<string, Color> {
-			{ "common"      , Color.Black     },
-			{ "uncommon"    , Color.LightGray },
-			{ "rare"        , Color.Gold      },
-			{ "mythic rare" , COLOR_MYTHIC    },
+			{ "common"      , Color.Black        },
+			{ "uncommon"    , Color.LightGray    },
+			{ "rare"        , Color.Gold         },
+			{ "mythic rare" , COLOR_MYTHIC       },
+			{ "special"     , Color.LightSkyBlue },
 		};
 
 		//Fields that can list all values
